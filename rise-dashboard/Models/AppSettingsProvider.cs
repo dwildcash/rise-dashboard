@@ -80,10 +80,5 @@
         /// Gets or sets the CryptopiaWalletAddress
         /// </summary>
         public static string CryptopiaWalletAddress { get; set; }
-
-        /// <summary>
-        /// Gets or sets the SiteAdminKey to Manage Pool List
-        /// </summary>
-        public static string SiteAdminKey { get; set; }
     }
 }

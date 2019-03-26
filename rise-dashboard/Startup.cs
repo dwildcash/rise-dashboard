@@ -52,8 +52,7 @@
             AppSettingsProvider.CoinMainSite = Configuration["AppSettings:CoinMainSite"];
             AppSettingsProvider.CoinExplorer = Configuration["AppSettings:CoinExplorer"];
             AppSettingsProvider.DonationAddress = Configuration["AppSettings:DonationAddress"];
-            AppSettingsProvider.RightBtcMarket = Configuration["AppSettings:RightBtcMarket"];
-            AppSettingsProvider.SiteAdminKey = Configuration["AppSettings:SiteAdminKey"];
+            AppSettingsProvider.RightBtcMarket = Configuration["AppSettings:RightBtcMarket"];          
             AppSettingsProvider.CryptopiaWalletAddress = Configuration["Appsettings:CryptopiaWalletAddress"];
             AppSettingsProvider.SimulateRoundCount = int.Parse(Configuration["AppSettings:SimulateRoundCount"]);
             AppSettingsProvider.MaxTransactionsToFetch = int.Parse(Configuration["AppSettings:MaxTransactionsToFetch"]);
@@ -75,13 +74,7 @@
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
-
-            .AddTwitter(options =>
-           {
-               options.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
-               options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
-           });
+            });
 
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));

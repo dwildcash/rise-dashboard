@@ -108,10 +108,6 @@ to get the desired effect
             <!-- Sidebar -->
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="info">
-                        <script async src="https://telegram.org/js/telegram-widget.js?5" data-telegram-login="RiseStar_bot" data-size="small" data-auth-url="http://rise.coinquote.io/Account/TGLoginCallback" data-request-access="write"></script>
-                    </div>
-                    </div>
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <!-- Sidebar user panel (optional) -->
@@ -122,7 +118,7 @@ to get the desired effect
                             <div class="info">
                                 <a href="#" class="d-block">@User.Identity.Name</a>
                             </div>
-                            <div class="info text-">
+                            <div class="info">
                                 <button class="btn-info btn-space ml-auto" type="button" onclick="location.href='/Account/Logout'">
                                     Logout
                                 </button>
@@ -131,155 +127,144 @@ to get the desired effect
                     }
                     else
                     {
-                        <!-- SIGNIN FORM -->
-                        @using (Html.BeginForm("ExternalLogin", "Account", FormMethod.Post, new { @class = "form-inline ml-auto" }))
-                        {
-                            var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                                <div class="image">
-                                    <font size="+2"><i class="fab fa-twitter nav-icon" style="color:#B6B2B2"></i></font>
-                                </div>
-                                <div class="info">
-                                    @foreach (var provider in loginProviders)
-                                    {
-                                        <span class="input-group-append ml-2">
-                                            <button type="submit" class="btn-info btn-space ml-auto" name="provider" id="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> Login with @provider.Name</button>
-                                        </span>
-                                    }
-                                </div>
+                        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                            <div class="info">
+                                <span class="input-group-append ml-2">
+                                    <script async src="https://telegram.org/js/telegram-widget.js?5" data-telegram-login="RiseStar_bot" data-size="media" data-userpic="false" data-auth-url="http://rise.coinquote.io/Account/LoginCallback" data-request-access="write"></script>
+                                </span>
                             </div>
-                        }
+                        </div>
                     }
-
-                    <!-- Sidebar Menu -->
-                    <nav class="mt-2">
-                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                </div>
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-book-open"></i>
+                                <p>
+                                    Transactions
+                                    <i class="right fa fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Transactions", "Home")" class="nav-link">
+                                        <i class="fa fa-play-circle nav-icon"></i>
+                                        <p>Last @(AppSettingsProvider.MaxTransactionsToFetch)</p>
+                                    </a>
+                                </li>
+                                @if (addressSaved != null)
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Transactions", "Home", new { address = addressSaved})" class="nav-link">
+                                            <i class="fa fa-play-circle nav-icon"></i>
+                                            <p>For @(addressSaved)</p>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                        {
                             <li class="nav-item has-treeview">
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon fa fa-book-open"></i>
                                     <p>
-                                        Transactions
+                                        Admin Users
                                         <i class="right fa fa-angle-left"></i>
                                     </p>
                                 </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="@Url.Action("Transactions", "Home")" class="nav-link">
-                                            <i class="fa fa-play-circle nav-icon"></i>
-                                            <p>Last @(AppSettingsProvider.MaxTransactionsToFetch)</p>
-                                        </a>
-                                    </li>
-                                    @if (addressSaved != null)
-                                    {
-                                        <li class="nav-item">
-                                            <a href="@Url.Action("Transactions", "Home", new { address = addressSaved})" class="nav-link">
-                                                <i class="fa fa-play-circle nav-icon"></i>
-                                                <p>For @(addressSaved)</p>
-                                            </a>
-                                        </li>
-                                    }
-                                </ul>
-                            </li>
-                            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
-                            {
-                                <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fa fa-book-open"></i>
-                                        <p>
-                                            Admin Users
-                                            <i class="right fa fa-angle-left"></i>
-                                        </p>
-                                    </a>
 
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="@Url.Action("Index", "ApplicationUsers")" class="nav-link">
-                                                <i class="fa fa-play-circle nav-icon"></i>
-                                                <p>Manage Users</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
-                            <!-- Delegate List -->
-                            <li class="nav-item">
-                                <a href="@Url.Action("Delegates", "Home")" class="nav-link">
-                                    <i class="fa fa-chalkboard-teacher nav-icon"></i>
-                                    <p>Delegates List</p>
-                                </a>
-                            </li>
-                            <!-- ./Delegate List-->
-                            <!-- Delegate List -->
-                            <li class="nav-item">
-                                @if (addressSaved != null)
-                                {
-                                    <a href="@Url.Action("Index", "DelegateForms", new { address = addressSaved})" class="nav-link">
-                                        <i class="fa fa-chalkboard-teacher nav-icon"></i>
-                                        <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action("Index", "DelegateForms")" class="nav-link">
-                                        <i class="fa fa-chalkboard-teacher nav-icon"></i>
-                                        <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
-                                    </a>
-                                }
-                            </li>
-                            <!-- ./Delegate List-->
-                            <!-- Sites -->
-                            <li class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fa fa-sitemap"></i>
-                                    <p>
-                                        @(AppSettingsProvider.CoinName) Official Sites
-                                        <i class="right fa fa-angle-left"></i>
-                                    </p>
-                                </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="@(AppSettingsProvider.CoinMainSite)" target="_blank" rel="noopener noreferrer" class="nav-link">
-                                            <i class="fa fa-play-circle nav-icon text-warning"></i>
-                                            <p>Main Web Site</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="https://wallet.rise.vision" target="_blank" rel="noopener noreferrer" class="nav-link">
-                                            <i class="fa fa-play-circle nav-icon text-warning"></i>
-                                            <p>Wallet</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="@(AppSettingsProvider.CoinExplorer)" target="_blank" rel="noopener noreferrer" class="nav-link">
-                                            <i class="fa fa-play-circle nav-icon text-warning"></i>
-                                            <p>Explorer</p>
+                                        <a href="@Url.Action("Index", "ApplicationUsers")" class="nav-link">
+                                            <i class="fa fa-play-circle nav-icon"></i>
+                                            <p>Manage Users</p>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            <!-- ./Sites-->
-                            <!-- PeersMap -->
-                            <li class="nav-item">
-                                <a href="@Url.Action("PeersMap", "Home")" class="nav-link">
-                                    <i class="fa fa-map nav-icon"></i>
-                                    <p>PeersMap</p>
+                        }
+                        <!-- Delegate List -->
+                        <li class="nav-item">
+                            <a href="@Url.Action("Delegates", "Home")" class="nav-link">
+                                <i class="fa fa-chalkboard-teacher nav-icon"></i>
+                                <p>Delegates List</p>
+                            </a>
+                        </li>
+                        <!-- ./Delegate List-->
+                        <!-- Delegate List -->
+                        <li class="nav-item">
+                            @if (addressSaved != null)
+                            {
+                                <a href="@Url.Action("Index", "DelegateForms", new { address = addressSaved})" class="nav-link">
+                                    <i class="fa fa-chalkboard-teacher nav-icon"></i>
+                                    <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
                                 </a>
-                            </li>
-                            <!-- ./PeersMap-->
-                            <!-- About -->
-                            <li class="nav-item">
-                                <a href="@Url.Action("About", "Home")" class="nav-link">
-                                    <i class="fa fa-id-card nav-icon"></i>
-                                    <p>About</p>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Index", "DelegateForms")" class="nav-link">
+                                    <i class="fa fa-chalkboard-teacher nav-icon"></i>
+                                    <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
                                 </a>
-                            </li>
-                            <!-- ./About-->
-                        </ul>
-                    </nav>
-                    <!-- /.sidebar-menu -->
-                </div>
-                <!-- /.sidebar -->
-</aside>
+                            }
+                        </li>
+                        <!-- ./Delegate List-->
+                        <!-- Sites -->
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-sitemap"></i>
+                                <p>
+                                    @(AppSettingsProvider.CoinName) Official Sites
+                                    <i class="right fa fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="@(AppSettingsProvider.CoinMainSite)" target="_blank" rel="noopener noreferrer" class="nav-link">
+                                        <i class="fa fa-play-circle nav-icon text-warning"></i>
+                                        <p>Main Web Site</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="https://wallet.rise.vision" target="_blank" rel="noopener noreferrer" class="nav-link">
+                                        <i class="fa fa-play-circle nav-icon text-warning"></i>
+                                        <p>Wallet</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@(AppSettingsProvider.CoinExplorer)" target="_blank" rel="noopener noreferrer" class="nav-link">
+                                        <i class="fa fa-play-circle nav-icon text-warning"></i>
+                                        <p>Explorer</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- ./Sites-->
+                        <!-- PeersMap -->
+                        <li class="nav-item">
+                            <a href="@Url.Action("PeersMap", "Home")" class="nav-link">
+                                <i class="fa fa-map nav-icon"></i>
+                                <p>PeersMap</p>
+                            </a>
+                        </li>
+                        <!-- ./PeersMap-->
+                        <!-- About -->
+                        <li class="nav-item">
+                            <a href="@Url.Action("About", "Home")" class="nav-link">
+                                <i class="fa fa-id-card nav-icon"></i>
+                                <p>About</p>
+                            </a>
+                        </li>
+                        <!-- ./About-->
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
 
         @RenderBody()
 
