@@ -1,16 +1,12 @@
 ﻿namespace rise.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using rise.Models;
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
     using System.Threading.Tasks;
-    using System.Web;
     using Telegram.Bot.Extensions.LoginWidget;
 
     [Authorize]
@@ -44,24 +40,23 @@
             return Challenge(properties, provider);
         }
 
-        public IDictionary<string, string> ToDictionary(NameValueCollection col)
-        {
-            IDictionary<string, string> dict = new Dictionary<string, string>();
-            foreach (var k in col.AllKeys)
-            {
-                dict.Add(k, col[k]);
-            }
-            return dict;
-        }
-
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> TGLoginCallback(int id,string first_name,string username, string photo_url, string auth_date, string hash)
+        public async Task<IActionResult> TGLoginCallback(int id, string first_name, string username, string photo_url, string auth_date, string hash)
         {
-            var fields = HttpUtility.ParseQueryString(HttpContext.Request.QueryString.ToString());
+            Dictionary<string, string> fields = new Dictionary<string, string>()
+            {
+                { "id", id.ToString() },
+                { "first_name", first_name },
+                { "username", username},
+                {"photo_url", photo_url },
+                {"auth_date", auth_date },
+                {"hash", hash }
+            };
 
             LoginWidget loginWidget = new LoginWidget(AppSettingsProvider.BotApiKey);
-            if (loginWidget.CheckAuthorization(ToDictionary(fields)) == Authorization.Valid)
+
+            if (loginWidget.CheckAuthorization(fields) == Authorization.Valid)
             {
                 var aspnetuser = await _userManager.FindByNameAsync(fields["username"]);
 
@@ -83,7 +78,6 @@
             }
             return RedirectToAction("Index", "Home");
         }
-
 
         [HttpGet]
         [AllowAnonymous]
