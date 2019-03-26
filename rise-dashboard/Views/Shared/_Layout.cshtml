@@ -6,9 +6,11 @@
 
 @using rise.Models
 
-@{string addressSaved = null;
+@{
+    string addressSaved = null;
     var controller = ViewContext.RouteData.Values["Controller"];
-    var action = ViewContext.RouteData.Values["Action"];}
+    var action = ViewContext.RouteData.Values["Action"];
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -107,35 +109,35 @@ to get the desired effect
 
             <!-- Sidebar -->
             <div class="sidebar">
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        <!-- Sidebar user panel (optional) -->
-                        <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
-                            <div class="image">
-                                <font size="+2" color="gray">&nbsp;<i class="far fa-user" style="color:#B6B2B2"></i></font>
-                            </div>
-                            <div class="info">
-                                <a href="#" class="d-block">@User.Identity.Name</a>
-                            </div>
-                            <div class="info">
-                                <button class="btn-info btn-space ml-auto" type="button" onclick="location.href='/Account/Logout'">
-                                    Logout
-                                </button>
-                            </div>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
+                        <div class="image">
+                            <font size="+2" color="gray">&nbsp;<i class="far fa-user" style="color:#B6B2B2"></i></font>
                         </div>
-                    }
-                    else
-                    {
-                        <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
-                            <div class="info">
-                                <span class="input-group-append ml-2">
-                                    <script async src="https://telegram.org/js/telegram-widget.js?5" data-telegram-login="RiseStar_bot" data-size="medium" data-userpic="false" data-auth-url="http://rise.coinquote.io/Account/LoginCallback" data-request-access="write"></script>
-                                </span>
-                            </div>
+                        <div class="info">
+                            <a href="#" class="d-block">@User.Identity.Name</a>
                         </div>
-                    }
-                </div>
+                        <div class="info">
+                            <button class="btn-info btn-space ml-auto" type="button" onclick="location.href='/Account/Logout'">
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
+                        <div class="info">
+                            <span class="input-group-append ml-2">
+                                <script async src="https://telegram.org/js/telegram-widget.js?5" data-telegram-login="RiseStar_bot" data-size="medium" data-userpic="false" data-auth-url="http://rise.coinquote.io/Account/LoginCallback" data-request-access="write"></script>
+                            </span>
+                        </div>
+                    </div>
+                }
+
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
