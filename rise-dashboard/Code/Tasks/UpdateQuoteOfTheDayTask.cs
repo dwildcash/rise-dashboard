@@ -1,0 +1,34 @@
+﻿namespace rise.Code
+{
+    using rise.Code.DataFetcher;
+    using rise.Code.Scheduling;
+    using rise.Models;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Defines the <see cref="UpdateQuoteOfTheDayTask" />
+    /// </summary>
+    public class UpdateQuoteOfTheDayTask : IScheduledTask
+    {
+        /// <summary>
+        /// Gets the Schedule
+        /// </summary>
+        public string Schedule => "*/30 * * * *";
+
+        /// <summary>
+        /// Fetch IP Localisation once a day
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task ExecuteAsync(CancellationToken cancellationToken)
+        {
+            QuoteOfTheDayResult quoteOfTheDayResult = await QuoteOfTheDayFetcher.FetchQuoteOfTheDay();
+
+            if (quoteOfTheDayResult != null)
+            {
+                QuoteOfTheDayResult.Current = quoteOfTheDayResult;
+            }
+        }
+    }
+}

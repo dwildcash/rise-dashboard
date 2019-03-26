@@ -1,0 +1,243 @@
+﻿@model rise.ViewModels.QuoteViewModel
+@using rise.Models
+
+@functions{
+
+    // Return Arrow symbole depending of the value
+    public string GetArrowSymbol(double value)
+    {
+        if (value < 0)
+        {
+            return "fa fa-arrow-circle-down";
+        }
+
+        return "fa fa-arrow-circle-up";
+    }
+
+    // Return Arrow symbole depending of the value
+    public string GetBackgroundColor(double value)
+    {
+        if (value < 0)
+        {
+            return "bg-danger";
+        }
+
+        return "bg-success";
+    }
+
+    // Return Arrow symbole depending of the value
+    public string TextColor(double value)
+    {
+        if (value < 0)
+        {
+            return "text-danger";
+        }
+
+        return "text-success";
+    }
+}
+
+@{
+    var CoinQuoteMonth = Model.CoinQuoteByDays(15);
+    var LastQuote = Model.LastAllQuote();
+    var Percentchange = Math.Round(Model.PercentChange(1),2);
+}
+
+
+<script type="text/javascript">
+
+    // Return with commas in between
+    var numberWithCommas = function (x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        };
+
+        var dataPack1 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "RightBtc").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
+        var dataPack2 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "LiveCoin").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
+        var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
+        var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
+
+        var bar_ctx = document.getElementById('priceQuoteChart');
+        var bar_chart = new Chart(bar_ctx, {
+        type: 'bar',
+        data: {
+            labels: dates,
+            datasets: [
+                {
+                label: "Price",
+                    type: "line",
+                    yAxisID: "price",
+                    data: dataPack3,
+                    backgroundColor: "rgba(0, 155, 5, 0.2)",
+                    borderColor: "rgba(0,155,5,1)",
+                    hoverBackgroundColor: "rgba(0, 153, 211, 0.7)",
+                    hoverBorderWidth: 2,
+                    hoverBorderColor: 'lightgrey'
+                },
+                {
+                label: 'RighBtc',
+                    yAxisID: "volume",
+                    data: dataPack1,
+                    backgroundColor: "rgba(244, 147, 82, 0.6)",
+                    hoverBackgroundColor: "rgba(55, 160, 225, 0.7)",
+                    hoverBorderWidth: 2,
+                    hoverBorderColor: 'lightgrey'
+                },
+                {
+                label: 'LiveCoin',
+                    yAxisID: "volume",
+                    data: dataPack2,
+                    backgroundColor: "rgba(62, 153, 211, 0.6)",
+                    hoverBackgroundColor: "rgba(225, 58, 55, 0.6)",
+                    hoverBorderWidth: 2,
+                    hoverBorderColor: 'lightgrey'
+                },
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            animation: {
+                duration: 15,
+            },
+            tooltips: {
+                mode: 'label',
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].label + ": " + numberWithCommas(tooltipItem.yLabel);
+                    }
+                }
+            },
+            scales: {
+                xAxes: [{
+                    stacked: true,
+                    gridLines: { display: false },
+                }],
+                yAxes: [{
+                    id: 'volume',
+                    position: 'left',
+                    stacked: true,
+                    ticks: {
+                        callback: function (value) { return numberWithCommas(value); },
+                    }
+                },
+                    {
+                    id: 'price',
+                    position: 'right'
+                }]
+            }, // scales
+            legend: { display: true }
+        } // options
+    }
+    );
+</script>
+
+
+<!-- Small boxes (Stat box) -->
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-white">
+            <div class="inner">
+                <h3>
+                    <span class="text-muted">@(Math.Round(LastQuote.Price * 100000000))</span>
+                    <small class="@(TextColor(Percentchange)) mr-1">
+                        <sup style="font-size: 20px">
+                            <i class="@GetArrowSymbol(Percentchange)"></i>
+                            @(Percentchange)%
+                        </sup>
+                    </small>
+                </h3>
+                <p>Sat Price</p>
+            </div>
+            <div class="icon">
+                <i class="fab fa-bitcoin"></i>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-white">
+            <div class="inner">
+                <h3>
+                    <span class="text-muted">
+                        @(Model.DaysLow(1) * 100000000)
+                        <font size="5"><i class="fa fa-arrows-alt-h" /></font>
+                        @(Model.DaysHigh(1) * 100000000)
+                    </span>
+                </h3>
+                <p>24H Range</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-exchange-alt"></i>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-white">
+            <div class="inner">
+                <h3><span class="text-muted">@(Math.Round(LastQuote.Volume).ToString("N0"))</span></h3>
+                <p>24H Volume (<i>$@(Math.Round(LastQuote.Volume * LastQuote.USDPrice, 2).ToString("N0")) usd</i>)</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-chart-line"></i>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-white">
+            <div class="inner">
+                <h3><span class="text-muted">@(Math.Round(LastQuote.USDPrice, 4))$ </span></h3>
+                <p>USD Price</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-dollar-sign"></i>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>
+<!-- /.row -->
+
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-header no-border">
+            <div class="d-flex justify-content-between">
+                <h3 class="card-title">@(AppSettingsProvider.CoinName) Market Stats</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="d-flex">
+                <p class="d-flex flex-column">
+                    <span class="text-bold text-lg">@(Math.Round(LastQuote.Price * 100000000)) - sat</span>
+                    <span>@(AppSettingsProvider.CoinName) Price</span>
+                </p>
+                <p class="ml-auto d-flex flex-column">
+                    <span class="text-bold text-lg text-center">@((Model.liveCoinQuoteResult.BestBid * 100000000).ToString())  <i class="fa fa-caret-left"></i> <i class="fa fa-caret-right"></i>@((Model.liveCoinQuoteResult.BestAsk * 100000000).ToString())</span>
+                    <span class="text-center">Bid - Ask</span>
+                </p>
+                <p class="ml-auto d-flex flex-column text-right">
+                    @if (Model.PercentChange(1) >= 0)
+                    {
+                        <span class="text-success text-bold">
+                            <i class="fa fa-arrow-up"></i>@(Percentchange)%
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="text-danger text-bold">
+                            <i class="fa fa-arrow-down"></i> @(Percentchange)%
+                        </span>
+                    }
+                    <span class="text-muted">24H % Change</span>
+                </p>
+            </div>
+            <div class="position-relative mb-4">
+                <canvas id="priceQuoteChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

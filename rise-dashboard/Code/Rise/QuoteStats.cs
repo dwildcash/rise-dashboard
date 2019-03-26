@@ -1,0 +1,125 @@
+﻿namespace rise.Code.Rise
+{
+    using rise.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    /// <summary>
+    /// Defines the <see cref="QuoteStats" />
+    /// </summary>
+    public class QuoteStats
+    {
+        /// <summary>
+        /// Gets or sets the coinQuoteCol
+        /// Collection of all coins quote
+        /// </summary>
+        public List<CoinQuote> coinQuoteCol { get; set; }
+
+        /// <summary>
+        /// Return the Time From Genesis
+        /// </summary>
+        /// <param name="unixTime"></param>
+        /// <returns></returns>
+        public DateTime FromGenesisTime(long unixTime)
+        {
+            DateTime epoch = new DateTime(2016, 05, 24, 17, 5, 0, 0).ToLocalTime();
+            return epoch.AddSeconds(unixTime);
+        }
+
+        // Return time in Genesis time from Minutes from now
+        /// <summary>
+        /// The ToGenesisTime
+        /// </summary>
+        /// <param name="minutesfrom">The minutesfrom<see cref="int"/></param>
+        /// <returns>The <see cref="long"/></returns>
+        public long ToGenesisTime(int minutesfromNow)
+        {
+            var epoch = new DateTime(2016, 05, 24, 17, 5, 0, 0).ToLocalTime();
+            return Convert.ToInt64((DateTime.Now.AddMinutes(-minutesfromNow) - epoch).TotalSeconds);
+        }
+
+        /// <summary>
+        /// Return a Collection of Last Quote
+        /// </summary>
+        /// <param name="days"></param>
+        /// <returns></returns>
+        public List<CoinQuote> CoinQuoteByDays(int days)
+        {
+            var query = from o in coinQuoteCol
+                        join d in coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-days)).GroupBy(x => new { y = x.TimeStamp.Day, m = x.TimeStamp.Month, d = x.TimeStamp.Day, x.Exchange }).Select(x => new CoinQuote { Exchange = x.Key.Exchange, TimeStamp = x.Max(i => i.TimeStamp) })
+            on new { o.Exchange, o.TimeStamp } equals new { d.Exchange, d.TimeStamp }
+                        select new CoinQuote { Exchange = o.Exchange, Price = o.Price, Volume = o.Volume, TimeStamp = o.TimeStamp, USDPrice = o.USDPrice };
+
+            return query.ToList();
+        }
+
+        /// <summary>
+        /// Return the highest price in Xday
+        /// </summary>
+        /// <param name="days">The days<see cref="int"/></param>
+        /// <returns></returns>
+        public double DaysHigh(int days)
+        {
+            var quoteXdays = coinQuoteCol.Where(x => x.Exchange == "LiveCoin" && x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-days)).OrderByDescending(i => i.Price).FirstOrDefault();
+
+            if (quoteXdays == null)
+            {
+                return 0;
+            }
+
+            return quoteXdays.Price;
+        }
+
+        /// <summary>
+        /// Return the highest price in Xday
+        /// </summary>
+        /// <param name="days">The days<see cref="int"/></param>
+        /// <returns></returns>
+        public double DaysLow(int days)
+        {
+            var quoteXdays = coinQuoteCol.Where(x => x.Exchange == "LiveCoin" && x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-days)).OrderBy(i => i.Price).FirstOrDefault();
+
+            if (quoteXdays == null)
+            {
+                return 0;
+            }
+
+            return quoteXdays.Price;
+        }
+
+        /// <summary>
+        /// Return the Price Change vs X days
+        /// </summary>
+        /// <param name="days">The days<see cref="int"/></param>
+        /// <returns></returns>
+        public double PercentChange(int days)
+        {
+            var quoteXdays = coinQuoteCol.Where(x => x.Exchange == "All" && x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-days)).OrderBy(x => x.TimeStamp).FirstOrDefault();
+            var quoteLast = LastAllQuote();
+
+            if (quoteXdays == null)
+            {
+                return 0;
+            }
+
+            if (quoteXdays.Price > quoteLast.Price)
+            {
+                return Math.Round(-(100 - (quoteLast.Price / quoteXdays.Price * 100)), 2);
+            }
+            else
+            {
+                return Math.Round(100 - (quoteXdays.Price / quoteLast.Price * 100), 2);
+            }
+        }
+
+        /// <summary>
+        /// Return The Last Quote
+        /// </summary>
+        /// <returns></returns>
+        public CoinQuote LastAllQuote()
+        {
+            return coinQuoteCol.Where(x=>x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "All").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+        }
+    }
+}

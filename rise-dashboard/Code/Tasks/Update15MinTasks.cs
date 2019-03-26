@@ -1,0 +1,36 @@
+﻿namespace rise.Code
+{
+    using rise.Code.DataFetcher;
+    using rise.Code.Rise;
+    using rise.Code.Scheduling;
+    using rise.Models;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Defines the <see cref="Update30MinTasks" />
+    /// </summary>
+    public class Update15MinTasks : IScheduledTask
+    {
+        /// <summary>
+        /// Gets the Schedule
+        /// </summary>
+        public string Schedule => "*/15 * * * *";
+
+        /// <summary>
+        /// The ExecuteAsync
+        /// </summary>
+        /// <param name="cancellationToken">The cancellationToken<see cref="CancellationToken"/></param>
+        /// <returns>The <see cref="Task"/></returns>
+        public async Task ExecuteAsync(CancellationToken cancellationToken)
+        {
+            DelegateResult delegateResult = await DelegateFetcher.FetchDelegates();
+
+            if (delegateResult.Success)
+            {
+                ForgingChanceCalculator.generateForgingStat2(delegateResult);
+                DelegateResult.Current = ForgingChanceCalculator.SimulateForgingRounds(delegateResult);
+            }
+        }
+    }
+}

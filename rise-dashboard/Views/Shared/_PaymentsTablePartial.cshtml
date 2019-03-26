@@ -1,0 +1,152 @@
+﻿@using rise.Models
+@model rise.ViewModels.AccountSummaryViewModel
+
+@functions{
+
+    /// <summary>
+    /// Return Delegate UserName
+    /// </summary>
+    /// <param name="address"></param>
+    /// <returns></returns>
+    public string ToDelegateUser(string address)
+    {
+        var mydelegate = Model.delegateResult.Delegates.Where(x => x.Address == address).FirstOrDefault();
+
+        if (mydelegate != null)
+        {
+            return mydelegate.Username;
+        }
+
+        return null;
+    }
+}
+
+<script type="text/javascript">
+
+    /* This is for displaying sparklines */
+    $(function () {
+        $('.inlinebar').sparkline('html', { type: 'bar', barColor: '#cf53f9' });
+    });
+
+    $(document).ready(function () {
+        $('#PaymentTable').DataTable({
+            "pageLength": 10,
+            "order": [[5, "desc"]],
+            "autoWidth": true,
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+            columnDefs: [{
+                className: 'control',
+                orderable: false,
+                targets: 0
+            }]
+        });
+    });
+</script>
+
+<!-- Start Payment Table-->
+<section class="no-padding-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="block margin-bottom-sm">
+                    <div class="title"><strong>@(AppSettingsProvider.CoinName) Payments</strong></div>
+                    <div class="table-responsive">
+                        <table id="PaymentTable" class="table display dt-responsive" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th data-priority="0"></th>
+                                    <th data-priority="8">Rank</th>
+                                    <th data-priority="1">Delegate</th>
+                                    <th data-priority="2">Last 10 - AVG/d</th>
+                                    <th data-priority="4">Tx Received</th>
+                                    <th data-priority="3">Last tx (d)</th>
+                                    <th data-priority="6">Tx Count</th>
+                                    <th data-priority="7">Avg tx (d)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var myvote in Model.delegateVotesResult.Delegates.OrderBy(x => x.Username))
+                                {
+                                    var sumDay = Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).Where(y => y.timestamp >= Model.ToGenesisTime(1600)).Sum(x => Double.Parse(x.amount.ToString()) / 100000000);
+                                    var sumWeek = Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).Where(y => y.timestamp >= Model.ToGenesisTime(10500)).Sum(x => Double.Parse(x.amount.ToString()) / 100000000);
+                                    var sumAll = Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).Sum(x => Double.Parse(x.amount.ToString()) / 100000000);
+
+                                    var list10Payments = Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).OrderByDescending(j => j.timestamp).Select(x => Double.Parse(x.amount.ToString()) / 100000000).Take(10).ToList();
+                                    var lastpayment = Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).OrderByDescending(r => r.timestamp).Select(x => x.timestamp).Take(1).SingleOrDefault();
+
+                                    int transactionsCount = Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).OrderByDescending(i => i.timestamp).Count();
+
+                                    var timeLast = Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).OrderByDescending(i => i.timestamp).FirstOrDefault();
+                                    var timeFirst = Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).OrderByDescending(i => i.timestamp).LastOrDefault();
+
+                                    double avgpaymentspan = 0;
+
+                                    if (timeLast != null && timeFirst != null)
+                                    {
+                                        avgpaymentspan = Math.Round(((Convert.ToDouble(timeLast.timestamp) - Convert.ToDouble(timeFirst.timestamp)) / (transactionsCount - 1) / 60 / 60 / 24), 2);
+                                    }
+
+                                    double sumAvg = 0;
+
+                                    if (Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).Count() > 0)
+                                    {
+                                        sumAvg = Math.Round(Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).Average(x => Double.Parse(x.amount.ToString()) / 100000000) / avgpaymentspan, 2);
+                                    }
+
+                                    <tr class="table-default">
+                                        <td></td>
+                                        <td class="align-middle"><h4><span class="badge badge-primary">@myvote.Rank</span></h4></td>
+                                        <td class="align-middle">
+                                            <span class="align-middle"><a href="/Home/DelegateStats?Username=@myvote.Username"> @myvote.Username</a></span>
+                                        </td>
+                                        <td>
+                                            <div class="description-block margin-bottom">
+                                                <div>
+                                                   <p><span class="inlinebar">@String.Join(", ", list10Payments.ToArray().Reverse())</span></p>
+                                                    @if (!Double.IsNaN(sumAvg) && !Double.IsInfinity(sumAvg) && sumAvg != 0)
+                                                    {
+                                                        <small><span class="dashtext-2">@sumAvg</span></small>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <h6><span class="small text-muted dashtext-3"><b>@Math.Round(sumDay, 2)</b></span>&nbsp;<span class="text-muted">1 D</span></h6>
+                                            <h6><span class="small text-muted dashtext-3"><b>@Math.Round(sumWeek, 2)</b></span>&nbsp;<span class="text-muted">1 W</span></h6>
+                                            <h6><span class="small text-muted dashtext-3"><b>@Math.Round(sumAll, 2)</b></span>&nbsp;<span class="text-muted">All</span> </h6>
+                                        <td class="align-middle">
+                                            @if (lastpayment != 0)
+                                            {
+                                                <h5><span class="text-muted">@Math.Round((DateTime.Now - Model.FromGenesisTime(lastpayment)).TotalDays, 1)</span></h5>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger">No payment</span>
+                                            }
+                                        </td>
+                                        <td class="align-middle"><h5><span class="text-muted">@transactionsCount </span></h5></td>
+                                        <td class="align-middle">
+                                            @if (!Double.IsNaN(avgpaymentspan) && !Double.IsInfinity(avgpaymentspan))
+                                            {
+                                                <h5><span class="text-muted">@avgpaymentspan </span></h5>
+                                            }
+                                            else
+                                            {
+                                                <h5><span class="text-muted">NA</span></h5>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Payment-->

@@ -1,0 +1,217 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using rise.Models
+
+@model rise.ViewModels.DelegateFormsViewModel
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "Delegates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@functions{
+
+    // Return Arrow symbole depending of the value
+    public string matchVote(string delegateAddress, string voteAddress)
+    {
+        if (delegateAddress == voteAddress)
+        {
+            return "table-success";
+        }
+
+        return "table-default";
+    }
+}
+
+@section Scripts
+    {
+    <!--Initialize Data Table-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#delegatesForm').DataTable({
+                "fixedHeader": true,
+                "pageLength": 10,
+                "scrollCollapse": true,
+                "order": [[6, "desc"]],
+                "autoWidth": true,
+                responsive:
+                {
+                    details:
+                    {
+                        type: 'column',
+                        target: -1
+                    }
+                },
+                columnDefs: [{
+                    className: 'control',
+                    orderable: false,
+                    targets: -1
+                }]
+            });
+        });
+    </script>
+}
+
+<br />
+<!--Content Wrapper.Contains page content-->
+<div class="content-wrapper">
+    <!-- Content Header(Page header)-->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1><img src="@Url.Content("~/img/" + @AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />@(AppSettingsProvider.CoinName) Dashboard</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a href="#">DelegateForms </a>
+                        <li class="breadcrumb-item active">Index</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <!-- Start Transactions Table-->
+        <!-- Main content -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <!-- DELEGATE SEARCH FORM -->
+                        @using (Html.BeginForm("Index", "DelegateForms", FormMethod.Get, new { @class = "form-inline ml-auto" }))
+                        {
+                            <div class="list-inline ml-3">
+                                <div class="input-group align-items-center h-100">
+                                    @if (Model.walletAccountResult != null)
+                                    {
+                                        <span class="input-group mr-3">Calculating using wallet <span class="text-muted ml-3">@Model.walletAccountResult.account.Address </span></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="input-group mr-3">Calculating using custom @AppSettingsProvider.CoinName balance </span>
+                                    }
+
+                                    <input class="form-control" type="search" value="@ViewBag.Balance" id="balance" name="balance">
+
+                                    <span class="input-group-append">
+                                        <button class="btn" type="submit">
+                                            <i class="fa fa-sync-alt"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="delegatesForm" class="table display dt-responsive" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th align-middle data-priority="4" class="align-middle">Rank</th>
+                                        <th align-middle data-priority="1" class="align-middle">Name</th>
+                                        <th align-middle data-priority="3" class="align-middle">Share</th>
+                                        <th align-middle data-priority="6" class="align-middle">Pay.(days)</th>
+                                        <th align-middle data-priority="5" class="align-middle">Forging Chance</th>
+                                        <th align-middle data-priority="7" class="align-middle">Percent Reward</th>
+                                        <th align-middle data-priority="2" class="align-middle">Daily Estimated Payout</th>
+                                        <th align-middle data-priority="8" class="align-middle">Monthly Estimated Payout</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{  var currentAccount = string.Empty;
+                                        var forgingChance = 0.0;
+                                        var delegateVoteWeight = 0.0;
+                                    }
+
+                                    @foreach (var t in Model.DelegateForm)
+                                    {
+                                        var mydelegate = Model.DelegateResult.Delegates.Where(o => o.Address == t.Address).FirstOrDefault();
+
+                                        if (Model.walletAccountResult != null)
+                                        {
+                                            currentAccount = Model.walletAccountResult.account.Address;
+                                        }
+
+                                        <tr class="@matchVote(string.IsNullOrEmpty(mydelegate?.Address) ? "" : mydelegate.Address, currentAccount)">
+
+                                            @if (mydelegate != null)
+                                            {
+                                                delegateVoteWeight = mydelegate.VotesWeight;
+                                                forgingChance = mydelegate.ForgingChance;
+
+                                                @if (mydelegate.Rank >= 199)
+                                                {
+                                                    <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Rank</span></h6></td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="align-middle"><h6><span class="badge badge-secondary">@mydelegate.Rank</span></h6></td>
+                                                }
+                                                <td class="align-middle"><h6><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@mydelegate.Username</a></h6></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="align-middle"><h6><span class="badge badge-primary">N/A</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">N/A</span></h6></td>
+                                            }
+
+                                            <td class="align-middle"><h6><strong>@t.Share%</strong></h6></td>
+                                            <td class="align-middle"><h6>@t.Payout_interval</h6></td>
+
+                                            @if (mydelegate != null)
+                                            {
+                                                <td class="align-middle"><h6><small class="text-muted">@Math.Round(mydelegate.ForgingChance, 2)%</small></h6></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="align-middle"><h6><small class="text-muted">N/A</small></h6></td>
+                                            }
+
+                                            @{ var clibalance = @ViewBag.balance; }
+                                            @{ var delvoteweight = delegateVoteWeight / 100000000; }
+                                            @{ var percentVoteWeight = clibalance / (delvoteweight + clibalance) * 100;}
+
+                                            <td class="align-middle"><h6>@Math.Round(percentVoteWeight, 2)%</h6></td>
+                                            <td class="align-middle"><h6><strong>@Math.Round((double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 3)</strong></h6></td>
+                                            <td class="align-middle"><h6><strong>@Math.Round(30 * (double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 2)</strong></h6></td>
+                                            <td>
+                                                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                                                {
+                                                    <text>
+                                                        <a asp-action="Edit" asp-route-id="@t.Id">Edit</a> |
+                                                        <a asp-action="Delete" asp-route-id="@t.Id"> Delete </a>
+                                                    </text>
+                                                }
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                            {
+                                <text>
+                                    <p>
+                                        <a asp-action="Create">Create New</a>
+                                    </p>
+                                </text>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- ./Transactions Table-->
+    </section>
+</div>

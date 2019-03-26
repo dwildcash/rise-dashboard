@@ -1,0 +1,101 @@
+﻿@model rise.Models.DelegateForm
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Delegates Pools</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">DelegateForms</a></li>
+                        <li class="breadcrumb-item active">Edit</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Edit Delegate Form</h5>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form asp-action="Edit">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input type="hidden" asp-for="Id" />
+                                        <div class="form-group">
+                                            <label asp-for="Address" class="control-label"></label>
+                                            <input asp-for="Address" class="form-control" />
+                                            <span asp-validation-for="Address" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Share" class="control-label"></label>
+                                            <input asp-for="Share" class="form-control" />
+                                            <span asp-validation-for="Share" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Payout_address" class="control-label"></label>
+                                            <input asp-for="Payout_address" class="form-control" />
+                                            <span asp-validation-for="Payout_address" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Min_payout" class="control-label"></label>
+                                            <input asp-for="Min_payout" class="form-control" />
+                                            <span asp-validation-for="Min_payout" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Payout_interval" class="control-label"></label>
+                                            <input asp-for="Payout_interval" class="form-control" />
+                                            <span asp-validation-for="Payout_interval" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" asp-for="Fees_covered" /> @Html.DisplayNameFor(model => model.Fees_covered)
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Contact" class="control-label"></label>
+                                            <input asp-for="Contact" class="form-control" />
+                                            <span asp-validation-for="Contact" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Contact_type" class="control-label"></label>
+                                            <input asp-for="Contact_type" class="form-control" />
+                                            <span asp-validation-for="Contact_type" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        </div>
+                                    </form>
+                                    <div>
+                                        <a asp-action="Index">Back to List</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+        </div>
+    </section>
+</div>

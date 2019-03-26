@@ -1,0 +1,186 @@
+﻿@{
+    ViewData["Title"] = "DelegateMap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using rise.Models
+@model rise.Models.PeersResult
+
+@{var MaxHeight = Model.Peers.Max(x => x.Height); }
+
+@section Scripts
+    {
+
+    <!-- Initialize Data Table-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#peersmap').DataTable({
+                "order": [[0, "desc"]],
+                "pageLength": 10,
+                "autoWidth": true,
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: -1
+                    }
+                },
+                columnDefs: [{
+                    className: 'control',
+                    orderable: false,
+                    targets: -1
+                }]
+            });
+        });
+    </script>
+
+    <script src="~/js/jquery-jvectormap-world-mill.js"></script>
+    <script type="text/javascript">
+   /* jVector Maps
+    * ------------
+    * Create a world map with markers
+    */
+        $('#world-map-markers').vectorMap({
+            map: 'world_mill',
+            normalizeFunction: 'polynomial',
+            hoverOpacity: 0.7,
+            hoverColor: false,
+            backgroundColor: 'transparent',
+            regionStyle: {
+                initial: {
+                    fill: 'rgba(210, 214, 222, 1)',
+                    'fill-opacity': 1,
+                    stroke: 'none',
+                    'stroke-width': 0,
+                    'stroke-opacity': 1
+                },
+                hover: {
+                    'fill-opacity': 0.7,
+                    cursor: 'pointer'
+                },
+                selected: {
+                    fill: 'yellow'
+                },
+                selectedHover: {}
+            },
+            markerStyle: {
+                initial: {
+                    fill: '#00a65a',
+                    stroke: '#111'
+                }
+            },
+             markers: [
+                        @foreach (var p in Model.Peers)
+                        {
+                            var mcolor = "green";
+                            if (p.Height < (MaxHeight - 2))
+                            {
+                                mcolor = "red";
+                            }
+                            <text> { latLng: [@p.Lattitude, @p.Longitude], name: '@{ if (@p.City != null) {@p.City} } OS:@p.Os - Height:@p.Height', style: { fill:'@mcolor', r: 5 }},</text>
+                        }
+                    ]
+        })
+    </script>
+}
+<br />
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1><img src="@Url.Content("~/img/"+ @AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />@(AppSettingsProvider.CoinName) Dashboard</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">PeerMaps</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-md-12">
+                <!-- MAP & BOX PANE -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Peers Map</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="d-md-flex">
+                            <div class="p-1 flex-1" style="overflow: hidden">
+                                <!-- Map will be created here -->
+                                <div id="world-map-markers" style="height: 450px; overflow: hidden"></div>
+                            </div>
+                        </div><!-- /.d-md-flex -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Start Transactions Table-->
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Connected Peers</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="peersmap" class="table display dt-responsive" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th align-middle data-priority="1">IP</th>
+                                    <th align-middle data-priority="2" class="align-middle">City</th>
+                                    <th align-middle data-priority="3" class="align-middle">Contry</th>
+                                    <th align-middle data-priority="5" class="align-middle">Version</th>
+                                    <th align-middle data-priority="5" class="align-middle">Height</th>
+                                    <th align-middle data-priority="4" class="align-middle">State</th>
+                                    <th align-middle data-priority="6" class="align-middle">Updated</th>
+                                    <th align-middle data-priority="7" class="align-middle">OS</th>
+                                    <th align-middle data-priority="0" class="align-middle"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var t in Model.Peers)
+                                {
+                                <tr>
+                                    <td class="align-middle"><h6><small class="text-muted">@t.Ip</small></h6></td>
+                                    <td class="align-middle"><h6><small class="text-muted">@t.City</small></h6></td>
+                                    <td class="align-middle"><h6><small class="text-muted">@t.Contry</small></h6></td>
+                                    <td class="align-middle"><h6><small class="text-muted">@t.Version</small></h6></td>
+                                    <td class="align-middle"><h6><small class="text-muted">@t.Height</small></h6></td>
+                                    @if (t.State == 2)
+                                    {
+                                        <td class="align-middle"><h6><i class="fa fa-star text-success"></i></h6></td>
+                                    }
+                                    else
+                                    {
+                                        <td class="align-middle"><h6><i class="fa fa-exclamation-circle text-danger"></i></h6></td>
+                                    }
+                                    <td class="align-middle"><h6><small class="text-muted">@t.Updated</small></h6></td>
+                                    <td class="align-middle"><h6><small class="text-muted">@t.Os</small></h6></td>
+                                    <td></td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    <!-- ./Transactions Table-->
+</div>

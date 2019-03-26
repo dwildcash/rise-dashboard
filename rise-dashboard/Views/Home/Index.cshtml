@@ -1,0 +1,65 @@
+﻿@using rise.Models
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = AppSettingsProvider.CoinName + " Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{string cookieValueFromContext = HttpContextAccessor.HttpContext.Request.Cookies["addr"]; }
+<title>@(AppSettingsProvider.CoinName) Dashboard</title>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+
+    @{
+        if (!String.IsNullOrEmpty(ViewBag.SearchText))
+        {
+            <text>
+                $('#AccountSummary').load('@Url.Action("AccountSummaryAsync", "Home")?address=@(ViewBag.SearchText)');
+            </text>
+        }
+        else if (cookieValueFromContext != null)
+        {
+            <text>
+                $('#AccountSummary').load('@Url.Action("AccountSummaryAsync", "Home")?address=@(cookieValueFromContext)');
+            </text>
+        }
+    }
+
+     $('#QuoteView').load('@Url.Action("QuotePartialView", "Home")');
+    </script>
+}
+
+<!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><img src="@Url.Content("~/img/"+ AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />@(AppSettingsProvider.CoinName) Dashboard</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Index</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+
+        <section class="content">
+            <div id="QuoteView"></div>
+        </section>
+
+        <section class="content">
+            <div id="AccountSummary"></div>
+        </section>
+    </div>
+<!-- /.content-wrapper -->
+
+<br />

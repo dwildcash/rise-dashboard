@@ -1,0 +1,120 @@
+﻿@using rise.Models
+@model rise.Models.DelegateResult
+
+@{
+    ViewData["Title"] = "Delegates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts
+    {
+    <!-- Initialize Data Table-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#delegates').DataTable({
+                "fixedHeader": true,
+                scrollY: "700px",
+                scrollCollapse: true,
+                "autoWidth": true,
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: -1
+                    }
+                },
+                columnDefs: [{
+                    className: 'control',
+                    orderable: false,
+                    targets: -1
+                }]
+            });
+        });
+    </script>
+}
+
+<br />
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1><img src="@Url.Content("~/img/"+ @AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />@(AppSettingsProvider.CoinName) Dashboard</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Delegates</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <!-- Start Transactions Table-->
+        <!-- Main content -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Delegates List</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="delegates" class="table display dt-responsive" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th align-middle data-priority="1" class="align-middle">Rank</th>
+                                        <th align-middle data-priority="2" class="align-middle">Name</th>
+                                        <th align-middle data-priority="4" class="align-middle">Uptime</th>
+                                        <th align-middle data-priority="5" class="align-middle">VoteWeight</th>
+                                        <th align-middle data-priority="8" class="align-middle">Missed Blocks</th>
+                                        <th align-middle data-priority="3" class="align-middle">Forging Chance</th>
+                                        <th align-middle data-priority="7" class="align-middle">Approval</th>
+                                        <th align-middle data-priority="5" class="align-middle">Forged</th>
+                                        <th align-middle data-priority="6" class="align-middle">Votes</th>
+                                        <th align-middle data-priority="10" class="align-middle">CMB</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var t in Model.Delegates.Where(x => x.VotesWeight != 0).OrderBy(r => r.Rank))
+                                    {
+                                        <tr>
+                                            @if (t.Rank <= 199)
+                                            {
+                                                <td class="align-middle"><h6><span class="badge badge-primary">@t.Rank</span></h6></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">@t.Rank</span></h6></td>
+                                            }
+
+                                            <td class="align-middle"><h6><small class="text-muted"><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@t.Username</a></small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.Productivity%</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@(Math.Round((double)t.VotesWeight / 100000000, 2).ToString("N0"))</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.Missedblocks</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@Math.Round(t.ForgingChance, 2)%</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.Approval%</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.Producedblocks.ToString("N0")</small></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@Math.Round((double)t.Vote / 100000000, 2)</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.CMB</small></h6></td>
+                                            <td></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- ./Transactions Table-->
+    </section>
+</div>

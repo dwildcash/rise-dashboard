@@ -1,0 +1,129 @@
+﻿@model rise.Models.Delegate
+
+@section Scripts
+    {
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("body").addClass('sidebar-collapse').trigger('collapsed.pushMenu');
+        $('#Paymentschart').load('@Url.Action("DelegatePaymentsChartAsync", "Home")?address=@(ViewBag.Address)&minutes=10500');
+    });
+
+    function UpdatePayment(time)
+    {
+        $('#Paymentschart').html("<div class=\"text-center\"><img src=\"/img/spinner.svg\" /></div>");
+        $('#Paymentschart').load('@Url.Action("DelegatePaymentsChartAsync", "Home")?address=@(ViewBag.Address)&minutes=' + time);
+    }
+    </script>
+}
+
+@if (ViewBag.Address == null)
+{
+    <h3> Delegate not found</h3>
+}
+else
+{
+    <section class="content-header">
+        <h2>Delegate <small><a href="https://explorer.rise.vision/address/@Model.Address" target="_blank">@Model.Address</a></small></h2>
+        <h5><i class="fa fa-star"></i>@Model.Username</h5>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes(Stat box) -->
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>@Model.Rank</h3>
+                            <p>Rank</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion-md-pie"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>@Model.Approval<sup style="font-size: 20px">%</sup></h3>
+                            <p>Approval</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion-md-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>@Model.Productivity%</h3>
+                            <p>Productivity</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion-md-hammer"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>@Model.Missedblocks</h3>
+                            <p>Missed Blocks</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion-md-remove-circle"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+        </div>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"> Payment sent to voters</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- Transactions Tables-->
+                    <div class="card-body p-0">
+                        <!-- Payments Chart-->
+                        <ul class="nav nav-tabs justify-content-end">
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#home" onclick="UpdatePayment(1600);">1 Day</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#menu1" onclick="UpdatePayment(10500);">1 Week</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#menu2" onclick="UpdatePayment(20600);">2 Weeks</a>
+                            </li>
+                        </ul>
+                        <div id="Paymentschart" class="container-fluid col-lg-12">
+                            <div class="text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}

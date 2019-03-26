@@ -1,0 +1,70 @@
+﻿@model rise.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Application Users</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">ApplicationUsers</a></li>
+                        <li class="breadcrumb-item active">Edit</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title"></h5>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form asp-action="Edit">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input type="hidden" asp-for="Id" />
+                                        <div class="form-group">
+                                            <label asp-for="UserName" class="control-label"></label>
+                                            <input asp-for="UserName" class="form-control" />
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Security Role</label>
+                                            @Html.DropDownList("RoleId", (IEnumerable<SelectListItem>)ViewBag.Roles, new { @class = "form-control" })
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" value="Save" class="btn btn-default" />
+                                        </div>
+                                    </form>
+                                    <div>
+                                        <a asp-action="Index">Back to List</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+        </div>
+    </section>
+</div>

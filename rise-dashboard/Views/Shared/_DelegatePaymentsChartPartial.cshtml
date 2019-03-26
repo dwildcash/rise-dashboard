@@ -1,0 +1,120 @@
+﻿@using rise.Models
+@model rise.ViewModels.DelegateStatsViewModel
+
+@functions{
+
+    // return the account name of delegate
+    public string ToDelegateUser(string address)
+    {
+        var mydelegate = Model.DelegateResult.Delegates.Where(x => x.Address == address).FirstOrDefault();
+
+        if (mydelegate != null)
+        {
+            return mydelegate.Username;
+        }
+
+        return null;
+    }
+}
+
+@{var guid = System.Guid.NewGuid().ToString().Replace("-", "");}
+
+<script type="text/javascript">
+    var ctx_@guid = document.getElementById("myChart_@guid");
+
+    var myChart_@guid = new Chart(ctx_@guid, {
+        type: 'horizontalBar',
+        data: {
+            labels: [
+                      @foreach (var voter in Model.VotersResult.Accounts)
+                      {
+                            <text>'@(ToDelegateUser(voter.Address) ?? voter.Address)',</text>
+                      }
+                ],
+            datasets: [{
+               label: '#@(AppSettingsProvider.CoinName) Delegate Payments to Voters',
+               data: [
+                       @foreach (var voter in Model.VotersResult.Accounts)
+                       {
+                           var sum = Model.TransactionsResult.transactions.Where(x => x.recipientId == voter.Address).Where(y => y.timestamp >= Model.ToGenesisTime(ViewBag.Minutes)).Sum(x => Double.Parse(x.amount.ToString()) / 100000000);
+                            <text>@sum,</text>
+                      }
+                ],
+                metadata: [
+                      @foreach (var voter in Model.VotersResult.Accounts)
+                      {
+                            <text>'@voter.Address',</text>
+                      }
+                ],
+                datalabels: {
+                    align: 'end',
+                    anchor: 'start'
+                },
+                borderWidth: 1
+            }],
+        },
+        options: {
+            tooltips: {
+                enabled: true,
+                callbacks: {
+                    label: function (tooltipItem) {
+                        return tooltipItem.yLabel + " " + Number(tooltipItem.xLabel) + "$";
+                    }
+                }
+            },
+            onClick: function (c, i) {
+                e = i[0];
+                var x_value = this.data.labels[e._index];
+                var y_value = this.data.datasets[0].data[e._index];
+                var m_value = this.data.datasets[0].metadata[e._index];
+                window.open("@(AppSettingsProvider.CoinExplorer)/address/" + m_value);
+            },
+            animation: {
+                duration: 1,
+                onComplete: function () {
+                    var chartInstance = this.chart,
+                    ctx = chartInstance.ctx;
+                    ctx.fillStyle = 'rgb(0, 0, 0)';
+                    var fontSize = 10;
+                    var fontStyle = 'normal';
+                    var fontFamily = 'arial';
+                    ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+                    this.data.datasets.forEach(function (dataset, i) {
+                        var meta = chartInstance.controller.getDatasetMeta(i);
+                        meta.data.forEach(function (bar, index) {
+                            var data = dataset.data[index];
+                            var dataString = dataset.data[index].toString();
+                            ctx.textAlign = 'left';
+                            ctx.textBaseline = 'middle';
+                            var padding = 00;
+                            var position = bar.tooltipPosition();
+                            ctx.fillText(dataString, position.x + 4, position.y);
+                        });
+                    });
+                }
+            },
+            maintainAspectRatio: false,
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        maxRotation: 90,
+                        minRotation: 80
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+<!-- Bar Chart for Payments -->
+
+<canvas id="myChart_@guid" height="@((Model.VotersResult.Accounts.Count * 20)+80)" width="800"></canvas>
+
+<!-- End Bar Chart for Payments -->

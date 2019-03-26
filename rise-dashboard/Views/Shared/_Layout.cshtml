@@ -1,0 +1,365 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+@using rise.Models
+
+@{string addressSaved = null;
+    var controller = ViewContext.RouteData.Values["Controller"];
+    var action = ViewContext.RouteData.Values["Action"];}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@(AppSettingsProvider.CoinName) Dashboard</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="@Url.Content("~/css/all.css")" />
+    <link rel="icon" href="@Url.Content("~/img/favicon.ico")" />
+    <!-- IonIcons -->
+    <link rel="stylesheet" href="@Url.Content("~/css/ionicons.min.css")" />
+
+    <!-- Pace Progressbar-->
+    <link rel="stylesheet" href="@Url.Content("~/css/pace.css")" />
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="@Url.Content("~/css/adminlte.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/css/jquery-ui-autocomplete.css")" />
+
+    <!-- Datatable -->
+    <link rel="stylesheet" href="@Url.Content("~/css/dataTables.bootstrap4.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/css/responsive.bootstrap4.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/css/fixedHeader.bootstrap4.min.css")" />
+
+    <!-- Jvector Maps -->
+    <link rel="stylesheet" href="@Url.Content("~/css/jquery-jvectormap.css")" />
+
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    @Html.Raw(JavaScriptSnippet.FullScript)
+</head>
+<!--
+BODY TAG OPTIONS:
+=================
+Apply one or more of the following classes to to the body tag
+to get the desired effect
+|---------------------------------------------------------|
+|LAYOUT OPTIONS | sidebar-collapse                        |
+|               | sidebar-mini                            |
+|---------------------------------------------------------|
+-->
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+                </li>
+            </ul>
+
+            <!-- DELEGATE SEARCH FORM -->
+            @using (Html.BeginForm(action.ToString(), controller.ToString(), FormMethod.Get, new { @class = "form-inline ml-auto" }))
+            {
+                if (ViewBag.Searchtext == null)
+                {
+                    addressSaved = HttpContextAccessor.HttpContext.Request.Cookies["addr"];
+                }
+                else
+                {
+                    addressSaved = ViewBag.SearchText;
+                }
+
+                <div class="right-menu list-inline ml-3">
+                    <div class="input-group">
+                        @if (addressSaved == null)
+                        {
+                            <input class="form-control form-control-navbar" type="search" placeholder="Search Delegates/Account" id="address" name="address">
+                        }
+                        else
+                        {
+                            <input class="form-control form-control-navbar" type="search" value="@addressSaved" id="address" name="address">
+                        }
+                        <span class="input-group-append">
+                            <button class="btn btn-navbar" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            }
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="/" class="brand-link">
+                <img src="@Url.Content("~/img/"+ AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />
+                <span class="brand-text font-weight-light">@(AppSettingsProvider.CoinName) Dashboard</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="info">
+                        <script async src="https://telegram.org/js/telegram-widget.js?5" data-telegram-login="RiseStar_bot" data-size="small" data-auth-url="http://rise.coinquote.io/Account/TGLoginCallback" data-request-access="write"></script>
+                    </div>
+                    </div>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <!-- Sidebar user panel (optional) -->
+                        <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
+                            <div class="image">
+                                <font size="+2" color="gray">&nbsp;<i class="far fa-user" style="color:#B6B2B2"></i></font>
+                            </div>
+                            <div class="info">
+                                <a href="#" class="d-block">@User.Identity.Name</a>
+                            </div>
+                            <div class="info text-">
+                                <button class="btn-info btn-space ml-auto" type="button" onclick="location.href='/Account/Logout'">
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- SIGNIN FORM -->
+                        @using (Html.BeginForm("ExternalLogin", "Account", FormMethod.Post, new { @class = "form-inline ml-auto" }))
+                        {
+                            var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                                <div class="image">
+                                    <font size="+2"><i class="fab fa-twitter nav-icon" style="color:#B6B2B2"></i></font>
+                                </div>
+                                <div class="info">
+                                    @foreach (var provider in loginProviders)
+                                    {
+                                        <span class="input-group-append ml-2">
+                                            <button type="submit" class="btn-info btn-space ml-auto" name="provider" id="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> Login with @provider.Name</button>
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-book-open"></i>
+                                    <p>
+                                        Transactions
+                                        <i class="right fa fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Transactions", "Home")" class="nav-link">
+                                            <i class="fa fa-play-circle nav-icon"></i>
+                                            <p>Last @(AppSettingsProvider.MaxTransactionsToFetch)</p>
+                                        </a>
+                                    </li>
+                                    @if (addressSaved != null)
+                                    {
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("Transactions", "Home", new { address = addressSaved})" class="nav-link">
+                                                <i class="fa fa-play-circle nav-icon"></i>
+                                                <p>For @(addressSaved)</p>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item has-treeview">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa fa-book-open"></i>
+                                        <p>
+                                            Admin Users
+                                            <i class="right fa fa-angle-left"></i>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("Index", "ApplicationUsers")" class="nav-link">
+                                                <i class="fa fa-play-circle nav-icon"></i>
+                                                <p>Manage Users</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            <!-- Delegate List -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("Delegates", "Home")" class="nav-link">
+                                    <i class="fa fa-chalkboard-teacher nav-icon"></i>
+                                    <p>Delegates List</p>
+                                </a>
+                            </li>
+                            <!-- ./Delegate List-->
+                            <!-- Delegate List -->
+                            <li class="nav-item">
+                                @if (addressSaved != null)
+                                {
+                                    <a href="@Url.Action("Index", "DelegateForms", new { address = addressSaved})" class="nav-link">
+                                        <i class="fa fa-chalkboard-teacher nav-icon"></i>
+                                        <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Index", "DelegateForms")" class="nav-link">
+                                        <i class="fa fa-chalkboard-teacher nav-icon"></i>
+                                        <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
+                                    </a>
+                                }
+                            </li>
+                            <!-- ./Delegate List-->
+                            <!-- Sites -->
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-sitemap"></i>
+                                    <p>
+                                        @(AppSettingsProvider.CoinName) Official Sites
+                                        <i class="right fa fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="@(AppSettingsProvider.CoinMainSite)" target="_blank" rel="noopener noreferrer" class="nav-link">
+                                            <i class="fa fa-play-circle nav-icon text-warning"></i>
+                                            <p>Main Web Site</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="https://wallet.rise.vision" target="_blank" rel="noopener noreferrer" class="nav-link">
+                                            <i class="fa fa-play-circle nav-icon text-warning"></i>
+                                            <p>Wallet</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@(AppSettingsProvider.CoinExplorer)" target="_blank" rel="noopener noreferrer" class="nav-link">
+                                            <i class="fa fa-play-circle nav-icon text-warning"></i>
+                                            <p>Explorer</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- ./Sites-->
+                            <!-- PeersMap -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("PeersMap", "Home")" class="nav-link">
+                                    <i class="fa fa-map nav-icon"></i>
+                                    <p>PeersMap</p>
+                                </a>
+                            </li>
+                            <!-- ./PeersMap-->
+                            <!-- About -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("About", "Home")" class="nav-link">
+                                    <i class="fa fa-id-card nav-icon"></i>
+                                    <p>About</p>
+                                </a>
+                            </li>
+                            <!-- ./About-->
+                        </ul>
+                    </nav>
+                    <!-- /.sidebar-menu -->
+                </div>
+                <!-- /.sidebar -->
+</aside>
+
+        @RenderBody()
+
+        <!-- /.content-wrapper -->
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <div class="float-left d-sm-none d-md-block text-sm" id="QuoteOfTheDay"></div>
+            <div class="float-right d-sm-none d-md-block text-sm">
+                <strong>Copyright &copy; 2019&nbsp;<a href="@(AppSettingsProvider.CoinExplorer)/address/@(AppSettingsProvider.DonationAddress)">Dwildcash </a></strong><a href="/Home/About"><img src="@Url.Content("~/img/dwildcash.png")" height="40" /></a>
+            </div>
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+    <!-- REQUIRED SCRIPTS
+
+    <!-- fontawesome -->
+    <script src="@Url.Content("~/js/all.js")"></script>
+
+    <!-- jQuery -->
+    <script src="@Url.Content("~/js/jquery.min.js")"></script>
+    <script src="@Url.Content("~/js/jquery-ui.min.js")"></script>
+    <script src="@Url.Content("~/js/jquery-jvectormap.min.js")"></script>
+    <script src="@Url.Content("~/js/jquery.sparkline.min.js")"></script>
+    <script src="@Url.Content("~/js/jquery.knob.min.js")"></script>
+
+    <!-- Bootstrap -->
+    <script src="@Url.Content("~/js/bootstrap.bundle.min.js")"></script>
+
+    <!-- Datable Bootstrap -->
+    <script src="@Url.Content("~/js/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/js/dataTables.responsive.min.js")"></script>
+    <script src="@Url.Content("~/js/dataTables.bootstrap4.js")"></script>
+    <script src="@Url.Content("~/js/responsive.bootstrap4.min.js")"></script>
+    <script src="@Url.Content("~/js/fixedHeader.bootstrap4.min.js")"></script>
+
+    <!-- AdminLTE -->
+    <script src="@Url.Content("~/js/adminlte.min.js")"></script>
+
+    <!-- OPTIONAL SCRIPTS -->
+    <script src="@Url.Content("~/js/Chart.min.js")"></script>
+    <script src="@Url.Content("~/js/pace.min.js")"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript">
+        $.ajaxSetup({ cache: false });
+        $.ui.autocomplete.prototype._renderItem = function (ul, item) {
+            item.label = item.label.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + $.ui.autocomplete.escapeRegex(this.term) + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>");
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+        $.ajax({
+            url: '@Url.Action("GetDelegates","Home")',
+            cache: false,
+            success: function(result) {
+                $("#address").autocomplete({
+                    source: result,
+                    open: function () {
+                        setTimeout(function () {
+                            $('.ui-autocomplete').css('z-index', 9999999).css('!important');
+                        }, 0);
+                    }
+                }).css('z-index', 2000);
+            }
+        });
+        $.ajax({
+            url: '@Url.Action("GetQuoteOfTheDay","Home")',
+            cache: false,
+            success: function (result) {
+                var myhtml = "<small>" + result.contents.quotes[0].quote  + "<cite title=\"Source Title\"> -" + result.contents.quotes[0].author + "</cite></small>";
+                $('#QuoteOfTheDay').html(myhtml);
+            }
+        })
+    </script>
+</body>
+</html>

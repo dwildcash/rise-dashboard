@@ -1,0 +1,98 @@
+﻿@model rise.ViewModels.TransactionsViewModel
+
+@using rise.Models
+
+@functions{
+
+    // return the account name for delegate
+    public string ToDelegateUser(string address)
+    {
+        var mydelegate = Model.DelegateResult.Delegates.Where(x => x.Address == address).FirstOrDefault();
+
+        if (mydelegate != null)
+        {
+            return mydelegate.Username;
+        }
+
+        return null;
+    }
+}
+
+<!-- Initialize Data Table-->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#transac').DataTable({
+            "pageLength": 10,
+            "order": [[0, "desc"]],
+            "autoWidth": true,
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: -1
+                }
+            },
+            columnDefs: [{
+                className: 'control',
+                orderable: false,
+                targets: -1
+            }]
+        });
+    });
+</script>
+
+<!-- Start Transactions Table-->
+<!-- Main content -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Latest @AppSettingsProvider.MaxTransactionsToFetch @(AppSettingsProvider.CoinName) Transactions</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="transac" class="table display dt-responsive" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th align-middle data-priority="1">Timestamp</th>
+                                <th align-middle data-priority="5" class="align-middle">Transaction id</th>
+                                <th align-middle data-priority="3" class="align-middle">Transaction</th>
+                                <th align-middle data-priority="2" class="align-middle">Amount</th>
+                                <th align-middle data-priority="4" class="align-middle">Value (Usd)</th>
+                                <th align-middle data-priority="0" class="align-middle"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var t in Model.TransactionsResult.transactions.OrderBy(x => x.timestamp).ToList())
+                            {
+                                <tr>
+                                    <td class="align-middle"><h6><small class="text-muted">@DateTime.Parse(Model.FromGenesisTime(t.timestamp).ToString()).ToString("yyyy-MM-dd HH:mm:ss")</small></h6></td>
+                                    <td class="align-middle"><h5><small><span class="text-muted"><a href="https://explorer.rise.vision/transaction/@t.id" target="_blank">@t.id</a></span></small></h5></td>
+                                    <td>
+                                        <h6 class="text-center"><span class="text-muted">@Html.ActionLink((ToDelegateUser(t.senderId) ?? t.senderId), "Account", "Home", new { address = t.senderId }, null)</span></h6>
+                                        <h6 class="text-center"><i class="fa fa-arrow-down align-content-center"></i></h6>
+
+                                        @if ((double.Parse(t.amount.ToString()) > 0))
+                                        {
+                                            <h6 class="text-center">@Html.ActionLink((ToDelegateUser(t.recipientId) ?? t.recipientId), "Account", "Home", new { address = t.recipientId }, null)</h6>
+                                        }
+                                        else
+                                        {
+                                            <h6 class="text-center"><span class="badge badge-info align-content-center">Delegate Vote</span></h6>
+                                        }
+                                    </td>
+                                    <td class="align-middle"><h6><span class="btn btn-outline-primary btn-sm text-sm-center">@(Math.Round((Double.Parse(t.amount.ToString()) / 100000000), 2).ToString("#,###.00;(0);0"))</span></h6></td>
+                                    <td class="nowrap align-middle"><h6><small class="text-muted"><i class="fa fa-dollar-sign"></i>@(Math.Round(Double.Parse(t.amount.ToString()) / 100000000 * Model.LastAllQuote().USDPrice, 4).ToString("#,###.00;(0);0"))</small></h6></td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+<!-- ./Transactions Table-->
