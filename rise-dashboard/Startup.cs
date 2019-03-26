@@ -57,7 +57,7 @@
             AppSettingsProvider.CryptopiaWalletAddress = Configuration["Appsettings:CryptopiaWalletAddress"];
             AppSettingsProvider.SimulateRoundCount = int.Parse(Configuration["AppSettings:SimulateRoundCount"]);
             AppSettingsProvider.MaxTransactionsToFetch = int.Parse(Configuration["AppSettings:MaxTransactionsToFetch"]);
-            AppSettingsProvider.BotKey = Configuration["AppSettings:BotKey"];
+            AppSettingsProvider.BotApiKey = Configuration["AppSettings:BotApiKey"];
         }
 
         /// <summary>

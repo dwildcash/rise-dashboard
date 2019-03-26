@@ -14,7 +14,7 @@
         /// <summary>
         /// Define the Telegram Bot Key
         /// </summary>
-        public static string BotKey { get; set; }
+        public static string BotApiKey { get; set; }
 
         /// <summary>
         /// Define the Max Coin that can be forged

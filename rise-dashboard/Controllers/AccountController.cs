@@ -56,11 +56,11 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> TGLoginCallback()
+        public async Task<IActionResult> TGLoginCallback(int id,string first_name,string username, string photo_url, string auth_date, string hash)
         {
             var fields = HttpUtility.ParseQueryString(HttpContext.Request.QueryString.ToString());
 
-            LoginWidget loginWidget = new LoginWidget(AppSettingsProvider.BotKey);
+            LoginWidget loginWidget = new LoginWidget(AppSettingsProvider.BotApiKey);
             if (loginWidget.CheckAuthorization(ToDictionary(fields)) == Authorization.Valid)
             {
                 var aspnetuser = await _userManager.FindByNameAsync(fields["username"]);
