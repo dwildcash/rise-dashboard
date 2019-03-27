@@ -130,7 +130,6 @@
     );
 </script>
 
-
 <!-- Small boxes (Stat box) -->
 <div class="row">
     <div class="col-lg-3 col-6">
@@ -238,6 +237,11 @@
             <div class="position-relative mb-4">
                 <canvas id="priceQuoteChart" height="200"></canvas>
             </div>
+            <p class="d-flex flex-column">
+                <span>@(AppSettingsProvider.CoinName) LiveCoin Tx</span>
+                <span class="text-muted text-lg">Sent to LiveCoin @(Model.liveCoinTx.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == "5920507067941756798R").Sum(x => x.amount / 100000000))</span>
+                <span class="text-muted text-lg">From LiveCoin @(Model.liveCoinTx.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == "5920507067941756798R").Sum(x => x.amount / 100000000))</span>
+            </p>
         </div>
     </div>
 </div>

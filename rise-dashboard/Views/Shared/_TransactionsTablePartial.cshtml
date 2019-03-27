@@ -14,6 +14,12 @@
             return mydelegate.Username;
         }
 
+        // Flag Live Coin Tx
+        if (address == "5920507067941756798R")
+        {
+            return "Livecoin.net";
+        }
+
         return null;
     }
 }
@@ -74,7 +80,7 @@
 
                                         @if ((double.Parse(t.amount.ToString()) > 0))
                                         {
-                                            <h6 class="text-center">@Html.ActionLink((ToDelegateUser(t.recipientId) ?? t.recipientId), "Account", "Home", new { address = t.recipientId }, null)</h6>
+                                            <h6 class="text-center">@Html.ActionLink((ToDelegateUser(t.recipientId) ?? t.recipientId), "Index", "Home", new { address = t.recipientId }, null)</h6>
                                         }
                                         else
                                         {

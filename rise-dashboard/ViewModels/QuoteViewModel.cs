@@ -2,6 +2,7 @@
 {
     using rise.Code.Rise;
     using rise.Models;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Defines the <see cref="QuoteViewModel" />
@@ -37,5 +38,10 @@
         /// Gets or sets the coinbaseBtcQuoteResult
         /// </summary>
         public CoinbaseBtcQuoteResult coinbaseBtcQuoteResult { get; set; }
+
+        /// <summary>
+        /// Get All coins sent or received from LiveCoin
+        /// </summary>
+        public TransactionsResult liveCoinTx { get; set; }
     }
 }

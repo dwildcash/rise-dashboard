@@ -288,12 +288,13 @@
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        public PartialViewResult QuotePartialView()
+        public async Task<PartialViewResult> QuotePartialView()
         {
             try
             {
                 var quoteViewModel = new QuoteViewModel
                 {
+                    liveCoinTx = await TransactionsFetcher.FetchAllUserTransactions("5920507067941756798R"),
                     transactionsResult = TransactionsResult.Current,
                     liveCoinQuoteResult = LiveCoinQuote.Current,
                     coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
