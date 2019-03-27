@@ -239,8 +239,8 @@
             </div>
             <p class="d-flex flex-column">              
                 <span>@(AppSettingsProvider.CoinName) LiveCoin Last 24H Tx</span>
-                <span class="text-muted text-lg">Sent to LiveCoin @(Model.liveCoinTx.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-20).ToUniversalTime()).Where(x => x.recipientId == "5920507067941756798R").Sum(x => x.amount / 100000000).ToString("N0"))</span>
-                <span class="text-muted text-lg">From LiveCoin @Model.liveCoinTx.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-20).ToUniversalTime()).Where(x => x.senderId == "5920507067941756798R").Sum(x => x.amount / 100000000).ToString("N0")</span>
+                <span class="text-muted text-lg">Sent to LiveCoin @(Model.liveCoinTx.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == "5920507067941756798R").Sum(x => x.amount / 100000000).ToString("N0"))</span>
+                <span class="text-muted text-lg">From LiveCoin @Model.liveCoinTx.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == "5920507067941756798R").Sum(x => x.amount / 100000000).ToString("N0")</span>
             </p>
         </div>
     </div>
