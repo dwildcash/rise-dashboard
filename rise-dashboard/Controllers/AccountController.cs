@@ -31,6 +31,7 @@
 
 
         [HttpPut]
+        [AllowAnonymous]
         public async Task<IActionResult> SyncUser(int TelegramId, string UserName, string Secret, string Address, string PublickKey)
         {
             var aspnetuser = await _userManager.FindByNameAsync(UserName);
