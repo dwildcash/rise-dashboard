@@ -38,9 +38,9 @@
                 { "id", id.ToString() },
                 { "first_name", first_name },
                 { "username", username},
-                {"photo_url", photo_url },
-                {"auth_date", auth_date },
-                {"hash", hash }
+                { "photo_url", photo_url },
+                { "auth_date", auth_date },
+                { "hash", hash }
             };
 
             LoginWidget loginWidget = new LoginWidget(AppSettingsProvider.BotApiKey);
@@ -49,10 +49,15 @@
             {
                 var aspnetuser = await _userManager.FindByNameAsync(fields["username"]);
 
+                if (aspnetuser.Photo_Url == null)
+                {
+                    aspnetuser.Photo_Url = fields["photo_url"];
+                }
+
                 // User doesnt exit in aspnetdb let create it
                 if (aspnetuser == null)
                 {
-                    aspnetuser = new ApplicationUser { UserName = fields["username"] };
+                    aspnetuser = new ApplicationUser { UserName = fields["username"], Photo_Url = fields["photo_url"] };
                     IdentityResult result = await _userManager.CreateAsync(aspnetuser);
 
                     // By default add user to Guest

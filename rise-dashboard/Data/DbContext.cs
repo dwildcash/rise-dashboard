@@ -17,6 +17,14 @@
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // Add Index to speedup
+            builder.Entity<CoinQuote>().HasIndex(x => new { x.Exchange, x.TimeStamp });
+        }
+
         /// <summary>
         /// Gets or sets the ApplicationUsers
         /// </summary>

@@ -14,7 +14,7 @@ namespace risedashboard.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -132,6 +132,8 @@ namespace risedashboard.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<string>("Address");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -140,9 +142,15 @@ namespace risedashboard.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("EncryptedBip39");
+
+                    b.Property<DateTime>("LastMessage");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<int>("MessageCount");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -156,14 +164,20 @@ namespace risedashboard.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<string>("Photo_Url");
+
+                    b.Property<string>("PublicKey");
+
+                    b.Property<string>("Role");
+
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<int>("TelegramId");
 
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
-
-                    b.Property<string>("WalletAddress");
 
                     b.HasKey("Id");
 
@@ -194,25 +208,9 @@ namespace risedashboard.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Exchange", "TimeStamp");
+
                     b.ToTable("CoinQuotes");
-                });
-
-            modelBuilder.Entity("rise.Models.Contributors", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Address");
-
-                    b.Property<string>("ImgPath");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Contributors");
                 });
 
             modelBuilder.Entity("rise.Models.DelegateForm", b =>

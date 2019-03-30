@@ -43,6 +43,7 @@
         private void BuildAppSettingsProvider()
         {
             AppSettingsProvider.APIUrl = Configuration["AppSettings:APIUrl"];
+            AppSettingsProvider.SiteUrl = Configuration["AppSettings:SiteUrl"];
             AppSettingsProvider.IPStackApiKey = Configuration["AppSettings:IPStackApiKey"];
             AppSettingsProvider.LiveCoinMarket = Configuration["AppSettings:LiveCoinMarket"];
             AppSettingsProvider.CoinMarketCapTickerCode = Configuration["AppSettings:CoinMarketCapTickerCode"];
@@ -52,11 +53,14 @@
             AppSettingsProvider.CoinMainSite = Configuration["AppSettings:CoinMainSite"];
             AppSettingsProvider.CoinExplorer = Configuration["AppSettings:CoinExplorer"];
             AppSettingsProvider.DonationAddress = Configuration["AppSettings:DonationAddress"];
-            AppSettingsProvider.RightBtcMarket = Configuration["AppSettings:RightBtcMarket"];          
-            AppSettingsProvider.CryptopiaWalletAddress = Configuration["Appsettings:CryptopiaWalletAddress"];
+            AppSettingsProvider.RightBtcMarket = Configuration["AppSettings:RightBtcMarket"];
+            AppSettingsProvider.LiveCoinWalletAddress = Configuration["Appsettings:LiveCoinWalletAddress"];
             AppSettingsProvider.SimulateRoundCount = int.Parse(Configuration["AppSettings:SimulateRoundCount"]);
             AppSettingsProvider.MaxTransactionsToFetch = int.Parse(Configuration["AppSettings:MaxTransactionsToFetch"]);
             AppSettingsProvider.BotApiKey = Configuration["AppSettings:BotApiKey"];
+            AppSettingsProvider.BotName = Configuration["AppSettings:BotName"];
+            AppSettingsProvider.Salt = Configuration["AppSettings:Salt"];
+            AppSettingsProvider.EncryptionKey = Configuration["AppSettings:EncryptionKey"];
         }
 
         /// <summary>
@@ -108,7 +112,7 @@
             {
                 Console.Write(args.Exception.Message);
                 args.SetObserved();
-            });
+            }); 
         }
 
         /// <summary>

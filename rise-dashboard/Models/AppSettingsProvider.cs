@@ -12,6 +12,29 @@
         public static int SimulateRoundCount { get; set; }
 
         /// <summary>
+        /// Encryption Salt
+        /// </summary>
+        public static string Salt { get; set; }
+
+
+        /// <summary>
+        /// Set the EncryptionKey
+        /// </summary>
+        public static string EncryptionKey { get; set; }
+
+        /// <summary>
+        /// Telegram Bot Name
+        /// </summary>
+        public static string BotName { get; set; }
+
+
+        /// <summary>
+        /// Get or Sets SiteURl
+        /// </summary>
+        public static string SiteUrl { get; set; }
+
+
+        /// <summary>
         /// Define the Telegram Bot Key
         /// </summary>
         public static string BotApiKey { get; set; }
@@ -77,8 +100,8 @@
         public static string IPStackApiKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the CryptopiaWalletAddress
+        /// Gets or sets the LiveCoinWalletAddress
         /// </summary>
-        public static string CryptopiaWalletAddress { get; set; }
+        public static string LiveCoinWalletAddress { get; set; }
     }
 }

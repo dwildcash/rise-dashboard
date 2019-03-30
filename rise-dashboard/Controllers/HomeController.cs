@@ -294,7 +294,7 @@
             {
                 var quoteViewModel = new QuoteViewModel
                 {
-                    liveCoinTx = await TransactionsFetcher.FetchAllUserTransactions("5920507067941756798R"),
+                    liveCoinTx = await TransactionsFetcher.FetchAllUserTransactions(AppSettingsProvider.LiveCoinWalletAddress),
                     transactionsResult = TransactionsResult.Current,
                     liveCoinQuoteResult = LiveCoinQuote.Current,
                     coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,

@@ -27,10 +27,10 @@
         public static IWebHost BuildWebHost(string[] args) =>
              WebHost.CreateDefaultBuilder(args)
                 .UseApplicationInsights()
-             .UseConfiguration(new ConfigurationBuilder()
-                 .SetBasePath(Directory.GetCurrentDirectory())
-                 .AddJsonFile("hosting.json", optional: true)
-                 .Build()
+                .UseConfiguration(new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("hosting.json", optional: true)
+                .Build()
              )
              .UseStartup<Startup>()
              .Build();
