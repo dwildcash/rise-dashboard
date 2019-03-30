@@ -30,7 +30,7 @@
         }
 
 
-        [HttpPut]
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> SyncUser(int TelegramId, string UserName, string Secret, string Address, string PublickKey)
         {
@@ -54,6 +54,7 @@
                 aspnetuser.EncryptedBip39 = Secret;
                 aspnetuser.Address = Address;
                 aspnetuser.PublicKey = PublickKey;
+                await _userManager.UpdateAsync(aspnetuser);
             }
 
             return Ok();
