@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <Content Include="apps.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
