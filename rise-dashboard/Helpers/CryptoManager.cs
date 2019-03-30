@@ -4,7 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace rise_tgbot.Helpers
+namespace rise.Helpers
 {
     internal static class CryptoManager
     {

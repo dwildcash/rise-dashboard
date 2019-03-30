@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using rise.Helpers;
     using rise.Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -28,6 +29,34 @@
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
+
+        [HttpPut]
+        public async Task<IActionResult> SyncUser(int TelegramId, string UserName, string Secret, string Address, string PublickKey)
+        {
+            var aspnetuser = await _userManager.FindByNameAsync(UserName);
+
+            // User doesnt exit in aspnetdb let create it
+            if (aspnetuser == null)
+            {
+                aspnetuser = new ApplicationUser { UserName = UserName, TelegramId = TelegramId, EncryptedBip39 = Secret, Address= Address, PublicKey = PublickKey };
+                IdentityResult result = await _userManager.CreateAsync(aspnetuser);
+
+                // By default add user to Guest
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(aspnetuser, "Member");
+                }
+            }
+            else
+            {
+                aspnetuser.TelegramId = TelegramId;
+                aspnetuser.EncryptedBip39 = Secret;
+                aspnetuser.Address = Address;
+                aspnetuser.PublicKey = PublickKey;
+            }
+
+            return Ok();
+        }
        
         [HttpGet]
         [AllowAnonymous]
