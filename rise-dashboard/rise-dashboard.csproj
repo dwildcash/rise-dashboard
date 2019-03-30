@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <ApplicationInsightsResourceId>/subscriptions/81eb8138-6691-4950-8572-ffe679e1970b/resourcegroups/emmanRG/providers/microsoft.insights/components/rise-dashboard</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/bf24cb8e-ffc4-41b8-9bd6-14f38d41a91b/resourceGroups/emmanRG/providers/microsoft.insights/components/rise-dashboard</ApplicationInsightsAnnotationResourceId>
+	 <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>
 
   <ItemGroup>
