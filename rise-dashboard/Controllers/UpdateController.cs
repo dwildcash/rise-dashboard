@@ -18,14 +18,11 @@ namespace rise.Controllers
 
         // POST api/update
         [HttpPost]
-        [HttpGet]
         [AllowAnonymous]
 
         public async Task<IActionResult> Post([FromBody]Update update)
         {
-            var e = "emman";
-
-            await _updateService.EchoAsync(update);
+            //await _updateService.EchoAsync(update);
             return Ok();
         }
     }
