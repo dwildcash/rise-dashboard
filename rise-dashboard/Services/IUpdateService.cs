@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
-namespace Rise.BotServices
+namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
 {
     public interface IUpdateService
     {

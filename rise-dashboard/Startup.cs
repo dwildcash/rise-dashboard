@@ -13,8 +13,10 @@
     using rise.Code.Scheduling;
     using rise.Data;
     using rise.Models;
-    using Rise.BotServices;
     using System;
+    using Telegram.Bot.Examples.DotNetCoreWebHook.Services;
+    using Telegram.Bot.Examples.DotNetCoreWebHook;
+
 
     /// <summary>
     /// Defines the <see cref="Startup" />
@@ -75,6 +77,8 @@
         /// <param name="services">The services<see cref="IServiceCollection"/></param>
         public void ConfigureServices(IServiceCollection services)
         {
+      
+
             // Service for slack auth
             services.AddAuthentication(options =>
             {
@@ -108,9 +112,10 @@
             // Save Livecoin quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
 
-            // Start BotService
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
+
+            services.Configure<BotConfiguration>(Configuration.GetSection("BotConfiguration"));
 
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>
