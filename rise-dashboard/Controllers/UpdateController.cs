@@ -22,7 +22,7 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Controllers
         public async Task<IActionResult> Post([FromBody]Update update)
         {
             await _updateService.EchoAsync(update);
-            return Ok();
+            return StatusCode(200);
         }
     }
 }
