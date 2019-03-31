@@ -13,6 +13,7 @@
     using rise.Code.Scheduling;
     using rise.Data;
     using rise.Models;
+    using Rise.BotServices;
     using System;
 
     /// <summary>
@@ -106,6 +107,10 @@
 
             // Save Livecoin quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
+
+            // Start BotService
+            services.AddScoped<IUpdateService, UpdateService>();
+            services.AddSingleton<IBotService, BotService>();
 
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>
