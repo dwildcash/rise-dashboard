@@ -18,6 +18,7 @@ namespace rise.Controllers
 
         // POST api/update
         [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody]Update update)
         {
