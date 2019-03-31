@@ -6,7 +6,7 @@ using Telegram.Bot.Types;
 
 namespace rise.Controllers
 {
-    [AllowAnonymous]
+ 
     public class UpdateController : Controller
     {
         private readonly IUpdateService _updateService;
@@ -20,6 +20,7 @@ namespace rise.Controllers
         [HttpPost]
         [HttpGet]
         [AllowAnonymous]
+
         public async Task<IActionResult> Post([FromBody]Update update)
         {
             await _updateService.EchoAsync(update);
