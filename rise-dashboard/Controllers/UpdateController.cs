@@ -23,6 +23,8 @@ namespace rise.Controllers
 
         public async Task<IActionResult> Post([FromBody]Update update)
         {
+            var e = "emman";
+
             await _updateService.EchoAsync(update);
             return Ok();
         }
