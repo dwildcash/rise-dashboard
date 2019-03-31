@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rise.BotServices;
+using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
-namespace Telegram.Bot.Examples.DotNetCoreWebHook.Controllers
+namespace rise.Controllers
 {
     [AllowAnonymous]
     public class UpdateController : Controller
@@ -18,6 +18,7 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Controllers
 
         // POST api/update
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody]Update update)
         {
             await _updateService.EchoAsync(update);

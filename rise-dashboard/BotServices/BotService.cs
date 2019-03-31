@@ -8,7 +8,7 @@ namespace Rise.BotServices
         public BotService()
         {
             // use proxy if configured in appsettings.*.json
-            Client = new TelegramBotClient(AppSettingsProvider.BotApiKey);              
+            Client = new TelegramBotClient(AppSettingsProvider.BotApiKey);
         }
 
         public TelegramBotClient Client { get; }
