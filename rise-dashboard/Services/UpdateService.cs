@@ -17,10 +17,12 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
     {
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
+        private readonly UserManager<ApplicationUser> _userManager; 
 
         public UpdateService(IBotService botService, ILogger<UpdateService> logger, UserManager<ApplicationUser> userManager)
         {
             _botService = botService;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -53,9 +55,74 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
             {
                 await cmd_Price(message.Chat.Id);
             }
+
+            // Return a  geek joke
+            if (command == "!JOKE")
+            {
+                await cmd_Joke(message.Chat.Id);
+            }
+
+            if (command == "!DEPOSIT")
+            {
+                await cmd_Deposit(message.Chat.Username, message.Chat.Id, message.Chat.Id);
+            }
+
         }
 
 
+        /// <summary>
+        /// Display Current Rise Exchanges
+        /// </summary>
+        /// <param name="chatId"></param>
+        /// <returns></returns>
+        private async Task cmd_Deposit(string username, long telegramId, long chatId)
+        {
+            await _botService.Client.SendChatActionAsync(chatId, ChatAction.Typing);
+
+            var aspnetuser = await _userManager.FindByNameAsync(username);
+
+            string strResponse = "Here we go @" + aspnetuser.UserName + " <b>" + aspnetuser.Address + "</b>";
+
+            if (string.IsNullOrEmpty(username))
+            {
+                strResponse += Environment.NewLine + " Note: Please configure your Telegram UserName if you want to Receive <b>Rise</b>";
+            }
+
+            await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+        }
+
+
+        /// <summary>
+        /// Display a chuck Norris Joke
+        /// </summary>
+        /// <param name="chatId"></param>
+        /// <returns></returns>
+        private async Task cmd_Joke(long chatId)
+        {
+            await _botService.Client.SendChatActionAsync(chatId, ChatAction.Typing);
+            var strResponse = await QuoteOfTheDayManager.GetQuoteOfTheDay();
+
+            if (strResponse != null)
+            {
+                await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+            }         
+        }
+
+
+        /// <summary>
+        /// Display Current Rise Exchanges
+        /// </summary>
+        /// <param name="chatId"></param>
+        /// <returns></returns>
+        private async Task cmd_Exchanges(long chatId)
+        {
+            await _botService.Client.SendChatActionAsync(chatId, ChatAction.Typing);
+            var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
+                    "<b>Livecoin</b> - http://livecoin.net" + Environment.NewLine +
+                    "<b>RightBtc</b> - http://rightbtc.com" + Environment.NewLine +
+                    "<b>Vinex</b> - https://vinex.network";
+            await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+        }
 
 
         /// <summary>
