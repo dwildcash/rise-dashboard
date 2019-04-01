@@ -62,11 +62,17 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
                 await cmd_Joke(message.Chat.Id);
             }
 
+            // Show Rise Exchanges
+            if (command == "!EXCHANGES")
+            {
+                await cmd_Exchanges(message.Chat.Id);
+            }
+
+            // show Deposit
             if (command == "!DEPOSIT")
             {
                 await cmd_Deposit(message.Chat.Username, message.Chat.Id, message.Chat.Id);
             }
-
         }
 
 
