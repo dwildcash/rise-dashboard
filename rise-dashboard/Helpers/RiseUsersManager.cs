@@ -3,31 +3,43 @@ using rise.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using rise.Data;
 
-/*
 namespace rise.Helpers
 {
     public class RiseUsersManager
     {
+
+        /// <summary>
+        /// Defines the scopeFactory
+        /// </summary>
+        private readonly IServiceScopeFactory scopeFactory;
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+
+        public RiseUsersManager(IServiceScopeFactory scopeFactory)
+        {
+            this.scopeFactory = scopeFactory;
+        }
+
         /// <summary>
         /// Create Account
         /// </summary>
         /// <param name="telegramId"></param>
-        public static ApplicationUser GetUserByUserName(string Username)
+        public ApplicationUser GetUserByUserName(string Username)
         {
-            using (var context = new ApplicationDbContext())
-            {
-                try
-                {
-                    return context.Users.Where(x => string.Equals(x.UserName, Username, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-                }
-                catch (Exception ex)
-                {
 
-                }
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var time = DateTime.Now.ToUniversalTime();
             }
 
-            return null;
+
+                return null;
         }
 
 
@@ -36,17 +48,22 @@ namespace rise.Helpers
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public static ApplicationUser GetLastMsgUser(string username)
+        public ApplicationUser GetLastMsgUser(string username)
         {
-            using (var context = new ApplicationDbContext())
+
+            using (var scope = scopeFactory.CreateScope())
             {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
                 try
                 {
-                    return context.Users.Where(x=>x.UserName != username).OrderByDescending(x=>x.LastMessage).FirstOrDefault();
+                    return dbContext.ApplicationUsers.Where(x=>x.UserName != username).OrderByDescending(x=>x.LastMessage).FirstOrDefault();
                 }
                 catch (Exception ex)
                 {
                 }
+
+                return null;
             }
         }
 
@@ -55,13 +72,15 @@ namespace rise.Helpers
         /// Return a list of Random users
         /// </summary>
         /// <returns></returns>
-        public static List<ApplicationUser> GetBoomUsers(string username)
+        public List<ApplicationUser> GetBoomUsers(string username)
         {
-            using (var context = new ApplicationDbContext())
+
+            using (var scope = scopeFactory.CreateScope())
             {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
                 {
-                    return context.Users.Where(x => x.LastMessage > DateTime.Now.AddHours(-1) && x.UserName != username && x.UserName != null && x.MessageCount > 2).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddHours(-1) && x.UserName != username && x.UserName != null && x.MessageCount > 2).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -74,13 +93,14 @@ namespace rise.Helpers
         /// Return a list of Random users
         /// </summary>,
         /// <returns></returns>
-        public static List<ApplicationUser> GetRainUsers(string username, int num = 10)
+        public List<ApplicationUser> GetRainUsers(string username, int num = 10)
         {
-            using (var context = new ApplicationDbContext())
+            using (var scope = scopeFactory.CreateScope())
             {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
                 {
-                    return context.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-2) && x.UserName != username && x.UserName != null && x.MessageCount > 3).OrderBy(x => Guid.NewGuid()).Take(num).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-2) && x.UserName != username && x.UserName != null && x.MessageCount > 3).OrderBy(x => Guid.NewGuid()).Take(num).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -93,15 +113,16 @@ namespace rise.Helpers
         /// Create Account
         /// </summary>
         /// <param name="telegramId"></param>
-        public static ApplicationUser GetUser(string UserName, int TelegramId)
+        public ApplicationUser GetUser(string UserName, int TelegramId)
         {
-            using (var context = new ApplicationDbContext())
+            using (var scope = scopeFactory.CreateScope())
             {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
                 {
-                    if (context.Users.Where(x => x.TelegramId == TelegramId).Count() == 0)
+                    if (dbContext.Users.Where(x => x.TelegramId == TelegramId).Count() == 0)
                     {
-                        var user = new User
+                        var user = new ApplicationUser
                         {
                             UserName = UserName,
                             TelegramId = TelegramId,
@@ -110,14 +131,14 @@ namespace rise.Helpers
                             LastMessage = DateTime.Now
                         };
 
-                        context.Add(user);
-                        context.SaveChanges();
+                        dbContext.Add(user);
+                        dbContext.SaveChanges();
 
                         return user;
                     }
                     else
                     {
-                        var user = context.Users.Where(x => x.TelegramId == TelegramId).FirstOrDefault();
+                        var user = dbContext.Users.Where(x => x.TelegramId == TelegramId).FirstOrDefault();
 
                         if (user.UserName == null && UserName != null)
                         {
@@ -126,7 +147,7 @@ namespace rise.Helpers
 
                         user.MessageCount++;
                         user.LastMessage = DateTime.Now;
-                        context.SaveChanges();
+                        dbContext.SaveChanges();
                         return user;
                     }
                 }
@@ -143,30 +164,30 @@ namespace rise.Helpers
         /// Create Account
         /// </summary>
         /// <param name="telegramId"></param>
-        public static void CreateWallet(int telegramId)
+        public void CreateWallet(int telegramId)
         {
-            using (var context = new ApplicationDbContext())
+            using (var scope = scopeFactory.CreateScope())
             {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
                 {
-                    var user = context.Users.Where(x => x.TelegramId == telegramId).FirstOrDefault();
+                    var user = dbContext.Users.Where(x => x.TelegramId == telegramId).FirstOrDefault();
 
                     if (string.IsNullOrEmpty(user.Address))
                     {
                         var account = RiseManager.CreateAccount();
                         user.Address = account.Result.account.address;
-                        user.Secret = CryptoManager.EncryptStringAES(account.Result.account.secret, AppSettingsProvider.EncryptionKey);
+                        user.EncryptedBip39 = CryptoManager.EncryptStringAES(account.Result.account.secret, AppSettingsProvider.EncryptionKey);
                         user.PublicKey = account.Result.account.publicKey;
-                        context.SaveChanges();
+                        dbContext.SaveChanges();
                     }
                 }
                 catch (Exception ex)
                 {
-                    return null;
                 }
             }
         }
     }
 }
 
-    */
+ 
