@@ -138,8 +138,9 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
             string strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + "</b>" + Environment.NewLine +
                 "Usd Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
                 "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + "</b>";
-            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("rise.coinquote.io", "https://rise.coinquote.io"));
-            await _botService.Client.SendTextMessageAsync(chatId, strResponse, replyMarkup: keyboard);
+            await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));
+            await _botService.Client.SendTextMessageAsync(chatId, "Open website", replyMarkup: keyboard);
 
         }
 
