@@ -96,13 +96,6 @@ namespace rise.Helpers
         public async Task<ApplicationUser> GetUserAsync(Update tgupdate)
         {
             ApplicationUser aspnetuser = await GetUserAsync(tgupdate.Message.Chat.Username, tgupdate.Message.Chat.Id);
-
-            if (aspnetuser != null)
-            {
-                // Update Chat Id
-                aspnetuser.ChatId = tgupdate.Message.Chat.Id;
-            }
-
             return null;
         }
 
