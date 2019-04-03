@@ -81,6 +81,10 @@
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
+            //services.AddTransient<ApplicationDbContext>();
+
+            //services.AddTransient<UserManager<ApplicationUser>>();
+
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
 
@@ -153,6 +157,8 @@
 
             // Seed Initial User
             DbSeedData.SeedData(userManager, roleManager, context);
+
+ 
 
             app.UseStaticFiles();
 
