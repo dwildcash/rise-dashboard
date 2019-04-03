@@ -3,7 +3,9 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using rise.Helpers;
     using rise.Models;
+    using rise_lib;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Telegram.Bot.Extensions.LoginWidget;
@@ -14,11 +16,13 @@
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly AppUsersManager _appUserManager;
 
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _appUserManager = new AppUsersManager(userManager);
         }
 
         [HttpGet]
@@ -37,7 +41,12 @@
             // User doesnt exit in aspnetdb let create it
             if (aspnetuser == null)
             {
-                aspnetuser = new ApplicationUser { UserName = UserName, TelegramId = TelegramId, EncryptedBip39 = Secret, Address = Address, PublicKey = PublickKey };
+                var account = RiseManager.CreateAccount();
+                var address = account.Result.account.address;
+                var secret  = CryptoManager.EncryptStringAES(account.Result.account.secret, AppSettingsProvider.EncryptionKey);
+                var publicKey = account.Result.account.publicKey;
+
+                aspnetuser = new ApplicationUser { UserName = UserName, TelegramId = TelegramId, Secret = secret, Address = address, PublicKey = publicKey };
                 IdentityResult result = await _userManager.CreateAsync(aspnetuser);
 
                 // By default add user to Guest
@@ -49,7 +58,7 @@
             else
             {
                 aspnetuser.TelegramId = TelegramId;
-                aspnetuser.EncryptedBip39 = Secret;
+                aspnetuser.Secret = Secret;
                 aspnetuser.Address = Address;
                 aspnetuser.PublicKey = PublickKey;
                 await _userManager.UpdateAsync(aspnetuser);
@@ -76,25 +85,7 @@
 
             if (loginWidget.CheckAuthorization(fields) == Authorization.Valid)
             {
-                var aspnetuser = await _userManager.FindByNameAsync(fields["username"]);
-
-                if (aspnetuser.Photo_Url == null)
-                {
-                    aspnetuser.Photo_Url = fields["photo_url"];
-                }
-
-                // User doesnt exit in aspnetdb let create it
-                if (aspnetuser == null)
-                {
-                    aspnetuser = new ApplicationUser { UserName = fields["username"], Photo_Url = fields["photo_url"] };
-                    IdentityResult result = await _userManager.CreateAsync(aspnetuser);
-
-                    // By default add user to Guest
-                    if (result.Succeeded)
-                    {
-                        await _userManager.AddToRoleAsync(aspnetuser, "Member");
-                    }
-                }
+                var aspnetuser = await _appUserManager.GetUserAsync(fields["username"], long.Parse(fields["id"]));
 
                 //sign the user and go to home
                 await _signInManager.SignInAsync(aspnetuser, isPersistent: false);
