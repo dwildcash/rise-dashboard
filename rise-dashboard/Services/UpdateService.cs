@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using rise.Helpers;
 using rise.Models;
 using rise.Services;
@@ -19,14 +18,12 @@ namespace Rise.Services
         private readonly IAppUsersManagerService _appUsersManagerService;
         private ApplicationUser appuser;
 
-
         public UpdateService(IBotService botService, ILogger<UpdateService> logger, IAppUsersManagerService appUsersManagerService)
         {
             _botService = botService;
             _appUsersManagerService = appUsersManagerService;
             _logger = logger;
         }
-
 
         public async Task EchoAsync(Update update)
         {
@@ -51,7 +48,7 @@ namespace Rise.Services
             // Info command
             if (command == "!INFO")
             {
-                await cmd_Info(message.Chat.Id);
+                await cmd_Info(message);
             }
 
             // Info Price
@@ -69,7 +66,7 @@ namespace Rise.Services
             // Show Rise Exchanges
             if (command == "!EXCHANGES")
             {
-                await cmd_Exchanges(message.Chat.Id);
+                await cmd_Exchanges(message);
             }
 
             // show Deposit
@@ -86,7 +83,7 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Deposit(Message message)
         {
-            string strResponse = "";
+            string strResponse = string.Empty;
 
             if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
             {
@@ -138,14 +135,33 @@ namespace Rise.Services
         /// </summary>
         /// <param name="chatId"></param>
         /// <returns></returns>
-        private async Task cmd_Exchanges(long chatId)
+        private async Task cmd_Exchanges(Message message)
         {
-            await _botService.Client.SendChatActionAsync(chatId, ChatAction.Typing);
-            var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                    "<b>Livecoin</b> - http://livecoin.net" + Environment.NewLine +
-                    "<b>RightBtc</b> - http://rightbtc.com" + Environment.NewLine +
-                    "<b>Vinex</b> - https://vinex.network";
-            await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+            string strResponse = string.Empty; ;
+
+            if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
+            {
+                if (appuser == null)
+                {
+                    strResponse = "Please use !exchanges command only in private message";
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                    return;
+                }
+            }
+
+            try
+            {
+                await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
+                strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
+                "<b>Livecoin</b> - http://livecoin.net" + Environment.NewLine +
+                "<b>RightBtc</b> - http://rightbtc.com" + Environment.NewLine +
+                "<b>Vinex</b> - https://vinex.network";
+                await _botService.Client.SendTextMessageAsync(appuser.TelegramId, strResponse, ParseMode.Html);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_exchanges {0}", ex.Message);
+            }
         }
 
         /// <summary>
@@ -166,14 +182,29 @@ namespace Rise.Services
             await _botService.Client.SendTextMessageAsync(chatId, "Open website", replyMarkup: keyboard);
         }
 
+
         /// <summary>
         /// Send Info
         /// </summary>
         /// <param name="chatId"></param>
         /// <returns></returns>
-        private async Task cmd_Info(long chatId)
+        private async Task cmd_Info(Message message)
         {
-            var strResponse = "<b>Rise Information/Tools</b>" + Environment.NewLine +
+            string strResponse = string.Empty;
+
+            if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
+            {
+                if (appuser == null)
+                {
+                    strResponse = "Please use !Info command only in private message";
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                    return;
+                }
+            }
+
+            try
+            {
+                strResponse = "<b>Rise Information/Tools</b>" + Environment.NewLine +
                 "<b>Rise Website</b> - https://rise.vision" + Environment.NewLine +
                 "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
                 "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
@@ -188,7 +219,12 @@ namespace Rise.Services
                 "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
                 "<b>Rise Intro Youtube</b> - https://www.youtube.com/watch?v=wZ2vIGl_gCM&feature=youtu.be" + Environment.NewLine +
                 "<b>Rise Telegram Tipping service</b> -!help";
-            await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+                await _botService.Client.SendTextMessageAsync(appuser.TelegramId, strResponse, ParseMode.Html);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_Info {0}", ex.Message);
+            }
         }
     }
 }

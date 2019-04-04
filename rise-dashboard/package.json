@@ -31,6 +31,6 @@
     "jvectormap-next": "^3.0.0",
     "pace-js": "^1.0.2",
     "pe7-icon": "^1.0.4",
-    "popper.js": "^1.14.7"
+    "popper.js": "^1.15.0"
   }
 }
