@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using rise.Helpers;
 using rise.Models;
-using Rise.Services;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
+namespace Rise.Services
 {
     public class UpdateService : IUpdateService
     {

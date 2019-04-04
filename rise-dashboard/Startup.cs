@@ -16,7 +16,7 @@
     using rise.Services;
     using System;
     using Rise.Services;
-    using Telegram.Bot.Examples.DotNetCoreWebHook.Services;
+
 
     /// <summary>
     /// Defines the <see cref="Startup" />

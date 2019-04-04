@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using rise.Data;
 using rise.Helpers;
 using rise.Models;
@@ -19,12 +20,14 @@ namespace rise.Services
         /// </summary>
         private readonly IServiceScopeFactory _scopeFactory;
 
+        private readonly ILogger<AppUsersManagerService> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AppUsersManagerService(IServiceScopeFactory scopeFactory, UserManager<ApplicationUser> userManager)
+        public AppUsersManagerService(IServiceScopeFactory scopeFactory, UserManager<ApplicationUser> userManager, ILogger<AppUsersManagerService> logger)
         {
             _scopeFactory = scopeFactory;
             _userManager = userManager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -44,6 +47,7 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError("Received Exception from GetLastMsgUser {0}", ex.Message);
                 }
 
                 return null;
@@ -65,8 +69,9 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    return null;
+                    _logger.LogError("Received Exception from GetBoomUsers {0}", ex.Message);
                 }
+                return null;
             }
         }
 
@@ -85,6 +90,7 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError("Received Exception from GetRainUsers {0}", ex.Message);
                     return null;
                 }
             }
@@ -129,8 +135,9 @@ namespace rise.Services
                         await CreateWalletAsync(appuser);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    _logger.LogError("Received Exception from GetUserAsync {0}", ex.Message);
                     return null;
                 }
             }
@@ -168,6 +175,7 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError("Received Exception from CreateWallet {0}", ex.Message);
             }
         }
     }

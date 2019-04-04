@@ -3,10 +3,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using rise.Helpers;
     using rise.Models;
     using rise.Services;
-    using rise_lib;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Telegram.Bot.Extensions.LoginWidget;

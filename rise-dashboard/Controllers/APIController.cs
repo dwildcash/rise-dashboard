@@ -8,7 +8,7 @@
     using Rise.Services;
     using System.Linq;
     using System.Threading.Tasks;
-    using Telegram.Bot.Examples.DotNetCoreWebHook.Services;
+
 
 
     /// <summary>
