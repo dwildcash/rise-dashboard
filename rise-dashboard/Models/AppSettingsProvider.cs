@@ -16,7 +16,6 @@
         /// </summary>
         public static string Salt { get; set; }
 
-
         /// <summary>
         /// Set the EncryptionKey
         /// </summary>
@@ -27,12 +26,15 @@
         /// </summary>
         public static string BotName { get; set; }
 
-
         /// <summary>
         /// Get or Sets SiteURl
         /// </summary>
         public static string SiteUrl { get; set; }
 
+        /// <summary>
+        /// Set the Telegram Channel Id
+        /// </summary>
+        public static long TelegramChannelId { get; set; }
 
         /// <summary>
         /// Define the Telegram Bot Key

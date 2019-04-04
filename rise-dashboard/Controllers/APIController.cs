@@ -9,8 +9,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-
-
     /// <summary>
     /// Defines the <see cref="apiController" />
     /// </summary>
@@ -28,7 +26,7 @@
         private readonly IUpdateService _updateService;
 
 
-        // POST api/update
+        // POST api/WebHook
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
@@ -44,7 +42,7 @@
         /// </summary>
         /// <param name="context">The context<see cref="ApplicationDbContext"/></param>
         /// <param name="userManager">The userManager<see cref="UserManager{ApplicationUser}"/></param>
-        public apiController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IUpdateService updateService)
+        public apiController(ApplicationDbContext context, IUpdateService updateService)
         {
             _updateService = updateService;
             _appdb = context;

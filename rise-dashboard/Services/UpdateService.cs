@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using rise.Helpers;
 using rise.Models;
+using rise.Services;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,14 +16,17 @@ namespace Rise.Services
     {
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAppUsersManagerService _appUsersManagerService;
+        private ApplicationUser appuser;
 
-        public UpdateService(IBotService botService, ILogger<UpdateService> logger, UserManager<ApplicationUser> userManager)
+
+        public UpdateService(IBotService botService, ILogger<UpdateService> logger, IAppUsersManagerService appUsersManagerService)
         {
             _botService = botService;
-            _userManager = userManager;
+            _appUsersManagerService = appUsersManagerService;
             _logger = logger;
         }
+
 
         public async Task EchoAsync(Update update)
         {
@@ -32,6 +36,9 @@ namespace Rise.Services
             }
 
             var message = update.Message;
+
+            // Get the user who sent message
+            appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id);
 
             string command = string.Empty;
 
@@ -68,7 +75,7 @@ namespace Rise.Services
             // show Deposit
             if (command == "!DEPOSIT")
             {
-                await cmd_Deposit(message.Chat.Username, message.Chat.Id, message.Chat.Id);
+                await cmd_Deposit(message);
             }
         }
 
@@ -77,20 +84,37 @@ namespace Rise.Services
         /// </summary>
         /// <param name="chatId"></param>
         /// <returns></returns>
-        private async Task cmd_Deposit(string username, long telegramId, long chatId)
+        private async Task cmd_Deposit(Message message)
         {
-            await _botService.Client.SendChatActionAsync(chatId, ChatAction.Typing);
+            string strResponse = "";
 
-            var aspnetuser = await _userManager.FindByNameAsync(username);
-
-            string strResponse = "Here we go @" + aspnetuser.UserName + " <b>" + aspnetuser.Address + "</b>";
-
-            if (string.IsNullOrEmpty(username))
+            if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
             {
-                strResponse += Environment.NewLine + " Note: Please configure your Telegram UserName if you want to Receive <b>Rise</b>";
+                if (appuser == null)
+                {
+                    strResponse = "Please use !deposit command only in private message";
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                    return;
+                }
             }
 
-            await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+            try
+            {
+                await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
+
+                strResponse = "Here we go @" + appuser.UserName + " this is your address <b>" + appuser.Address + "</b>";
+
+                if (string.IsNullOrEmpty(appuser.UserName))
+                {
+                    strResponse += Environment.NewLine + " Note: Please configure your Telegram UserName if you want to Receive <b>Rise</b>";
+                }
+
+                await _botService.Client.SendTextMessageAsync(appuser.TelegramId, strResponse, ParseMode.Html);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_deposit {0}", ex.Message);
+            }
         }
 
         /// <summary>
