@@ -16,7 +16,7 @@
     public class AccountController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly AppUsersManagerService _appUsersManagerService;
+        private readonly IAppUsersManagerService _appUsersManagerService;
 
         public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService)
         {

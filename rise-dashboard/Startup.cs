@@ -83,7 +83,6 @@
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
-
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
 
@@ -111,11 +110,11 @@
             // Save Livecoin quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
 
-            // configure Telegram bot
+            // Configure Telegram bot
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
 
-            // User Management Service
+            // Users Management Service
             services.AddSingleton<IAppUsersManagerService, AppUsersManagerService>();
 
             // Config Start Scheduler
