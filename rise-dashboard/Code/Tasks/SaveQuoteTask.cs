@@ -21,7 +21,7 @@
         /// <summary>
         /// Defines the scopeFactory
         /// </summary>
-        private readonly IServiceScopeFactory scopeFactory;
+        private readonly IServiceScopeFactory _scopeFactory;
 
         /// <summary>
         /// The ExecuteAsync
@@ -32,7 +32,7 @@
         {
             try
             {
-                using (var scope = scopeFactory.CreateScope())
+                using (var scope = _scopeFactory.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var time = DateTime.Now.ToUniversalTime();
@@ -86,7 +86,7 @@
         /// <param name="scopeFactory">The scopeFactory<see cref="IServiceScopeFactory"/></param>
         public SaveQuoteTask(IServiceScopeFactory scopeFactory)
         {
-            this.scopeFactory = scopeFactory;
+            _scopeFactory = scopeFactory;
         }
     }
 }

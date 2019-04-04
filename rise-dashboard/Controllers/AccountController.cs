@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using rise.Helpers;
     using rise.Models;
+    using rise.Services;
     using rise_lib;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -14,15 +15,13 @@
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly AppUsersManager _appUserManager;
+        private readonly AppUsersManagerService _appUsersManagerService;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(SignInManager<ApplicationUser> signInManager, AppUsersManagerService appUsersManagerService)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
-            _appUserManager = new AppUsersManager(userManager);
+            _appUsersManagerService = appUsersManagerService;
         }
 
         [HttpGet]
@@ -36,24 +35,15 @@
         [AllowAnonymous]
         public async Task<IActionResult> SyncUser(int TelegramId, string UserName, string Secret, string Address, string PublickKey)
         {
-            var aspnetuser = await _userManager.FindByNameAsync(UserName);
+            var aspnetuser = await _appUsersManagerService.GetUserAsync(UserName, TelegramId);
 
             // User doesnt exit in aspnetdb let create it
             if (aspnetuser == null)
             {
                 var account = RiseManager.CreateAccount();
                 var address = account.Result.account.address;
-                var secret  = CryptoManager.EncryptStringAES(account.Result.account.secret, AppSettingsProvider.EncryptionKey);
+                var secret = CryptoManager.EncryptStringAES(account.Result.account.secret, AppSettingsProvider.EncryptionKey);
                 var publicKey = account.Result.account.publicKey;
-
-                aspnetuser = new ApplicationUser { UserName = UserName, TelegramId = TelegramId, Secret = secret, Address = address, PublicKey = publicKey };
-                IdentityResult result = await _userManager.CreateAsync(aspnetuser);
-
-                // By default add user to Guest
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(aspnetuser, "Member");
-                }
             }
             else
             {
@@ -61,7 +51,7 @@
                 aspnetuser.Secret = Secret;
                 aspnetuser.Address = Address;
                 aspnetuser.PublicKey = PublickKey;
-                await _userManager.UpdateAsync(aspnetuser);
+                await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
             }
 
             return Ok();
@@ -85,11 +75,12 @@
 
             if (loginWidget.CheckAuthorization(fields) == Authorization.Valid)
             {
-                var aspnetuser = await _appUserManager.GetUserAsync(fields["username"], long.Parse(fields["id"]));
+                var aspnetuser = await _appUsersManagerService.GetUserAsync(fields["username"], long.Parse(fields["id"]));
 
                 //sign the user and go to home
                 await _signInManager.SignInAsync(aspnetuser, isPersistent: false);
             }
+
             return RedirectToAction("Index", "Home");
         }
 

@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using rise.Helpers;
 using rise.Models;
+using Rise.Services;
+using System;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -17,7 +16,7 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
     {
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
-        private readonly UserManager<ApplicationUser> _userManager; 
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public UpdateService(IBotService botService, ILogger<UpdateService> logger, UserManager<ApplicationUser> userManager)
         {
@@ -25,7 +24,6 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
             _userManager = userManager;
             _logger = logger;
         }
-
 
         public async Task EchoAsync(Update update)
         {
@@ -37,7 +35,7 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
             var message = update.Message;
 
             string command = string.Empty;
-       
+
             // Match Command
             if (Regex.Matches(message.Text, @"!(\S+)\s?").Count > 0)
             {
@@ -75,7 +73,6 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
             }
         }
 
-
         /// <summary>
         /// Display Current Rise Exchanges
         /// </summary>
@@ -97,7 +94,6 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
             await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
         }
 
-
         /// <summary>
         /// Display a chuck Norris Joke
         /// </summary>
@@ -111,9 +107,8 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
             if (strResponse != null)
             {
                 await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
-            }         
+            }
         }
-
 
         /// <summary>
         /// Display Current Rise Exchanges
@@ -129,7 +124,6 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
                     "<b>Vinex</b> - https://vinex.network";
             await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
         }
-
 
         /// <summary>
         /// Display Current Price
@@ -147,9 +141,7 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
             await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
             var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));
             await _botService.Client.SendTextMessageAsync(chatId, "Open website", replyMarkup: keyboard);
-
         }
-
 
         /// <summary>
         /// Send Info
@@ -173,8 +165,7 @@ namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
                 "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
                 "<b>Rise Intro Youtube</b> - https://www.youtube.com/watch?v=wZ2vIGl_gCM&feature=youtu.be" + Environment.NewLine +
                 "<b>Rise Telegram Tipping service</b> -!help";
-                 await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+            await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
         }
-
     }
 }

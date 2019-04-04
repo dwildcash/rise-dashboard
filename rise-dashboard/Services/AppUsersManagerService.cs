@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using rise.Data;
+using rise.Helpers;
 using rise.Models;
 using rise_lib;
 using System;
@@ -9,19 +10,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
-namespace rise.Helpers
+namespace rise.Services
 {
-    public class AppUsersManager
+    public class AppUsersManagerService : IAppUsersManagerService
     {
         /// <summary>
         /// Defines the scopeFactory
         /// </summary>
-        private readonly IServiceScopeFactory scopeFactory;
+        private readonly IServiceScopeFactory _scopeFactory;
 
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AppUsersManager(UserManager<ApplicationUser> userManager)
+        public AppUsersManagerService(IServiceScopeFactory scopeFactory, UserManager<ApplicationUser> userManager)
         {
+            _scopeFactory = scopeFactory;
             _userManager = userManager;
         }
 
@@ -32,7 +34,7 @@ namespace rise.Helpers
         /// <returns></returns>
         public ApplicationUser GetLastMsgUser(string excluded_username)
         {
-            using (var scope = scopeFactory.CreateScope())
+            using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
@@ -54,7 +56,7 @@ namespace rise.Helpers
         /// <returns></returns>
         public List<ApplicationUser> GetBoomUsers(string excluded_username)
         {
-            using (var scope = scopeFactory.CreateScope())
+            using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
@@ -74,7 +76,7 @@ namespace rise.Helpers
         /// <returns></returns>
         public List<ApplicationUser> GetRainUsers(string excluded_username, int num = 10)
         {
-            using (var scope = scopeFactory.CreateScope())
+            using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
@@ -109,7 +111,7 @@ namespace rise.Helpers
         {
             ApplicationUser appuser = null;
 
-            using (var scope = scopeFactory.CreateScope())
+            using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
@@ -137,10 +139,20 @@ namespace rise.Helpers
         }
 
         /// <summary>
+        /// Update Application User
+        /// </summary>
+        /// <param name="appuser"></param>
+        /// <returns></returns>
+        public async Task UpdateApplicationUser(ApplicationUser appuser)
+        {
+            await _userManager.UpdateAsync(appuser);
+        }
+
+        /// <summary>
         /// Create Account
         /// </summary>
         /// <param name="telegramId"></param>
-        private async Task CreateWalletAsync(ApplicationUser appuser)
+        public async Task CreateWalletAsync(ApplicationUser appuser)
         {
             try
             {

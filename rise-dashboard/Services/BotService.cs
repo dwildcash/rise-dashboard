@@ -1,10 +1,9 @@
-using Microsoft.Extensions.Options;
+using Telegram.Bot;
 
-namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
+namespace Rise.Services
 {
     public class BotService : IBotService
     {
-
         public BotService()
         {
             // use proxy if configured in appsettings.*.json

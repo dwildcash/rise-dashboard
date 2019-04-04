@@ -13,7 +13,9 @@
     using rise.Code.Scheduling;
     using rise.Data;
     using rise.Models;
+    using rise.Services;
     using System;
+    using Rise.Services;
     using Telegram.Bot.Examples.DotNetCoreWebHook.Services;
 
     /// <summary>
@@ -81,9 +83,9 @@
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
-            //services.AddTransient<ApplicationDbContext>();
 
-            //services.AddTransient<UserManager<ApplicationUser>>();
+            // User Management Service
+            services.AddSingleton<IAppUsersManagerService, AppUsersManagerService>();
 
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));

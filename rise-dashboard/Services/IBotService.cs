@@ -1,4 +1,6 @@
-﻿namespace Telegram.Bot.Examples.DotNetCoreWebHook.Services
+﻿using Telegram.Bot;
+
+namespace Rise.Services
 {
     public interface IBotService
     {
