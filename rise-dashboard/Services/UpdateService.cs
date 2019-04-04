@@ -185,6 +185,8 @@ namespace Rise.Services
                     {
                         strResponse += Environment.NewLine + " Note: Please configure your Telegram UserName if you want to Receive <b>RISE</b>";
                     }
+
+                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, strResponse, ParseMode.Html);
                 }
             }
             catch (Exception ex)
