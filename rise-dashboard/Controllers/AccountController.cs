@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using rise.Helpers;
     using rise.Models;
     using rise.Services;
     using System.Collections.Generic;
@@ -38,7 +39,7 @@
             if (aspnetuser != null)
             {
                 aspnetuser.TelegramId = TelegramId;
-                aspnetuser.Secret = Secret;
+                aspnetuser.Secret = CryptoManager.EncryptStringAES(Secret,AppSettingsProvider.EncryptionKey);
                 aspnetuser.Address = Address;
                 aspnetuser.PublicKey = PublickKey;
                 await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
