@@ -217,7 +217,9 @@ namespace Rise.Services
                 try
                 {
                     await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
-                    var tx = await RiseManager.CreatePaiment(amount * 100000000, sender.GetSecret(), address);
+                   
+                    var e = sender.GetSecret();
+                    var tx = await RiseManager.CreatePaiment(amount * 100000000, e, address);
 
                     strResponse = "Ok @" + sender.UserName + " I sent " + amount + "RISE to this address <b>" + address + "</b>";
 
