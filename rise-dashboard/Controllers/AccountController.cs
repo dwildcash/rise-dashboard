@@ -37,15 +37,7 @@
         {
             var aspnetuser = await _appUsersManagerService.GetUserAsync(UserName, TelegramId);
 
-            // User doesnt exit in aspnetdb let create it
-            if (aspnetuser == null)
-            {
-                var account = RiseManager.CreateAccount();
-                var address = account.Result.account.address;
-                var secret = CryptoManager.EncryptStringAES(account.Result.account.secret, AppSettingsProvider.EncryptionKey);
-                var publicKey = account.Result.account.publicKey;
-            }
-            else
+            if (aspnetuser != null)
             {
                 aspnetuser.TelegramId = TelegramId;
                 aspnetuser.Secret = Secret;
