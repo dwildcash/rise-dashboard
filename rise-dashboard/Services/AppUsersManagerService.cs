@@ -19,6 +19,7 @@ namespace rise.Services
         /// Defines the scopeFactory
         /// </summary>
         private readonly IServiceScopeFactory _scopeFactory;
+
         private readonly ILogger<AppUsersManagerService> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -28,8 +29,6 @@ namespace rise.Services
             _userManager = userManager;
             _logger = logger;
         }
-
-
 
         /// <summary>
         /// Get User by Username
@@ -54,7 +53,6 @@ namespace rise.Services
                 return null;
             }
         }
-
 
         /// <summary>
         /// Get Last user by Msd

@@ -66,7 +66,6 @@ namespace Rise.Services
                 await cmd_ShowUserBalance(appuser);
             }
 
-
             // Show Help
             if (command == "!HELP")
             {
@@ -74,18 +73,55 @@ namespace Rise.Services
             }
 
             // Withdraw Rice
-            if (command == "!WITHDRAW")
+            if (command == "!SEND")
             {
                 var strResponse = string.Empty;
+                double amount = 0;
+                List<ApplicationUser> ListDestuser = new List<ApplicationUser>();
 
                 try
                 {
-                    var amount = double.Parse(Regex.Matches(message.Text, @"[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
+                    amount = double.Parse(Regex.Matches(message.Text, @"[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
                 }
                 catch (Exception ex)
                 {
                     strResponse = "Illegal amount entered. ex: !withdraw 10 RISE to 5953135380169360325R";
-                    
+
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                    return;
+                }
+
+                var recipientUser = _appUsersManagerService.GetUserByUsername(destUser);
+                ListDestuser.Add(recipientUser);
+
+                List<rise_lib.Models.Transaction> tx = await cmd_SendTx(appuser, ListDestuser, amount);
+
+                if (tx[0].success)
+                {
+                    strResponse = "@" + recipientUser.UserName + " wake up, it's a wonderful day!! thanks to @" + appuser.UserName + " he sent <b>" + amount + " RISE</b> to you :)";
+                }
+                else
+                {
+                    strResponse = "Ohhh sorry " + appuser.UserName + " I got a problem while processing transaction.";
+                }
+
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+            }
+
+            // Withdraw Rice
+            if (command == "!WITHDRAW")
+            {
+                var strResponse = string.Empty;
+                double amount = 0;
+
+                try
+                {
+                    amount = double.Parse(Regex.Matches(message.Text, @"[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
+                }
+                catch (Exception ex)
+                {
+                    strResponse = "Illegal amount entered. ex: !withdraw 10 RISE to 5953135380169360325R";
+
                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
                     return;
                 }
@@ -99,7 +135,8 @@ namespace Rise.Services
                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
                     return;
                 }
-                cmd_WithdrawTx(appuser,)
+
+                await cmd_WithdrawTx(appuser, recipientId, amount);
             }
 
             // Info Price
@@ -126,7 +163,6 @@ namespace Rise.Services
                 await cmd_Deposit(message, appuser);
             }
         }
-
 
         /// <summary>
         /// Display Current Rise Exchanges
@@ -165,7 +201,6 @@ namespace Rise.Services
             }
         }
 
-
         /// <summary>
         /// Withdraw Rise to account
         /// </summary>
@@ -173,9 +208,10 @@ namespace Rise.Services
         /// <param name="address"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        private async Task cmd_WithdrawTx(ApplicationUser sender, string address, int amount)
+        private async Task cmd_WithdrawTx(ApplicationUser sender, string address, double amount)
         {
             string strResponse = string.Empty;
+
             if (await cmd_BalanceCheck(sender, 1, amount))
             {
                 try
@@ -194,10 +230,9 @@ namespace Rise.Services
             }
             else
             {
-                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Sorry @" + sender.UserName " you dont have enough RISE to send <b>" + amount + "</b> to " + ListReceiver.Count + " users", ParseMode.Html);
+                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Sorry @" + sender.UserName + " you dont have enough RISE to send <b>" + amount + "</b> to address " + address, ParseMode.Html);
             }
         }
-
 
         /// <summary>
         /// Show Help
@@ -236,9 +271,12 @@ namespace Rise.Services
 
                 await _botService.Client.SendTextMessageAsync(appuser.TelegramId, strResponse, ParseMode.Html);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_Help {0}" + ex.Message);
+            }
         }
-        
+
         /// <summary>
         /// Create Transaction
         /// </summary>
@@ -246,7 +284,7 @@ namespace Rise.Services
         /// <param name="Receiver"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        private async Task<List<rise_lib.Models.Transaction>> cmd_SendTx(ApplicationUser Sender, List<ApplicationUser> ListReceiver, int amount)
+        private async Task<List<rise_lib.Models.Transaction>> cmd_SendTx(ApplicationUser Sender, List<ApplicationUser> ListReceiver, double amount)
         {
             List<rise_lib.Models.Transaction> txList = new List<rise_lib.Models.Transaction>();
 
@@ -256,6 +294,11 @@ namespace Rise.Services
                 {
                     foreach (var destUser in ListReceiver)
                     {
+                        if (destUser.Address == null || destUser.Address[destUser.Address.Length - 1] != 'R')
+                        {
+                            continue;
+                        }
+
                         var tx = await RiseManager.CreatePaiment(amount * 100000000, Sender.GetSecret(), destUser.Address);
                         txList.Add(tx);
                     }
@@ -289,8 +332,6 @@ namespace Rise.Services
 
             return txList;
         }
-
-        
 
         /// <summary>
         /// Show User Balance
@@ -332,7 +373,7 @@ namespace Rise.Services
         /// <param name="NumTx"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        private async Task<bool> cmd_BalanceCheck(ApplicationUser Sender, int NumTx, int amount)
+        private async Task<bool> cmd_BalanceCheck(ApplicationUser Sender, int NumTx, double amount)
         {
             try
             {
@@ -351,7 +392,6 @@ namespace Rise.Services
                 return false;
             }
         }
-
 
         /// <summary>
         /// Display a chuck Norris Joke
@@ -421,7 +461,6 @@ namespace Rise.Services
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, "click to open website", replyMarkup: keyboard);
         }
 
-
         /// <summary>
         /// Send RISE Info
         /// </summary>
@@ -440,7 +479,7 @@ namespace Rise.Services
                 "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
                 "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
                 "<b>Rise Dashboard</b> - https://rise.coinquote.io" + Environment.NewLine +
-                "<b>Rise Force Game</b> - http://duhec.net/riseForce" + Environment.NewLine +       
+                "<b>Rise Force Game</b> - http://duhec.net/riseForce" + Environment.NewLine +
                 "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                 "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
                 "<b>Rise Slack</b> - https://risevision.slack.com/" + Environment.NewLine +
