@@ -2,6 +2,7 @@
 using rise.Helpers;
 using rise.Models;
 using rise.Services;
+using rise_lib;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -38,11 +39,24 @@ namespace Rise.Services
             appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id);
 
             string command = string.Empty;
+            string destUser = string.Empty;
 
             // Match Command
             if (Regex.Matches(message.Text, @"!(\S+)\s?").Count > 0)
             {
                 command = Regex.Matches(message.Text.ToUpper(), @"!(\S+)\s?")[0].ToString().Trim();
+            }
+
+            // Match DestUser if any
+            if (Regex.Matches(message.Text, @"@(\S+)\s?").Count > 0)
+            {
+                destUser = Regex.Matches(message.Text, @"@(\S+)\s?")[0].ToString().Replace("@", "").Trim();
+            }
+
+            // Send
+            if (command == "!SEND")
+            {
+                await cmd_Send(message, destUser);
             }
 
             // Info command
@@ -54,13 +68,13 @@ namespace Rise.Services
             // Info Price
             if (command == "!PRICE")
             {
-                await cmd_Price(message.Chat.Id);
+                await cmd_Price(message);
             }
 
             // Return a  geek joke
             if (command == "!JOKE")
             {
-                await cmd_Joke(message.Chat.Id);
+                await cmd_Joke(message);
             }
 
             // Show Rise Exchanges
@@ -75,6 +89,34 @@ namespace Rise.Services
                 await cmd_Deposit(message);
             }
         }
+
+
+        /// <summary>
+        /// Send Coin to someone
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private async Task cmd_Send(Message message, string destUser)
+        {
+            string strResponse = string.Empty;
+
+            if (string.IsNullOrEmpty(destUser))
+            {
+                strResponse = "Please provide a user name starting with <b>@</b>!send 10 @Dwildcash";
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                return;
+            }
+
+            try
+            {
+                await cmd_SendTx(appuser, _appUsersManagerService.GetUserByUsername(destUser), 1);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_Send {0}", ex.Message);
+            }
+        }
+
 
         /// <summary>
         /// Display Current Rise Exchanges
@@ -110,23 +152,45 @@ namespace Rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_deposit {0}", ex.Message);
+                _logger.LogError("Received Exception from cmd_Deposit {0}", ex.Message);
             }
         }
+
+
+        /// <summary>
+        /// Create Transaction
+        /// </summary>
+        /// <param name="Sender"></param>
+        /// <param name="Receiver"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        private async Task cmd_SendTx(ApplicationUser Sender, ApplicationUser Receiver, int amount)
+        {
+            try
+            {
+                var tx = await RiseManager.CreatePaiment(amount * 100000000, Sender.GetSecret(), Receiver.Address);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from SendCoin " + ex.Message);
+                return;
+            }
+        }
+
 
         /// <summary>
         /// Display a chuck Norris Joke
         /// </summary>
         /// <param name="chatId"></param>
         /// <returns></returns>
-        private async Task cmd_Joke(long chatId)
+        private async Task cmd_Joke(Message message)
         {
-            await _botService.Client.SendChatActionAsync(chatId, ChatAction.Typing);
+            await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             var strResponse = await QuoteOfTheDayManager.GetQuoteOfTheDay();
 
             if (strResponse != null)
             {
-                await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
         }
 
@@ -160,7 +224,7 @@ namespace Rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_exchanges {0}", ex.Message);
+                _logger.LogError("Received Exception from cmd_Exchanges {0}", ex.Message);
             }
         }
 
@@ -169,17 +233,17 @@ namespace Rise.Services
         /// </summary>
         /// <param name="chatId"></param>
         /// <returns></returns>
-        private async Task cmd_Price(long chatId)
+        private async Task cmd_Price(Message message)
         {
-            await _botService.Client.SendChatActionAsync(chatId, ChatAction.Typing);
+            await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             var quote = await QuoteManager.GetRiseQuote();
 
             string strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + "</b>" + Environment.NewLine +
-                "Usd Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
-                "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + "</b>";
-            await _botService.Client.SendTextMessageAsync(chatId, strResponse, ParseMode.Html);
+            "Usd Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
+            "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + "</b>";
+            await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));
-            await _botService.Client.SendTextMessageAsync(chatId, "Open website", replyMarkup: keyboard);
+            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Open website", replyMarkup: keyboard);
         }
 
 

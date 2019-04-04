@@ -19,7 +19,6 @@ namespace rise.Services
         /// Defines the scopeFactory
         /// </summary>
         private readonly IServiceScopeFactory _scopeFactory;
-
         private readonly ILogger<AppUsersManagerService> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -29,6 +28,33 @@ namespace rise.Services
             _userManager = userManager;
             _logger = logger;
         }
+
+
+
+        /// <summary>
+        /// Get User by Username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public ApplicationUser GetUserByUsername(string username)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                try
+                {
+                    return dbContext.ApplicationUsers.Where(x => x.UserName == username).FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Received Exception from GetUserByUsername {0}", ex.Message);
+                }
+
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// Get Last user by Msd
