@@ -84,9 +84,6 @@
             });
 
 
-            // User Management Service
-            services.AddSingleton<IAppUsersManagerService, AppUsersManagerService>();
-
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
 
@@ -117,6 +114,9 @@
             // configure Telegram bot
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
+
+            // User Management Service
+            services.AddSingleton<IAppUsersManagerService, AppUsersManagerService>();
 
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>
