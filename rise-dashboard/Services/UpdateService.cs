@@ -4,6 +4,7 @@ using rise.Models;
 using rise.Services;
 using rise_lib;
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
@@ -53,16 +54,16 @@ namespace Rise.Services
                 destUser = Regex.Matches(message.Text, @"@(\S+)\s?")[0].ToString().Replace("@", "").Trim();
             }
 
-            // Send
-            if (command == "!SEND")
-            {
-                await cmd_Send(message, destUser);
-            }
-
             // Info command
             if (command == "!INFO")
             {
                 await cmd_Info(message);
+            }
+
+            // Show Balance
+            if (command == "!BALANCE")
+            {
+                await cmd_ShowUserBalance(appuser);
             }
 
             // Info Price
@@ -92,33 +93,6 @@ namespace Rise.Services
 
 
         /// <summary>
-        /// Send Coin to someone
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        private async Task cmd_Send(Message message, string destUser)
-        {
-            string strResponse = string.Empty;
-
-            if (string.IsNullOrEmpty(destUser))
-            {
-                strResponse = "Please provide a user name starting with <b>@</b>!send 10 @Dwildcash";
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-                return;
-            }
-
-            try
-            {
-                await cmd_SendTx(appuser, _appUsersManagerService.GetUserByUsername(destUser), 1);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Received Exception from cmd_Send {0}", ex.Message);
-            }
-        }
-
-
-        /// <summary>
         /// Display Current Rise Exchanges
         /// </summary>
         /// <param name="chatId"></param>
@@ -131,8 +105,7 @@ namespace Rise.Services
             {
                 if (appuser == null)
                 {
-                    strResponse = "Please use !deposit command only in private message";
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please use !deposit command only in private message" , ParseMode.Html);
                     return;
                 }
             }
@@ -164,19 +137,88 @@ namespace Rise.Services
         /// <param name="Receiver"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        private async Task cmd_SendTx(ApplicationUser Sender, ApplicationUser Receiver, int amount)
+        private async Task cmd_SendTx(ApplicationUser Sender, List<ApplicationUser> ListReceiver, int amount)
+        {
+            if (await cmd_BalanceCheck(Sender, ListReceiver.Count, amount))
+            {
+                try
+                {
+                    foreach (var destUser in ListReceiver)
+                    {
+                        var tx = await RiseManager.CreatePaiment(amount * 100000000, Sender.GetSecret(), destUser.Address);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Received Exception from SendCoin " + ex.Message);
+                    return;
+                }
+            }
+            else
+            {
+                await _botService.Client.SendTextMessageAsync(Sender.TelegramId, "Sorry you dont have enough RISE to send <b>" + amount + "</b> to " + ListReceiver.Count + " users", ParseMode.Html);
+            }
+        }
+
+        
+
+        /// <summary>
+        /// Show User Balance
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <returns></returns>
+        private async Task cmd_ShowUserBalance(ApplicationUser sender)
+        {
+            string strResponse = string.Empty;
+
+            try
+            {
+                await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+
+                if (!string.IsNullOrEmpty(sender.Address))
+                {
+                    strResponse = "<b>Current Balance for </b>@" + sender.UserName + Environment.NewLine +
+                        "Address: <b>" + sender.Address + "</b>" + Environment.NewLine +
+                        "Balance <b>" + Math.Round(await RiseManager.AccountBalanceAsync(sender.Address), 4) + " RISE </b>";
+
+                    if (string.IsNullOrEmpty(sender.UserName))
+                    {
+                        strResponse += Environment.NewLine + " Note: Please configure your Telegram UserName if you want to Receive <b>RISE</b>";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_Deposit {0}", ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Verify if Balance is OK
+        /// </summary>
+        /// <param name="Sender"></param>
+        /// <param name="NumTx"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        private async Task<bool> cmd_BalanceCheck(ApplicationUser Sender, int NumTx, int amount)
         {
             try
             {
-                var tx = await RiseManager.CreatePaiment(amount * 100000000, Sender.GetSecret(), Receiver.Address);
+                var balance = await RiseManager.AccountBalanceAsync(Sender.Address);
+
+                if (balance > (0.1 * NumTx) + amount)
+                {
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
                 _logger.LogError("Received Exception from SendCoin " + ex.Message);
-                return;
+                return false;
             }
         }
-
 
         /// <summary>
         /// Display a chuck Norris Joke
