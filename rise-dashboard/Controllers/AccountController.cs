@@ -32,7 +32,7 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> SyncUser(int TelegramId, string UserName, string Secret, string Address, string PublickKey)
+        public async Task<IActionResult> SyncUser(int TelegramId, string UserName, string Secret, string Address, string PublicKey)
         {
             var aspnetuser = await _appUsersManagerService.GetUserAsync(UserName, TelegramId);
 
@@ -41,7 +41,7 @@
                 aspnetuser.TelegramId = TelegramId;
                 aspnetuser.Secret = CryptoManager.EncryptStringAES(Secret.Replace("\r", ""), AppSettingsProvider.EncryptionKey);
                 aspnetuser.Address = Address;
-                aspnetuser.PublicKey = PublickKey;
+                aspnetuser.PublicKey = PublicKey;
                 await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
             }
 
