@@ -5,6 +5,7 @@ using rise.Services;
 using rise_lib;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
@@ -75,7 +76,30 @@ namespace Rise.Services
             // Withdraw Rice
             if (command == "!WITHDRAW")
             {
+                var strResponse = string.Empty;
 
+                try
+                {
+                    var amount = double.Parse(Regex.Matches(message.Text, @"[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
+                }
+                catch (Exception ex)
+                {
+                    strResponse = "Illegal amount entered. ex: !withdraw 10 RISE to 5953135380169360325R";
+                    
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                    return;
+                }
+
+                var recipientId = message.Text.ToUpper().Split(' ').Last();
+
+                if (recipientId[recipientId.Length - 1] != 'R')
+                {
+                    strResponse = "<b>" + recipientId + "</b> doesnt look to be a valid RISE address (doesnt end with an 'R')";
+                    _logger.LogError("Received Exception from cmd_Withdraw {0}", strResponse);
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                    return;
+                }
+                cmd_WithdrawTx(appuser,)
             }
 
             // Info Price
@@ -143,33 +167,34 @@ namespace Rise.Services
 
 
         /// <summary>
-        /// Withdraw Rise 
+        /// Withdraw Rise to account
         /// </summary>
-        /// <param name="Sender"></param>
+        /// <param name="sender"></param>
+        /// <param name="address"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        private async Task cmd_Withdraw(ApplicationUser sender, int amount)
+        private async Task cmd_WithdrawTx(ApplicationUser sender, string address, int amount)
         {
             string strResponse = string.Empty;
-
-            List<ApplicationUser> ListReceiver = new List<ApplicationUser>
+            if (await cmd_BalanceCheck(sender, 1, amount))
             {
-                sender
-            };
+                try
+                {
+                    await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+                    var tx = await RiseManager.CreatePaiment(amount * 100000000, sender.GetSecret(), address);
 
-            List<rise_lib.Models.Transaction> txlst  = await cmd_SendTx(sender, ListReceiver, amount);
+                    strResponse = "Ok @" + sender.UserName + " I sent " + amount + "RISE to this address <b>" + address + "</b>";
 
-            if (txlst[0].success)
-            {
-                strResponse = "Sent <b>" + amount + "</b> to " + sender.Address + " Status:" + txlst[0].success;
-                await _botService.Client.SendTextMessageAsync(sender.TelegramId, strResponse, ParseMode.Html);
-                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + txlst[0].transactionId));
-                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Transaction Id:" + txlst[0].transactionId + "", replyMarkup: keyboard);
+                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, strResponse, ParseMode.Html);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Received Exception from cmd_WithdrawTx {0}" + ex.Message);
+                }
             }
             else
             {
-                strResponse = "Error Processing Transaction";
-                await _botService.Client.SendTextMessageAsync(sender.TelegramId, strResponse, ParseMode.Html);
+                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Sorry @" + sender.UserName " you dont have enough RISE to send <b>" + amount + "</b> to " + ListReceiver.Count + " users", ParseMode.Html);
             }
         }
 
