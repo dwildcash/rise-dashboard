@@ -99,44 +99,16 @@ namespace Rise.Services
                 if (tx[0].success)
                 {
                     strResponse = "@" + recipientUser.UserName + " wake up, it's a wonderful day!! thanks to @" + appuser.UserName + " he sent <b>" + amount + " RISE</b> to you :)";
+
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                    var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx[0].transactionId));
+                    await _botService.Client.SendTextMessageAsync(message.Chat, "Transaction Id:" + tx[0].transactionId + "", replyMarkup: keyboard);
                 }
                 else
                 {
                     strResponse = "Ohhh sorry " + appuser.UserName + " I got a problem while processing transaction.";
-                }
-
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-            }
-
-            // Withdraw Rice
-            if (command == "!WITHDRAW")
-            {
-                var strResponse = string.Empty;
-                double amount = 0;
-
-                try
-                {
-                    amount = double.Parse(Regex.Matches(message.Text, @"[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
-                }
-                catch (Exception ex)
-                {
-                    strResponse = "Illegal amount entered. ex: !withdraw 10 RISE to 5953135380169360325R";
-
                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-                    return;
-                }
-
-                var recipientId = message.Text.ToUpper().Split(' ').Last();
-
-                if (recipientId[recipientId.Length - 1] != 'R')
-                {
-                    strResponse = "<b>" + recipientId + "</b> doesnt look to be a valid RISE address (doesnt end with an 'R')";
-                    _logger.LogError("Received Exception from cmd_Withdraw {0}", strResponse);
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-                    return;
-                }
-
-                await cmd_WithdrawTx(appuser, recipientId, amount);
+                }       
             }
 
             // Info Price
