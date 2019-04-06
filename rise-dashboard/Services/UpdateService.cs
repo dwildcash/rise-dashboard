@@ -89,6 +89,9 @@ namespace Rise.Services
             // Withdraw coin to address
             if (command == "!WITHDRAW")
             {
+                var ff = amount;
+                var fg = lstDestAddress;
+                
                 if (amount > 0.1)
                 {
                     var tx = await cmd_SendTx(appuser, lstDestAddress, amount);
