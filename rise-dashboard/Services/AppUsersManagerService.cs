@@ -108,6 +108,7 @@ namespace rise.Services
             using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
                 try
                 {
                     return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-2) && x.UserName != excluded_username && x.UserName != null && x.MessageCount > 3).OrderBy(x => Guid.NewGuid()).Take(num).ToList();
@@ -137,7 +138,7 @@ namespace rise.Services
         /// <param name="UserName"></param>
         /// <param name="TelegramId"></param>
         /// <returns></returns>
-        public async Task<ApplicationUser> GetUserAsync(string userName, long telegramId)
+        public async Task<ApplicationUser> GetUserAsync(string userName, long telegramId, bool flagMsgUpdate=false)
         {
             ApplicationUser appuser = null;
 
@@ -163,6 +164,14 @@ namespace rise.Services
                 {
                     _logger.LogError("Received Exception from GetUserAsync {0}", ex.Message);
                     return null;
+                }
+
+                // Flag update message
+                if (flagMsgUpdate)
+                {
+                    appuser.MessageCount++;
+                    appuser.LastMessage = DateTime.Now;
+                    await _userManager.UpdateAsync(appuser);
                 }
             }
 

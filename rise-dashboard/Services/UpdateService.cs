@@ -35,9 +35,15 @@ namespace Rise.Services
             }
 
             var message = update.Message;
+            var flagMsgUpdate = false;
+
+            if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
+            {
+                flagMsgUpdate = true;
+            }
 
             // Get the user who sent message
-            var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id);
+            var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
 
             string command = string.Empty;
             List<string> lstDestUsers = new List<string>();
@@ -100,6 +106,13 @@ namespace Rise.Services
                 await cmd_Withdraw(appuser, lstAmount.FirstOrDefault(), lstDestAddress.FirstOrDefault());
             }
 
+            if (command == "!RAIN")
+            {
+                List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
+
+                await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "its Raining!!!");
+            }
+
             // Withdraw coin to address
             if (command == "!SEND")
             {
@@ -110,7 +123,7 @@ namespace Rise.Services
                     lstAppUsers.Add(_appUsersManagerService.GetUserByUsername(user));
                 }
 
-                await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers);
+                await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "wake up!!!");
             }
 
             // Info Price
@@ -245,7 +258,7 @@ namespace Rise.Services
         /// <param name="amount"></param>
         /// <param name="recipientId"></param>
         /// <returns></returns>
-        private async Task cmd_Send(Message message, ApplicationUser sender, double amount, List<ApplicationUser> destusers)
+        private async Task cmd_Send(Message message, ApplicationUser sender, double amount, List<ApplicationUser> destusers, string bannerMsg="")
         {
             double balance = 0;
 
@@ -265,7 +278,7 @@ namespace Rise.Services
                     }
 
                     var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " wake up, its a wonderful day!! thanks to @" + sender.UserName + " he sent <b>" + amount + " RISE</b> to you :)", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + " its a wonderful day!! thanks to @" + sender.UserName + " he sent <b>" + Math.Round(amountToSend,3) + " RISE</b> to you :)", ParseMode.Html);
                 }
                 else
                 {
