@@ -99,7 +99,20 @@ namespace Rise.Services
             {
                 await cmd_Withdraw(appuser, lstAmount.FirstOrDefault(), lstDestAddress.FirstOrDefault());
             }
-            
+
+            // Withdraw coin to address
+            if (command == "!SEND")
+            {
+                List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
+
+                foreach (var user in lstDestUsers)
+                {
+                    lstAppUsers.Add(_appUsersManagerService.GetUserByUsername(user));
+                }
+
+                await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers);
+            }
+
             // Info Price
             if (command == "!PRICE")
             {
@@ -187,7 +200,13 @@ namespace Rise.Services
             }
         }
 
-
+        /// <summary>
+        /// Withdraw coin
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="amount"></param>
+        /// <param name="recipientId"></param>
+        /// <returns></returns>
         private async Task cmd_Withdraw(ApplicationUser sender, double amount, string recipientId)
         {
             double balance = 0;
@@ -210,6 +229,7 @@ namespace Rise.Services
                 else
                 {
                     await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Not enough RISE to Withdraw <b>" + amount + "</b> balance" + balance + " RISE", ParseMode.Html);
+                    return;
                 }
             }
             else
@@ -218,6 +238,47 @@ namespace Rise.Services
             }
         }
 
+        /// <summary>
+        /// Withdraw coin
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="amount"></param>
+        /// <param name="recipientId"></param>
+        /// <returns></returns>
+        private async Task cmd_Send(Message message, ApplicationUser sender, double amount, List<ApplicationUser> destusers)
+        {
+            double balance = 0;
+
+            if (amount > 0 && destusers.Count > 0)
+            {
+                await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+
+                double amountToSend = amount / destusers.Count();
+
+                balance = await RiseManager.AccountBalanceAsync(sender.Address);
+
+                if (balance > ((0.1 * destusers.Count) + amount))
+                {
+                    foreach (var destuser in destusers.Where(x => x.Address != null))
+                    {
+                        var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, sender.GetSecret(), destuser.Address);
+                    }
+
+                    var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " wake up, its a wonderful day!! thanks to @" + sender.UserName + " he sent <b>" + amount + " RISE</b> to you :)", ParseMode.Html);
+                }
+                else
+                {
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to send <b>" + amount + "</b> to " + destusers.Count() + " users. Balance: " + balance + " RISE", ParseMode.Html);
+                    return;
+                }
+            }
+            else
+            {
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please specify amount and user ex: !send 10 @Dwildcash", ParseMode.Html);
+                return;
+            }
+        }
 
         /// <summary>
         /// Show User Balance
@@ -251,7 +312,6 @@ namespace Rise.Services
                 _logger.LogError("Received Exception from cmd_Deposit {0}", ex.Message);
             }
         }
-
 
         /// <summary>
         /// Display a chuck Norris Joke
