@@ -44,28 +44,36 @@ namespace Rise.Services
             List<string> lstDestAddress = new List<string>();
             double amount = 0;
 
-            // Match Command
-            if (Regex.Matches(message.Text, @"!(\S+)\s?").Count > 0)
+            try
             {
-                command = Regex.Matches(message.Text.ToUpper(), @"!(\S+)\s?")[0].ToString().Trim();
-            }
+                // Match Command
+                if (Regex.Matches(message.Text, @"!(\S+)\s?").Count > 0)
+                {
+                    command = Regex.Matches(message.Text.ToUpper(), @"!(\S+)\s?")[0].ToString().Trim();
+                }
 
-            // Match @username if any
-            if (Regex.Matches(message.Text, @"@(\S+)\s?").Count > 0)
-            {
-                lstDestUsers = Regex.Matches(message.Text, @"@(\S+)\s?").Cast<Match>().Select(m => m.Value.Replace("@", "").Trim()).ToList();
-            }
+                // Match @username if any
+                if (Regex.Matches(message.Text, @"@(\S+)\s?").Count > 0)
+                {
+                    lstDestUsers = Regex.Matches(message.Text, @"@(\S+)\s?").Cast<Match>().Select(m => m.Value.Replace("@", "").Trim()).ToList();
+                }
 
-            // Match any double amount if present
-            if (Regex.Matches(message.Text, @"([ ]{1,})+[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?\s+?").Count > 0)
-            {
-                amount = double.Parse(Regex.Matches(message.Text, @"([ ]{1,})+[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?\s+?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
-            }
+                // Match any double amount if present
+                if (Regex.Matches(message.Text, @"([ ]{1,})+[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?\s+?").Count > 0)
+                {
+                    amount = double.Parse(Regex.Matches(message.Text, @"([ ]{1,})+[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?\s+?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
+                }
 
-            // Match any address
-            if (Regex.Matches(message.Text, @"\d*[r,R]\b").Count > 0)
+                // Match any address
+                if (Regex.Matches(message.Text, @"\d*[r,R]\b").Count > 0)
+                {
+                    lstDestAddress = Regex.Matches(message.Text, @"(\d*[r,R]\b").Cast<Match>().Select(m => m.Value).ToList();
+                }
+            }
+            catch (Exception ex)
             {
-                lstDestAddress = Regex.Matches(message.Text, @"(\d*[r,R]\b").Cast<Match>().Select(m => m.Value).ToList();
+                _logger.LogError("Error parsing parameters {0}" + ex.Message);
+                return;
             }
 
             // Info command
