@@ -40,7 +40,7 @@ namespace Rise.Services
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id);
 
             string command = string.Empty;
-            string destUser = string.Empty;
+            List<string> lstDestUsers = new List<string>();
             double amount = 0;
 
             // Match Command
@@ -52,13 +52,19 @@ namespace Rise.Services
             // Match @username if any
             if (Regex.Matches(message.Text, @"@(\S+)\s?").Count > 0)
             {
-                destUser = Regex.Matches(message.Text, @"@(\S+)\s?")[0].ToString().Replace("@", "").Trim();
+                lstDestUsers = Regex.Matches(message.Text, @"@(\S+)\s?").Cast<Match>().Select(m => m.Value.Replace("@", "").Trim()).ToList();
             }
 
             // Match any double amount if present
-            amount = double.Parse(Regex.Matches(message.Text, @"([ ]{1,})+[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
+            try
+            {
+                amount = double.Parse(Regex.Matches(message.Text, @"([ ]{1,})+[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?\s+?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
+            }
+            catch
+            {
+                amount = 0;
+            }
 
-   
             // Info command
             if (command == "!INFO")
             {
@@ -77,43 +83,70 @@ namespace Rise.Services
                 await cmd_Help(message, appuser);
             }
 
-            // Withdraw Rice
-            if (command == "!SEND")
+            // Withdraw coin to address
+            if (command == "!WITHDRAW")
             {
-                var strResponse = string.Empty;
-
-                List<ApplicationUser> ListDestuser = new List<ApplicationUser>();
-
-                try
+                string strResponse = string.Empty;
+                List<string> LstRecipient = new List<string>
                 {
-                    amount = double.Parse(Regex.Matches(message.Text, @"[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
-                }
-                catch (Exception ex)
+                    appuser.Address
+                };
+
+                if (amount > 0.1)
                 {
-                    strResponse = "Illegal amount entered. ex: !withdraw 10 RISE to 5953135380169360325R";
+                    var tx = await cmd_SendTx(appuser, LstRecipient, amount);
 
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-                    return;
-                }
-
-                var recipientUser = _appUsersManagerService.GetUserByUsername(destUser);
-                ListDestuser.Add(recipientUser);
-
-                List<rise_lib.Models.Transaction> tx = await cmd_SendTx(appuser, ListDestuser.Where(x=>x.Address != null).Select(x=>x.Address).ToList(), amount);
-
-                if (tx[0].success)
-                {
-                    strResponse = "@" + recipientUser.UserName + " wake up, it's a wonderful day!! thanks to @" + appuser.UserName + " he sent <b>" + amount + " RISE</b> to you :)";
-
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-                    var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx[0].transactionId));
-                    await _botService.Client.SendTextMessageAsync(message.Chat, "Transaction Id:" + tx[0].transactionId + "", replyMarkup: keyboard);
+                    if (tx.FirstOrDefault().success)
+                    {
+                        await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Successfully sent <b>" + amount + "</b> to " + appuser.Address, ParseMode.Html);
+                        var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx[0].transactionId));
+                        await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Transaction Id:" + tx[0].transactionId + "", replyMarkup: keyboard);
+                    }
+                    else
+                    {
+                        await _botService.Client.SendTextMessageAsync(appuser.TelegramId, tx.FirstOrDefault().reason, ParseMode.Html);
+                    }
                 }
                 else
                 {
-                    strResponse = "Ohhh sorry " + appuser.UserName + " I got a problem while processing transaction.";
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-                }       
+                    await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "The amount " + amount + " will not cover network fees (0.1)", ParseMode.Html);
+                }
+            }
+
+            // Withdraw Rice
+            if (command == "!SEND")
+            {
+                string strResponse = string.Empty;
+                List<string> LstRecipient = new List<string>();
+          
+                // Get the recipients.
+                foreach (var recipient in lstDestUsers)
+                {
+                    LstRecipient.Add(_appUsersManagerService.GetUserByUsername(recipient).Address);
+                }
+
+                if (amount > 0.1)
+                {
+                    var tx = await cmd_SendTx(appuser, LstRecipient, amount);
+
+                    foreach (var t in tx)
+                    {
+                        if (t.success)
+                        {
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Successfully sent <b>" + amount + "</b> to " + appuser.Address, ParseMode.Html);
+                            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + t.transactionId));
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Transaction Id:" + t.transactionId + "", replyMarkup: keyboard);
+                        }
+                        else
+                        {
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, t.reason, ParseMode.Html);
+                        }
+                    }
+                }
+                else
+                {
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "The amount " + amount + " will not cover network fees (0.1)", ParseMode.Html);
+                }
             }
 
             // Info Price
@@ -138,30 +171,6 @@ namespace Rise.Services
             if (command == "!DEPOSIT")
             {
                 await cmd_Deposit(message, appuser);
-            }
-
-            // Withdraw
-            if (command == "!WITHDRAW")
-            {
-                string strResponse = string.Empty;
-                List<string> LstRecipient = new List<string>();
-                LstRecipient.Add(appuser.Address);
-
-                if (amount > 0.1)
-                {
-                    var tx = await cmd_SendTx(appuser, LstRecipient, amount);
-
-                    if (tx.FirstOrDefault().success)
-                    {
-                        await _botService.Client.SendTextMessageAsync(appuser.TelegramId,"Successfully sent <b>" + amount + "</b> to " + appuser.Address ,ParseMode.Html);
-                        var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx[0].transactionId));
-                        await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Transaction Id:" + tx[0].transactionId + "", replyMarkup: keyboard);
-                    }
-                    else
-                    {
-                        await _botService.Client.SendTextMessageAsync(appuser.TelegramId, tx.FirstOrDefault().reason, ParseMode.Html);
-                    }
-                }
             }
         }
 
@@ -239,6 +248,9 @@ namespace Rise.Services
         {
             List<rise_lib.Models.Transaction> txList = new List<rise_lib.Models.Transaction>();
 
+            // Spread payment equally to eaach users.
+            var splitamount = amount / ListRecipient.Count();
+
             if (await cmd_BalanceCheck(Sender, ListRecipient.Count, amount))
             {
                 try
@@ -258,7 +270,7 @@ namespace Rise.Services
                             continue;
                         }
 
-                        var tx = await RiseManager.CreatePaiment(amount * 100000000, Sender.GetSecret(), recipient);
+                        var tx = await RiseManager.CreatePaiment(splitamount * 100000000, Sender.GetSecret(), recipient);
                         tx.reason = "OK";
 
                         txList.Add(tx);
@@ -285,7 +297,7 @@ namespace Rise.Services
                 {
                     success = false,
                     transactionId = null,
-                    reason = "Sorry you dont have enough RISE to send <b>" + amount + "</b> to " + ListRecipient.Count + " users"
+                    reason = "Sorry you dont have enough RISE to send <b>" + splitamount + "</b> to " + ListRecipient.Count + " users"
                 };
 
                 txList.Add(errTx);        
