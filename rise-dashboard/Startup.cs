@@ -14,9 +14,8 @@
     using rise.Data;
     using rise.Models;
     using rise.Services;
-    using System;
     using Rise.Services;
-
+    using System;
 
     /// <summary>
     /// Defines the <see cref="Startup" />
@@ -159,8 +158,6 @@
 
             // Seed Initial User
             DbSeedData.SeedData(userManager, roleManager, context);
-
- 
 
             app.UseStaticFiles();
 
