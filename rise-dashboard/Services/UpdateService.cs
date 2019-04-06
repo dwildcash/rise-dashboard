@@ -65,9 +65,9 @@ namespace Rise.Services
                 }
 
                 // Match any address
-                if (Regex.Matches(message.Text, @"\d*[r,R]\b").Count > 0)
+                if (Regex.Matches(message.Text, @"\d+[R,r]").Count > 0)
                 {
-                    lstDestAddress = Regex.Matches(message.Text, @"(\d*[r,R]\b").Cast<Match>().Select(m => m.Value).ToList();
+                    lstDestAddress = Regex.Matches(message.Text, @"\d+[R,r]").Cast<Match>().Select(m => m.Value).ToList();
                 }
             }
             catch (Exception ex)
