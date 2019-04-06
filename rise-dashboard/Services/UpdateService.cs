@@ -41,6 +41,7 @@ namespace Rise.Services
 
             string command = string.Empty;
             string destUser = string.Empty;
+            double amount = 0;
 
             // Match Command
             if (Regex.Matches(message.Text, @"!(\S+)\s?").Count > 0)
@@ -52,6 +53,18 @@ namespace Rise.Services
             if (Regex.Matches(message.Text, @"@(\S+)\s?").Count > 0)
             {
                 destUser = Regex.Matches(message.Text, @"@(\S+)\s?")[0].ToString().Replace("@", "").Trim();
+            }
+
+            try
+            {
+                amount = double.Parse(Regex.Matches(message.Text, @"([ ]{1,})+[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?").Cast<Match>().Select(m => m.Value).FirstOrDefault());
+            }
+            catch (Exception ex)
+            {
+                strResponse = "Illegal amount entered. ex: !withdraw 10 RISE to 5953135380169360325R";
+
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                return;
             }
 
             // Info command
@@ -134,6 +147,15 @@ namespace Rise.Services
             {
                 await cmd_Deposit(message, appuser);
             }
+
+            if (command == "!WITHDRAW")
+            {
+                string strResponse = string.Empty;
+                List<string> LstRecipient = new List<string>();
+                LstRecipient.Add(appuser.Address);
+
+                cmd_SendTx(appuser, LstRecipient, amount)
+            }
         }
 
         /// <summary>
@@ -174,29 +196,11 @@ namespace Rise.Services
         private async Task cmd_WithdrawTx(ApplicationUser sender, string address, double amount)
         {
             string strResponse = string.Empty;
+            List<string> LstRecipient = new List<string>();
+            LstRecipient.Add(address);
 
-            if (await cmd_BalanceCheck(sender, 1, amount))
-            {
-                try
-                {
-                    await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
-                   
-                    var e = sender.GetSecret();
-                    var tx = await RiseManager.CreatePaiment(amount * 100000000, e, address);
-
-                    strResponse = "Ok @" + sender.UserName + " I sent " + amount + "RISE to this address <b>" + address + "</b>";
-
-                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, strResponse, ParseMode.Html);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Received Exception from cmd_WithdrawTx {0}" + ex.Message);
-                }
-            }
-            else
-            {
-                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Sorry @" + sender.UserName + " you dont have enough RISE to send <b>" + amount + "</b> to address " + address, ParseMode.Html);
-            }
+            cmd_SendTx(sender,LstRecipient,amount)
+            
         }
 
         /// <summary>
@@ -252,10 +256,20 @@ namespace Rise.Services
                     {
                         if (recipient[recipient.Length - 1] != 'R')
                         {
+                            var errTx = new rise_lib.Models.Transaction
+                            {
+                                success = false,
+                                transactionId = null,
+                                reason = "Address doesnt end with a R"
+                            };
+
+                            txList.Add(errTx);
                             continue;
                         }
 
                         var tx = await RiseManager.CreatePaiment(amount * 100000000, Sender.GetSecret(), recipient);
+                        tx.reason = "OK";
+
                         txList.Add(tx);
                     }
                 }
