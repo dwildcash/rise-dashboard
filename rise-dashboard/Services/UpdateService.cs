@@ -119,25 +119,37 @@ namespace Rise.Services
                 // Get the recipients.
                 foreach (var recipient in lstDestUsers)
                 {
-                    LstRecipient.Add(_appUsersManagerService.GetUserByUsername(recipient).Address);
+                    var foundUser = _appUsersManagerService.GetUserByUsername(recipient);
+
+                    if (foundUser != null && foundUser?.Address != null)
+                    {
+                        LstRecipient.Add(foundUser.Address);
+                    }
                 }
 
                 if (amount > 0.1)
                 {
-                    var tx = await cmd_SendTx(appuser, LstRecipient, amount);
-
-                    foreach (var t in tx)
+                    if (LstRecipient.Count >= 1)
                     {
-                        if (t.success)
+                        var tx = await cmd_SendTx(appuser, LstRecipient, amount);
+
+                        foreach (var t in tx)
                         {
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Successfully sent <b>" + amount + "</b> to " + appuser.Address, ParseMode.Html);
-                            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + t.transactionId));
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Transaction Id:" + t.transactionId + "", replyMarkup: keyboard);
+                            if (t.success)
+                            {
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Successfully sent <b>" + amount + "</b> to " + appuser.Address, ParseMode.Html);
+                                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + t.transactionId));
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Transaction Id:" + t.transactionId + "", replyMarkup: keyboard);
+                            }
+                            else
+                            {
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, t.reason, ParseMode.Html);
+                            }
                         }
-                        else
-                        {
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, t.reason, ParseMode.Html);
-                        }
+                    }
+                    else
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Sorry could not find any user matching your send.", ParseMode.Html);
                     }
                 }
                 else
