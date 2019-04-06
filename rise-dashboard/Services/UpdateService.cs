@@ -192,7 +192,7 @@ namespace Rise.Services
         {
             double balance = 0;
 
-            if (amount > 0 && sender.Address != null)
+            if (amount > 0 && !string.IsNullOrEmpty(sender.Address))
             {
                 await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
 
