@@ -37,7 +37,6 @@ namespace Rise.Services
             var message = update.Message;
             var flagMsgUpdate = false;
 
-
             // Count only message coming from channel
             if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
             {
@@ -84,77 +83,85 @@ namespace Rise.Services
                 return;
             }
 
-            // Info command
-            if (command == "!INFO")
+            try
             {
-                await cmd_Info(message);
-            }
-
-            // Show Balance
-            if (command == "!BALANCE")
-            {
-                await cmd_ShowUserBalance(appuser);
-            }
-
-            // Show Help
-            if (command == "!HELP")
-            {
-                await cmd_Help(message, appuser);
-            }
-
-            // Withdraw coin to address
-            if (command == "!WITHDRAW")
-            {
-                await cmd_Withdraw(appuser, lstAmount.FirstOrDefault(), lstDestAddress.FirstOrDefault());
-            }
-
-            if (command == "!RAIN")
-            {
-                List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
-
-                await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "its Raining!!!");
-            }
-
-            // Withdraw coin to address
-            if (command == "!SEND")
-            {
-                List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
-
-                foreach (var user in lstDestUsers)
+                // Info command
+                if (command == "!INFO")
                 {
-                    var e = _appUsersManagerService.GetUserByUsername(user);
-
-                    if (e != null)
-                    {
-                        lstAppUsers.Add(e);
-                    }
+                    await cmd_Info(message);
                 }
 
-                await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "wake up!!!");
-            }
+                // Show Balance
+                if (command == "!BALANCE")
+                {
+                    await cmd_ShowUserBalance(appuser);
+                }
 
-            // Info Price
-            if (command == "!PRICE")
-            {
-                await cmd_Price(message);
-            }
+                // Show Help
+                if (command == "!HELP")
+                {
+                    await cmd_Help(message, appuser);
+                }
 
-            // Return a  geek joke
-            if (command == "!JOKE")
-            {
-                await cmd_Joke(message);
-            }
+                // Withdraw coin to address
+                if (command == "!WITHDRAW")
+                {
+                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault(), lstDestAddress.FirstOrDefault());
+                }
 
-            // Show Rise Exchanges
-            if (command == "!EXCHANGES")
-            {
-                await cmd_Exchanges(message, appuser);
-            }
+                if (command == "!RAIN")
+                {
+                    List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
 
-            // show Deposit
-            if (command == "!DEPOSIT")
+                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "its Raining!!!");
+                }
+
+                // Withdraw coin to address
+                if (command == "!SEND")
+                {
+                    List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
+
+                    foreach (var user in lstDestUsers)
+                    {
+                        var e = _appUsersManagerService.GetUserByUsername(user);
+
+                        if (e != null)
+                        {
+                            lstAppUsers.Add(e);
+                        }
+                    }
+
+                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "wake up!!!");
+                }
+
+                // Info Price
+                if (command == "!PRICE")
+                {
+                    await cmd_Price(message);
+                }
+
+                // Return a  geek joke
+                if (command == "!JOKE")
+                {
+                    await cmd_Joke(message);
+                }
+
+                // Show Rise Exchanges
+                if (command == "!EXCHANGES")
+                {
+                    await cmd_Exchanges(message, appuser);
+                }
+
+                // show Deposit
+                if (command == "!DEPOSIT")
+                {
+                    await cmd_Deposit(message, appuser);
+                }
+            }
+            catch (Exception ex)
             {
-                await cmd_Deposit(message, appuser);
+                _logger.LogError("Error parsing !command {0}" + ex.Message);
+                return;
             }
         }
 
@@ -220,8 +227,6 @@ namespace Rise.Services
             }
         }
 
-
-
         private async Task cmd_Hope(Message message)
         {
             List<string> LstHope = new List<string>();
@@ -243,8 +248,6 @@ namespace Rise.Services
             int index = random.Next(LstHope.Count);
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, LstHope[index], ParseMode.Html);
         }
-
-
 
         /// <summary>
         /// Withdraw coin
@@ -291,7 +294,7 @@ namespace Rise.Services
         /// <param name="amount"></param>
         /// <param name="recipientId"></param>
         /// <returns></returns>
-        private async Task cmd_Send(Message message, ApplicationUser sender, double amount, List<ApplicationUser> destusers, string bannerMsg="")
+        private async Task cmd_Send(Message message, ApplicationUser sender, double amount, List<ApplicationUser> destusers, string bannerMsg = "")
         {
             double balance = 0;
 
@@ -318,9 +321,7 @@ namespace Rise.Services
                     }
 
                     var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + " its a wonderful day!! thanks to @" + sender.UserName + " he sent <b>" + Math.Round(amountToSend,3) + " RISE</b> to you :)", ParseMode.Html);
-
-                    
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + " its a wonderful day!! thanks to @" + sender.UserName + " he sent <b>" + Math.Round(amountToSend, 3) + " RISE</b> to you :)", ParseMode.Html);
                 }
                 else
                 {
