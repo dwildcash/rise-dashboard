@@ -63,6 +63,7 @@
             AppSettingsProvider.BotName = Configuration["AppSettings:BotName"];
             AppSettingsProvider.Salt = Configuration["AppSettings:Salt"];
             AppSettingsProvider.EncryptionKey = Configuration["AppSettings:EncryptionKey"];
+            AppSettingsProvider.WebHookSecret = Configuration["WebHookSecret"];
             AppSettingsProvider.TelegramChannelId = long.Parse(Configuration["AppSettings:TelegramChannelId"]);
         }
 

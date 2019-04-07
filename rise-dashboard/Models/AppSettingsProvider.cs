@@ -105,5 +105,10 @@
         /// Gets or sets the LiveCoinWalletAddress
         /// </summary>
         public static string LiveCoinWalletAddress { get; set; }
+
+        /// <summary>
+        /// Secret used for Telegram webhook
+        /// </summary>
+        public static string WebHookSecret { get; set; }
     }
 }
