@@ -103,12 +103,17 @@ namespace Rise.Services
                     await cmd_Help(message, appuser);
                 }
 
+                // Show Private Bip39
+                if (command == "!KEY")
+                {
+                    await cmd_Key(appuser);
+                }
+
                 // Withdraw coin to address
                 if (command == "!WITHDRAW")
                 {
                     await cmd_Withdraw(appuser, lstAmount.FirstOrDefault(), lstDestAddress.FirstOrDefault());
                 }
-
 
                 // Boom!
                 if (command == "!BOOM")
@@ -142,6 +147,24 @@ namespace Rise.Services
                     }
 
                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "wake up!!!");
+                }
+
+                // Tell when last message from user
+                if (command == "!SEEN")
+                {
+                    List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
+
+                    foreach (var user in lstDestUsers)
+                    {
+                        var e = _appUsersManagerService.GetUserByUsername(user);
+
+                        if (e != null)
+                        {
+                            lstAppUsers.Add(e);
+                        }
+                    }
+
+                    await cmd_Seen(appuser, message, lstAppUsers);
                 }
 
                 // Info Price
@@ -209,6 +232,7 @@ namespace Rise.Services
             }
         }
 
+
         /// <summary>
         /// Show Help
         /// </summary>
@@ -243,7 +267,6 @@ namespace Rise.Services
             }
         }
 
-
         /// <summary>
         /// Send Hope Message
         /// </summary>
@@ -277,6 +300,18 @@ namespace Rise.Services
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, LstHope[index], ParseMode.Html);
         }
 
+
+        /// <summary>
+        /// Show Wallet Key
+        /// </summary>
+        /// <param name="appuser"></param>
+        private async Task cmd_Key(ApplicationUser appuser)
+        {
+            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "This is the private key for your TIP wallet, please note it and delete this message!", ParseMode.Html);
+            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, appuser.GetSecret(), ParseMode.Html);
+        }
+
+
         /// <summary>
         /// Withdraw coin
         /// </summary>
@@ -286,32 +321,39 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Withdraw(ApplicationUser sender, double amount, string recipientId)
         {
-            double balance = 0;
-
-            if (amount > 0 && !string.IsNullOrEmpty(recipientId))
+            try
             {
-                await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+                double balance = 0;
 
-                balance = await RiseManager.AccountBalanceAsync(sender.Address);
-
-                if (balance > (0.1 + amount))
+                if (amount > 0 && !string.IsNullOrEmpty(recipientId))
                 {
-                    var tx = await RiseManager.CreatePaiment(amount * 100000000, sender.GetSecret(), recipientId);
+                    await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
 
-                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Successfully sent <b>" + amount + "</b> to " + recipientId, ParseMode.Html);
+                    balance = await RiseManager.AccountBalanceAsync(sender.Address);
 
-                    var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
-                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
+                    if (balance > (0.1 + amount))
+                    {
+                        var tx = await RiseManager.CreatePaiment(amount * 100000000, sender.GetSecret(), recipientId);
+
+                        await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Successfully sent <b>" + amount + "</b> to " + recipientId, ParseMode.Html);
+
+                        var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
+                        await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
+                    }
+                    else
+                    {
+                        await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Not enough RISE to Withdraw <b>" + amount + "</b> balance" + balance + " RISE", ParseMode.Html);
+                        return;
+                    }
                 }
                 else
                 {
-                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Not enough RISE to Withdraw <b>" + amount + "</b> balance" + balance + " RISE", ParseMode.Html);
-                    return;
+                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Please specify amount and address ex: !withdraw 10 5953135380169360325R", ParseMode.Html);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Please specify amount and address ex: !withdraw 10 5953135380169360325R", ParseMode.Html);
+                _logger.LogError("Received Exception from cmd_Withdraw {0}", ex.Message);
             }
         }
 
@@ -376,7 +418,65 @@ namespace Rise.Services
             {
                 _logger.LogError("Received Exception from cmd_Send transaction {0}", ex.Message);
             }
+        }
 
+        /// <summary>
+        /// Tell when last user sent message on channel
+        /// </summary>
+        /// <param name="appuser"></param>
+        /// <param name="message"></param>
+        /// <param name="destUsers"></param>
+        /// <returns></returns>
+        private async Task cmd_Seen(ApplicationUser appuser, Message message, List<ApplicationUser> lookUsers)
+        {
+            try
+            {
+                var strResponse = string.Empty;
+
+                if (lookUsers.Count() == 0)
+                {
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a user name starting with <b>@</b> ex !seen @Dwildcash", ParseMode.Html);
+                    return;
+                }
+
+                await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+
+                foreach (var user in lookUsers)
+                {
+                    if (user?.LastMessage != null)
+                    {
+                        var lastseen = user.LastMessage;
+                        double hours = Math.Round((DateTime.Now - user.LastMessage).TotalHours, 2);
+                        double minutes = Math.Round((DateTime.Now - user.LastMessage).TotalMinutes, 2);
+                        string showtime;
+
+                        if (hours <= 1 && minutes > 0)
+                        {
+                            showtime = minutes + " minutes ago.";
+                        }
+                        else if (user.UserName == appuser.UserName)
+                        {
+                            showtime = "... @" + appuser.UserName + " problem finding yourself? ";
+                        }
+                        else
+                        {
+                            showtime = Math.Round(hours, 2) + " hours ago.";
+                        }
+
+                        strResponse = "Last Message from @" + user.UserName + " was " + showtime;
+                    }
+                    else
+                    {
+                        strResponse = "Sorry, I don't know @" + user.UserName;
+                    }
+
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_Seen {0}", ex.Message);
+            }
         }
 
         /// <summary>
@@ -408,7 +508,7 @@ namespace Rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_Deposit {0}", ex.Message);
+                _logger.LogError("Received Exception from cmd_ShowUserBalance {0}", ex.Message);
             }
         }
 
@@ -435,18 +535,7 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Exchanges(Message message, ApplicationUser appuser)
         {
-            string strResponse = string.Empty; ;
-
-            if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
-            {
-                if (appuser == null)
-                {
-                    strResponse = "Please use !exchanges command only in private message";
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-                    return;
-                }
-            }
-
+            var strResponse = string.Empty;
             try
             {
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
