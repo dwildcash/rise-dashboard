@@ -85,6 +85,11 @@ namespace Rise.Services
 
             try
             {
+                if (appuser.UserName != "Dwildcash" || appuser.UserName != "oregonpop" || appuser.UserName != "Showrulz" || appuser.UserName != "Lok35h")
+                {
+                    return;
+                }
+
                 // Info command
                 if (command == "!INFO")
                 {
@@ -302,12 +307,13 @@ namespace Rise.Services
 
 
         /// <summary>
-        /// Show Wallet Key
+        /// Show Wallet Address and Key
         /// </summary>
         /// <param name="appuser"></param>
         private async Task cmd_Key(ApplicationUser appuser)
         {
             await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "This is the private key for your TIP wallet, please note it and delete this message!", ParseMode.Html);
+            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "<b>"+appuser.Address+"</b>", ParseMode.Html);
             await _botService.Client.SendTextMessageAsync(appuser.TelegramId, appuser.GetSecret(), ParseMode.Html);
         }
 
