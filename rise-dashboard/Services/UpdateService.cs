@@ -326,42 +326,57 @@ namespace Rise.Services
         {
             double balance = 0;
 
-            if (amount > 0 && destusers.Count > 0)
+            try
             {
-                await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
-
-                double amountToSend = amount / destusers.Count();
-
-                balance = await RiseManager.AccountBalanceAsync(sender.Address);
-
-                if (balance > ((0.1 * destusers.Count) + amount))
+                if (amount > 0 && destusers.Count > 0)
                 {
-                    foreach (var destuser in destusers.Where(x => x.Address != null))
+                    await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+
+                    double amountToSend = amount / destusers.Count();
+
+                    balance = await RiseManager.AccountBalanceAsync(sender.Address);
+
+                    if (balance > ((0.1 * destusers.Count) + amount))
                     {
-                        var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, sender.GetSecret(), destuser.Address);
-
-                        if (tx.success)
+                        foreach (var destuser in destusers.Where(x => x.Address != null))
                         {
-                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);
-                            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
-                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
-                        }
-                    }
+                            var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, sender.GetSecret(), destuser.Address);
 
-                    var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + " its a wonderful day!! thanks to @" + sender.UserName + " he sent <b>" + Math.Round(amountToSend, 3) + " RISE</b> to you :)", ParseMode.Html);
+                            if (tx.success)
+                            {
+                                try
+                                {
+                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);
+                                    var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
+                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.LogError("Received Exception from cmd_Send private Message {0}", ex.Message);
+                                }
+                            }
+                        }
+
+                        var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + " its a wonderful day!! thanks to @" + sender.UserName + " he sent <b>" + Math.Round(amountToSend, 3) + " RISE</b> to you :)", ParseMode.Html);
+                    }
+                    else
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to send <b>" + amount + "</b> to " + destusers.Count() + " users. Balance: " + balance + " RISE", ParseMode.Html);
+                        return;
+                    }
                 }
                 else
                 {
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to send <b>" + amount + "</b> to " + destusers.Count() + " users. Balance: " + balance + " RISE", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please specify amount and user ex: !send 10 @Dwildcash", ParseMode.Html);
                     return;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please specify amount and user ex: !send 10 @Dwildcash", ParseMode.Html);
-                return;
+                _logger.LogError("Received Exception from cmd_Send transaction {0}", ex.Message);
             }
+
         }
 
         /// <summary>

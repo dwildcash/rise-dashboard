@@ -43,7 +43,7 @@ namespace rise.Services
 
                 try
                 {
-                    return dbContext.ApplicationUsers.Where(x => x.UserName == username).FirstOrDefault();
+                    return dbContext.ApplicationUsers.Where(x => string.Equals(x.UserName, username, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                 }
                 catch (Exception ex)
                 {
