@@ -54,7 +54,7 @@ namespace Rise.Services
 
             try
             {
-                // Match Command if present
+                // Match !Command if present
                 if (Regex.Matches(message.Text, @"!(\S+)\s?").Count > 0)
                 {
                     command = Regex.Matches(message.Text.ToUpper(), @"!(\S+)\s?")[0].ToString().Trim();
