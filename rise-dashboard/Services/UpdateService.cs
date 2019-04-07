@@ -222,7 +222,7 @@ namespace Rise.Services
 
 
 
-        private void cmd_Hope(Message message)
+        private async Task cmd_Hope(Message message)
         {
             List<string> LstHope = new List<string>();
 
@@ -240,9 +240,8 @@ namespace Rise.Services
             LstHope.Add("There is always hope!");
 
             var random = new Random();
-            var list = new List<string> { "one", "two", "three", "four" };
-            int index = random.Next(list.Count);
-            Console.WriteLine(list[index]);
+            int index = random.Next(LstHope.Count);
+            await _botService.Client.SendTextMessageAsync(message.Chat.Id, LstHope[index], ParseMode.Html);
         }
 
 
