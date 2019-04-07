@@ -37,6 +37,8 @@ namespace Rise.Services
             var message = update.Message;
             var flagMsgUpdate = false;
 
+
+            // Count only message coming from channel
             if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
             {
                 flagMsgUpdate = true;
