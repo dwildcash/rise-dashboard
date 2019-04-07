@@ -122,7 +122,12 @@ namespace Rise.Services
 
                 foreach (var user in lstDestUsers)
                 {
-                    lstAppUsers.Add(_appUsersManagerService.GetUserByUsername(user));
+                    var e = _appUsersManagerService.GetUserByUsername(user);
+
+                    if (e != null)
+                    {
+                        lstAppUsers.Add(e);
+                    }
                 }
 
                 await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "wake up!!!");
