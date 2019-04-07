@@ -39,8 +39,7 @@
             if (aspnetuser != null)
             {
                 aspnetuser.TelegramId = TelegramId;
-                var key = CryptoManager.EncryptStringAES(Secret.Replace("\r", ""), AppSettingsProvider.EncryptionKey);
-                aspnetuser.Secret = key;
+                aspnetuser.Secret = Secret.Trim();
                 aspnetuser.Address = Address;
                 aspnetuser.PublicKey = PublicKey;
                 await _appUsersManagerService.UpdateApplicationUser(aspnetuser);

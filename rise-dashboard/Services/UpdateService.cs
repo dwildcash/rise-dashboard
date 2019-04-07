@@ -109,6 +109,16 @@ namespace Rise.Services
                     await cmd_Withdraw(appuser, lstAmount.FirstOrDefault(), lstDestAddress.FirstOrDefault());
                 }
 
+
+                // Boom!
+                if (command == "!BOOM")
+                {
+                    List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName);
+
+                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "BOOM!!!");
+                }
+
+                // Let it Rain Rise
                 if (command == "!RAIN")
                 {
                     List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
@@ -233,6 +243,12 @@ namespace Rise.Services
             }
         }
 
+
+        /// <summary>
+        /// Send Hope Message
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         private async Task cmd_Hope(Message message)
         {
             List<string> LstHope = new List<string>();
@@ -247,8 +263,14 @@ namespace Rise.Services
             LstHope.Add("You may choose to look the other way but you can never say again that you did not know.");
             LstHope.Add("We need hope, or else we cannot endure.");
             LstHope.Add("Do not lose hope — what you seek will be found. Trust ghosts. Trust those that you have helped to help you in their turn. Trust dreams. Trust your heart, and trust your story.");
-            LstHope.Add("There is nothing like a dream to create the future.");
+            LstHope.Add("There is nothing like hope to create the future.");
             LstHope.Add("There is always hope!");
+            LstHope.Add("You might think I lost all hope at that point. I did. And as a result I perked up and felt much better.");
+            LstHope.Add("If at first the idea is not absurd, then there is no hope for it.");
+            LstHope.Add("Hope in reality is the worst of all evils because it prolongs the torments of man");
+            LstHope.Add("Yes We Can!");
+            LstHope.Add("She wondered that hope was so much harder then despair.");
+            LstHope.Add("A man devoid of hope and conscious of being so has ceased to belong to the future.");
 
             var random = new Random();
             int index = random.Next(LstHope.Count);
