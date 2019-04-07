@@ -316,7 +316,7 @@ namespace Rise.Services
                         {
                             await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from " + sender.UserName, ParseMode.Html);
                             var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
-                            await _botService.Client.SendTextMessageAsync(message.Chat, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
+                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
                         }
                     }
 
