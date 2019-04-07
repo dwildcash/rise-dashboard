@@ -146,6 +146,12 @@ namespace Rise.Services
                     await cmd_Joke(message);
                 }
 
+                // Return a  geek joke
+                if (command == "!HOPE")
+                {
+                    await cmd_Hope(message);
+                }
+
                 // Show Rise Exchanges
                 if (command == "!EXCHANGES")
                 {
@@ -314,7 +320,7 @@ namespace Rise.Services
 
                         if (tx.success)
                         {
-                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from " + sender.UserName, ParseMode.Html);
+                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);
                             var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
                             await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
                         }
