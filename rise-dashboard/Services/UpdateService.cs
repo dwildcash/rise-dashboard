@@ -226,7 +226,7 @@ namespace Rise.Services
         {
             List<string> LstHope = new List<string>();
 
-            LstHope.Add("You may say I'm a dreamer, but I'm not the only one. I hope someday you'll join us. And the world will live as one.";
+            LstHope.Add("You may say I'm a dreamer, but I'm not the only one. I hope someday you'll join us. And the world will live as one.");
             LstHope.Add("I like the night. Without the dark, we'd never see the stars.");
             LstHope.Add("They say a person needs just three things to be truly happy in this world: someone to love, something to do, and something to hope for.");
             LstHope.Add("If you're reading this...Congratulations, you're alive. If that's not something to smile about, then I don't know what is");
