@@ -85,7 +85,7 @@ namespace Rise.Services
 
             try
             {
-                if (appuser.UserName != "dwildcash" || appuser.UserName != "oregonpop" || appuser.UserName != "Showrulz" || appuser.UserName != "Lok35h")
+                if (appuser.UserName != "dwildcash" && appuser.UserName != "oregonpop" && appuser.UserName != "Showrulz" && appuser.UserName != "Lok35h")
                 {
                     return;
                 }
