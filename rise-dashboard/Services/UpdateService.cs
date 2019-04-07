@@ -220,6 +220,33 @@ namespace Rise.Services
             }
         }
 
+
+
+        private void cmd_Hope(Message message)
+        {
+            List<string> LstHope = new List<string>();
+
+            LstHope.Add("You may say I'm a dreamer, but I'm not the only one. I hope someday you'll join us. And the world will live as one.";
+            LstHope.Add("I like the night. Without the dark, we'd never see the stars.");
+            LstHope.Add("They say a person needs just three things to be truly happy in this world: someone to love, something to do, and something to hope for.");
+            LstHope.Add("If you're reading this...Congratulations, you're alive. If that's not something to smile about, then I don't know what is");
+            LstHope.Add("And now these three remain: faith, hope and love. But the greatest of these is love.");
+            LstHope.Add("It's amazing how a little tomorrow can make up for a whole lot of yesterday.");
+            LstHope.Add("In a time of destruction, create something.");
+            LstHope.Add("You may choose to look the other way but you can never say again that you did not know.");
+            LstHope.Add("We need hope, or else we cannot endure.");
+            LstHope.Add("Do not lose hope — what you seek will be found. Trust ghosts. Trust those that you have helped to help you in their turn. Trust dreams. Trust your heart, and trust your story.");
+            LstHope.Add("There is nothing like a dream to create the future.");
+            LstHope.Add("There is always hope!");
+
+            var random = new Random();
+            var list = new List<string> { "one", "two", "three", "four" };
+            int index = random.Next(list.Count);
+            Console.WriteLine(list[index]);
+        }
+
+
+
         /// <summary>
         /// Withdraw coin
         /// </summary>
@@ -282,10 +309,19 @@ namespace Rise.Services
                     foreach (var destuser in destusers.Where(x => x.Address != null))
                     {
                         var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, sender.GetSecret(), destuser.Address);
+
+                        if (tx.success)
+                        {
+                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from " + sender.UserName, ParseMode.Html);
+                            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
+                            await _botService.Client.SendTextMessageAsync(message.Chat, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
+                        }
                     }
 
                     var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + " its a wonderful day!! thanks to @" + sender.UserName + " he sent <b>" + Math.Round(amountToSend,3) + " RISE</b> to you :)", ParseMode.Html);
+
+                    
                 }
                 else
                 {
