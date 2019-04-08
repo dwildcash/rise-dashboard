@@ -20,7 +20,7 @@ namespace Rise.Services
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
         private readonly IAppUsersManagerService _appUsersManagerService;
-        private long messagesCount = 0;
+        private static long messagesCount = 0;
 
         public UpdateService(IBotService botService, ILogger<UpdateService> logger, IAppUsersManagerService appUsersManagerService)
         {
@@ -144,7 +144,7 @@ namespace Rise.Services
                         await _botService.Client.SendTextMessageAsync(message.Chat.Id, "@" + appuser.UserName + " activated a <b>Splash!</b> Be active! I will choose a winner in the next messages!", ParseMode.Html);
                     }
 
-                    var waitMsg = messagesCount + (int)RandomGenerator.NextLong(1, 10);
+                    var waitMsg = messagesCount + (int)RandomGenerator.NextLong(1, 7);
 
                     while (messagesCount < waitMsg)
                     {
