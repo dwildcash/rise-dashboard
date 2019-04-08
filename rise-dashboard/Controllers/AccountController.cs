@@ -37,20 +37,11 @@
         {
             var aspnetuser = await _appUsersManagerService.GetUserAsync(UserName, TelegramId);
 
+            var j = CryptoManager.EncryptStringAES(Secret, AppSettingsProvider.EncryptionKey);
+
             try
             {
-                if (aspnetuser != null)
-                {
-                    aspnetuser.TelegramId = TelegramId;
-                    var oe = Secret;
-                    var ff = aspnetuser.Secret;
-                    var gg = aspnetuser.GetSecret();
-                    aspnetuser.Secret = CryptoManager.EncryptStringAES(Secret, AppSettingsProvider.EncryptionKey);
-                    var jj = aspnetuser.GetSecret();
-                    aspnetuser.Address = Address;
-                    aspnetuser.PublicKey = PublicKey;
-                    await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
-                }
+                await _appUsersManagerService.ImportUser(UserName, TelegramId, j, PublicKey);
             }
             catch (Exception ex)
             {

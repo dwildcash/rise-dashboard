@@ -15,6 +15,8 @@ namespace rise.Services
 
         Task<ApplicationUser> GetUserAsync(Update tgupdate);
 
+        Task ImportUser(string userName, long telegramId, string secret, string publicKey);
+
         Task<ApplicationUser> GetUserAsync(string userName, long telegramId, bool flagMsgUpdate = false);
 
         ApplicationUser GetUserByUsername(string username);

@@ -132,6 +132,40 @@ namespace rise.Services
             return null;
         }
 
+
+        public async Task ImportUser(string userName, long telegramId, string secret, string publicKey)
+        {
+            ApplicationUser appuser = null;
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                appuser = dbContext.Users.OfType<ApplicationUser>().Where(x => x.TelegramId == telegramId).FirstOrDefault();
+
+                try
+                {
+                    // New user detected
+                    if (appuser == null)
+                    {
+                        // Create new user
+                        appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };                 
+                    }
+                
+
+                appuser.Secret = secret;
+                appuser.PublicKey = publicKey;
+                await _userManager.UpdateAsync(appuser);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Received Exception from GetUserAsync {0}", ex.Message);
+                }
+            }
+        }
+
+
+
         /// <summary>
         /// Get User
         /// </summary>
