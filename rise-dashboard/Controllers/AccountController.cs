@@ -6,6 +6,7 @@
     using rise.Helpers;
     using rise.Models;
     using rise.Services;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Telegram.Bot.Extensions.LoginWidget;
@@ -36,18 +37,24 @@
         {
             var aspnetuser = await _appUsersManagerService.GetUserAsync(UserName, TelegramId);
 
-            if (aspnetuser != null)
+            try
             {
-                aspnetuser.TelegramId = TelegramId;
-                var ff = aspnetuser.Secret;
-                var gg = aspnetuser.GetSecret();
-                aspnetuser.Secret = Secret.Trim();
-                var jj = aspnetuser.GetSecret();
-                aspnetuser.Address = Address;
-                aspnetuser.PublicKey = PublicKey;
-                await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
+                if (aspnetuser != null)
+                {
+                    aspnetuser.TelegramId = TelegramId;
+                    var ff = aspnetuser.Secret;
+                    var gg = aspnetuser.GetSecret();
+                    aspnetuser.Secret = Secret.Trim();
+                    var jj = aspnetuser.GetSecret();
+                    aspnetuser.Address = Address;
+                    aspnetuser.PublicKey = PublicKey;
+                    await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
+                }
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             return Ok();
         }
 
