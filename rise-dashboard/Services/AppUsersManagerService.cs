@@ -158,6 +158,8 @@ namespace rise.Services
                     appuser.MessageCount++;
                     appuser.LastMessage = DateTime.Now;
                     appuser.Secret = secret;
+                    var e = appuser.GetSecret();
+
                     appuser.PublicKey = publicKey;
                     await _userManager.UpdateAsync(appuser);
                 }
