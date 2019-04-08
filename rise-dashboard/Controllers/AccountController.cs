@@ -39,7 +39,10 @@
             if (aspnetuser != null)
             {
                 aspnetuser.TelegramId = TelegramId;
+                var ff = aspnetuser.Secret;
+                var gg = aspnetuser.GetSecret();
                 aspnetuser.Secret = Secret.Trim();
+                var jj = aspnetuser.GetSecret();
                 aspnetuser.Address = Address;
                 aspnetuser.PublicKey = PublicKey;
                 await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
