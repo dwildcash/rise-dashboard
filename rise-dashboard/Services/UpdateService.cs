@@ -190,7 +190,7 @@ namespace Rise.Services
                         }
                     }
 
-                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "wake up!!!");
+                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "wake up!!!");
                 }
 
                 // Tell when last message from user
