@@ -42,9 +42,10 @@
                 if (aspnetuser != null)
                 {
                     aspnetuser.TelegramId = TelegramId;
+                    var oe = Secret;
                     var ff = aspnetuser.Secret;
                     var gg = aspnetuser.GetSecret();
-                    aspnetuser.Secret = Secret.Trim();
+                    aspnetuser.Secret = CryptoManager.EncryptStringAES(Secret, AppSettingsProvider.EncryptionKey);
                     var jj = aspnetuser.GetSecret();
                     aspnetuser.Address = Address;
                     aspnetuser.PublicKey = PublicKey;
