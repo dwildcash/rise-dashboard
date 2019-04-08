@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -19,6 +20,7 @@ namespace Rise.Services
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
         private readonly IAppUsersManagerService _appUsersManagerService;
+        private long messagesCount = 0;
 
         public UpdateService(IBotService botService, ILogger<UpdateService> logger, IAppUsersManagerService appUsersManagerService)
         {
@@ -41,6 +43,7 @@ namespace Rise.Services
             if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
             {
                 flagMsgUpdate = true;
+                messagesCount++;
             }
 
             // Get the user who sent message
@@ -114,10 +117,46 @@ namespace Rise.Services
                     await cmd_Key(appuser);
                 }
 
-                // Withdraw coin to address
+                // Withdraw RISE to address
                 if (command == "!WITHDRAW")
                 {
                     await cmd_Withdraw(appuser, lstAmount.FirstOrDefault(), lstDestAddress.FirstOrDefault());
+                }
+
+                // Splash!
+                if (command == "!SPLASH")
+                {
+                    if (lstAmount.FirstOrDefault() <= 0.1)
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide amount of RISE to !SPLASH > 0.1", ParseMode.Html);
+                        return;
+                    }
+
+                    var balance = await RiseManager.AccountBalanceAsync(appuser.Address);
+
+                    if (balance < (0.1 + lstAmount.FirstOrDefault()))
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to !SPLASH " + lstAmount.FirstOrDefault() + " RISE Balance:" + balance , ParseMode.Html);
+                        return;
+                    }
+                    else
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "@" + appuser.UserName + " activated a <b>Splash!</b> Be active! I will choose a winner in the next messages!", ParseMode.Html);
+                    }
+
+                    var waitMsg = messagesCount + (int)RandomGenerator.NextLong(1, 10);
+
+                    while (messagesCount < waitMsg)
+                    {
+                        await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                        Thread.Sleep(1000);
+                    }
+
+                    List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
+
+                    lstAppUsers.Add(_appUsersManagerService.GetLastMsgUser(appuser.UserName));
+
+                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
                 }
 
                 // Boom!
@@ -262,7 +301,8 @@ namespace Rise.Services
                 "<b>!balance</b> - Show current RISE Balance" + Environment.NewLine +
                 "<b>!joke</b> - Display a geek joke" + Environment.NewLine +
                 "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
-                "<b>!price</b> - Show current RISE Price" + Environment.NewLine;
+                "<b>!price</b> - Show current RISE Price" + Environment.NewLine +
+                "<b>!key</b> - Send you Tip wallet passphrase in private msg" + Environment.NewLine;
 
                 await _botService.Client.SendTextMessageAsync(appuser.TelegramId, strResponse, ParseMode.Html);
             }
