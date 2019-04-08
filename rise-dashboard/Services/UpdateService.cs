@@ -154,6 +154,7 @@ namespace Rise.Services
                         Thread.Sleep(1000);
                         if (i == 15)
                         {
+                            i++;
                             await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Splash aborted no winner :(", ParseMode.Html);
                             return;
                         }
