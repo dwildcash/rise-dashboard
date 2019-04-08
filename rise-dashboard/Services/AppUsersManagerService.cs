@@ -134,52 +134,6 @@ namespace rise.Services
 
 
         /// <summary>
-        /// Import usd
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="telegramId"></param>
-        /// <param name="secret"></param>
-        /// <param name="publicKey"></param>
-        /// <returns></returns>
-        public async Task ImportUser(string userName, long telegramId, string secret, string publicKey)
-        {
-            ApplicationUser appuser = null;
-
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                appuser = dbContext.Users.OfType<ApplicationUser>().Where(x => x.TelegramId == telegramId).FirstOrDefault();
-
-                try
-                {
-                    // New user detected
-                    if (appuser == null)
-                    {
-                        // Create new user
-                        var appuser2 = new ApplicationUser { UserName = userName, TelegramId = telegramId };
-                        appuser2.Secret = secret;
-                        appuser2.PublicKey = publicKey;
-                        await _userManager.UpdateAsync(appuser2);
-                    }
-                
-                    appuser.MessageCount++;
-                    appuser.LastMessage = DateTime.Now;
-                    appuser.Secret = secret;
-                    var e = appuser.GetSecret();
-
-                    appuser.PublicKey = publicKey;
-                    dbContext.SaveChanges();
-
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Received Exception from GetUserAsync {0}", ex.Message);
-                }
-            }
-        }
-
-        /// <summary>
         /// Get User
         /// </summary>
         /// <param name="UserName"></param>

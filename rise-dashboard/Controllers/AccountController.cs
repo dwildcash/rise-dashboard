@@ -31,24 +31,6 @@
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> SyncUser(int TelegramId, string UserName, string Secret, string Address, string PublicKey)
-        {
-            var aspnetuser = await _appUsersManagerService.GetUserAsync(UserName, TelegramId);
-
-            var j = CryptoManager.EncryptStringAES(Secret, AppSettingsProvider.EncryptionKey);
-
-            try
-            {
-                await _appUsersManagerService.ImportUser(UserName, TelegramId, j, PublicKey);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return Ok();
-        }
 
         [HttpGet]
         [AllowAnonymous]

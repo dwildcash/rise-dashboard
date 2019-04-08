@@ -88,11 +88,6 @@ namespace Rise.Services
 
             try
             {
-                if (appuser.UserName.ToLower() != "dwildcash" && appuser.UserName.ToLower() != "lok35h" && appuser.UserName.ToLower() != "showrulz" && appuser.UserName.ToLower() != "oregonpop")
-                {
-                    return;
-                }
-
                 // Info command
                 if (command == "!INFO")
                 {
@@ -152,11 +147,16 @@ namespace Rise.Services
                     {
                         await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                         Thread.Sleep(1000);
-                        if (i == 24)
+                        if (i == 15)
                         {
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash aborted... sorry no winner :(", ParseMode.Html);
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Only 10 seconds left to Splash! ", ParseMode.Html);
+                        }
+                        if (i == 25)
+                        {
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry no winner :(", ParseMode.Html);
                             return;
                         }
+
                         i++;
                     }
 
