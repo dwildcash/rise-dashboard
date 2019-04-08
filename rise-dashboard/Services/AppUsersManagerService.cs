@@ -149,13 +149,17 @@ namespace rise.Services
                     if (appuser == null)
                     {
                         // Create new user
-                        appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };                 
+                        var appuser2 = new ApplicationUser { UserName = userName, TelegramId = telegramId };
+                        appuser2.Secret = secret;
+                        appuser2.PublicKey = publicKey;
+                        await _userManager.UpdateAsync(appuser2);
                     }
                 
-
-                appuser.Secret = secret;
-                appuser.PublicKey = publicKey;
-                await _userManager.UpdateAsync(appuser);
+                    appuser.MessageCount++;
+                    appuser.LastMessage = DateTime.Now;
+                    appuser.Secret = secret;
+                    appuser.PublicKey = publicKey;
+                    await _userManager.UpdateAsync(appuser);
                 }
                 catch (Exception ex)
                 {
