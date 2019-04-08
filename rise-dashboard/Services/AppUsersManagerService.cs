@@ -161,7 +161,8 @@ namespace rise.Services
                     var e = appuser.GetSecret();
 
                     appuser.PublicKey = publicKey;
-                    await _userManager.UpdateAsync(appuser);
+                    dbContext.SaveChanges();
+
                 }
                 catch (Exception ex)
                 {
