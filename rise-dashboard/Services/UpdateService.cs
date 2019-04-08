@@ -353,8 +353,8 @@ namespace Rise.Services
         private async Task cmd_Key(ApplicationUser appuser)
         {
             await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "This is the private key for your TIP wallet, please note it and delete this message!", ParseMode.Html);
-            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "<b>"+appuser.Address+"</b>", ParseMode.Html);
-            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, appuser.GetSecret(), ParseMode.Html);
+            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Address: <b>"+appuser.Address+"</b>", ParseMode.Html);
+            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Passphrase: " + appuser.GetSecret(), ParseMode.Html);
         }
 
 
