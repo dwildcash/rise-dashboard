@@ -68,13 +68,13 @@ namespace Rise.Services
                     lstDestUsers = Regex.Matches(message.Text, @"@(\S+)\s?").Cast<Match>().Select(m => m.Value.Replace("@", "").Trim()).ToList();
                 }
 
-                // Match any double amount if present
+                // Match any double Amount if present
                 if (Regex.Matches(message.Text, @"([ ]|(^|\s))?[0-9]+(\.[0-9]*)?([ ]|($|\s))").Count > 0)
                 {
                     lstAmount = Regex.Matches(message.Text, @"([ ]|(^|\s))?[0-9]+(\.[0-9]*)?([ ]|($|\s))").Cast<Match>().Select(m => double.Parse(m.Value.Trim())).ToList();
                 }
 
-                // Match any Rise address if present
+                // Match any Rise Address if present
                 if (Regex.Matches(message.Text, @"\d+[R,r]").Count > 0)
                 {
                     lstDestAddress = Regex.Matches(message.Text, @"\d+[R,r]").Cast<Match>().Select(m => m.Value.Trim()).ToList();
@@ -88,7 +88,7 @@ namespace Rise.Services
 
             try
             {
-                if (appuser.UserName.ToLower() != "dwildcash")
+                if (appuser.UserName.ToLower() != "dwildcash" && appuser.UserName.ToLower() != "lok35h" && appuser.UserName.ToLower() != "showrulz" && appuser.UserName.ToLower() != "oregonpop")
                 {
                     return;
                 }
@@ -164,7 +164,7 @@ namespace Rise.Services
                 {
                     List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName);
 
-                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "BOOM!!!");
+                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault()-(lstAppUsers.Count*0.1), lstAppUsers, "BOOM!!!");
                 }
 
                 // Let it Rain Rise
@@ -172,7 +172,7 @@ namespace Rise.Services
                 {
                     List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
 
-                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "its Raining!!!");
+                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault()-(lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
                 }
 
                 // Withdraw coin to address
@@ -234,45 +234,11 @@ namespace Rise.Services
                 {
                     await cmd_Exchanges(message, appuser);
                 }
-
-                // show Deposit
-                if (command == "!DEPOSIT")
-                {
-                    await cmd_Deposit(message, appuser);
-                }
             }
             catch (Exception ex)
             {
                 _logger.LogError("Error parsing !command {0}" + ex.Message);
                 return;
-            }
-        }
-
-        /// <summary>
-        /// Display Current Rise Exchanges
-        /// </summary>
-        /// <param name="chatId"></param>
-        /// <returns></returns>
-        private async Task cmd_Deposit(Message message, ApplicationUser appuser)
-        {
-            string strResponse = string.Empty;
-
-            try
-            {
-                await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
-
-                strResponse = "Here we go @" + appuser.UserName + " this is your address <b>" + appuser.Address + "</b>";
-
-                if (string.IsNullOrEmpty(appuser.UserName))
-                {
-                    strResponse += Environment.NewLine + " Note: Please configure your Telegram UserName if you want to Receive <b>Rise</b>";
-                }
-
-                await _botService.Client.SendTextMessageAsync(appuser.TelegramId, strResponse, ParseMode.Html);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Received Exception from cmd_Deposit {0}", ex.Message);
             }
         }
 
@@ -296,7 +262,6 @@ namespace Rise.Services
                 "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
                 "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
                 "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
-                "<b>!deposit</b> - Create a Deposit RISE Address" + Environment.NewLine +
                 "<b>!balance</b> - Show current RISE Balance" + Environment.NewLine +
                 "<b>!joke</b> - Display a geek joke" + Environment.NewLine +
                 "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
@@ -338,6 +303,10 @@ namespace Rise.Services
             LstHope.Add("Yes We Can!");
             LstHope.Add("She wondered that hope was so much harder then despair.");
             LstHope.Add("A man devoid of hope and conscious of being so has ceased to belong to the future.");
+            LstHope.Add("Hope makes a merry heart.");
+            LstHope.Add("Hope is a strange commodity. It is an opiate. We swear we have relinquished it and, lo, here comes a day when, all unannounced, our enslavement to it returns.");
+            LstHope.Add("Stay hopeful.");
+            LstHope.Add("Do not dwell on your loss. Look forward with bright new hopes.");
 
             var random = new Random();
             int index = random.Next(LstHope.Count);
@@ -421,7 +390,7 @@ namespace Rise.Services
 
                     balance = await RiseManager.AccountBalanceAsync(sender.Address);
 
-                    if (balance > ((0.1 * destusers.Count) + amount))
+                    if (balance >= ((0.1 * destusers.Count) + amount))
                     {
                         foreach (var destuser in destusers.Where(x => x.Address != null))
                         {

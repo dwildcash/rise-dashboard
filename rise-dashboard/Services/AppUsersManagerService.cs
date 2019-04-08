@@ -133,6 +133,14 @@ namespace rise.Services
         }
 
 
+        /// <summary>
+        /// Import usd
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="telegramId"></param>
+        /// <param name="secret"></param>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
         public async Task ImportUser(string userName, long telegramId, string secret, string publicKey)
         {
             ApplicationUser appuser = null;
@@ -170,8 +178,6 @@ namespace rise.Services
                 }
             }
         }
-
-
 
         /// <summary>
         /// Get User
@@ -213,6 +219,12 @@ namespace rise.Services
                 {
                     appuser.MessageCount++;
                     appuser.LastMessage = DateTime.Now;
+                }
+
+                // Create a wallet for everyone
+                if (appuser.Address == null)
+                {
+                    await CreateWalletAsync(appuser);
                 }
 
                 dbContext.SaveChanges();
