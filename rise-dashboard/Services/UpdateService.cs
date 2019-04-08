@@ -136,7 +136,7 @@ namespace Rise.Services
 
                     if (balance < (0.1 + lstAmount.FirstOrDefault()))
                     {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to !SPLASH " + lstAmount.FirstOrDefault() + " RISE Balance:" + balance , ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to !SPLASH " + lstAmount.FirstOrDefault() + " RISE Balance:" + balance, ParseMode.Html);
                         return;
                     }
                     else
@@ -276,7 +276,6 @@ namespace Rise.Services
             }
         }
 
-
         /// <summary>
         /// Show Help
         /// </summary>
@@ -345,7 +344,6 @@ namespace Rise.Services
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, LstHope[index], ParseMode.Html);
         }
 
-
         /// <summary>
         /// Show Wallet Address and Key
         /// </summary>
@@ -353,10 +351,9 @@ namespace Rise.Services
         private async Task cmd_Key(ApplicationUser appuser)
         {
             await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "This is the private key for your TIP wallet, please note it and delete this message!", ParseMode.Html);
-            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Address: <b>"+appuser.Address+"</b>", ParseMode.Html);
+            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Address: <b>" + appuser.Address + "</b>", ParseMode.Html);
             await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Passphrase: " + appuser.GetSecret(), ParseMode.Html);
         }
-
 
         /// <summary>
         /// Withdraw coin
