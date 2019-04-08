@@ -195,10 +195,11 @@ namespace rise.Services
                     if (appuser == null)
                     {
                         // Create new user
-                        appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };
+                        var newappuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };
 
                         // Create a Wallet for user
-                        await CreateWalletAsync(appuser);
+                        await CreateWalletAsync(newappuser);
+                        await _userManager.UpdateAsync(newappuser);
                     }
                 }
                 catch (Exception ex)
@@ -212,8 +213,9 @@ namespace rise.Services
                 {
                     appuser.MessageCount++;
                     appuser.LastMessage = DateTime.Now;
-                    await _userManager.UpdateAsync(appuser);
                 }
+
+                dbContext.SaveChanges();
             }
 
             return appuser;
