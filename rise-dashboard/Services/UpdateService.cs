@@ -152,12 +152,12 @@ namespace Rise.Services
                     {
                         await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                         Thread.Sleep(1000);
-                        if (i == 15)
+                        if (i == 10)
                         {
-                            i++;
                             await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Splash aborted no winner :(", ParseMode.Html);
                             return;
                         }
+                        i++;
                     }
 
                     List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
