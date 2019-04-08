@@ -144,7 +144,7 @@ namespace Rise.Services
                         await _botService.Client.SendTextMessageAsync(message.Chat.Id, "@" + appuser.UserName + " activated a <b>Splash!</b> Be active! I will choose a winner in the next messages!", ParseMode.Html);
                     }
 
-                    var waitMsg = messagesCount + (int)RandomGenerator.NextLong(1, 4);
+                    var waitMsg = messagesCount + (int)RandomGenerator.NextLong(1, 5);
 
                     int i = 0;
 
@@ -152,9 +152,9 @@ namespace Rise.Services
                     {
                         await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                         Thread.Sleep(1000);
-                        if (i == 14)
+                        if (i == 24)
                         {
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Splash aborted... sorry no winner :(", ParseMode.Html);
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash aborted... sorry no winner :(", ParseMode.Html);
                             return;
                         }
                         i++;
