@@ -69,16 +69,15 @@
                     var quoteAllWeighted = new CoinQuote
                     {
                         Exchange = "All",
-                        Price = (quoteRightBtc.Price * quoteRightBtc.Volume / totalVolume) + (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume),
+                        Price = (quoteRightBtc.Price * quoteRightBtc.Volume / totalVolume) + (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume),
                         Volume = totalVolume,
                         TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * ((quoteRightBtc.Price * quoteRightBtc.Volume / totalVolume) + (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume))
+                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * ((quoteRightBtc.Price * quoteRightBtc.Volume / totalVolume) + (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume))
                     };
 
                     dbContext.CoinQuotes.Add(quoteLivecoin);
                     dbContext.CoinQuotes.Add(quoteRightBtc);
                     dbContext.CoinQuotes.Add(quoteAltilly);
-
                     dbContext.CoinQuotes.Add(quoteAllWeighted);
 
                     // Save Context in Database
