@@ -21,6 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@(AppSettingsProvider.CoinName) Dashboard</title>
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="@Url.Content("~/css/all.css")" />
     <link rel="icon" href="@Url.Content("~/img/favicon.ico")" />
@@ -111,10 +112,11 @@ to get the desired effect
 
                 @if (SignInManager.IsSignedIn(User))
                 {
+                    ApplicationUser appuser = await UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User);
                     <!-- Sidebar user panel (optional) -->
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
                         <div class="image">
-                            <font size="+2" color="gray">&nbsp;<i class="far fa-user" style="color:#B6B2B2"></i></font>
+                            <img src="@(appuser.Photo_Url)" class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
                             <a href="#" class="d-block">@User.Identity.Name</a>
