@@ -99,6 +99,7 @@ namespace rise.Services
             }
         }
 
+
         /// <summary>
         /// Return a list of Random users
         /// </summary>,
@@ -117,6 +118,29 @@ namespace rise.Services
                 {
                     _logger.LogError("Received Exception from GetRainUsers {0}", ex.Message);
                     return null;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Return a list of Random users
+        /// </summary>,
+        /// <returns></returns>
+        public void uppdate_photourl(long telegramID, string photourl)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                try
+                {
+                    dbContext.Users.Where(x => x.TelegramId == telegramID).FirstOrDefault().Photo_Url = photourl;
+                    dbContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Received Exception from GetRainUsers {0}", ex.Message);
                 }
             }
         }

@@ -53,8 +53,7 @@
                 if (loginWidget.CheckAuthorization(fields) == Authorization.Valid)
                 {
                     var aspnetuser = await _appUsersManagerService.GetUserAsync(fields["username"], long.Parse(fields["id"]));
-                    aspnetuser.Photo_Url = fields["photo_url"];
-                    await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
+                    _appUsersManagerService.uppdate_photourl(aspnetuser.TelegramId, fields["photo_url"]);
 
                     //sign the user and go to home
                     await _signInManager.SignInAsync(aspnetuser, isPersistent: false);

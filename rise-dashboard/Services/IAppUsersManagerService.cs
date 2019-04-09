@@ -17,6 +17,8 @@ namespace rise.Services
 
         Task<ApplicationUser> GetUserAsync(string userName, long telegramId, bool flagMsgUpdate = false);
 
+        void uppdate_photourl(long telegramID, string photourl);
+
         ApplicationUser GetUserByUsername(string username);
 
         Task CreateWalletAsync(ApplicationUser appuser);
