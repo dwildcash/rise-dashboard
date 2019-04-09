@@ -55,7 +55,16 @@
                         USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * ((double)RightBtcQuoteResult.Current.Result.Last / 100000000)
                     };
 
-                    var totalVolume = quoteRightBtc.Volume + quoteLivecoin.Volume;
+                    var quoteAltilly = new CoinQuote
+                    {
+                        Exchange = "Altilly",
+                        Price = double.Parse(AltillyQuote.Current.last),
+                        Volume = double.Parse(AltillyQuote.Current.volume),
+                        TimeStamp = time,
+                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * (double.Parse(AltillyQuote.Current.last) / 100000000)
+                    };
+
+                    var totalVolume = quoteRightBtc.Volume + quoteLivecoin.Volume + quoteAltilly.Volume;
 
                     var quoteAllWeighted = new CoinQuote
                     {

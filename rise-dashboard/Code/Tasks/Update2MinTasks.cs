@@ -30,6 +30,13 @@
                 LiveCoinQuote.Current = liveCoinQuoteResult;
             }
 
+            AltillyQuote altillyQuoteResult = await AltillyQuoteFetcher.FetchAltillyQuote();
+
+            if (altillyQuoteResult != null)
+            {
+                AltillyQuote.Current = altillyQuoteResult;
+            }
+
             CoinbaseBtcQuoteResult coinbaseBtcQuoteResult = await CoinbaseBtcFetcher.FetchCoinbaseBtcQuote();
 
             if (coinbaseBtcQuoteResult != null)

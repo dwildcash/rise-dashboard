@@ -264,7 +264,7 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Vote(Message message)
         {
-            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Current RISE Vote", "https://vote.rise.vision/"));
+            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("RISE Voting", "https://vote.rise.vision/"));
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, "click below to open RISE voting website", replyMarkup: keyboard);
         }
 
