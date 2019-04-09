@@ -12,9 +12,8 @@
     /// </summary>
     public static class AltillyQuoteFetcher
     {
-      
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public static async Task<AltillyQuote> FetchAltillyQuote()
