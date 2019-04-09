@@ -77,6 +77,8 @@
 
                     dbContext.CoinQuotes.Add(quoteLivecoin);
                     dbContext.CoinQuotes.Add(quoteRightBtc);
+                    dbContext.CoinQuotes.Add(quoteAltilly);
+
                     dbContext.CoinQuotes.Add(quoteAllWeighted);
 
                     // Save Context in Database
