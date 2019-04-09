@@ -48,14 +48,21 @@
 
             LoginWidget loginWidget = new LoginWidget(AppSettingsProvider.BotApiKey);
 
-            if (loginWidget.CheckAuthorization(fields) == Authorization.Valid)
+            try
             {
-                var aspnetuser = await _appUsersManagerService.GetUserAsync(fields["username"], long.Parse(fields["id"]));
-                aspnetuser.Photo_Url = fields["photo_url"];
-                await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
+                if (loginWidget.CheckAuthorization(fields) == Authorization.Valid)
+                {
+                    var aspnetuser = await _appUsersManagerService.GetUserAsync(fields["username"], long.Parse(fields["id"]));
+                    aspnetuser.Photo_Url = fields["photo_url"];
+                    await _appUsersManagerService.UpdateApplicationUser(aspnetuser);
 
-                //sign the user and go to home
-                await _signInManager.SignInAsync(aspnetuser, isPersistent: false);
+                    //sign the user and go to home
+                    await _signInManager.SignInAsync(aspnetuser, isPersistent: false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
 
             return RedirectToAction("Index", "Home");
