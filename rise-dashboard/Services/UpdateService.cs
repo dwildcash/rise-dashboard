@@ -167,6 +167,12 @@ namespace Rise.Services
                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
                 }
 
+                // Show Private Bip39
+                if (command == "!VOTE")
+                {
+                    await cmd_Vote(appuser);
+                }
+
                 // Boom!
                 if (command == "!BOOM")
                 {
@@ -249,6 +255,19 @@ namespace Rise.Services
                 return;
             }
         }
+
+
+        /// <summary>
+        /// Show vote website
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private async Task cmd_Vote(Message message)
+        {
+            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Current Vote", "https://vote.rise.vision/"));
+            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "click to open website", replyMarkup: keyboard);
+        }
+
 
         /// <summary>
         /// Show Help
