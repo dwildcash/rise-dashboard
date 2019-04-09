@@ -170,7 +170,7 @@ namespace Rise.Services
                 // Show Private Bip39
                 if (command == "!VOTE")
                 {
-                    await cmd_Vote(appuser);
+                    await cmd_Vote(message);
                 }
 
                 // Boom!
