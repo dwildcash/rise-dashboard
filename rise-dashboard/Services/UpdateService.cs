@@ -136,7 +136,7 @@ namespace Rise.Services
                     }
                     else
                     {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "@" + appuser.UserName + " activated a <b>Splash!</b> Be active! I will choose a winner in the next messages!", ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "@" + appuser.UserName + " activated a <b> " + lstAmount.FirstOrDefault() + " RISE Splash!</b> Be active! I will choose a winner in the next messages!", ParseMode.Html);
                     }
 
                     var waitMsg = messagesCount + (int)RandomGenerator.NextLong(1, 5);
@@ -571,7 +571,7 @@ namespace Rise.Services
                 "<b>Livecoin</b> - http://livecoin.net" + Environment.NewLine +
                 "<b>RightBtc</b> - http://rightbtc.com" + Environment.NewLine +
                 "<b>Vinex</b> - https://vinex.network";
-                await _botService.Client.SendTextMessageAsync(appuser.TelegramId, strResponse, ParseMode.Html);
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
             {
