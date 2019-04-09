@@ -115,7 +115,7 @@ namespace Rise.Services
                 // Withdraw RISE to address
                 if (command == "!WITHDRAW")
                 {
-                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault(), lstDestAddress.FirstOrDefault());
+                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1*lstDestAddress.Count()), lstDestAddress.FirstOrDefault());
                 }
 
                 // Splash!
@@ -611,6 +611,7 @@ namespace Rise.Services
             {
                 strResponse = "<b>Rise Information/Tools</b>" + Environment.NewLine +
                 "<b>Rise Website</b> - https://rise.vision" + Environment.NewLine +
+                "<b>Rise RoadMap</b> - https://rise.vision/roadmap/" + Environment.NewLine +
                 "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
                 "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
                 "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
