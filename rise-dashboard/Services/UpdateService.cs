@@ -315,6 +315,13 @@ namespace Rise.Services
             LstHope.Add("Hope is a strange commodity. It is an opiate. We swear we have relinquished it and, lo, here comes a day when, all unannounced, our enslavement to it returns.");
             LstHope.Add("Stay hopeful.");
             LstHope.Add("Do not dwell on your loss. Look forward with bright new hopes.");
+            LstHope.Add("Hope itself is like a star- not to be seen in the sunshine of prosperity, and only to be discovered in the night of adversity.");
+            LstHope.Add("There is a secret medicine given only to those who hurt so hard they can't hope");
+            LstHope.Add("We promise according to our hopes and perform according to our fears.");
+            LstHope.Add("To wish was to hope, and to hope was to expect");
+            LstHope.Add("May your choices reflect your hopes, not your fears.");
+            LstHope.Add("I inhale hope with every breath I take");
+            LstHope.Add("Hope does not leave without being given permission.");
 
             var random = new Random();
             int index = random.Next(LstHope.Count);
@@ -327,7 +334,7 @@ namespace Rise.Services
         /// <param name="appuser"></param>
         private async Task cmd_Key(ApplicationUser appuser)
         {
-            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "This is the private key for your TIP wallet, please note it and delete this message!", ParseMode.Html);
+            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "This is the private key for your TIP wallet account, please note it and delete this message!", ParseMode.Html);
             await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Address: <b>" + appuser.Address + "</b>", ParseMode.Html);
             await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Passphrase: " + appuser.GetSecret(), ParseMode.Html);
         }
@@ -560,6 +567,7 @@ namespace Rise.Services
             {
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
+                "<b>Altilly</b> - https://altilly.com" + Environment.NewLine +
                 "<b>Livecoin</b> - http://livecoin.net" + Environment.NewLine +
                 "<b>RightBtc</b> - http://rightbtc.com" + Environment.NewLine +
                 "<b>Vinex</b> - https://vinex.network";
