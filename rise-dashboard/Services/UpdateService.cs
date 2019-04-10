@@ -38,8 +38,6 @@ namespace Rise.Services
                 return;
             }
 
-            var eee = update.Message.Chat.PinnedMessage;
-
             var message = update.Message;
             var flagMsgUpdate = false;
 
@@ -149,14 +147,9 @@ namespace Rise.Services
 
                     while (messagesCount < waitMsg)
                     {
-                        await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
 
                         Thread.Sleep(1000);
 
-                        if (i == 15)
-                        {
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Only 15 seconds left to Splash! ", ParseMode.Html);
-                        }
                         if (i == 30)
                         {
                             await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry no winner :(", ParseMode.Html);
