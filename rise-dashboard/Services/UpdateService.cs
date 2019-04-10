@@ -192,6 +192,14 @@ namespace Rise.Services
                 {
                     List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
 
+                    var balance = await RiseManager.AccountBalanceAsync(appuser.Address);
+
+                    if (balance < ((0.1*lstAppUsers.Count) + lstAmount.FirstOrDefault()))
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to !RAIN " + lstAmount.FirstOrDefault() + " RISE Balance:" + balance, ParseMode.Html);
+                        return;
+                    }
+                   
                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault()-(lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
                 }
 
