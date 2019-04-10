@@ -20,15 +20,13 @@ namespace Rise.Services
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
         private readonly IAppUsersManagerService _appUsersManagerService;
-        private static long messagesCount = 0;
+        private static long messagesCount;
 
         public UpdateService(IBotService botService, ILogger<UpdateService> logger, IAppUsersManagerService appUsersManagerService)
         {
             _botService = botService;
             _appUsersManagerService = appUsersManagerService;
             _logger = logger;
-
-
         }
 
         public async Task EchoAsync(Update update)
@@ -37,8 +35,6 @@ namespace Rise.Services
             {
                 return;
             }
-
-            var eee = update.Message.Chat.PinnedMessage;
 
             var message = update.Message;
             var flagMsgUpdate = false;
@@ -149,14 +145,9 @@ namespace Rise.Services
 
                     while (messagesCount < waitMsg)
                     {
-                        await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
 
                         Thread.Sleep(1000);
 
-                        if (i == 15)
-                        {
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Only 15 seconds left to Splash! ", ParseMode.Html);
-                        }
                         if (i == 30)
                         {
                             await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry no winner :(", ParseMode.Html);
