@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using rise.Code.DataFetcher;
     using rise.Data;
     using rise.Models;
@@ -17,6 +18,11 @@
     /// </summary>
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Logger
+        /// </summary>
+        private readonly ILogger<HomeController> _logger;
+
         /// <summary>
         /// Defines the _userManager
         /// </summary>
@@ -32,9 +38,10 @@
         /// </summary>
         /// <param name="context">The context<see cref="ApplicationDbContext"/></param>
         /// <param name="userManager">The userManager<see cref="UserManager{ApplicationUser}"/></param>
-        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ILogger<HomeController> logger)
         {
             _appdb = context;
+            _logger = logger;
             _userManager = userManager;
         }
 
@@ -303,9 +310,9 @@
 
                 return PartialView("_QuotePartial", quoteViewModel);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.Write(e.InnerException);
+                _logger.LogError("Received Exception from QuotePartial {0}", ex.Message);
                 return null;
             }
         }

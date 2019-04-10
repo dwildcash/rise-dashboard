@@ -9,6 +9,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using rise.Code;
     using rise.Code.Scheduling;
     using rise.Data;
@@ -22,11 +23,14 @@
     /// </summary>
     public class Startup
     {
+
+        private readonly ILogger<Startup> _logger;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
         /// <param name="env">The env<see cref="IHostingEnvironment"/></param>
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, ILogger<Startup> logger)
         {
             var builder = new ConfigurationBuilder()
                .SetBasePath(env.ContentRootPath)
@@ -37,6 +41,8 @@
 
             // Build AppSettings
             BuildAppSettingsProvider();
+
+            _logger = logger;
         }
 
         /// <summary>
@@ -121,7 +127,7 @@
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>
             {
-                Console.Write(args.Exception.Message);
+                _logger.LogError("Received Exception from Startup Scheduler{0}", args.Exception.Message);
                 args.SetObserved();
             });
         }
@@ -152,9 +158,9 @@
                     serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.EnsureCreated();
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.Write(e.InnerException);
+                _logger.LogError("Received Exception from Configure {0}", ex.Message);
             }
 
             // Seed Initial User

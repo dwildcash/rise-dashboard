@@ -3,7 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using rise.Helpers;
+    using Microsoft.Extensions.Logging;
     using rise.Models;
     using rise.Services;
     using System;
@@ -17,11 +17,13 @@
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAppUsersManagerService _appUsersManagerService;
+        private readonly ILogger<AppUsersManagerService> _logger;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService)
+        public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService, ILogger<AppUsersManagerService> logger)
         {
             _signInManager = signInManager;
             _appUsersManagerService = appUsersManagerService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -61,7 +63,7 @@
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError("Received Exception from loginCallback {0}", ex.Message);
             }
 
             return RedirectToAction("Index", "Home");
