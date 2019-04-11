@@ -182,17 +182,7 @@ namespace rise.Services
                         if (appuser == null)
                         {
                             // Create new user
-                            appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };
-
-                            // Create a Wallet for user
-                            AccountResult accountresult = await RiseManager.CreateAccount();
-
-                            if (accountresult.success)
-                            {
-                                appuser.Address = accountresult.account.address;
-                                appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
-                                appuser.PublicKey = accountresult.account.publicKey;
-                            }
+                            appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId, Role = "Member" };
 
                             dbContext.Users.Add(appuser);
                         }
