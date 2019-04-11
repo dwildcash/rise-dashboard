@@ -21,8 +21,6 @@ namespace rise.Services
 
         ApplicationUser GetUserByUsername(string username);
 
-        Task CreateWalletAsync(ApplicationUser appuser);
-
         Task UpdateApplicationUser(ApplicationUser appuser);
     }
 }

@@ -5,6 +5,7 @@ using rise.Data;
 using rise.Helpers;
 using rise.Models;
 using rise_lib;
+using rise_lib.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -182,7 +183,16 @@ namespace rise.Services
                         var newappuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };
 
                         // Create a Wallet for user
-                        await CreateWalletAsync(newappuser);
+                        AccountResult accountresult = await RiseManager.CreateAccount();
+
+                        if (accountresult.success)
+                        {
+                            newappuser.Address = accountresult.account.address;
+                            newappuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
+                            newappuser.PublicKey = accountresult.account.publicKey;
+                        }
+
+                        dbContext.Users.Add(newappuser);
                     }
                 }
                 catch (Exception ex)
@@ -201,7 +211,15 @@ namespace rise.Services
                 // Create a wallet for everyone
                 if (appuser.Address == null)
                 {
-                    await CreateWalletAsync(appuser);
+                    // Create a Wallet for user
+                    AccountResult accountresult = await RiseManager.CreateAccount();
+
+                    if (accountresult.success)
+                    {
+                        appuser.Address = accountresult.account.address;
+                        appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
+                        appuser.PublicKey = accountresult.account.publicKey;
+                    }
                 }
 
                 dbContext.SaveChanges();
@@ -220,28 +238,5 @@ namespace rise.Services
             await _userManager.UpdateAsync(appuser);
         }
 
-        /// <summary>
-        /// Create Account
-        /// </summary>
-        /// <param name="telegramId"></param>
-        public async Task CreateWalletAsync(ApplicationUser appuser)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(appuser.Address))
-                {
-                    var account = RiseManager.CreateAccount();
-                    appuser.Address = account.Result.account.address;
-                    appuser.Secret = CryptoManager.EncryptStringAES(account.Result.account.secret, AppSettingsProvider.EncryptionKey);
-                    appuser.PublicKey = account.Result.account.publicKey;
-
-                    await _userManager.UpdateAsync(appuser);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Received Exception from CreateWallet {0}", ex.Message);
-            }
-        }
     }
 }
