@@ -183,7 +183,6 @@ namespace rise.Services
 
                         // Create a Wallet for user
                         await CreateWalletAsync(newappuser);
-                        await _userManager.UpdateAsync(newappuser);
                     }
                 }
                 catch (Exception ex)

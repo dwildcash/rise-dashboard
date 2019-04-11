@@ -123,7 +123,7 @@ namespace Rise.Services
                 {
                     if (lstAmount.FirstOrDefault() <= 0.1)
                     {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide amount of RISE to !SPLASH > 0.1", ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to Splash amount lower than 0.1!", ParseMode.Html);
                         return;
                     }
 
@@ -173,6 +173,12 @@ namespace Rise.Services
                 // Boom!
                 if (command == "!BOOM")
                 {
+                    if (lstAmount.FirstOrDefault() <= 0.1)
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to boom amount lower than 0.1!", ParseMode.Html);
+                        return;
+                    }
+
                     List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName);
 
                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault()-(lstAppUsers.Count*0.1), lstAppUsers, "BOOM!!!");
@@ -181,6 +187,12 @@ namespace Rise.Services
                 // Let it Rain Rise
                 if (command == "!RAIN")
                 {
+                    if (lstAmount.FirstOrDefault() <= 0.1)
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to rain amount lower than 0.1!", ParseMode.Html);
+                        return;
+                    }
+
                     List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
 
                     var balance = await RiseManager.AccountBalanceAsync(appuser.Address);
@@ -197,6 +209,12 @@ namespace Rise.Services
                 // Withdraw coin to address
                 if (command == "!SEND")
                 {
+                    if (lstAmount.FirstOrDefault() <= 0.1)
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to send amount lower than 0.1", ParseMode.Html);
+                        return;
+                    }
+
                     List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
 
                     foreach (var user in lstDestUsers)
@@ -296,6 +314,7 @@ namespace Rise.Services
                 "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
                 "<b>!balance</b> - Show current RISE Balance" + Environment.NewLine +
                 "<b>!joke</b> - Display a geek joke" + Environment.NewLine +
+                "<b>!hope</b> - Show hope quote" + Environment.NewLine +
                 "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
                 "<b>!price</b> - Show current RISE Price" + Environment.NewLine +
                 "<b>!key</b> - Send you Tip wallet passphrase in private msg" + Environment.NewLine;
@@ -346,6 +365,12 @@ namespace Rise.Services
             LstHope.Add("May your choices reflect your hopes, not your fears.");
             LstHope.Add("I inhale hope with every breath I take");
             LstHope.Add("Hope does not leave without being given permission.");
+            LstHope.Add("Stay forever enthusiastic about your desirable dreams.");
+            LstHope.Add("Do not dwell on your loss. Look forward with bright new hopes.");
+            LstHope.Add("Stay hopeful.");
+            LstHope.Add("something was dead in each of us, and what was dead was hope.");
+            LstHope.Add("Education is the realization of hope for the future.");
+            LstHope.Add("You see, if we have no hope, we have nothing");
 
             var random = new Random();
             int index = random.Next(LstHope.Count);
