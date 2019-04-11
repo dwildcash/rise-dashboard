@@ -418,7 +418,7 @@ namespace Rise.Services
                     }
                     else
                     {
-                        await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Not enough RISE to Withdraw <b>" + amount + "</b> balance" + balance + " RISE", ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Not enough RISE to Withdraw <b>" + amount + "</b> RISE balance" + balance + " RISE", ParseMode.Html);
                         return;
                     }
                 }
@@ -480,7 +480,7 @@ namespace Rise.Services
                     }
                     else
                     {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to send <b>" + amount + "</b> to " + destusers.Count() + " users. Balance: " + balance + " RISE", ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to send <b>" + amount + " RISE</b> to " + destusers.Count() + " users. Balance: " + balance + " RISE", ParseMode.Html);
                         return;
                     }
                 }
