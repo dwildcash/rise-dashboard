@@ -19,6 +19,6 @@ namespace rise.Services
 
         void uppdate_photourl(long telegramID, string photourl);
 
-        ApplicationUser GetUserByUsername(string username);
+        Task<ApplicationUser> GetUserByUsername(string username);
     }
 }

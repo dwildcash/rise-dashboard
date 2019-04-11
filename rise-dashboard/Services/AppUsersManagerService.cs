@@ -36,7 +36,7 @@ namespace rise.Services
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public ApplicationUser GetUserByUsername(string username)
+        public async Task<ApplicationUser> GetUserByUsername(string username)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -44,15 +44,31 @@ namespace rise.Services
 
                 try
                 {
-                    return dbContext.ApplicationUsers.Where(x => string.Equals(x.UserName, username, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    var user = dbContext.ApplicationUsers.Where(x => string.Equals(x.UserName, username, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    // Create a wallet for everyone
+                    if (user.Address == null)
+                    {
+                        // Create a Wallet for user
+                        AccountResult accountresult = await RiseManager.CreateAccount();
+
+                        if (accountresult.success)
+                        {
+                            user.Address = accountresult.account.address;
+                            user.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
+                            user.PublicKey = accountresult.account.publicKey;
+                        }
+                    }
+
+                    dbContext.SaveChanges();
+
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError("Received Exception from GetUserByUsername {0}", ex.Message);
                 }
-
-                return null;
             }
+
+            return null;
         }
 
         /// <summary>
@@ -68,7 +84,7 @@ namespace rise.Services
 
                 try
                 {
-                    return dbContext.ApplicationUsers.Where(x => x.UserName != excluded_username).OrderByDescending(x => x.LastMessage).FirstOrDefault();
+                    return dbContext.ApplicationUsers.Where(x => x.UserName != excluded_username && x.Address !=null).OrderByDescending(x => x.LastMessage).FirstOrDefault();
                 }
                 catch (Exception ex)
                 {
@@ -90,7 +106,7 @@ namespace rise.Services
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
                 {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddHours(-1) && x.UserName != excluded_username && x.UserName != null && x.MessageCount > 2).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddHours(-1) && x.UserName != excluded_username && x.UserName != null && x.MessageCount > 2 && x.Address != null).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -113,7 +129,7 @@ namespace rise.Services
 
                 try
                 {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-2) && x.UserName != excluded_username && x.UserName != null && x.MessageCount > 3).OrderBy(x => Guid.NewGuid()).Take(num).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-2) && x.UserName != excluded_username && x.UserName != null && x.MessageCount > 3 && x.Address != null).OrderBy(x => Guid.NewGuid()).Take(num).ToList();
                 }
                 catch (Exception ex)
                 {

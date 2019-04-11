@@ -181,6 +181,14 @@ namespace Rise.Services
 
                     List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName);
 
+                    var balance = await RiseManager.AccountBalanceAsync(appuser.Address);
+
+                    if (balance < ((0.1 * lstAppUsers.Count) + lstAmount.FirstOrDefault()))
+                    {
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to !BOOM " + lstAmount.FirstOrDefault() + " RISE Balance:" + balance, ParseMode.Html);
+                        return;
+                    }
+
                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault()-(lstAppUsers.Count*0.1), lstAppUsers, "BOOM!!!");
                 }
 
@@ -219,7 +227,7 @@ namespace Rise.Services
 
                     foreach (var user in lstDestUsers)
                     {
-                        var e = _appUsersManagerService.GetUserByUsername(user);
+                        var e = await _appUsersManagerService.GetUserByUsername(user);
 
                         if (e != null)
                         {
@@ -237,7 +245,7 @@ namespace Rise.Services
 
                     foreach (var user in lstDestUsers)
                     {
-                        var e = _appUsersManagerService.GetUserByUsername(user);
+                        var e = await _appUsersManagerService.GetUserByUsername(user);
 
                         if (e != null)
                         {
