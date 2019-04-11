@@ -199,7 +199,7 @@ namespace rise.Services
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError("Received Exception from GetUserAsync {0}", ex.Message);
+                        _logger.LogError("Received Exception from CreateUser {0}", ex.Message);
                         return null;
                     }
 
@@ -234,16 +234,5 @@ namespace rise.Services
 
             return appuser;
         }
-
-        /// <summary>
-        /// Update Application User
-        /// </summary>
-        /// <param name="appuser"></param>
-        /// <returns></returns>
-        public async Task UpdateApplicationUser(ApplicationUser appuser)
-        {
-            await _userManager.UpdateAsync(appuser);
-        }
-
     }
 }
