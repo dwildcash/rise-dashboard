@@ -168,61 +168,68 @@ namespace rise.Services
         {
             ApplicationUser appuser = null;
 
-            using (var scope = _scopeFactory.CreateScope())
+            try
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                appuser = dbContext.Users.OfType<ApplicationUser>().Where(x => x.TelegramId == telegramId).FirstOrDefault();
-
-                try
+                using (var scope = _scopeFactory.CreateScope())
                 {
-                    // New user detected
-                    if (appuser == null)
-                    {
-                        // Create new user
-                        var newappuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };
+                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
+                    appuser = dbContext.Users.OfType<ApplicationUser>().Where(x => x.TelegramId == telegramId).FirstOrDefault();
+
+                    try
+                    {
+                        // New user detected
+                        if (appuser == null)
+                        {
+                            // Create new user
+                            var newappuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };
+
+                            // Create a Wallet for user
+                            AccountResult accountresult = await RiseManager.CreateAccount();
+
+                            if (accountresult.success)
+                            {
+                                newappuser.Address = accountresult.account.address;
+                                newappuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
+                                newappuser.PublicKey = accountresult.account.publicKey;
+                            }
+
+                            dbContext.Users.Add(newappuser);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError("Received Exception from GetUserAsync {0}", ex.Message);
+                        return null;
+                    }
+
+                    // Flag update message
+                    if (flagMsgUpdate)
+                    {
+                        appuser.MessageCount++;
+                        appuser.LastMessage = DateTime.Now;
+                    }
+
+                    // Create a wallet for everyone
+                    if (appuser.Address == null)
+                    {
                         // Create a Wallet for user
                         AccountResult accountresult = await RiseManager.CreateAccount();
 
                         if (accountresult.success)
                         {
-                            newappuser.Address = accountresult.account.address;
-                            newappuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
-                            newappuser.PublicKey = accountresult.account.publicKey;
+                            appuser.Address = accountresult.account.address;
+                            appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
+                            appuser.PublicKey = accountresult.account.publicKey;
                         }
-
-                        dbContext.Users.Add(newappuser);
                     }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Received Exception from GetUserAsync {0}", ex.Message);
-                    return null;
-                }
 
-                // Flag update message
-                if (flagMsgUpdate)
-                {
-                    appuser.MessageCount++;
-                    appuser.LastMessage = DateTime.Now;
+                    dbContext.SaveChanges();
                 }
-
-                // Create a wallet for everyone
-                if (appuser.Address == null)
-                {
-                    // Create a Wallet for user
-                    AccountResult accountresult = await RiseManager.CreateAccount();
-
-                    if (accountresult.success)
-                    {
-                        appuser.Address = accountresult.account.address;
-                        appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
-                        appuser.PublicKey = accountresult.account.publicKey;
-                    }
-                }
-
-                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from GetUserAsync {0}", ex.Message);
             }
 
             return appuser;
