@@ -182,19 +182,19 @@ namespace rise.Services
                         if (appuser == null)
                         {
                             // Create new user
-                            var newappuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };
+                            appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId };
 
                             // Create a Wallet for user
                             AccountResult accountresult = await RiseManager.CreateAccount();
 
                             if (accountresult.success)
                             {
-                                newappuser.Address = accountresult.account.address;
-                                newappuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
-                                newappuser.PublicKey = accountresult.account.publicKey;
+                                appuser.Address = accountresult.account.address;
+                                appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
+                                appuser.PublicKey = accountresult.account.publicKey;
                             }
 
-                            dbContext.Users.Add(newappuser);
+                            dbContext.Users.Add(appuser);
                         }
                     }
                     catch (Exception ex)
