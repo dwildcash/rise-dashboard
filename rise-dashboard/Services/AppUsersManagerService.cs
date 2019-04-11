@@ -46,7 +46,7 @@ namespace rise.Services
                 {
                     var user = dbContext.ApplicationUsers.Where(x => string.Equals(x.UserName, username, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                     // Create a wallet for everyone
-                    if (user.Address == null)
+                    if (user?.Address == null)
                     {
                         // Create a Wallet for user
                         AccountResult accountresult = await RiseManager.CreateAccount();
@@ -217,7 +217,7 @@ namespace rise.Services
                     }
 
                     // Create a wallet for everyone
-                    if (appuser.Address == null)
+                    if (appuser?.Address == null)
                     {
                         // Create a Wallet for user
                         AccountResult accountresult = await RiseManager.CreateAccount();
