@@ -123,7 +123,7 @@ namespace Rise.Services
                 {
                     if (lstAmount.FirstOrDefault() <= 0.1)
                     {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to Splash amount lower than 0.1!", ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to Splash amount lower than 0.1! \xF0\x9F\x98\x94", ParseMode.Html);
                         return;
                     }
 
