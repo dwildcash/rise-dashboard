@@ -35,11 +35,10 @@ namespace Rise.Services
             {
                 return;
             }
-
-       
+   
             var message = update.Message;
 
-            if (message.Chat.Username != "dwildcash")
+            if (message.Chat.Username != "Dwildcash")
             {
                 return;
             }
