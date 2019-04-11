@@ -36,7 +36,14 @@ namespace Rise.Services
                 return;
             }
 
+       
             var message = update.Message;
+
+            if (message.Chat.Username != "dwildcash")
+            {
+                return;
+            }
+
             var flagMsgUpdate = false;
 
             // Count only message coming from channel
