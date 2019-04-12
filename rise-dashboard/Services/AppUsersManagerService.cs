@@ -144,7 +144,7 @@ namespace rise.Services
         /// Return a list of Random users
         /// </summary>,
         /// <returns></returns>
-        public void uppdate_photourl(long telegramID, string photourl)
+        public void Update_Photourl(long telegramID, string photourl)
         {
             using (var scope = _scopeFactory.CreateScope())
             {

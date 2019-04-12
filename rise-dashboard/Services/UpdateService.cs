@@ -127,108 +127,62 @@ namespace Rise.Services
                 // Splash!
                 if (command == "!SPLASH")
                 {
-                    if (lstAmount.FirstOrDefault() <= 0.1)
-                    {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to Splash amount lower than 0.1!", ParseMode.Html);
-                        return;
-                    }
-
-                    var balance = await RiseManager.AccountBalanceAsync(appuser.Address);
-
-                    if (balance < (0.1 + lstAmount.FirstOrDefault()))
-                    {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to !SPLASH " + lstAmount.FirstOrDefault() + " RISE Balance:" + balance, ParseMode.Html);
-                        return;
-                    }
-                    else
-                    {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "@" + appuser.UserName + " activated a <b> " + lstAmount.FirstOrDefault() + " RISE Splash!</b> Be active! I will choose a winner in the next messages!", ParseMode.Html);
-                    }
-
-                    var waitMsg = messagesCount + (int)RandomGenerator.NextLong(1, 4);
-
-                    int i = 0;
-
-                    while (messagesCount < waitMsg)
+                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, 1, message.Chat.Id, appuser) == false)
                     {
 
-                        Thread.Sleep(1000);
+                        var waitMsg = messagesCount + (int)RandomGenerator.NextLong(1, 4);
 
-                        if (i == 30)
+                        int i = 0;
+
+                        while (messagesCount < waitMsg)
                         {
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry no winner :(", ParseMode.Html);
-                            return;
+
+                            Thread.Sleep(1000);
+
+                            if (i == 30)
+                            {
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry no winner :(", ParseMode.Html);
+                                return;
+                            }
+
+                            i++;
                         }
 
-                        i++;
+                        List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
+
+                        lstAppUsers.Add(_appUsersManagerService.GetLastMsgUser(appuser.UserName));
+
+                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
                     }
-
-                    List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
-
-                    lstAppUsers.Add(_appUsersManagerService.GetLastMsgUser(appuser.UserName));
-
-                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
-                }
-
-                // Show Private Bip39
-                if (command == "!VOTE")
-                {
-                    await cmd_Vote(message);
                 }
 
                 // Boom!
                 if (command == "!BOOM")
                 {
-                    if (lstAmount.FirstOrDefault() <= 0.1)
-                    {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to boom amount lower than 0.1!", ParseMode.Html);
-                        return;
-                    }
-
                     List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName);
 
-                    var balance = await RiseManager.AccountBalanceAsync(appuser.Address);
-
-                    if (balance < ((0.1 * lstAppUsers.Count) + lstAmount.FirstOrDefault()))
+                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
                     {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to !BOOM " + lstAmount.FirstOrDefault() + " RISE Balance:" + balance, ParseMode.Html);
-                        return;
+                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
                     }
-
-                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault()-(lstAppUsers.Count*0.1), lstAppUsers, "BOOM!!!");
                 }
 
                 // Let it Rain Rise
                 if (command == "!RAIN")
                 {
-                    if (lstAmount.FirstOrDefault() <= 0.1)
-                    {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to rain amount lower than 0.1!", ParseMode.Html);
-                        return;
-                    }
-
                     List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
 
-                    var balance = await RiseManager.AccountBalanceAsync(appuser.Address);
-
-                    if (balance < ((0.1*lstAppUsers.Count) + lstAmount.FirstOrDefault()))
+                    // Check before sending
+                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
                     {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to !RAIN " + lstAmount.FirstOrDefault() + " RISE Balance:" + balance, ParseMode.Html);
-                        return;
+                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
                     }
-                   
-                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault()-(lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
                 }
+
 
                 // Withdraw coin to address
                 if (command == "!SEND")
                 {
-                    if (lstAmount.FirstOrDefault() <= 0.1)
-                    {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "It make no sense to send amount lower than 0.1", ParseMode.Html);
-                        return;
-                    }
-
                     List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
 
                     foreach (var user in lstDestUsers)
@@ -241,7 +195,11 @@ namespace Rise.Services
                         }
                     }
 
-                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "wake up!!!");
+                    // Check before sending
+                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
+                    {
+                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "wake up!!!");
+                    }
                 }
 
                 // Tell when last message from user
@@ -446,6 +404,50 @@ namespace Rise.Services
                 _logger.LogError("Received Exception from cmd_Withdraw {0}", ex.Message);
             }
         }
+
+
+
+        /// <summary>
+        /// precheck before sending
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="command"></param>
+        /// <param name="numReceivers"></param>
+        /// <returns></returns>
+        private async Task<bool> cmd_preSend(double amount, string command, int numReceivers, long chatId, ApplicationUser appuser)
+        {
+            try
+            {
+                if (numReceivers == 0)
+                {
+                    await _botService.Client.SendTextMessageAsync(chatId, "Sorry I found no users to send to", ParseMode.Html);
+                    return false;
+                }
+
+                if (amount <= 0.1)
+                {
+                    await _botService.Client.SendTextMessageAsync(chatId, "It make no sense to " + command + " amount lower than 0.1!", ParseMode.Html);
+                    return false;
+                }
+
+                var balance = await RiseManager.AccountBalanceAsync(appuser.Address);
+
+                if (balance < ((0.1 * numReceivers) + amount))
+                {
+                    await _botService.Client.SendTextMessageAsync(chatId, "Not enough RISE to !" + command + " " + amount + " RISE Balance:" + balance, ParseMode.Html);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_preSend private Message {0}", ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+
 
         /// <summary>
         /// Withdraw coin
