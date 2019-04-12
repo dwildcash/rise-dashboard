@@ -187,7 +187,7 @@ namespace Rise.Services
 
                     foreach (var user in lstDestUsers)
                     {
-                        var e = await _appUsersManagerService.GetUserByUsername(user);
+                        var e = await _appUsersManagerService.GetUserAsync(user);
 
                         if (e != null)
                         {
@@ -209,7 +209,7 @@ namespace Rise.Services
 
                     foreach (var user in lstDestUsers)
                     {
-                        var e = await _appUsersManagerService.GetUserByUsername(user);
+                        var e = await _appUsersManagerService.GetUserAsync(user);
 
                         if (e != null)
                         {

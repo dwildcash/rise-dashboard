@@ -15,10 +15,8 @@ namespace rise.Services
 
         Task<ApplicationUser> GetUserAsync(Update tgupdate);
 
-        Task<ApplicationUser> GetUserAsync(string userName, long telegramId, bool flagMsgUpdate = false);
+        Task<ApplicationUser> GetUserAsync(string userName, long telegramId = 0, bool flagMsgUpdate = false);
 
         void Update_Photourl(long telegramID, string photourl);
-
-        Task<ApplicationUser> GetUserByUsername(string username);
     }
 }

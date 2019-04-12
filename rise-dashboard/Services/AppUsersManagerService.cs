@@ -32,46 +32,6 @@ namespace rise.Services
         }
 
         /// <summary>
-        /// Get User by Username
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public async Task<ApplicationUser> GetUserByUsername(string username)
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                try
-                {
-                    var user = dbContext.ApplicationUsers.Where(x => string.Equals(x.UserName, username, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                    // Create a wallet for everyone
-                    if (user?.Address == null)
-                    {
-                        // Create a Wallet for user
-                        AccountResult accountresult = await RiseManager.CreateAccount();
-
-                        if (accountresult.success)
-                        {
-                            user.Address = accountresult.account.address;
-                            user.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
-                            user.PublicKey = accountresult.account.publicKey;
-                        }
-                    }
-
-                    dbContext.SaveChanges();
-
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Received Exception from GetUserByUsername {0}", ex.Message);
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Get Last user by Msd
         /// </summary>
         /// <param name="username"></param>
@@ -180,7 +140,7 @@ namespace rise.Services
         /// <param name="UserName"></param>
         /// <param name="TelegramId"></param>
         /// <returns></returns>
-        public async Task<ApplicationUser> GetUserAsync(string userName, long telegramId, bool flagMsgUpdate=false)
+        public async Task<ApplicationUser> GetUserAsync(string userName, long telegramId = 0, bool flagMsgUpdate=false)
         {
             ApplicationUser appuser = null;
 
@@ -190,7 +150,14 @@ namespace rise.Services
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                    appuser = dbContext.Users.OfType<ApplicationUser>().Where(x => x.TelegramId == telegramId).FirstOrDefault();
+                    if (telegramId != 0)
+                    {
+                        appuser = dbContext.Users.OfType<ApplicationUser>().Where(x => x.TelegramId == telegramId).FirstOrDefault();
+                    }
+                    else
+                    {
+                        appuser = dbContext.Users.OfType<ApplicationUser>().Where(x => x.UserName == userName).FirstOrDefault();
+                    }
 
                     try
                     {
