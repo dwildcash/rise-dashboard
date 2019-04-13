@@ -40,7 +40,7 @@ namespace Rise.Services
 
             var flagMsgUpdate = false;
 
-            // Count only message coming from channel
+            // Count only message coming from channely
             if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
             {
                 flagMsgUpdate = true;
@@ -405,7 +405,7 @@ namespace Rise.Services
             {
                 if (numReceivers == 0)
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "Sorry I found no users to send to", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, "Sorry I do not find anyone to send RISE", ParseMode.Html);
                     return false;
                 }
 
