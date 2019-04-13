@@ -7,11 +7,11 @@ namespace rise.Services
 {
     public interface IAppUsersManagerService
     {
-        ApplicationUser GetLastMsgUser(string excluded_username);
+        ApplicationUser GetLastMsgUser(string excludedUsername);
 
-        List<ApplicationUser> GetBoomUsers(string excluded_username);
+        List<ApplicationUser> GetBoomUsers(string excludedUsername);
 
-        List<ApplicationUser> GetRainUsers(string excluded_username, int num = 10);
+        List<ApplicationUser> GetRainUsers(string excludedUsername, int num = 10);
 
         Task<ApplicationUser> GetUserAsync(Update tgupdate);
 

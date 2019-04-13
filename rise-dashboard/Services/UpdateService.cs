@@ -35,13 +35,8 @@ namespace Rise.Services
             {
                 return;
             }
-   
-            var message = update.Message;
 
-            if (message.Chat.Username != "Dwildcash")
-            {
-                return;
-            }
+            var message = update.Message;
 
             var flagMsgUpdate = false;
 
@@ -71,19 +66,19 @@ namespace Rise.Services
                 // Match @username if present
                 if (Regex.Matches(message.Text, @"@(\S+)\s?").Count > 0)
                 {
-                    lstDestUsers = Regex.Matches(message.Text, @"@(\S+)\s?").Cast<Match>().Select(m => m.Value.Replace("@", "").Trim()).ToList();
+                    lstDestUsers = Regex.Matches(message.Text, @"@(\S+)\s?").Select(m => m.Value.Replace("@", "").Trim()).ToList();
                 }
 
                 // Match any double Amount if present
                 if (Regex.Matches(message.Text, @"([ ]|(^|\s))?[0-9]+(\.[0-9]*)?([ ]|($|\s))").Count > 0)
                 {
-                    lstAmount = Regex.Matches(message.Text, @"([ ]|(^|\s))?[0-9]+(\.[0-9]*)?([ ]|($|\s))").Cast<Match>().Select(m => double.Parse(m.Value.Trim())).ToList();
+                    lstAmount = Regex.Matches(message.Text, @"([ ]|(^|\s))?[0-9]+(\.[0-9]*)?([ ]|($|\s))").Select(m => double.Parse(m.Value.Trim())).ToList();
                 }
 
                 // Match any Rise Address if present
                 if (Regex.Matches(message.Text, @"\d+[R,r]").Count > 0)
                 {
-                    lstDestAddress = Regex.Matches(message.Text, @"\d+[R,r]").Cast<Match>().Select(m => m.Value.Trim()).ToList();
+                    lstDestAddress = Regex.Matches(message.Text, @"\d+[R,r]").Select(m => m.Value.Trim()).ToList();
                 }
             }
             catch (Exception ex)
@@ -94,166 +89,154 @@ namespace Rise.Services
 
             try
             {
-                // Info command
-                if (command == "!INFO")
+                switch (command)
                 {
-                    await cmd_Info(message);
-                }
-
-                // Show Balance
-                if (command == "!BALANCE")
-                {
-                    await cmd_ShowUserBalance(appuser);
-                }
-
-                // Show Help
-                if (command == "!HELP")
-                {
-                    await cmd_Help(message, appuser);
-                }
-
-                // Show Private Bip39
-                if (command == "!KEY")
-                {
-                    await cmd_Key(appuser);
-                }
-
-                // Withdraw RISE to address
-                if (command == "!WITHDRAW")
-                {
-                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstDestAddress.Count(), message.Chat.Id, appuser))
-                    {
-                        await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count()), lstDestAddress.FirstOrDefault());
-                    }
-                }
-
-                // Splash!
-                if (command == "!SPLASH")
-                {
-                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, 1, message.Chat.Id, appuser) == false)
-                    {
-
-                        var waitMsg = _messagesCount + (int)RandomGenerator.NextLong(1, 4);
-
-                        int i = 0;
-
-                        while (_messagesCount < waitMsg)
+                    // Info command
+                    case "!INFO":
+                        await cmd_Info(message);
+                        break;
+                    // Show Balance
+                    case "!BALANCE":
+                        await cmd_ShowUserBalance(appuser);
+                        break;
+                    // Show Help
+                    case "!HELP":
+                        await cmd_Help(message, appuser);
+                        break;
+                    // Show Private Bip39
+                    case "!KEY":
+                        await cmd_Key(appuser);
+                        break;
+                    // Withdraw RISE to address
+                    case "!WITHDRAW":
                         {
-
-                            Thread.Sleep(1000);
-
-                            if (i == 30)
+                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstDestAddress.Count(), message.Chat.Id, appuser))
                             {
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry no winner :(", ParseMode.Html);
-                                return;
+                                await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count()), lstDestAddress.FirstOrDefault());
                             }
 
-                            i++;
+                            break;
                         }
-
-                        List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
-
-                        lstAppUsers.Add(_appUsersManagerService.GetLastMsgUser(appuser.UserName));
-
-                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
-                    }
-                }
-
-                // Boom!
-                if (command == "!BOOM")
-                {
-                    List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName);
-
-                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
-                    {
-                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
-                    }
-                }
-
-                // Let it Rain Rise
-                if (command == "!RAIN")
-                {
-                    List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
-
-                    // Check before sending
-                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
-                    {
-                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
-                    }
-                }
-
-
-                // Withdraw coin to address
-                if (command == "!SEND")
-                {
-                    List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
-
-                    foreach (var user in lstDestUsers)
-                    {
-                        var e = await _appUsersManagerService.GetUserAsync(user);
-
-                        if (e != null)
+                    // Splash!
+                    case "!SPLASH":
                         {
-                            lstAppUsers.Add(e);
+                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, 1, message.Chat.Id, appuser) == false)
+                            {
+                                var waitMsg = _messagesCount + (int)RandomGenerator.NextLong(1, 4);
+
+                                var i = 0;
+
+                                while (_messagesCount < waitMsg)
+                                {
+                                    Thread.Sleep(1000);
+
+                                    if (i == 30)
+                                    {
+                                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry no winner :(", ParseMode.Html);
+                                        return;
+                                    }
+
+                                    i++;
+                                }
+
+                                var lstAppUsers = new List<ApplicationUser>();
+
+                                lstAppUsers.Add(_appUsersManagerService.GetLastMsgUser(appuser.UserName));
+
+                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
+                            }
+
+                            break;
                         }
-                    }
-
-                    // Check before sending
-                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
-                    {
-                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "wake up!!!");
-                    }
-                }
-
-                // Tell when last message from user
-                if (command == "!SEEN")
-                {
-                    List<ApplicationUser> lstAppUsers = new List<ApplicationUser>();
-
-                    foreach (var user in lstDestUsers)
-                    {
-                        var e = await _appUsersManagerService.GetUserAsync(user);
-
-                        if (e != null)
+                    // Boom!
+                    case "!BOOM":
                         {
-                            lstAppUsers.Add(e);
+                            List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName);
+
+                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
+                            {
+                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                            }
+
+                            break;
                         }
-                    }
+                    // Let it Rain Rise
+                    case "!RAIN":
+                        {
+                            List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
 
-                    await cmd_Seen(appuser, message, lstAppUsers);
-                }
+                            // Check before sending
+                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
+                            {
+                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
+                            }
 
-                // Info Price
-                if (command == "!PRICE")
-                {
-                    await cmd_Price(message);
-                }
+                            break;
+                        }
+                    // Withdraw coin to address
+                    case "!SEND":
+                        {
+                            var lstAppUsers = new List<ApplicationUser>();
 
-                // Return a  geek joke
-                if (command == "!JOKE")
-                {
-                    await cmd_Joke(message);
-                }
+                            foreach (var user in lstDestUsers)
+                            {
+                                var e = await _appUsersManagerService.GetUserAsync(user);
 
-                // Return a  geek joke
-                if (command == "!HOPE")
-                {
-                    await cmd_Hope(message);
-                }
+                                if (e != null)
+                                {
+                                    lstAppUsers.Add(e);
+                                }
+                            }
 
-                // Show Rise Exchanges
-                if (command == "!EXCHANGES")
-                {
-                    await cmd_Exchanges(message, appuser);
+                            // Check before sending
+                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
+                            {
+                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "wake up!!!");
+                            }
+
+                            break;
+                        }
+                    // Tell when last message from user
+                    case "!SEEN":
+                        {
+                            var lstAppUsers = new List<ApplicationUser>();
+
+                            foreach (var user in lstDestUsers)
+                            {
+                                var e = await _appUsersManagerService.GetUserAsync(user);
+
+                                if (e != null)
+                                {
+                                    lstAppUsers.Add(e);
+                                }
+                            }
+
+                            await cmd_Seen(appuser, message, lstAppUsers);
+                            break;
+                        }
+                    // Info Price
+                    case "!PRICE":
+                        await cmd_Price(message);
+                        break;
+                    // Return a  geek joke
+                    case "!JOKE":
+                        await cmd_Joke(message);
+                        break;
+                    // Return a  geek joke
+                    case "!HOPE":
+                        await cmd_Hope(message);
+                        break;
+                    // Show Rise Exchanges
+                    case "!EXCHANGES":
+                        await cmd_Exchanges(message, appuser);
+                        break;
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError("Error parsing !command {0}" + ex.Message);
-                return;
             }
         }
-
 
         /// <summary>
         /// Show vote website
@@ -266,15 +249,15 @@ namespace Rise.Services
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, "click below to open RISE voting website", replyMarkup: keyboard);
         }
 
-
         /// <summary>
         /// Show Help
         /// </summary>
         /// <param name="message"></param>
+        /// <param name="appuser"></param>
         /// <returns></returns>
         private async Task cmd_Help(Message message, ApplicationUser appuser)
         {
-            string strResponse = string.Empty;
+            string strResponse;
 
             try
             {
@@ -309,47 +292,48 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Hope(Message message)
         {
-            List<string> LstHope = new List<string>();
-
-            LstHope.Add("You may say I'm a dreamer, but I'm not the only one. I hope someday you'll join us. And the world will live as one.");
-            LstHope.Add("I like the night. Without the dark, we'd never see the stars.");
-            LstHope.Add("They say a person needs just three things to be truly happy in this world: someone to love, something to do, and something to hope for.");
-            LstHope.Add("If you're reading this...Congratulations, you're alive. If that's not something to smile about, then I don't know what is");
-            LstHope.Add("And now these three remain: faith, hope and love. But the greatest of these is love.");
-            LstHope.Add("It's amazing how a little tomorrow can make up for a whole lot of yesterday.");
-            LstHope.Add("In a time of destruction, create something.");
-            LstHope.Add("You may choose to look the other way but you can never say again that you did not know.");
-            LstHope.Add("We need hope, or else we cannot endure.");
-            LstHope.Add("Do not lose hope — what you seek will be found. Trust ghosts. Trust those that you have helped to help you in their turn. Trust dreams. Trust your heart, and trust your story.");
-            LstHope.Add("There is nothing like hope to create the future.");
-            LstHope.Add("There is always hope!");
-            LstHope.Add("You might think I lost all hope at that point. I did. And as a result I perked up and felt much better.");
-            LstHope.Add("If at first the idea is not absurd, then there is no hope for it.");
-            LstHope.Add("Hope in reality is the worst of all evils because it prolongs the torments of man");
-            LstHope.Add("Yes We Can!");
-            LstHope.Add("She wondered that hope was so much harder then despair.");
-            LstHope.Add("A man devoid of hope and conscious of being so has ceased to belong to the future.");
-            LstHope.Add("Hope makes a merry heart.");
-            LstHope.Add("Hope is a strange commodity. It is an opiate. We swear we have relinquished it and, lo, here comes a day when, all unannounced, our enslavement to it returns.");
-            LstHope.Add("Stay hopeful.");
-            LstHope.Add("Do not dwell on your loss. Look forward with bright new hopes.");
-            LstHope.Add("Hope itself is like a star- not to be seen in the sunshine of prosperity, and only to be discovered in the night of adversity.");
-            LstHope.Add("There is a secret medicine given only to those who hurt so hard they can't hope");
-            LstHope.Add("We promise according to our hopes and perform according to our fears.");
-            LstHope.Add("To wish was to hope, and to hope was to expect");
-            LstHope.Add("May your choices reflect your hopes, not your fears.");
-            LstHope.Add("I inhale hope with every breath I take");
-            LstHope.Add("Hope does not leave without being given permission.");
-            LstHope.Add("Stay forever enthusiastic about your desirable dreams.");
-            LstHope.Add("Do not dwell on your loss. Look forward with bright new hopes.");
-            LstHope.Add("Stay hopeful.");
-            LstHope.Add("something was dead in each of us, and what was dead was hope.");
-            LstHope.Add("Education is the realization of hope for the future.");
-            LstHope.Add("You see, if we have no hope, we have nothing");
+            var lstHope = new List<string>
+            {
+                "You may say I'm a dreamer, but I'm not the only one. I hope someday you'll join us. And the world will live as one.",
+                "I like the night. Without the dark, we'd never see the stars.",
+                "They say a person needs just three things to be truly happy in this world: someone to love, something to do, and something to hope for.",
+                "If you're reading this...Congratulations, you're alive. If that's not something to smile about, then I don't know what is",
+                "And now these three remain: faith, hope and love. But the greatest of these is love.",
+                "It's amazing how a little tomorrow can make up for a whole lot of yesterday.",
+                "In a time of destruction, create something.",
+                "You may choose to look the other way but you can never say again that you did not know.",
+                "We need hope, or else we cannot endure.",
+                "Do not lose hope — what you seek will be found. Trust ghosts. Trust those that you have helped to help you in their turn. Trust dreams. Trust your heart, and trust your story.",
+                "There is nothing like hope to create the future.",
+                "There is always hope!",
+                "You might think I lost all hope at that point. I did. And as a result I perked up and felt much better.",
+                "If at first the idea is not absurd, then there is no hope for it.",
+                "Hope in reality is the worst of all evils because it prolongs the torments of man",
+                "Yes We Can!",
+                "She wondered that hope was so much harder then despair.",
+                "A man devoid of hope and conscious of being so has ceased to belong to the future.",
+                "Hope makes a merry heart.",
+                "Hope is a strange commodity. It is an opiate. We swear we have relinquished it and, lo, here comes a day when, all unannounced, our enslavement to it returns.",
+                "Stay hopeful.",
+                "Do not dwell on your loss. Look forward with bright new hopes.",
+                "Hope itself is like a star- not to be seen in the sunshine of prosperity, and only to be discovered in the night of adversity.",
+                "There is a secret medicine given only to those who hurt so hard they can't hope",
+                "We promise according to our hopes and perform according to our fears.",
+                "To wish was to hope, and to hope was to expect",
+                "May your choices reflect your hopes, not your fears.",
+                "I inhale hope with every breath I take",
+                "Hope does not leave without being given permission.",
+                "Stay forever enthusiastic about your desirable dreams.",
+                "Do not dwell on your loss. Look forward with bright new hopes.",
+                "Stay hopeful.",
+                "something was dead in each of us, and what was dead was hope.",
+                "Education is the realization of hope for the future.",
+                "You see, if we have no hope, we have nothing"
+            };
 
             var random = new Random();
-            int index = random.Next(LstHope.Count);
-            await _botService.Client.SendTextMessageAsync(message.Chat.Id, LstHope[index], ParseMode.Html);
+            int index = random.Next(lstHope.Count);
+            await _botService.Client.SendTextMessageAsync(message.Chat.Id, lstHope[index], ParseMode.Html);
         }
 
         /// <summary>
@@ -374,13 +358,11 @@ namespace Rise.Services
         {
             try
             {
-                double balance;
-
                 if (amount > 0 && !string.IsNullOrEmpty(recipientId))
                 {
                     await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
 
-                    balance = await RiseManager.AccountBalanceAsync(sender.Address);
+                    var balance = await RiseManager.AccountBalanceAsync(sender.Address);
 
                     if (balance > (0.1 + amount))
                     {
@@ -408,14 +390,14 @@ namespace Rise.Services
             }
         }
 
-
-
         /// <summary>
-        /// precheck before sending
+        /// Check Before Sending
         /// </summary>
         /// <param name="amount"></param>
         /// <param name="command"></param>
         /// <param name="numReceivers"></param>
+        /// <param name="chatId"></param>
+        /// <param name="appuser"></param>
         /// <returns></returns>
         private async Task<bool> cmd_preSend(double amount, string command, int numReceivers, long chatId, ApplicationUser appuser)
         {
@@ -450,7 +432,6 @@ namespace Rise.Services
             return true;
         }
 
-        
         /// <summary>
         /// Send Coin
         /// </summary>
@@ -515,19 +496,20 @@ namespace Rise.Services
         }
 
         /// <summary>
-        /// Tell when last user sent message on channel
+        /// Seen last User
         /// </summary>
         /// <param name="appuser"></param>
         /// <param name="message"></param>
-        /// <param name="destUsers"></param>
+        /// <param name="lookUsers"></param>
         /// <returns></returns>
         private async Task cmd_Seen(ApplicationUser appuser, Message message, List<ApplicationUser> lookUsers)
         {
+            if (lookUsers == null) throw new ArgumentNullException(nameof(lookUsers));
             try
             {
-                var strResponse = string.Empty;
+                string strResponse;
 
-                if (lookUsers.Count() == 0)
+                if (!lookUsers.Any())
                 {
                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a user name starting with <b>@</b> ex !seen @Dwildcash", ParseMode.Html);
                     return;
@@ -539,7 +521,6 @@ namespace Rise.Services
                 {
                     if (user?.LastMessage != null)
                     {
-                        var lastseen = user.LastMessage;
                         double hours = Math.Round((DateTime.Now - user.LastMessage).TotalHours, 2);
                         double minutes = Math.Round((DateTime.Now - user.LastMessage).TotalMinutes, 2);
                         string showtime;
@@ -580,17 +561,15 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_ShowUserBalance(ApplicationUser sender)
         {
-            string strResponse = string.Empty;
-
             try
             {
                 await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
 
                 if (!string.IsNullOrEmpty(sender.Address))
                 {
-                    strResponse = "<b>Current Balance for </b>@" + sender.UserName + Environment.NewLine +
-                    "Address: <b>" + sender.Address + "</b>" + Environment.NewLine +
-                    "Balance <b>" + Math.Round(await RiseManager.AccountBalanceAsync(sender.Address), 4) + " RISE </b>";
+                    var strResponse = "<b>Current Balance for </b>@" + sender.UserName + Environment.NewLine +
+                                         "Address: <b>" + sender.Address + "</b>" + Environment.NewLine +
+                                         "Balance <b>" + Math.Round(await RiseManager.AccountBalanceAsync(sender.Address), 4) + " RISE </b>";
 
                     if (string.IsNullOrEmpty(sender.UserName))
                     {
@@ -607,9 +586,9 @@ namespace Rise.Services
         }
 
         /// <summary>
-        /// Display a chuck Norris Joke
+        /// Show Chuck Norris Joke
         /// </summary>
-        /// <param name="chatId"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
         private async Task cmd_Joke(Message message)
         {
@@ -623,13 +602,14 @@ namespace Rise.Services
         }
 
         /// <summary>
-        /// Display Current List Rise Exchanges
+        /// Show Rise Exchanges
         /// </summary>
-        /// <param name="chatId"></param>
+        /// <param name="message"></param>
+        /// <param name="appuser"></param>
         /// <returns></returns>
         private async Task cmd_Exchanges(Message message, ApplicationUser appuser)
         {
-            var strResponse = string.Empty;
+            string strResponse;
             try
             {
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
@@ -647,9 +627,9 @@ namespace Rise.Services
         }
 
         /// <summary>
-        /// Display RISE Current Price
+        /// Show Rise Price
         /// </summary>
-        /// <param name="chatId"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
         private async Task cmd_Price(Message message)
         {
@@ -666,13 +646,13 @@ namespace Rise.Services
         }
 
         /// <summary>
-        /// Send RISE Info
+        /// Send Rise Info
         /// </summary>
-        /// <param name="chatId"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
         private async Task cmd_Info(Message message)
         {
-            string strResponse = string.Empty;
+            string strResponse;
 
             try
             {
