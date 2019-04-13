@@ -11,7 +11,7 @@ namespace rise.Helpers
             try
             {
                 // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     return await hc.GetStringAsync("https://geek-jokes.sameerkumar.website/api");
                 }

@@ -31,7 +31,7 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> WebHook(string secret,[FromBody]Telegram.Bot.Types.Update update)
+        public async Task<IActionResult> WebHook(string secret, [FromBody]Telegram.Bot.Types.Update update)
         {
             // Return if the secret is not correct
             if (secret != AppSettingsProvider.WebHookSecret)
@@ -44,11 +44,11 @@
         }
 
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="apiController"/> class.
-        /// </summary>
-        /// <param name="context">The context<see cref="ApplicationDbContext"/></param>
-        /// <param name="userManager">The userManager<see cref="UserManager{ApplicationUser}"/></param>
+       /// <summary>
+       /// api Controller
+       /// </summary>
+       /// <param name="context"></param>
+       /// <param name="updateService"></param>
         public apiController(ApplicationDbContext context, IUpdateService updateService)
         {
             _updateService = updateService;
@@ -61,7 +61,7 @@
         /// <returns></returns>
         /// 
         [AllowAnonymous]
-        public JsonResult getQuote()
+        public JsonResult GetQuote()
         {
             var obj = _appdb.CoinQuotes.Where(x => x.Exchange == "All").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
             return Json(obj);
@@ -73,7 +73,7 @@
         /// <returns></returns>
 
         [AllowAnonymous]
-        public JsonResult getQuoteOfTheDay()
+        public JsonResult GetQuoteOfTheDay()
         {
             return Json(QuoteOfTheDayResult.Current);
         }

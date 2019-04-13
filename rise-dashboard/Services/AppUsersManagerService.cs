@@ -5,7 +5,6 @@ using rise.Data;
 using rise.Helpers;
 using rise.Models;
 using rise_lib;
-using rise_lib.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,19 +31,21 @@ namespace rise.Services
         }
 
         /// <summary>
-        /// Get Last user by Msd
+        /// Get the last Message
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="excludedUsername"></param>
         /// <returns></returns>
-        public ApplicationUser GetLastMsgUser(string excluded_username)
+        public ApplicationUser GetLastMsgUser(string excludedUsername)
         {
+            if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
+
             using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 try
                 {
-                    return dbContext.ApplicationUsers.Where(x => x.UserName != excluded_username && x.Address !=null).OrderByDescending(x => x.LastMessage).FirstOrDefault();
+                    return dbContext.ApplicationUsers.Where(x => x.UserName != excludedUsername && x.Address != null).OrderByDescending(x => x.LastMessage).FirstOrDefault();
                 }
                 catch (Exception ex)
                 {
@@ -56,17 +57,19 @@ namespace rise.Services
         }
 
         /// <summary>
-        /// Return a list of Random users
+        /// Return List of Boom Users
         /// </summary>
+        /// <param name="excludedUsername"></param>
         /// <returns></returns>
-        public List<ApplicationUser> GetBoomUsers(string excluded_username)
+        public List<ApplicationUser> GetBoomUsers(string excludedUsername)
         {
+            if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
             using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
                 {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddHours(-1) && x.UserName != excluded_username && x.UserName != null && x.MessageCount > 2 && x.Address != null).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddHours(-1) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 2 && x.Address != null).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -76,20 +79,23 @@ namespace rise.Services
             }
         }
 
-
         /// <summary>
-        /// Return a list of Random users
-        /// </summary>,
+        /// Get List of Rain Users
+        /// </summary>
+        /// <param name="excludedUsername"></param>
+        /// <param name="num"></param>
         /// <returns></returns>
-        public List<ApplicationUser> GetRainUsers(string excluded_username, int num = 10)
+        public List<ApplicationUser> GetRainUsers(string excludedUsername, int num = 10)
         {
+            if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
+
             using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 try
                 {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-2) && x.UserName != excluded_username && x.UserName != null && x.MessageCount > 3 && x.Address != null).OrderBy(x => Guid.NewGuid()).Take(num).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-2) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 3 && x.Address != null).OrderBy(x => Guid.NewGuid()).Take(num).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -99,12 +105,12 @@ namespace rise.Services
             }
         }
 
-
         /// <summary>
-        /// Return a list of Random users
-        /// </summary>,
-        /// <returns></returns>
-        public void Update_Photourl(long telegramID, string photourl)
+        /// Update Photo Url
+        /// </summary>
+        /// <param name="telegramId"></param>
+        /// <param name="photourl"></param>
+        public void Update_Photourl(long telegramId, string photourl)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -112,7 +118,7 @@ namespace rise.Services
 
                 try
                 {
-                    dbContext.Users.Where(x => x.TelegramId == telegramID).FirstOrDefault().Photo_Url = photourl;
+                    dbContext.Users.FirstOrDefault(x => x.TelegramId == telegramId).Photo_Url = photourl;
                     dbContext.SaveChanges();
                 }
                 catch (Exception ex)
@@ -127,20 +133,16 @@ namespace rise.Services
         /// </summary>
         /// <param name="tgupdate"></param>
         /// <returns></returns>
-        public async Task<ApplicationUser> GetUserAsync(Update tgupdate)
-        {
-            ApplicationUser aspnetuser = await GetUserAsync(tgupdate.Message.Chat.Username, tgupdate.Message.Chat.Id);
-            return null;
-        }
-
+        public async Task<ApplicationUser> GetUserAsync(Update tgupdate) => await GetUserAsync(tgupdate.Message.Chat.Username, tgupdate.Message.Chat.Id);
 
         /// <summary>
-        /// Get User
+        /// Get user Async
         /// </summary>
-        /// <param name="UserName"></param>
-        /// <param name="TelegramId"></param>
+        /// <param name="userName"></param>
+        /// <param name="telegramId"></param>
+        /// <param name="flagMsgUpdate"></param>
         /// <returns></returns>
-        public async Task<ApplicationUser> GetUserAsync(string userName, long telegramId = 0, bool flagMsgUpdate=false)
+        public async Task<ApplicationUser> GetUserAsync(string userName, long telegramId = 0, bool flagMsgUpdate = false)
         {
             ApplicationUser appuser = null;
 
@@ -150,14 +152,7 @@ namespace rise.Services
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                    if (telegramId != 0)
-                    {
-                        appuser = dbContext.Users.OfType<ApplicationUser>().Where(x => x.TelegramId == telegramId).FirstOrDefault();
-                    }
-                    else
-                    {
-                        appuser = dbContext.Users.OfType<ApplicationUser>().Where(x => x.UserName == userName).FirstOrDefault();
-                    }
+                    appuser = telegramId != 0 ? dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.TelegramId == telegramId) : dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.UserName == userName);
 
                     try
                     {
@@ -184,10 +179,10 @@ namespace rise.Services
                     }
 
                     // Create a wallet for everyone
-                    if (appuser?.Address == null)
+                    if (appuser.Address == null)
                     {
                         // Create a Wallet for user
-                        AccountResult accountresult = await RiseManager.CreateAccount();
+                        var accountresult = await RiseManager.CreateAccount();
 
                         if (accountresult.success)
                         {

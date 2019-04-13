@@ -57,12 +57,12 @@
             AppSettingsProvider.CoinMarketCapTickerCode = Configuration["AppSettings:CoinMarketCapTickerCode"];
             AppSettingsProvider.CoinName = Configuration["AppSettings:CoinName"];
             AppSettingsProvider.CoinRewardDay = int.Parse(Configuration["AppSettings:CoinRewardDay"]);
-            AppSettingsProvider.CoinFullName = Configuration["Appsettings:CoinFullName"];
+            AppSettingsProvider.CoinFullName = Configuration["AppSettings:CoinFullName"];
             AppSettingsProvider.CoinMainSite = Configuration["AppSettings:CoinMainSite"];
             AppSettingsProvider.CoinExplorer = Configuration["AppSettings:CoinExplorer"];
             AppSettingsProvider.DonationAddress = Configuration["AppSettings:DonationAddress"];
             AppSettingsProvider.RightBtcMarket = Configuration["AppSettings:RightBtcMarket"];
-            AppSettingsProvider.LiveCoinWalletAddress = Configuration["Appsettings:LiveCoinWalletAddress"];
+            AppSettingsProvider.LiveCoinWalletAddress = Configuration["AppSettings:LiveCoinWalletAddress"];
             AppSettingsProvider.SimulateRoundCount = int.Parse(Configuration["AppSettings:SimulateRoundCount"]);
             AppSettingsProvider.MaxTransactionsToFetch = int.Parse(Configuration["AppSettings:MaxTransactionsToFetch"]);
             AppSettingsProvider.BotApiKey = Configuration["AppSettings:BotApiKey"];

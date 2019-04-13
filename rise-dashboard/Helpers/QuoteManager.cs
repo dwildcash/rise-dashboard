@@ -14,7 +14,7 @@ namespace rise.Helpers
             try
             {
                 // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync("https://rise.coinquote.io/api/getQuote"));
                     return JsonConvert.DeserializeObject<CoinQuote>(result.ToString());

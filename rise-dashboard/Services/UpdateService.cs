@@ -20,7 +20,7 @@ namespace Rise.Services
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
         private readonly IAppUsersManagerService _appUsersManagerService;
-        private static long messagesCount;
+        private static long _messagesCount;
 
         public UpdateService(IBotService botService, ILogger<UpdateService> logger, IAppUsersManagerService appUsersManagerService)
         {
@@ -49,7 +49,7 @@ namespace Rise.Services
             if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
             {
                 flagMsgUpdate = true;
-                messagesCount++;
+                _messagesCount++;
             }
 
             // Get the user who sent message
@@ -121,7 +121,10 @@ namespace Rise.Services
                 // Withdraw RISE to address
                 if (command == "!WITHDRAW")
                 {
-                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1*lstDestAddress.Count()), lstDestAddress.FirstOrDefault());
+                    if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstDestAddress.Count(), message.Chat.Id, appuser))
+                    {
+                        await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count()), lstDestAddress.FirstOrDefault());
+                    }
                 }
 
                 // Splash!
@@ -130,11 +133,11 @@ namespace Rise.Services
                     if (await cmd_preSend(lstAmount.FirstOrDefault(), command, 1, message.Chat.Id, appuser) == false)
                     {
 
-                        var waitMsg = messagesCount + (int)RandomGenerator.NextLong(1, 4);
+                        var waitMsg = _messagesCount + (int)RandomGenerator.NextLong(1, 4);
 
                         int i = 0;
 
-                        while (messagesCount < waitMsg)
+                        while (_messagesCount < waitMsg)
                         {
 
                             Thread.Sleep(1000);
@@ -371,7 +374,7 @@ namespace Rise.Services
         {
             try
             {
-                double balance = 0;
+                double balance;
 
                 if (amount > 0 && !string.IsNullOrEmpty(recipientId))
                 {
@@ -447,19 +450,18 @@ namespace Rise.Services
             return true;
         }
 
-
-
+        
         /// <summary>
-        /// Withdraw coin
+        /// Send Coin
         /// </summary>
+        /// <param name="message"></param>
         /// <param name="sender"></param>
         /// <param name="amount"></param>
-        /// <param name="recipientId"></param>
+        /// <param name="destusers"></param>
+        /// <param name="bannerMsg"></param>
         /// <returns></returns>
         private async Task cmd_Send(Message message, ApplicationUser sender, double amount, List<ApplicationUser> destusers, string bannerMsg = "")
         {
-            double balance = 0;
-
             try
             {
                 if (amount > 0 && destusers.Count > 0)
@@ -468,7 +470,7 @@ namespace Rise.Services
 
                     double amountToSend = amount / destusers.Count();
 
-                    balance = await RiseManager.AccountBalanceAsync(sender.Address);
+                    var balance = await RiseManager.AccountBalanceAsync(sender.Address);
 
                     if (balance >= ((0.1 * destusers.Count) + amount))
                     {

@@ -28,27 +28,27 @@
         /// <summary>
         /// Gets or sets the ApplicationUsers
         /// </summary>
-        public DbSet<rise.Models.ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         /// <summary>
         /// Gets or sets the ApplicationRoles
         /// </summary>
-        public DbSet<rise.Models.ApplicationRole> ApplicationRoles { get; set; }
+        public DbSet<ApplicationRole> ApplicationRoles { get; set; }
 
         /// <summary>
         /// Gets or sets the IPData
         /// </summary>
-        public DbSet<rise.Models.IPData> IPData { get; set; }
+        public DbSet<IPData> IPData { get; set; }
 
         /// <summary>
         /// Gets or sets the Locations
         /// </summary>
-        public DbSet<rise.Models.Location> Locations { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
         /// <summary>
         /// Gets or sets the Languages
         /// </summary>
-        public DbSet<rise.Models.Language> Languages { get; set; }
+        public DbSet<Language> Languages { get; set; }
 
         /// <summary>
         /// Gets or sets the CoinQuotes
@@ -58,6 +58,6 @@
         /// <summary>
         /// Gets or sets the Contributors
         /// </summary>
-        public DbSet<rise.Models.DelegateForm> DelegateForms { get; set; }
+        public DbSet<DelegateForm> DelegateForms { get; set; }
     }
 }
