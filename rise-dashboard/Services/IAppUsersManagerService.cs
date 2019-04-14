@@ -7,7 +7,7 @@ namespace rise.Services
 {
     public interface IAppUsersManagerService
     {
-        ApplicationUser GetLastMsgUser(string excludedUsername);
+        List<ApplicationUser> GetLastMsgUsers(string excludedUsername, int maxusers = 1);
 
         List<ApplicationUser> GetBoomUsers(string excludedUsername, int maxusers = 10);
 

@@ -51,6 +51,7 @@ namespace Rise.Services
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
 
+            var maxusers = 5;
             var commands = new List<string>();
             var lstDestUsers = new List<string>();
             var lstDestAddress = new List<string>();
@@ -80,6 +81,12 @@ namespace Rise.Services
                 if (Regex.Matches(message.Text, @"\d+[R,r]").Count > 0)
                 {
                     lstDestAddress = Regex.Matches(message.Text, @"\d+[R,r]").Select(m => m.Value.Trim()).ToList();
+                }
+
+                // add any extra users
+                if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
+                {
+                    maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                 }
             }
             catch (Exception ex)
@@ -113,11 +120,9 @@ namespace Rise.Services
                         // Withdraw RISE to address
                         case "!WITHDRAW":
                             {
-                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstDestAddress.Count(),
-                                    message.Chat.Id, appuser))
+                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstDestAddress.Count, message.Chat.Id, appuser))
                                 {
-                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count()),
-                                        lstDestAddress.FirstOrDefault());
+                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), lstDestAddress.FirstOrDefault());
                                 }
 
                                 break;
@@ -125,8 +130,13 @@ namespace Rise.Services
                         // Splash!
                         case "!SPLASH":
                             {
-                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, 1, message.Chat.Id, appuser) ==
-                                    false)
+                                // add any extra users
+                                if (lstAmount.Count == 1)
+                                {
+                                    maxusers = 1;
+                                }
+
+                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, 1, message.Chat.Id, appuser))
                                 {
                                     var waitMsg = _messagesCount + (int)RandomGenerator.NextLong(1, 4);
 
@@ -138,18 +148,14 @@ namespace Rise.Services
 
                                         if (i == 30)
                                         {
-                                            await _botService.Client.SendTextMessageAsync(message.Chat.Id,
-                                                "Timeout! Splash Aborted... sorry guys no winner :(", ParseMode.Html);
+                                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry guys no winner :(", ParseMode.Html);
                                             return;
                                         }
 
                                         i++;
                                     }
 
-                                    var lstAppUsers = new List<ApplicationUser>
-                                {
-                                    _appUsersManagerService.GetLastMsgUser(appuser.UserName)
-                                };
+                                    var lstAppUsers = _appUsersManagerService.GetLastMsgUsers(appuser.UserName, maxusers);
 
                                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
                                 }
@@ -161,9 +167,7 @@ namespace Rise.Services
                             {
                                 try
                                 {
-                                    var maxusers = 5;
-
-                                    if (lstAmount.Count() > 1 && Math.Abs(lstAmount[1]) > 0)
+                                    if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                                     {
                                         maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                     }
@@ -171,7 +175,7 @@ namespace Rise.Services
                                     var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
 
                                     if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command,
-                                        lstAppUsers.Count(), message.Chat.Id, appuser))
+                                        lstAppUsers.Count, message.Chat.Id, appuser))
                                     {
                                         await cmd_Send(message, appuser,
                                             lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
@@ -187,9 +191,7 @@ namespace Rise.Services
                         // Let it Rain Rise
                         case "!RAIN":
                             {
-                                var maxusers = 5;
-
-                                if (lstAmount.Count() > 1 && Math.Abs(lstAmount[1]) > 0)
+                                if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                                 {
                                     maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                 }
@@ -198,7 +200,7 @@ namespace Rise.Services
 
                                 // Check before sending
                                 if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command,
-                                    lstAppUsers.Count(), message.Chat.Id, appuser))
+                                    lstAppUsers.Count, message.Chat.Id, appuser))
                                 {
                                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1),
                                         lstAppUsers, "its Raining!!!");
@@ -222,7 +224,7 @@ namespace Rise.Services
                                 }
 
                                 // Check before sending
-                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(),
+                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count,
                                     message.Chat.Id, appuser))
                                 {
                                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1),
@@ -472,7 +474,7 @@ namespace Rise.Services
                 {
                     await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
 
-                    var amountToSend = amount / destusers.Count();
+                    var amountToSend = amount / destusers.Count;
 
                     var balance = await RiseManager.AccountBalanceAsync(sender.Address);
 
@@ -502,7 +504,7 @@ namespace Rise.Services
                     }
                     else
                     {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to send <b>" + amount + " RISE</b> to " + destusers.Count() + " users. Balance: " + balance + " RISE", ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to send <b>" + amount + " RISE</b> to " + destusers.Count + " users. Balance: " + balance + " RISE", ParseMode.Html);
                     }
                 }
                 else

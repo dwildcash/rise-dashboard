@@ -35,7 +35,7 @@ namespace rise.Services
         /// </summary>
         /// <param name="excludedUsername"></param>
         /// <returns></returns>
-        public ApplicationUser GetLastMsgUser(string excludedUsername)
+        public List<ApplicationUser> GetLastMsgUsers(string excludedUsername, int maxusers = 1)
         {
             if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
 
@@ -45,7 +45,7 @@ namespace rise.Services
 
                 try
                 {
-                    return dbContext.ApplicationUsers.Where(x => x.UserName != excludedUsername && x.Address != null).OrderByDescending(x => x.LastMessage).FirstOrDefault();
+                    return dbContext.ApplicationUsers.Where(x => x.UserName != excludedUsername && x.Address != null).OrderByDescending(x => x.LastMessage).Take(maxusers).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -61,7 +61,7 @@ namespace rise.Services
         /// </summary>
         /// <param name="excludedUsername"></param>
         /// <returns></returns>
-        public List<ApplicationUser> GetBoomUsers(string excludedUsername, int maxusers = 10)
+        public List<ApplicationUser> GetBoomUsers(string excludedUsername, int maxusers = 7)
         {
             if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
 
@@ -86,7 +86,7 @@ namespace rise.Services
         /// <param name="excludedUsername"></param>
         /// <param name="maxusers"></param>
         /// <returns></returns>
-        public List<ApplicationUser> GetRainUsers(string excludedUsername, int maxusers = 10)
+        public List<ApplicationUser> GetRainUsers(string excludedUsername, int maxusers = 7)
         {
             if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
 
