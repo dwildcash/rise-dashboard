@@ -274,6 +274,8 @@ namespace Rise.Services
                 {
                     _logger.LogError("Error parsing !command {0}" + ex.Message);
                 }
+
+                return;
             }
         }
 
