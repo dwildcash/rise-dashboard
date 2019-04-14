@@ -50,10 +50,10 @@ namespace Rise.Services
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
 
-            string command = string.Empty;
-            List<string> lstDestUsers = new List<string>();
-            List<string> lstDestAddress = new List<string>();
-            List<double> lstAmount = new List<double>();
+            var command = string.Empty;
+            var lstDestUsers = new List<string>();
+            var lstDestAddress = new List<string>();
+            var lstAmount = new List<double>();
 
             try
             {
@@ -132,16 +132,18 @@ namespace Rise.Services
 
                                     if (i == 30)
                                     {
-                                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry no winner :(", ParseMode.Html);
+                                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry guys no winner :(", ParseMode.Html);
                                         return;
                                     }
 
                                     i++;
                                 }
 
-                                var lstAppUsers = new List<ApplicationUser>();
+                                var lstAppUsers = new List<ApplicationUser>
+                                {
+                                    _appUsersManagerService.GetLastMsgUser(appuser.UserName)
+                                };
 
-                                lstAppUsers.Add(_appUsersManagerService.GetLastMsgUser(appuser.UserName));
 
                                 await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
                             }
@@ -191,7 +193,7 @@ namespace Rise.Services
                             // Check before sending
                             if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
                             {
-                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "wake up!!!");
+                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "wake up!!! its a wonderful day!");
                             }
 
                             break;
@@ -318,7 +320,7 @@ namespace Rise.Services
             };
 
             var random = new Random();
-            int index = random.Next(lstHope.Count);
+            var index = random.Next(lstHope.Count);
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, lstHope[index], ParseMode.Html);
         }
 
@@ -397,7 +399,7 @@ namespace Rise.Services
 
                 if (amount <= 0.1)
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "It make no sense to " + command + " amount lower than 0.1!", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, "Yish! It make no sense to " + command + " amount lower than 0.1!", ParseMode.Html);
                     return false;
                 }
 
@@ -427,7 +429,7 @@ namespace Rise.Services
         /// <param name="destusers"></param>
         /// <param name="bannerMsg"></param>
         /// <returns></returns>
-        private async Task cmd_Send(Message message, ApplicationUser sender, double amount, List<ApplicationUser> destusers, string bannerMsg = "")
+        private async Task cmd_Send(Message message, ApplicationUser sender, double amount, IReadOnlyCollection<ApplicationUser> destusers, string bannerMsg = "")
         {
             try
             {
@@ -461,7 +463,7 @@ namespace Rise.Services
                         }
 
                         var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + " its a wonderful day!! thanks to @" + sender.UserName + " he sent <b>" + Math.Round(amountToSend, 3) + " RISE</b> to you :)", ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + " thanks to @" + sender.UserName + " he sent <b>" + Math.Round(amountToSend, 3) + " RISE</b> to you :)", ParseMode.Html);
                     }
                     else
                     {
