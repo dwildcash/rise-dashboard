@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using rise.Models;
+    using Models;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -20,7 +20,7 @@
         {
             try
             {
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     var quote = JObject.Parse(await hc.GetStringAsync("https://www.rightbtc.com/api/public/ticker/" + AppSettingsProvider.RightBtcMarket));
                     var rightBtcQuoteResult = JsonConvert.DeserializeObject<RightBtcQuoteResult>(quote.ToString());

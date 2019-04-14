@@ -41,13 +41,13 @@ namespace rise.Code.Tasks
         /// <returns></returns>
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            PeersResult peersResult = await PeersFetcher.FetchPeers();
+            var peersResult = await PeersFetcher.FetchPeers();
 
             if (peersResult != null)
             {
                 PeersResult.Current = peersResult;
 
-                using (IServiceScope scope = _provider.CreateScope())
+                using (var scope = _provider.CreateScope())
                 {
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
@@ -55,7 +55,7 @@ namespace rise.Code.Tasks
                     {
                         foreach (var peer in PeersResult.Current.Peers)
                         {
-                            if (context.IPData.Where(x => x.ip == peer.Ip).Count() == 0)
+                            if (!context.IPData.Any(x => x.ip == peer.Ip))
                             {
                                 var ipdata = await IPsFetcher.FetchIPGeoLocation(peer.Ip);
 
@@ -67,11 +67,15 @@ namespace rise.Code.Tasks
                                 }
                             }
 
-                            var ipobj = context.IPData.Where(x => x.ip == peer.Ip).FirstOrDefault();
-                            peer.Lattitude = ipobj.latitude;
-                            peer.Longitude = ipobj.longitude;
-                            peer.City = ipobj.city;
-                            peer.Contry = ipobj.country_name;
+                            var ipobj = context.IPData.FirstOrDefault(x => x.ip == peer.Ip);
+
+                            if (ipobj != null)
+                            {
+                                peer.Lattitude = ipobj.latitude;
+                                peer.Longitude = ipobj.longitude;
+                                peer.City = ipobj.city;
+                                peer.Contry = ipobj.country_name;
+                            }
                         }
                     }
                 }

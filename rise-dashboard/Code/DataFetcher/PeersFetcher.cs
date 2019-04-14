@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using rise.Models;
+    using Models;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -20,7 +20,7 @@
         {
             try
             {
-                // Retreive Quote
+                // Retrieve Quote
                 using (HttpClient hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/peers"));

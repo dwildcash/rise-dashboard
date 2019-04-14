@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using rise.Models;
+    using Models;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -20,8 +20,8 @@
         {
             try
             {
-                // Retreive Quote Of the Day.
-                using (HttpClient hc = new HttpClient())
+                // Retrieve Quote Of the Day.
+                using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync("http://quotes.rest/qod.json?category=inspire"));
                     var quoteOfTheDayResult = JsonConvert.DeserializeObject<QuoteOfTheDayResult>(result.ToString());

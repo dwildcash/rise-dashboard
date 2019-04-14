@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using rise.Models;
+    using Models;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -21,19 +21,12 @@
         {
             try
             {
-                // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+                // Retrieve Quote
+                using (var hc = new HttpClient())
                 {
                     JObject result = null;
 
-                    if (address?.Length == 0)
-                    {
-                        result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/transactions?orderBy=timestamp:desc&limit=" + AppSettingsProvider.MaxTransactionsToFetch));
-                    }
-                    else
-                    {
-                        result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/transactions?orderBy=timestamp:desc&limit=" + AppSettingsProvider.MaxTransactionsToFetch + "&recipientId=" + address));
-                    }
+                    result = address?.Length == 0 ? JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/transactions?orderBy=timestamp:desc&limit=" + AppSettingsProvider.MaxTransactionsToFetch)) : JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/transactions?orderBy=timestamp:desc&limit=" + AppSettingsProvider.MaxTransactionsToFetch + "&recipientId=" + address));
 
                     var transactionsResult = JsonConvert.DeserializeObject<TransactionsResult>(result.ToString());
 
@@ -56,8 +49,8 @@
         {
             try
             {
-                // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+                // Retrieve Quote
+                using (var hc = new HttpClient())
                 {
                     var result1 = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/transactions?limit=" + AppSettingsProvider.MaxTransactionsToFetch + "&orderBy=timestamp:desc&recipientId=" + address));
                     var transactionsResult = JsonConvert.DeserializeObject<TransactionsResult>(result1.ToString());
@@ -88,8 +81,6 @@
         /// <returns>The <see cref="Task{TransactionsResult}"/></returns>
         public static async Task<TransactionsResult> FetchOutgoingTransactions(string address = "")
         {
-            TransactionsResult transactionsResult = null;
-
             try
             {
                 // Retreive Quote
@@ -97,16 +88,9 @@
                 {
                     JObject result;
 
-                    if (address?.Length == 0)
-                    {
-                        result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/transactions?limit=" + AppSettingsProvider.MaxTransactionsToFetch + "&orderBy=timestamp:desc"));
-                    }
-                    else
-                    {
-                        result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/transactions?limit=" + AppSettingsProvider.MaxTransactionsToFetch + "&orderBy=timestamp:desc&senderId=" + address));
-                    }
+                    result = address?.Length == 0 ? JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/transactions?limit=" + AppSettingsProvider.MaxTransactionsToFetch + "&orderBy=timestamp:desc")) : JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/transactions?limit=" + AppSettingsProvider.MaxTransactionsToFetch + "&orderBy=timestamp:desc&senderId=" + address));
 
-                    transactionsResult = JsonConvert.DeserializeObject<TransactionsResult>(result.ToString());
+                    var transactionsResult = JsonConvert.DeserializeObject<TransactionsResult>(result.ToString());
 
                     return transactionsResult.success ? transactionsResult : null;
                 }

@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using rise.Models;
+    using Models;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -19,15 +19,13 @@
         /// <returns>The <see cref="Task{WalletAccountResult}"/></returns>
         public static async Task<WalletAccountResult> FetchRiseWalletAccount(string walletAddress)
         {
-            WalletAccountResult walletAccountResult;
-
             try
             {
                 // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/accounts?address=" + walletAddress));
-                    walletAccountResult = JsonConvert.DeserializeObject<WalletAccountResult>(result.ToString());
+                    var walletAccountResult = JsonConvert.DeserializeObject<WalletAccountResult>(result.ToString());
 
                     return walletAccountResult.success ? walletAccountResult : null;
                 }

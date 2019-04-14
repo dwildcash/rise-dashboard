@@ -1,6 +1,6 @@
 ﻿namespace rise.Code.Scheduling
 {
-    using rise.Code.Cron;
+    using Cron;
     using System;
     using System.Collections.Generic;
     using System.Linq;

@@ -24,10 +24,7 @@
         /// <summary>
         /// Return The forging Probability based on SimulatedRound
         /// </summary>
-        public double ForgingChance
-        {
-            get { return AddChance / (double)AppSettingsProvider.SimulateRoundCount * (double)100; }
-        }
+        public double ForgingChance => AddChance / AppSettingsProvider.SimulateRoundCount * 100;
 
         /// <summary>
         /// Gets or sets the Address

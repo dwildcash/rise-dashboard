@@ -23,21 +23,21 @@ namespace rise.Code.Tasks
         /// <returns>The <see cref="Task"/></returns>
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            LiveCoinQuote liveCoinQuoteResult = await LiveCoinQuoteFetcher.FetchLiveCoinQuote();
+            var liveCoinQuoteResult = await LiveCoinQuoteFetcher.FetchLiveCoinQuote();
 
             if (liveCoinQuoteResult != null)
             {
                 LiveCoinQuote.Current = liveCoinQuoteResult;
             }
 
-            AltillyQuote altillyQuoteResult = await AltillyQuoteFetcher.FetchAltillyQuote();
+            var altillyQuoteResult = await AltillyQuoteFetcher.FetchAltillyQuote();
 
             if (altillyQuoteResult != null)
             {
                 AltillyQuote.Current = altillyQuoteResult;
             }
 
-            CoinbaseBtcQuoteResult coinbaseBtcQuoteResult = await CoinbaseBtcFetcher.FetchCoinbaseBtcQuote();
+            var coinbaseBtcQuoteResult = await CoinbaseBtcFetcher.FetchCoinbaseBtcQuote();
 
             if (coinbaseBtcQuoteResult != null)
             {
@@ -51,7 +51,7 @@ namespace rise.Code.Tasks
                 RightBtcQuoteResult.Current = RightBtcQuoteResult;
             }
 
-            TransactionsResult transactionsResult = await TransactionsFetcher.FetchTransactions();
+            var transactionsResult = await TransactionsFetcher.FetchTransactions();
 
             if (transactionsResult.success)
             {

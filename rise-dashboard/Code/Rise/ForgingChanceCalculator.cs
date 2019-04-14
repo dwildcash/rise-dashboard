@@ -22,7 +22,7 @@
         /// <returns></returns>
         private static long GenerateRandomWeight()
         {
-            Random rnd = new Random();
+            var rnd = new Random();
             var e = RandomGenerator.NextLong(1, SumofWeight());
             return RandomGenerator.NextLong(1, SumofWeight());
         }
@@ -47,7 +47,7 @@
 
             for (int slot = 0; slot < 101; slot++)
             {
-                slotProb = workingDelegatesLst.Where(x => x.Rank == slot + 1).FirstOrDefault().VotesWeight;
+                slotProb = workingDelegatesLst.FirstOrDefault(x => x.Rank == slot + 1).VotesWeight;
 
                 foreach (var dele in workingDelegatesLst)
                 {
@@ -62,7 +62,7 @@
 
                     slotProb -= dele.VotesWeight;
 
-                    var currdel = delegateResult.Delegates.Where(x => x.Address == dele.Address).FirstOrDefault();
+                    var currdel = delegateResult.Delegates.FirstOrDefault(x => x.Address == dele.Address);
                     if (currdel.Username == "dwildcash")
                     {
                         System.Diagnostics.Debug.WriteLine("Slot " + slot + " Delegate " + currdel.Username + " chance " + chance);

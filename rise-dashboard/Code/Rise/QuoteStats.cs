@@ -1,6 +1,6 @@
 ﻿namespace rise.Code.Rise
 {
-    using rise.Models;
+    using Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -27,12 +27,12 @@
             return epoch.AddSeconds(unixTime);
         }
 
-        // Return time in Genesis time from Minutes from now
+    
         /// <summary>
-        /// The ToGenesisTime
+        /// Return Time to Genesis format
         /// </summary>
-        /// <param name="minutesfrom">The minutesfrom<see cref="int"/></param>
-        /// <returns>The <see cref="long"/></returns>
+        /// <param name="minutesfromNow"></param>
+        /// <returns></returns>
         public long ToGenesisTime(int minutesfromNow)
         {
             var epoch = new DateTime(2016, 05, 24, 17, 5, 0, 0).ToLocalTime();

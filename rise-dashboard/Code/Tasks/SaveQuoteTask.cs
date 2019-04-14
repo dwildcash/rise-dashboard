@@ -1,10 +1,9 @@
 ﻿namespace rise.Code
 {
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using rise.Code.Scheduling;
-    using rise.Data;
-    using rise.Models;
+    using Scheduling;
+    using Data;
+    using Models;
     using System;
     using System.Threading;
     using System.Threading.Tasks;

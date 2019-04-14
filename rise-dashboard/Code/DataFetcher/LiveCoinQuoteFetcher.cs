@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using rise.Models;
+    using Models;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -23,9 +23,9 @@
                 using (HttpClient hc = new HttpClient())
                 {
                     var quote = JObject.Parse(await hc.GetStringAsync("https://api.livecoin.net/exchange/ticker?currencyPair=" + AppSettingsProvider.LiveCoinMarket));
-                    var LiveCoinQuoteResult = JsonConvert.DeserializeObject<LiveCoinQuote>(quote.ToString());
+                    var liveCoinQuoteResult = JsonConvert.DeserializeObject<LiveCoinQuote>(quote.ToString());
 
-                    return LiveCoinQuoteResult.Cur != null ? LiveCoinQuoteResult : null;
+                    return liveCoinQuoteResult.Cur != null ? liveCoinQuoteResult : null;
                 }
             }
             catch (Exception e)

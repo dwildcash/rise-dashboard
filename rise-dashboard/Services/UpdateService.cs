@@ -380,7 +380,6 @@ namespace Rise.Services
                     else
                     {
                         await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Not enough RISE to Withdraw <b>" + amount + "</b> RISE balance" + balance + " RISE", ParseMode.Html);
-                        return;
                     }
                 }
                 else
@@ -423,7 +422,7 @@ namespace Rise.Services
 
                 if (balance < ((0.1 * numReceivers) + amount))
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "Not enough RISE to " + command + " " + amount + "RISE to " + numReceivers + " users. RISE Balance:" + balance, ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, "Not enough RISE to " + command + " " + amount + " RISE to " + numReceivers + " users. RISE Balance:" + balance, ParseMode.Html);
                     return false;
                 }
             }
@@ -484,13 +483,11 @@ namespace Rise.Services
                     else
                     {
                         await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to send <b>" + amount + " RISE</b> to " + destusers.Count() + " users. Balance: " + balance + " RISE", ParseMode.Html);
-                        return;
                     }
                 }
                 else
                 {
                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please specify amount and user ex: !send 10 @Dwildcash", ParseMode.Html);
-                    return;
                 }
             }
             catch (Exception ex)
@@ -511,8 +508,6 @@ namespace Rise.Services
             if (lookUsers == null) throw new ArgumentNullException(nameof(lookUsers));
             try
             {
-                string strResponse;
-
                 if (!lookUsers.Any())
                 {
                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a user name starting with <b>@</b> ex !seen @Dwildcash", ParseMode.Html);
@@ -523,6 +518,8 @@ namespace Rise.Services
 
                 foreach (var user in lookUsers)
                 {
+                    string strResponse;
+
                     if (user?.LastMessage != null)
                     {
                         var hours = Math.Round((DateTime.Now - user.LastMessage).TotalHours, 2);
