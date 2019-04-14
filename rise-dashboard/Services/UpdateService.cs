@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.ExpressionTranslators.Internal;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -52,7 +53,7 @@ namespace Rise.Services
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
 
             var maxusers = 5;
-            var commands = new List<string>();
+            var botcommands = new List<string>();
             var lstDestUsers = new List<string>();
             var lstDestAddress = new List<string>();
             var lstAmount = new List<double>();
@@ -62,7 +63,7 @@ namespace Rise.Services
                 // Match !Command if present
                 if (Regex.Matches(message.Text, @"!(\S+)\s?").Count > 0)
                 {
-                    commands = Regex.Matches(message.Text.ToUpper(), @"!(\S+)\s?").Select(m => m.Value).ToList();
+                    botcommands = Regex.Matches(message.Text.ToUpper(), @"!(\S+)\s?").Select(m => m.Value).ToList();
                 }
 
                 // Match @username if present
@@ -95,11 +96,11 @@ namespace Rise.Services
                 return;
             }
 
-            foreach (var command in commands)
+            foreach (string command in botcommands)
             {
                 try
                 {
-                    switch (command)
+                    switch (command.Trim())
                     {
                         // Info command
                         case "!INFO":
@@ -273,9 +274,6 @@ namespace Rise.Services
                 {
                     _logger.LogError("Error parsing !command {0}" + ex.Message);
                 }
-
-                Thread.Sleep(1500);
-                await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
             }
         }
 
