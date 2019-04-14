@@ -10,7 +10,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.ExpressionTranslators.Internal;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -141,11 +140,17 @@ namespace Rise.Services
                                 {
                                     var waitMsg = _messagesCount + (int)RandomGenerator.NextLong(1, 4);
 
+                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, " Be active! @" + appuser.UserName + " activated a Splash! a winner will be selected in the next messages!", ParseMode.Html);
                                     var i = 0;
 
                                     while (_messagesCount < waitMsg)
                                     {
                                         Thread.Sleep(1000);
+
+                                        if (i % 5 == 0)
+                                        {
+                                            await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                                        }
 
                                         if (i == 30)
                                         {
@@ -291,8 +296,8 @@ namespace Rise.Services
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
 
                 var strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
-                                     "<b>!rain</b> - !rain 10 (to random users active in last 2 days)" + Environment.NewLine +
-                                     "<b>!boom</b> - !boom 10 (to all users active the in last hour)" + Environment.NewLine +
+                                     "<b>!rain</b> - !rain 10 (to random users active in last 2 days min 3 msg)" + Environment.NewLine +
+                                     "<b>!boom</b> - !boom 10 (to all users active the in last hour min 2 msg)" + Environment.NewLine +
                                      "<b>!splash</b> - !splash 10 (winner will be in random in next max 10 msg)" + Environment.NewLine +
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
                                      "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
