@@ -51,7 +51,7 @@ namespace Rise.Services
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
 
-            var command = string.Empty;
+            var commands = new List<string>();
             var lstDestUsers = new List<string>();
             var lstDestAddress = new List<string>();
             var lstAmount = new List<double>();
@@ -61,7 +61,7 @@ namespace Rise.Services
                 // Match !Command if present
                 if (Regex.Matches(message.Text, @"!(\S+)\s?").Count > 0)
                 {
-                    command = Regex.Matches(message.Text.ToUpper(), @"!(\S+)\s?")[0].ToString().Trim();
+                    commands = Regex.Matches(message.Text.ToUpper(), @"!(\S+)\s?").Select(m => m.Value).ToList();
                 }
 
                 // Match @username if present
@@ -88,72 +88,104 @@ namespace Rise.Services
                 return;
             }
 
-            try
+            foreach (var command in commands)
             {
-                switch (command)
+                try
                 {
-                    // Info command
-                    case "!INFO":
-                        await cmd_Info(message);
-                        break;
-                    // Show Balance
-                    case "!BALANCE":
-                        await cmd_ShowUserBalance(appuser);
-                        break;
-                    // Show Help
-                    case "!HELP":
-                        await cmd_Help(appuser);
-                        break;
-                    // Show Private Bip39
-                    case "!KEY":
-                        await cmd_Key(appuser);
-                        break;
-                    // Withdraw RISE to address
-                    case "!WITHDRAW":
-                        {
-                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstDestAddress.Count(), message.Chat.Id, appuser))
-                            {
-                                await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count()), lstDestAddress.FirstOrDefault());
-                            }
-
+                    switch (command)
+                    {
+                        // Info command
+                        case "!INFO":
+                            await cmd_Info(message);
                             break;
-                        }
-                    // Splash!
-                    case "!SPLASH":
-                        {
-                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, 1, message.Chat.Id, appuser) == false)
+                        // Show Balance
+                        case "!BALANCE":
+                            await cmd_ShowUserBalance(appuser);
+                            break;
+                        // Show Help
+                        case "!HELP":
+                            await cmd_Help(appuser);
+                            break;
+                        // Show Private Bip39
+                        case "!KEY":
+                            await cmd_Key(appuser);
+                            break;
+                        // Withdraw RISE to address
+                        case "!WITHDRAW":
                             {
-                                var waitMsg = _messagesCount + (int)RandomGenerator.NextLong(1, 4);
-
-                                var i = 0;
-
-                                while (_messagesCount < waitMsg)
+                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstDestAddress.Count(),
+                                    message.Chat.Id, appuser))
                                 {
-                                    Thread.Sleep(1000);
-
-                                    if (i == 30)
-                                    {
-                                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry guys no winner :(", ParseMode.Html);
-                                        return;
-                                    }
-
-                                    i++;
+                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count()),
+                                        lstDestAddress.FirstOrDefault());
                                 }
 
-                                var lstAppUsers = new List<ApplicationUser>
+                                break;
+                            }
+                        // Splash!
+                        case "!SPLASH":
+                            {
+                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, 1, message.Chat.Id, appuser) ==
+                                    false)
+                                {
+                                    var waitMsg = _messagesCount + (int)RandomGenerator.NextLong(1, 4);
+
+                                    var i = 0;
+
+                                    while (_messagesCount < waitMsg)
+                                    {
+                                        Thread.Sleep(1000);
+
+                                        if (i == 30)
+                                        {
+                                            await _botService.Client.SendTextMessageAsync(message.Chat.Id,
+                                                "Timeout! Splash Aborted... sorry guys no winner :(", ParseMode.Html);
+                                            return;
+                                        }
+
+                                        i++;
+                                    }
+
+                                    var lstAppUsers = new List<ApplicationUser>
                                 {
                                     _appUsersManagerService.GetLastMsgUser(appuser.UserName)
                                 };
 
-                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
-                            }
+                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
+                                }
 
-                            break;
-                        }
-                    // Boom!
-                    case "!BOOM":
-                        {
-                            try
+                                break;
+                            }
+                        // Boom!
+                        case "!BOOM":
+                            {
+                                try
+                                {
+                                    var maxusers = 5;
+
+                                    if (lstAmount.Count() > 1 && Math.Abs(lstAmount[1]) > 0)
+                                    {
+                                        maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                                    }
+
+                                    var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
+
+                                    if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command,
+                                        lstAppUsers.Count(), message.Chat.Id, appuser))
+                                    {
+                                        await cmd_Send(message, appuser,
+                                            lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.LogError("Received Exception from Boom {0}" + ex.Message);
+                                }
+
+                                break;
+                            }
+                        // Let it Rain Rise
+                        case "!RAIN":
                             {
                                 var maxusers = 5;
 
@@ -162,101 +194,83 @@ namespace Rise.Services
                                     maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                 }
 
-                                var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
+                                var lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
 
-                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count(), message.Chat.Id, appuser))
+                                // Check before sending
+                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command,
+                                    lstAppUsers.Count(), message.Chat.Id, appuser))
                                 {
-                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1),
+                                        lstAppUsers, "its Raining!!!");
                                 }
+
+                                break;
                             }
-                            catch (Exception ex)
+                        // Withdraw coin to address
+                        case "!SEND":
                             {
-                                _logger.LogError("Received Exception from Boom {0}" + ex.Message);
-                            }
-                            break;
-                        }
-                    // Let it Rain Rise
-                    case "!RAIN":
-                        {
-                            var maxusers = 5;
+                                var lstAppUsers = new List<ApplicationUser>();
 
-                            if (lstAmount.Count() > 1 && Math.Abs(lstAmount[1]) > 0)
-                            {
-                                maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
-                            }
-
-                            var lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
-
-                            // Check before sending
-                            if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count(), message.Chat.Id, appuser))
-                            {
-                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
-                            }
-
-                            break;
-                        }
-                    // Withdraw coin to address
-                    case "!SEND":
-                        {
-                            var lstAppUsers = new List<ApplicationUser>();
-
-                            foreach (var user in lstDestUsers)
-                            {
-                                var e = await _appUsersManagerService.GetUserAsync(user);
-
-                                if (e != null)
+                                foreach (var user in lstDestUsers)
                                 {
-                                    lstAppUsers.Add(e);
+                                    var e = await _appUsersManagerService.GetUserAsync(user);
+
+                                    if (e != null)
+                                    {
+                                        lstAppUsers.Add(e);
+                                    }
                                 }
-                            }
 
-                            // Check before sending
-                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
-                            {
-                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "wake up!!! its a wonderful day!");
-                            }
-
-                            break;
-                        }
-                    // Tell when last message from user
-                    case "!SEEN":
-                        {
-                            var lstAppUsers = new List<ApplicationUser>();
-
-                            foreach (var user in lstDestUsers)
-                            {
-                                var e = await _appUsersManagerService.GetUserAsync(user);
-
-                                if (e != null)
+                                // Check before sending
+                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(),
+                                    message.Chat.Id, appuser))
                                 {
-                                    lstAppUsers.Add(e);
+                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1),
+                                        lstAppUsers, "wake up!!! its a wonderful day!");
                                 }
-                            }
 
-                            await cmd_Seen(appuser, message, lstAppUsers);
+                                break;
+                            }
+                        // Tell when last message from user
+                        case "!SEEN":
+                            {
+                                var lstAppUsers = new List<ApplicationUser>();
+
+                                foreach (var user in lstDestUsers)
+                                {
+                                    var e = await _appUsersManagerService.GetUserAsync(user);
+
+                                    if (e != null)
+                                    {
+                                        lstAppUsers.Add(e);
+                                    }
+                                }
+
+                                await cmd_Seen(appuser, message, lstAppUsers);
+                                break;
+                            }
+                        // Info Price
+                        case "!PRICE":
+                            await cmd_Price(message);
                             break;
-                        }
-                    // Info Price
-                    case "!PRICE":
-                        await cmd_Price(message);
-                        break;
-                    // Return a  geek joke
-                    case "!JOKE":
-                        await cmd_Joke(message);
-                        break;
-                    // Return a  geek joke
-                    case "!HOPE":
-                        await cmd_Hope(message);
-                        break;
-                    // Show Rise Exchanges
-                    case "!EXCHANGES":
-                        await cmd_Exchanges(message, appuser);
-                        break;
+                        // Return a  geek joke
+                        case "!JOKE":
+                            await cmd_Joke(message);
+                            break;
+                        // Return a  geek joke
+                        case "!HOPE":
+                            await cmd_Hope(message);
+                            break;
+                        // Show Rise Exchanges
+                        case "!EXCHANGES":
+                            await cmd_Exchanges(message, appuser);
+                            break;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error parsing !command {0}" + ex.Message);
+                catch (Exception ex)
+                {
+                    _logger.LogError("Error parsing !command {0}" + ex.Message);
+                }
             }
         }
 

@@ -74,7 +74,7 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Received Exception from GetBoomUsers {0}", ex.Message);
+                        _logger.LogError("Received Exception from GetBoomUsers {0}", ex.Message);
                 }
                 return null;
             }
