@@ -61,15 +61,16 @@ namespace rise.Services
         /// </summary>
         /// <param name="excludedUsername"></param>
         /// <returns></returns>
-        public List<ApplicationUser> GetBoomUsers(string excludedUsername)
+        public List<ApplicationUser> GetBoomUsers(string excludedUsername, int maxusers = 10)
         {
             if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
+
             using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
                 {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddHours(-1) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 2 && x.Address != null).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddHours(-1) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 2 && x.Address != null).Take(maxusers).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -83,9 +84,9 @@ namespace rise.Services
         /// Get List of Rain Users
         /// </summary>
         /// <param name="excludedUsername"></param>
-        /// <param name="num"></param>
+        /// <param name="maxusers"></param>
         /// <returns></returns>
-        public List<ApplicationUser> GetRainUsers(string excludedUsername, int num = 10)
+        public List<ApplicationUser> GetRainUsers(string excludedUsername, int maxusers = 10)
         {
             if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
 
@@ -95,7 +96,7 @@ namespace rise.Services
 
                 try
                 {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-2) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 3 && x.Address != null).OrderBy(x => Guid.NewGuid()).Take(num).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-2) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 3 && x.Address != null).OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
                 }
                 catch (Exception ex)
                 {

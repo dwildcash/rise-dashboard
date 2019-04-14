@@ -5,6 +5,7 @@ using rise.Services;
 using rise_lib;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -144,7 +145,6 @@ namespace Rise.Services
                                     _appUsersManagerService.GetLastMsgUser(appuser.UserName)
                                 };
 
-
                                 await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
                             }
 
@@ -153,7 +153,14 @@ namespace Rise.Services
                     // Boom!
                     case "!BOOM":
                         {
-                            List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName);
+                            var maxusers = 10;
+
+                            if (Math.Abs(lstAmount[1]) > 0)
+                            {
+                                maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                            }
+
+                            var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
 
                             if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
                             {
@@ -165,7 +172,14 @@ namespace Rise.Services
                     // Let it Rain Rise
                     case "!RAIN":
                         {
-                            List<ApplicationUser> lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName);
+                            var maxusers = 10;
+
+                            if (Math.Abs(lstAmount[1]) > 0)
+                            {
+                                maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                            }
+
+                            var lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
 
                             // Check before sending
                             if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
@@ -280,6 +294,8 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Hope(Message message)
         {
+            await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+
             var lstHope = new List<string>
             {
                 "You may say I'm a dreamer, but I'm not the only one. I hope someday you'll join us. And the world will live as one.",

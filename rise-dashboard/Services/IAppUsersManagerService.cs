@@ -9,9 +9,9 @@ namespace rise.Services
     {
         ApplicationUser GetLastMsgUser(string excludedUsername);
 
-        List<ApplicationUser> GetBoomUsers(string excludedUsername);
+        List<ApplicationUser> GetBoomUsers(string excludedUsername, int maxusers = 10);
 
-        List<ApplicationUser> GetRainUsers(string excludedUsername, int num = 10);
+        List<ApplicationUser> GetRainUsers(string excludedUsername, int maxusers = 10);
 
         Task<ApplicationUser> GetUserAsync(Update tgupdate);
 
