@@ -25,7 +25,7 @@ namespace rise.Helpers
                 throw new ArgumentNullException("sharedSecret");
             }
 
-            string outStr = null;                       // Encrypted string to return
+            string outStr;                       // Encrypted string to return
             RijndaelManaged aesAlg = null;              // RijndaelManaged object used to encrypt the data.
 
             try
@@ -91,7 +91,7 @@ namespace rise.Helpers
 
             // Declare the string used to hold
             // the decrypted text.
-            string plaintext = null;
+            string plaintext;
 
             try
             {

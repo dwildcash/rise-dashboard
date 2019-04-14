@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using rise.Models;
+    using Models;
 
     /// <summary>
     /// Defines the <see cref="ApplicationDbContext" />
@@ -53,7 +53,7 @@
         /// <summary>
         /// Gets or sets the CoinQuotes
         /// </summary>
-        public DbSet<rise.Models.CoinQuote> CoinQuotes { get; set; }
+        public DbSet<CoinQuote> CoinQuotes { get; set; }
 
         /// <summary>
         /// Gets or sets the Contributors

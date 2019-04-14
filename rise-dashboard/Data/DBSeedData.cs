@@ -35,7 +35,7 @@
                     Description = "Application Administrator"
                 };
 
-                IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+                var roleResult = roleManager.CreateAsync(role).Result;
             }
 
             // Create Member Group
@@ -47,7 +47,7 @@
                     Description = "Member User"
                 };
 
-                IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+                var roleResult = roleManager.CreateAsync(role).Result;
             }
         }
 

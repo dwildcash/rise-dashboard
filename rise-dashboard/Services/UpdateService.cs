@@ -101,7 +101,7 @@ namespace Rise.Services
                         break;
                     // Show Help
                     case "!HELP":
-                        await cmd_Help(message, appuser);
+                        await cmd_Help(appuser);
                         break;
                     // Show Private Bip39
                     case "!KEY":
@@ -238,44 +238,32 @@ namespace Rise.Services
             }
         }
 
-        /// <summary>
-        /// Show vote website
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        private async Task cmd_Vote(Message message)
-        {
-            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("RISE Voting", "https://vote.rise.vision/"));
-            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "click below to open RISE voting website", replyMarkup: keyboard);
-        }
 
+       
         /// <summary>
         /// Show Help
         /// </summary>
-        /// <param name="message"></param>
         /// <param name="appuser"></param>
         /// <returns></returns>
-        private async Task cmd_Help(Message message, ApplicationUser appuser)
+        private async Task cmd_Help(ApplicationUser appuser)
         {
-            string strResponse;
-
             try
             {
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
 
-                strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
-                "<b>!rain</b> - !rain 10 (to random users active in last 2 days)" + Environment.NewLine +
-                "<b>!boom</b> - !boom 10 (to all users active the in last hour)" + Environment.NewLine +
-                "<b>!splash</b> - !splash 10 (winner will be in random in next max 10 msg)" + Environment.NewLine +
-                "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
-                "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
-                "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
-                "<b>!balance</b> - Show current RISE Balance" + Environment.NewLine +
-                "<b>!joke</b> - Display a geek joke" + Environment.NewLine +
-                "<b>!hope</b> - Show hope quote" + Environment.NewLine +
-                "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
-                "<b>!price</b> - Show current RISE Price" + Environment.NewLine +
-                "<b>!key</b> - Send you Tip wallet passphrase in private msg" + Environment.NewLine;
+                var strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
+                                     "<b>!rain</b> - !rain 10 (to random users active in last 2 days)" + Environment.NewLine +
+                                     "<b>!boom</b> - !boom 10 (to all users active the in last hour)" + Environment.NewLine +
+                                     "<b>!splash</b> - !splash 10 (winner will be in random in next max 10 msg)" + Environment.NewLine +
+                                     "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
+                                     "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
+                                     "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
+                                     "<b>!balance</b> - Show current RISE Balance" + Environment.NewLine +
+                                     "<b>!joke</b> - Display a geek joke" + Environment.NewLine +
+                                     "<b>!hope</b> - Show hope quote" + Environment.NewLine +
+                                     "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
+                                     "<b>!price</b> - Show current RISE Price" + Environment.NewLine +
+                                     "<b>!key</b> - Send you Tip wallet passphrase in private msg" + Environment.NewLine;
 
                 await _botService.Client.SendTextMessageAsync(appuser.TelegramId, strResponse, ParseMode.Html);
             }
@@ -419,7 +407,7 @@ namespace Rise.Services
 
                 if (balance < ((0.1 * numReceivers) + amount))
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "Not enough RISE to !" + command + " " + amount + " RISE Balance:" + balance, ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, "Not enough RISE to " + command + " " + amount + " RISE Balance:" + balance, ParseMode.Html);
                     return false;
                 }
             }
@@ -449,7 +437,7 @@ namespace Rise.Services
                 {
                     await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
 
-                    double amountToSend = amount / destusers.Count();
+                    var amountToSend = amount / destusers.Count();
 
                     var balance = await RiseManager.AccountBalanceAsync(sender.Address);
 
@@ -521,8 +509,8 @@ namespace Rise.Services
                 {
                     if (user?.LastMessage != null)
                     {
-                        double hours = Math.Round((DateTime.Now - user.LastMessage).TotalHours, 2);
-                        double minutes = Math.Round((DateTime.Now - user.LastMessage).TotalMinutes, 2);
+                        var hours = Math.Round((DateTime.Now - user.LastMessage).TotalHours, 2);
+                        var minutes = Math.Round((DateTime.Now - user.LastMessage).TotalMinutes, 2);
                         string showtime;
 
                         if (hours <= 1 && minutes > 0)
