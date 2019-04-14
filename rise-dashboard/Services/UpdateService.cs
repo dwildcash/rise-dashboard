@@ -162,7 +162,7 @@ namespace Rise.Services
 
                             var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
 
-                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
+                            if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count(), message.Chat.Id, appuser))
                             {
                                 await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
                             }
@@ -182,7 +182,7 @@ namespace Rise.Services
                             var lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
 
                             // Check before sending
-                            if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count(), message.Chat.Id, appuser))
+                            if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count(), message.Chat.Id, appuser))
                             {
                                 await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
                             }
