@@ -153,28 +153,34 @@ namespace Rise.Services
                     // Boom!
                     case "!BOOM":
                         {
-                            var maxusers = 10;
-
-                            if (Math.Abs(lstAmount[1]) > 0)
+                            try
                             {
-                                maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                                var maxusers = 5;
+
+                                if (lstAmount.Count() > 1 && Math.Abs(lstAmount[1]) > 0)
+                                {
+                                    maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                                }
+
+                                var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
+
+                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count(), message.Chat.Id, appuser))
+                                {
+                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                }
                             }
-
-                            var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
-
-                            if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count(), message.Chat.Id, appuser))
+                            catch (Exception ex)
                             {
-                                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                _logger.LogError("Received Exception from Boom {0}" + ex.Message);
                             }
-
                             break;
                         }
                     // Let it Rain Rise
                     case "!RAIN":
                         {
-                            var maxusers = 10;
+                            var maxusers = 5;
 
-                            if (Math.Abs(lstAmount[1]) > 0)
+                            if (lstAmount.Count() > 1 && Math.Abs(lstAmount[1]) > 0)
                             {
                                 maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                             }
