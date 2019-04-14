@@ -268,6 +268,9 @@ namespace Rise.Services
                             await cmd_Exchanges(message, appuser);
                             break;
                     }
+
+                    Thread.Sleep(1500);
+                    await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 }
                 catch (Exception ex)
                 {
