@@ -11,7 +11,7 @@ namespace rise.Helpers
         //While an app specific salt is not the best practice for
         //password based encryption, it's probably safe enough as long as
         //it is truly uncommon. Also too much work to alter this answer otherwise.
-        private static readonly byte[] _salt = Encoding.ASCII.GetBytes(AppSettingsProvider.Salt);
+        private static readonly byte[] Salt = Encoding.ASCII.GetBytes(AppSettingsProvider.Salt);
 
         public static string EncryptStringAES(string plainText, string sharedSecret)
         {
@@ -26,12 +26,12 @@ namespace rise.Helpers
             }
 
             string outStr;                       // Encrypted string to return
-            RijndaelManaged aesAlg = null;              // RijndaelManaged object used to encrypt the data.
+            RijndaelManaged aesAlg = null;       // RijndaelManaged object used to encrypt the data.
 
             try
             {
                 // generate the key from the shared secret and the salt
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(sharedSecret, _salt);
+                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(sharedSecret, Salt);
 
                 // Create a RijndaelManaged object
                 aesAlg = new RijndaelManaged();
@@ -96,7 +96,7 @@ namespace rise.Helpers
             try
             {
                 // generate the key from the shared secret and the salt
-                var key = new Rfc2898DeriveBytes(sharedSecret, _salt);
+                var key = new Rfc2898DeriveBytes(sharedSecret, Salt);
 
                 // Create the streams used for decryption.
                 var bytes = Convert.FromBase64String(cipherText);

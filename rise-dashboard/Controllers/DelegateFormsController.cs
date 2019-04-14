@@ -126,6 +126,7 @@ namespace rise_dashboard.Controllers
             {
                 _context.Add(delegateForm);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(delegateForm);

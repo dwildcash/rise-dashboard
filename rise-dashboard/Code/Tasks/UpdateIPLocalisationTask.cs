@@ -1,15 +1,15 @@
-﻿namespace rise.Code
-{
-    using Microsoft.Extensions.DependencyInjection;
-    using rise.Code.DataFetcher;
-    using rise.Code.Scheduling;
-    using rise.Data;
-    using rise.Models;
-    using System;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using rise.Code.DataFetcher;
+using rise.Code.Scheduling;
+using rise.Data;
+using rise.Models;
 
+namespace rise.Code.Tasks
+{
     /// <summary>
     /// Defines the <see cref="UpdateIpLocalisationTask" />
     /// </summary>

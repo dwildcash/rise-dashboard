@@ -48,7 +48,7 @@
                 { "hash", hash }
             };
 
-            LoginWidget loginWidget = new LoginWidget(AppSettingsProvider.BotApiKey);
+            var loginWidget = new LoginWidget(AppSettingsProvider.BotApiKey);
 
             try
             {

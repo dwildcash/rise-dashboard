@@ -188,7 +188,9 @@
         {
             var applicationRole = await _context.ApplicationRoles.SingleOrDefaultAsync(m => m.Id == id);
             _context.ApplicationRoles.Remove(applicationRole);
+
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

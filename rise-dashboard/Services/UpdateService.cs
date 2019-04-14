@@ -238,8 +238,6 @@ namespace Rise.Services
             }
         }
 
-
-       
         /// <summary>
         /// Show Help
         /// </summary>

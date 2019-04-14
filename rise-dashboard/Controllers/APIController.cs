@@ -1,14 +1,12 @@
 ﻿namespace rise.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using rise.Data;
-    using rise.Models;
+    using Data;
+    using Models;
     using Rise.Services;
     using System.Linq;
     using System.Threading.Tasks;
-    using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
     /// <summary>
     /// Defines the <see cref="apiController" />

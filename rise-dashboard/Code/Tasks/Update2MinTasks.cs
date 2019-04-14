@@ -1,11 +1,11 @@
-﻿namespace rise.Code
-{
-    using rise.Code.DataFetcher;
-    using rise.Code.Scheduling;
-    using rise.Models;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using rise.Code.DataFetcher;
+using rise.Code.Scheduling;
+using rise.Models;
 
+namespace rise.Code.Tasks
+{
     /// <summary>
     /// Defines the <see cref="Update2MinTasks" />
     /// </summary>

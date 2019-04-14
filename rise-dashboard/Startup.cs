@@ -1,4 +1,6 @@
-﻿namespace rise
+﻿using rise.Code.Tasks;
+
+namespace rise
 {
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
