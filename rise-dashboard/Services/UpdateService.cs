@@ -137,7 +137,7 @@ namespace Rise.Services
                                     maxusers = 1;
                                 }
 
-                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, 1, message.Chat.Id, appuser))
+                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, maxusers, message.Chat.Id, appuser))
                                 {
                                     var waitMsg = _messagesCount + (int)RandomGenerator.NextLong(1, 4);
 
