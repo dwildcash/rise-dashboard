@@ -423,7 +423,7 @@ namespace Rise.Services
 
                 if (balance < ((0.1 * numReceivers) + amount))
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "Not enough RISE to " + command + " " + amount + " RISE Balance:" + balance, ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, "Not enough RISE to " + command + " " + amount + "RISE to " + numReceivers + " users. RISE Balance:" + balance, ParseMode.Html);
                     return false;
                 }
             }
