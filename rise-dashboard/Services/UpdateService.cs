@@ -120,7 +120,7 @@ namespace Rise.Services
                         // Withdraw RISE to address
                         case "!WITHDRAW":
                             {
-                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstDestAddress.Count, message.Chat.Id, appuser))
+                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), command, lstDestAddress.Count, message.Chat.Id, appuser))
                                 {
                                     await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), lstDestAddress.FirstOrDefault());
                                 }
@@ -146,11 +146,6 @@ namespace Rise.Services
                                     while (_messagesCount < waitMsg)
                                     {
                                         Thread.Sleep(1000);
-
-                                        if (i % 5 == 0)
-                                        {
-                                            await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-                                        }
 
                                         if (i == 30)
                                         {
@@ -296,8 +291,8 @@ namespace Rise.Services
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
 
                 var strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
-                                     "<b>!rain</b> - !rain 10 (to random users active in last 2 days min 3 msg)" + Environment.NewLine +
-                                     "<b>!boom</b> - !boom 10 (to all users active the in last hour min 2 msg)" + Environment.NewLine +
+                                     "<b>!rain</b> - !rain 10 (to random users active min 3 msg)" + Environment.NewLine +
+                                     "<b>!boom</b> - !boom 10 (to all users active the in last day min 2 msg)" + Environment.NewLine +
                                      "<b>!splash</b> - !splash 10 (winner will be in random in next max 10 msg)" + Environment.NewLine +
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
                                      "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
