@@ -173,7 +173,7 @@ namespace rise.Services
                     }
 
                     // Update Username
-                    if (userName != appuser.UserName)
+                    if (userName != appuser?.UserName)
                     {
                         appuser.UserName = userName;
                     }
