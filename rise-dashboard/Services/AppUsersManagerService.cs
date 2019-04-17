@@ -172,6 +172,12 @@ namespace rise.Services
                         return null;
                     }
 
+                    // Update Username
+                    if (userName != appuser.UserName)
+                    {
+                        appuser.UserName = userName;
+                    }
+
                     // Flag update message
                     if (flagMsgUpdate)
                     {
