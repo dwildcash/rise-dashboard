@@ -84,7 +84,7 @@ namespace Rise.Services
                 }
 
                 // add any extra users
-                if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
+                if (lstAmount.Count > 1 && lstAmount[1] < 5000 && Math.Abs(lstAmount[1]) > 0)
                 {
                     maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                 }
