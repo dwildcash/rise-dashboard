@@ -146,60 +146,68 @@ namespace rise.Services
         public async Task<ApplicationUser> GetUserAsync(string userName, long telegramId = 0, bool flagMsgUpdate = false)
         {
             ApplicationUser appuser = null;
-
+    
             try
             {
                 using (var scope = _scopeFactory.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                    appuser = telegramId != 0 ? dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.TelegramId == telegramId) : dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.UserName == userName);
-
-                    try
+                    if (telegramId != 0)
                     {
-                        // New user detected
-                        if (appuser == null)
+                     
+                        appuser = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.TelegramId == telegramId);
+
+                        try
                         {
-                            // Create new user
-                            appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId, Role = "Member" };
+                            // New user detected
+                            if (appuser == null)
+                            {
+                                // Create new user
+                                appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId, Role = "Member" };
 
-                            dbContext.Users.Add(appuser);
+                                dbContext.Users.Add(appuser);
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError("Received Exception from CreateUser {0}", ex.Message);
-                        return null;
-                    }
-
-                    // Update Username
-                    if (userName != appuser?.UserName)
-                    {
-                        appuser.UserName = userName;
-                    }
-
-                    // Flag update message
-                    if (flagMsgUpdate)
-                    {
-                        appuser.MessageCount++;
-                        appuser.LastMessage = DateTime.Now;
-                    }
-
-                    // Create a wallet for everyone
-                    if (appuser.Address == null)
-                    {
-                        // Create a Wallet for user
-                        var accountresult = await RiseManager.CreateAccount();
-
-                        if (accountresult.success)
+                        catch (Exception ex)
                         {
-                            appuser.Address = accountresult.account.address;
-                            appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
-                            appuser.PublicKey = accountresult.account.publicKey;
+                            _logger.LogError("Received Exception from CreateUser {0}", ex.Message);
+                            return null;
                         }
-                    }
 
-                    dbContext.SaveChanges();
+                        // Update Username
+                        if (userName != appuser?.UserName)
+                        {
+                            appuser.UserName = userName;
+                        }
+
+                        // Flag update message
+                        if (flagMsgUpdate)
+                        {
+                            appuser.MessageCount++;
+                            appuser.LastMessage = DateTime.Now;
+                        }
+
+                        // Create a wallet for everyone
+                        if (appuser.Address == null)
+                        {
+                            // Create a Wallet for user
+                            var accountresult = await RiseManager.CreateAccount();
+
+                            if (accountresult.success)
+                            {
+                                appuser.Address = accountresult.account.address;
+                                appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
+                                appuser.PublicKey = accountresult.account.publicKey;
+                            }
+                        }
+
+                        dbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        appuser = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.UserName == userName);
+                    }
                 }
             }
             catch (Exception ex)

@@ -224,12 +224,17 @@ namespace Rise.Services
                                     }
                                 }
 
-                                // Check before sending
-                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, lstAppUsers.Count,
-                                    message.Chat.Id, appuser))
+                                if (lstAppUsers.Count >= 1)
                                 {
-                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1),
-                                        lstAppUsers, "wake up!!! its a wonderful day!");
+                                    // Check before sending
+                                    if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
+                                    {
+                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "wake up!!! its a wonderful day!");
+                                    }
+                                }
+                                else
+                                {
+                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Users:" + string.Join(" ", lstDestUsers) + " were not found", ParseMode.Html);
                                 }
 
                                 break;
