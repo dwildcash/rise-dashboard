@@ -74,7 +74,7 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                        _logger.LogError("Received Exception from GetBoomUsers {0}", ex.Message);
+                    _logger.LogError("Received Exception from GetBoomUsers {0}", ex.Message);
                 }
                 return null;
             }
@@ -146,7 +146,7 @@ namespace rise.Services
         public async Task<ApplicationUser> GetUserAsync(string userName, long telegramId = 0, bool flagMsgUpdate = false)
         {
             ApplicationUser appuser = null;
-    
+
             try
             {
                 using (var scope = _scopeFactory.CreateScope())
@@ -155,7 +155,6 @@ namespace rise.Services
 
                     if (telegramId != 0)
                     {
-                     
                         appuser = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.TelegramId == telegramId);
 
                         try
