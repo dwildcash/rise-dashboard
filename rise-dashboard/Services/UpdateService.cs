@@ -268,7 +268,7 @@ namespace Rise.Services
                         case "!EXCHANGES":
                             await cmd_Exchanges(message, appuser);
                             break;
-                    }             
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -483,30 +483,28 @@ namespace Rise.Services
 
                     if (balance >= ((0.1 * destusers.Count) + amount))
                     {
-                        if (destusers.Count <= 5)
+                        foreach (var destuser in destusers.Where(x => x.Address != null))
                         {
-                            foreach (var destuser in destusers.Where(x => x.Address != null))
+                            var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, sender.GetSecret(), destuser.Address);
+                            if (destusers.Count <= 5)
                             {
-                                var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, sender.GetSecret(),
-                                    destuser.Address);
-
                                 if (tx.success)
                                 {
                                     try
                                     {
                                         await _botService.Client.SendTextMessageAsync(destuser.TelegramId,
-                                            "You received " + amountToSend + " from @" + sender.UserName,
-                                            ParseMode.Html);
+                                        "You received " + amountToSend + " from @" + sender.UserName,
+                                        ParseMode.Html);
                                         var keyboard = new InlineKeyboardMarkup(
-                                            InlineKeyboardButton.WithUrl("See Transaction",
-                                                "https://explorer.rise.vision/tx/" + tx.transactionId));
+                                        InlineKeyboardButton.WithUrl("See Transaction",
+                                            "https://explorer.rise.vision/tx/" + tx.transactionId));
                                         await _botService.Client.SendTextMessageAsync(destuser.TelegramId,
-                                            "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
+                                        "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
                                     }
                                     catch (Exception ex)
                                     {
                                         _logger.LogError("Received Exception from cmd_Send private Message {0}",
-                                            ex.Message);
+                                        ex.Message);
                                     }
                                 }
                             }
