@@ -95,7 +95,7 @@ namespace Rise.Services
                 return;
             }
 
-            foreach (string command in botcommands)
+            foreach (var command in botcommands)
             {
                 try
                 {
