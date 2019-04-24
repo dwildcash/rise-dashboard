@@ -72,9 +72,9 @@ namespace Rise.Services
                 }
 
                 // Match any double Amount if present
-                if (Regex.Matches(message.Text, @"([ ]|(^|\s))?[0-9]+(\.[0-9]*)?([ ]|($|\s))").Count > 0)
+                if (Regex.Matches(message.Text, @"(\b[0-9]+(\.[0-9]*)?([ ]|($|\s))").Count > 0)
                 {
-                    lstAmount = Regex.Matches(message.Text, @"([ ]|(^|\s))?[0-9]+(\.[0-9]*)?([ ]|($|\s))").Select(m => double.Parse(m.Value.Trim())).ToList();
+                    lstAmount = Regex.Matches(message.Text, @"  ").Select(m => double.Parse(m.Value.Trim())).ToList();
                 }
 
                 // Match any Rise Address if present
