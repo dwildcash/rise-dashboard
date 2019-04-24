@@ -20,8 +20,8 @@
         {
             try
             {
-                // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+
+                using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/delegates/forging/getForgedByAccount?generatorPublicKey=" + generatorPublicKey));
                     var forgedByAccountResult = JsonConvert.DeserializeObject<ForgedByAccount>(result.ToString());

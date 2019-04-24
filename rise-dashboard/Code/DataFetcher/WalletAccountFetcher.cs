@@ -21,7 +21,7 @@
         {
             try
             {
-                // Retreive Quote
+
                 using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/accounts?address=" + walletAddress));

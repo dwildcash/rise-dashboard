@@ -20,8 +20,7 @@
         {
             try
             {
-                // Retrieve Quote
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/peers"));
                     var peersResult = JsonConvert.DeserializeObject<PeersResult>(result.ToString());

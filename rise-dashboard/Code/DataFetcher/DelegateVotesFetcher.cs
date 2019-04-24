@@ -21,8 +21,8 @@
         {
             try
             {
-                // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+                // Retrieve Quote
+                using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/accounts/delegates?address=" + address));
                     var delegateResult = JsonConvert.DeserializeObject<DelegateResult>(result.ToString());

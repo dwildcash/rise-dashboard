@@ -20,7 +20,7 @@
         {
             try
             {
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     var quote = JObject.Parse(await hc.GetStringAsync("https://api.coinbase.com/v2/prices/BTC-USD/spot"));
                     var coinbaseQuoteResult = JsonConvert.DeserializeObject<CoinbaseBtcQuoteResult>(quote.ToString());

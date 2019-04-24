@@ -21,7 +21,7 @@
             try
             {
                 // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/delegates?orderBy=rank:asc"));
                     var delegateResult = JsonConvert.DeserializeObject<DelegateResult>(result.ToString());

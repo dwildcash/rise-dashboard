@@ -20,7 +20,7 @@
         {
             try
             {
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     var quote = JObject.Parse(await hc.GetStringAsync("https://api.livecoin.net/exchange/ticker?currencyPair=" + AppSettingsProvider.LiveCoinMarket));
                     var liveCoinQuoteResult = JsonConvert.DeserializeObject<LiveCoinQuote>(quote.ToString());

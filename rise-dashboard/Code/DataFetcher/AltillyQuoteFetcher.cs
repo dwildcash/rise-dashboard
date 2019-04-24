@@ -20,7 +20,7 @@
         {
             try
             {
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     var quote = JObject.Parse(await hc.GetStringAsync("https://api.altilly.com/api/public/Ticker/" + AppSettingsProvider.RightBtcMarket));
                     var AltillyQuoteResult = JsonConvert.DeserializeObject<AltillyQuote>(quote.ToString());

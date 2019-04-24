@@ -20,8 +20,8 @@
         {
             try
             {
-                // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+                // Retrieve Quote
+                using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/blocks/"));
                     var blocksResult = JsonConvert.DeserializeObject<BlocksResult>(result.ToString());

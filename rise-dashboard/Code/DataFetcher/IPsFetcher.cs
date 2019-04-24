@@ -24,8 +24,7 @@
             // Make an api call and get response.
             try
             {
-                // Retreive Quote
-                using (HttpClient hc = new HttpClient())
+                using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync("http://api.ipstack.com/" + Ip + "?access_key=" + AppSettingsProvider.IPStackApiKey));
                     return JsonConvert.DeserializeObject<IPData>(result.ToString());
