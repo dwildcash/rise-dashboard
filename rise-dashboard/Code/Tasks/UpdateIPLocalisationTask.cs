@@ -74,7 +74,7 @@ namespace rise.Code.Tasks
                                 peer.Lattitude = ipobj.latitude;
                                 peer.Longitude = ipobj.longitude;
                                 peer.City = ipobj.city;
-                                peer.Contry = ipobj.country_name;
+                                peer.Country = ipobj.country_name;
                             }
                         }
                     }

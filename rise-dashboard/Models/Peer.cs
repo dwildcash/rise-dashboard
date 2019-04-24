@@ -80,7 +80,7 @@
         /// <summary>
         /// Gets or sets the Contry
         /// </summary>
-        public string Contry { get; set; }
+        public string Country { get; set; }
 
         /// <summary>
         /// Gets or sets the ISP
