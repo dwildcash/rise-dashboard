@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using rise.Code.DataFetcher;
 using rise.Models;
 using rise_lib;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -81,7 +82,7 @@ namespace rise.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            return new JsonResult(new { balance = RiseManager.AccountBalanceAsync(user.Address) });
+            return new JsonResult(new { balance = Math.Round(await RiseManager.AccountBalanceAsync(user.Address),2) });
         }
 
         /// <summary>
