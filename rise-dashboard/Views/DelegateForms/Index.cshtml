@@ -148,7 +148,7 @@
                                                 delegateVoteWeight = mydelegate.VotesWeight;
                                                 forgingChance = mydelegate.ForgingChance;
 
-                                                @if (mydelegate.Rank >= 199)
+                                                if (mydelegate.Rank >= 199)
                                                 {
                                                     <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Rank</span></h6></td>
                                                 }
