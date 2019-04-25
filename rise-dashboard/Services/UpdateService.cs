@@ -706,6 +706,7 @@ namespace Rise.Services
                 "<b>Rise Force Game</b> - http://duhec.net/riseForce" + Environment.NewLine +
                 "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                 "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
+                "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
                 "<b>Rise Slack</b> - https://risevision.slack.com/" + Environment.NewLine +
                 "<b>Rise Discord</b> - https://discord.gg/6jyWQnJ" + Environment.NewLine +
                 "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
