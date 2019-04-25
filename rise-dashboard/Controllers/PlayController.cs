@@ -1,27 +1,18 @@
-﻿
-using System;
-using System.Linq;
-using System.Net;
-using rise.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using rise.Code.DataFetcher;
-using rise.Data;
+using rise.Models;
 using rise_lib;
-
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace rise.Controllers
 {
-
     [Authorize]
     public class PlayController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-
 
         public PlayController(UserManager<ApplicationUser> userManager)
         {
@@ -38,7 +29,6 @@ namespace rise.Controllers
         {
             return await _userManager.GetUserAsync(this.User);
         }
-
 
         /// <summary>
         /// Create the Draw Here.
@@ -75,14 +65,11 @@ namespace rise.Controllers
             // Proceed the payment.
             if (amount > 0)
             {
-
-               
             }
             else
             {
                 // User lost...
-               
-            };
+            }
         }
 
         /// <summary>
@@ -96,7 +83,6 @@ namespace rise.Controllers
 
             return new JsonResult(new { balance = RiseManager.AccountBalanceAsync(user.Address) });
         }
-
 
         /// <summary>
         /// Get Transactions from Wallet
@@ -116,7 +102,6 @@ namespace rise.Controllers
 
             return PartialView("_UserListTransactionsPartial");
         }
-
 
         [AllowAnonymous]
         public async Task<ActionResult> Index()
