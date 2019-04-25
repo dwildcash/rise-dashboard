@@ -8,10 +8,6 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 
-@section Scripts
-{
-    <script src="@Url.Content("~/js/roulette.js")"></script>
-}
 
 @functions{
     public string GetAntiXsrfRequestToken()
@@ -32,6 +28,7 @@
 {
     @section Scripts
         {
+        <script src="@Url.Content("~/js/roulette.js")"></script>
         <script type="text/javascript">
 
             GetBalance();
