@@ -8,8 +8,10 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 
-
-<script src="@Url.Content("~/js/roulette.js")"></script>
+@section Scripts
+{
+    <script src="@Url.Content("~/js/roulette.js")"></script>
+}
 
 @functions{
     public string GetAntiXsrfRequestToken()
