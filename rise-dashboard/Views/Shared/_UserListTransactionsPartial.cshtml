@@ -1,0 +1,32 @@
+﻿@functions{
+    private static DateTime ConvertFromUnixTimestamp(double timestamp)
+    {
+        DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+        return origin.AddSeconds(timestamp);
+    }
+}
+
+<ul class="list-group">
+
+    @{string badge = "badge-success"; }
+    
+    @foreach (var transac in @ViewBag.Transactions)
+    {
+
+        @if (double.Parse(transac.amount) <= 0)
+         {
+             badge = "badge-warning";
+         }
+         else
+         {
+             badge = "badge-success";
+         }
+
+        <li class="list-group-item">
+            <span class="badge badge-pill @badge">@transac.amount</span>&nbsp;<span class="small">@ConvertFromUnixTimestamp(transac.time)</span>  
+        </li>
+    }
+</ul>
+
+
+
