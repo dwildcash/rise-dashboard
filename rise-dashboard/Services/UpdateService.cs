@@ -113,10 +113,7 @@ namespace Rise.Services
                         case "!HELP":
                             await cmd_Help(appuser);
                             break;
-                        // Show Private Bip39
-                        case "!KEY":
-                            await cmd_Key(appuser);
-                            break;
+
                         // Withdraw RISE to address
                         case "!WITHDRAW":
                             {
@@ -306,8 +303,7 @@ namespace Rise.Services
                                      "<b>!joke</b> - Display a geek joke" + Environment.NewLine +
                                      "<b>!hope</b> - Show hope quote" + Environment.NewLine +
                                      "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
-                                     "<b>!price</b> - Show current RISE Price" + Environment.NewLine +
-                                     "<b>!key</b> - Send you Tip wallet passphrase in private msg" + Environment.NewLine;
+                                     "<b>!price</b> - Show current RISE Price" + Environment.NewLine;
 
                 await _botService.Client.SendTextMessageAsync(appuser.TelegramId, strResponse, ParseMode.Html);
             }
@@ -704,7 +700,7 @@ namespace Rise.Services
                 "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
                 "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
                 "<b>Rise Dashboard</b> - https://rise.coinquote.io" + Environment.NewLine +
-                "<b>Rise Force Game</b> - http://duhec.net/riseForce" + Environment.NewLine +
+                "<b>Rise Force Game</b> - http://riseforce.io/" + Environment.NewLine +
                 "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                 "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
                 "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
