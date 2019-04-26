@@ -70,7 +70,7 @@ namespace rise.Services
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
                 {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-1) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 2 && x.Address != null).Take(maxusers).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-1) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 2 && x.Address != null).OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
                 }
                 catch (Exception ex)
                 {
