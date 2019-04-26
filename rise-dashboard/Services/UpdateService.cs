@@ -490,7 +490,8 @@ namespace Rise.Services
                     {
                         foreach (var destuser in destusers.Where(x => x.Address != null))
                         {
-                            var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, sender.GetSecret(), destuser.Address);
+                            var secret = sender.GetSecret();
+                            var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
                             if (destusers.Count <= 15)
                             {
                                 if (tx.success)
