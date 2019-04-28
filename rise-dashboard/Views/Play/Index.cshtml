@@ -65,11 +65,11 @@
                         if (data.balance < 1) {
                             $('#CashOut').html('');
                             $('.start').attr('disabled', 'true');
-                            $('#userbalance').html('<h3><span class="badge badge-pill badge-warning"> Need Min 1 HODL to Spin</span></h3>');
+                            $('#userbalance').html('<h3><span class="badge badge-pill badge-warning"> Need Min 1 RISE to Spin</span></h3>');
                         }
                         else {
-                            $('#userbalance').html('<h3><span class="badge badge-pill badge-success">' + data.balance + ' HOdl</span></h3>');
-                            $('#CashOut').html('<h4><span class="text-info">Cash Out your HOdl</span></h4><p class="text-sm-left">Any time you can cash out by Clicking <a href="/Home/CashOut" class="badge badge-pill badge-default">Here</a> you will need to provide your own wallet address.</p>');
+                            $('#userbalance').html('<h3><span class="badge badge-pill badge-success">' + data.balance + ' RISE</span></h3>');
+                            $('#CashOut').html('<h4><span class="text-info">Cash Out your RISE</span></h4><p class="text-sm-left">Any time you can cash out by Clicking <a href="/Home/CashOut" class="badge badge-pill badge-default">Here</a> you will need to provide your own wallet address.</p>');
                         }
                     }
                 });
@@ -102,10 +102,10 @@
 
                     stopCallback: function ($stopElm) {
                         if (rouletter.roulette.AmountToPay < 0) {
-                            $('#textstatus').html('<h2><img src="images/lose.png" width="50" />&nbsp;<span class="badge badge-pill badge-warning">' + rouletter.roulette.AmountToPay + ' </span> HOdl</h1>');
+                            $('#textstatus').html('<h2><img src="images/lose.png" width="50" />&nbsp;<span class="badge badge-pill badge-warning">' + rouletter.roulette.AmountToPay + ' </span> RISE</h1>');
                         }
                         else {
-                            $('#textstatus').html('<h1><img src="images/win.png" width="50" /> &nbsp;<span class="badge badge-pill badge-success">+' + rouletter.roulette.AmountToPay + ' </span> HOdl</h1>');
+                            $('#textstatus').html('<h1><img src="images/win.png" width="50" /> &nbsp;<span class="badge badge-pill badge-success">+' + rouletter.roulette.AmountToPay + ' </span> RISE</h1>');
                         }
 
                         $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Home")');
@@ -145,7 +145,7 @@
         {
             <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
                 <br /><br /><br /><br /><br />
-                <img src="~/images/hodlplay.svg" alt="hodlplay" class="img-fluid" width="700" />
+                <img src="~/images/hodlplay.svg" alt="riseplay" class="img-fluid" width="700" />
                 <br />
 
                 @if (User.Identity.Name != null)
@@ -205,16 +205,15 @@
                     <div class="col-lg-4">
                         <h4><span class="text-info">How to fund your account</span></h4>
                         <p class="text-sm-left">
-                            The first step is funding your account by sending RISE to <b>@ViewBag.OnlineWallet</b> You can also use this address to receive directly from the
-                            <a href="http://faucet.hodlcoin.com" class="badge badge-pill badge-default">Faucet</a> or mine directly to it.
+                            Use your telegram TIP wallet <b>@ViewBag.OnlineWallet</b> to play!
                         </p>
 
                         <h4><span class="text-info">Price to Win</span></h4>
 
-                        <p><img src="~/images/coin.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">2</span> HOdl</p>
-                        <p><img src="~/images/squirrel head.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">4 </span> HOdl</p>
-                        <p><img src="~/images/goldnuts2.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">6</span> HOdl</p>
-                        <p><img src="~/images/hodler_trophy.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">50</span> HOdl</p>
+                        <p><img src="~/images/coin.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">2</span> RISE</p>
+                        <p><img src="~/images/squirrel head.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">4 </span> RISE</p>
+                        <p><img src="~/images/goldnuts2.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">6</span> RISE</p>
+                        <p><img src="~/images/hodler_trophy.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">50</span> RISE</p>
 
                         <div id="CashOut"></div>
                     </div>

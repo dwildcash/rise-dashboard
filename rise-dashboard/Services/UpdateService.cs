@@ -633,7 +633,7 @@ namespace Rise.Services
 
             if (strResponse != null)
             {
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.Replace("chuck norris","RISE",true, CultureInfo.InvariantCulture), ParseMode.Html);
             }
         }
 
