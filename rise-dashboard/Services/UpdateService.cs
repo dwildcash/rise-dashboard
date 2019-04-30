@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using rise.Code.DataFetcher;
 using rise.Helpers;
 using rise.Models;
 using rise.Services;
@@ -629,11 +630,11 @@ namespace Rise.Services
         private async Task cmd_Joke(Message message)
         {
             await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-            var strResponse = await QuoteOfTheDayManager.GetQuoteOfTheDay();
+            var strResponse = await JokeFetcher.FetchJoke();
 
             if (strResponse != null)
             {
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.Replace("chuck norris","RISE",true, CultureInfo.InvariantCulture), ParseMode.Html);
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.attachments.FirstOrDefault().text, ParseMode.Html);
             }
         }
 
