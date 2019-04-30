@@ -66,6 +66,9 @@ var deps = {
     "jquery-sparkline": {
         "/jquery.sparkline.min.js": "js"
     },
+    "jquery-ui-touch-punch": {
+        "jquery.ui.touch-punch.min.js": "js"
+    },
     "jvectormap-next": {
         "/jquery-jvectormap.min.js": "js",
         "/jquery-jvectormap.css": "css"
