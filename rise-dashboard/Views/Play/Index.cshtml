@@ -28,7 +28,7 @@
 
 <style>
     .odometer {
-        font-size: 100px;
+        font-size: 80px;
     }
 </style>
 
@@ -40,67 +40,18 @@
 
         <script type="text/javascript">
 
-            GetBalance();
-
-            $(document).ready(function () {
-                GetBalance();
-            });
-
-            $( function() {
-                $( "#slider-range-max" ).slider({
+            $(document).ready(function() {
+                $("#slider-range-max").slider({
                     range: "max",
                     min: 4,
                     max: 96,
                     value: 50,
-                        slide: function (event, ui) {
+                    slide: function (event, ui) {
                         odometer1.innerHTML = ui.value;
-                        $( "#amount" ).val( ui.value );
+                        $("#amount").val(ui.value);
                     }
                 });
-                $( "#amount" ).val( $( "#slider-range-max" ).slider( "value" ) );
             } );
-
-            $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Play")');
-
-            function CreateDrawAjax() {
-                var result = "";
-                $.ajax({
-                    url: '/Play/CreateDraw',
-                    type: "POST",
-                    data: { __RequestVerificationToken: $('#RequestVerificationToken').val() },
-                    error: function (xhr) { alert('Error: ' + xhr.statusText); },
-                    async: false,
-                    success: function (data) {
-                        result = jQuery.parseJSON(data);
-                    }
-                });
-                return result;
-            }
-
-            function GetBalance() {
-                var result = "";
-                $.ajax({
-                    url: '/Play/GetUserBalance',
-                    type: "POST",
-                    data: { __RequestVerificationToken: $('#RequestVerificationToken').val() },
-                    error: function (xhr) { alert('Error: ' + xhr.statusText); },
-                    success: function (data) {
-                        if (data.balance < 1) {
-                            $('#CashOut').html('');
-                            $('.start').attr('disabled', 'true');
-                            $('#userbalance').html('<h3><span class="badge badge-pill badge-warning"> Need Min 1 RISE to Spin</span></h3>');
-                        }
-                        else {
-                            $('#userbalance').html('<h3><span class="badge badge-pill badge-success">' + data.balance + ' RISE</span></h3>');
-                            $('#CashOut').html('<h4><span class="text-info">Cash Out your RISE</span></h4><p class="text-sm-left">Any time you can cash out by Clicking <a href="/Home/CashOut" class="badge badge-pill badge-default">Here</a> you will need to provide your own wallet address.</p>');
-                        }
-                    }
-                });
-            }
-
-            setTimeout(function(){
-                odometer2.innerHTML = 50;
-            }, 1000);
 
         </script>
     }
@@ -151,7 +102,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <p>
-                        <label for="amount">Minimum number of bedrooms:</label>
+                        <label for="amount">Lucky Number</label>
                         <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
                     </p>
                     <div id="slider-range-max"></div>
