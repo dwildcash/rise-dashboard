@@ -25,7 +25,7 @@
                 {
                     var result = JObject.Parse(await hc.GetStringAsync("https://icanhazdadjoke.com/slack"));
                     var JokeResult = JsonConvert.DeserializeObject<JokeResult>(result.ToString());
-                    return JokeResult;
+                    return JokeResult ?? null;
                 }
             }
             catch (Exception e)

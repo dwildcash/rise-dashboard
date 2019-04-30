@@ -21,14 +21,17 @@
 @model rise.Models.ApplicationUser
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Rise Play Page";
 }
+
+<link rel="stylesheet" href="@Url.Content("~/css/odometer-theme-slot-machine.css")" />
 
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Administrator") || User.IsInRole("Member")))
 {
     @section Scripts
         {
-        <script src="@Url.Content("~/js/roulette.js")"></script>
+        <script src="@Url.Content("~/js/odometer.min.js")"></script>
+
         <script type="text/javascript">
 
             GetBalance();
@@ -75,65 +78,9 @@
                 });
             }
 
-            $(function () {
-
-                $('.roulette').find('img').hover(function () {
-                    console.log($(this).height());
-                });
-
-                var p = {
-
-                    startCallback: function () {
-                        var myresult = CreateDrawAjax();
-                        p['speed'] = 8;
-                        p['duration'] = 3;
-                        p['stopImageNumber'] = myresult.WinNumber;
-                        rouletter.roulette('option', p);
-                        rouletter.roulette.AmountToPay = myresult.AmountToPay;
-                        $('#textstatus').html('<h3>Spinning...</h3>');
-                        $('#stopImageNumber').spinner('disable');
-                        $('.start').attr('disabled', 'true');
-                        $('.stop').removeAttr('disabled');
-                    },
-
-                    slowDownCallback: function () {
-                        $('.stop').attr('disabled', 'true');
-                    },
-
-                    stopCallback: function ($stopElm) {
-                        if (rouletter.roulette.AmountToPay < 0) {
-                            $('#textstatus').html('<h2><img src="images/lose.png" width="50" />&nbsp;<span class="badge badge-pill badge-warning">' + rouletter.roulette.AmountToPay + ' </span> RISE</h1>');
-                        }
-                        else {
-                            $('#textstatus').html('<h1><img src="images/win.png" width="50" /> &nbsp;<span class="badge badge-pill badge-success">+' + rouletter.roulette.AmountToPay + ' </span> RISE</h1>');
-                        }
-
-                        $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Home")');
-                        $('#stopImageNumber').spinner('enable');
-                        $('.start').removeAttr('disabled');
-                        $('.stop').attr('disabled', 'true');
-
-                        GetBalance();
-                    }
-                }
-
-                var rouletter = $('div.roulette');
-                rouletter.roulette(p);
-
-                $('.stop').click(function () {
-                    var stopImageNumber;
-                    if (stopImageNumber == "") {
-                        stopImageNumber = null;
-                    }
-                    rouletter.roulette('stop');
-                });
-
-                $('.stop').attr('disabled', 'true');
-
-                $('.start').click(function () {
-                    rouletter.roulette('start');
-                });
-            });
+            setTimeout(function(){
+    odometer.innerHTML = 456;
+            }, 1000);
 
         </script>
     }
@@ -148,19 +95,22 @@
                 <img src="~/images/hodlplay.svg" alt="riseplay" class="img-fluid" width="700" />
                 <br />
 
+                <h2>
+                    RisePlay (Beta Testing)
+                </h2>
+                <br />
+                <br /><br />
+
                 @if (User.Identity.Name != null)
                 {
-                    <br /><br /><br />
-                    <h2>
-                        <span class="text-warning"> @User.Identity.Name the site is only available on invite.</span>
-                    </h2>
+                    <p class="lead">
+                        <h2>
+                            <span class="text-warning"> Sorry @User.Identity.Name the site is only available on invite.</span>
+                        </h2>
+                    </p>
                 }
                 else
                 {
-                    <h2>
-                        RisePlay (Beta Testing)
-                    </h2>
-                    <br />
                     <p class="lead">
                         <br />
                         <h2> <span class="text-warning">At this moment RisePlay is only available on invite.</span></h2>
@@ -170,61 +120,13 @@
         }
         else
         {
-            <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto">
-                <br />
-                <img src="~/images/hodlplay.svg" alt="Riseplay" class="img-fluid" width="250" />
-                <br /><br /><br />
-
-                <div class="row">
-                    <div class="col-lg-5">
-                        <div class="roulette_container">
-                            <div class="roulette" style="display:none;">
-                                <img data-value="0" src="~/images/mshroom.png" />
-                                <img data-value="1" src="~/images/flower.png" />
-                                <img data-value="2" src="~/images/chomp.png" />
-                                <img data-value="3" src="~/images/trabant.png" />
-                                <img data-value="4" src="~/images/coin.png" />
-                                <img data-value="5" src="~/images/squirrel head.png" />
-                                <img data-value="6" src="~/images/goldnuts2.png" />
-                                <img data-value="7" src="~/images/hodler_trophy.png" />
-                            </div>
-                        </div>
-                        <div class="btn_container">
-                            <p>
-                                <button class="btn btn-lg btn-primary start"> START </button>
-                                <button class="stop btn-lg btn btn-warning"> STOP </button>
-                            </p>
-                        </div>
-                        <div class="container-fluid text-center">
-                            <h1 id="textstatus"></h1>
-                        </div>
-                        <div class="container-fluid text-center">
-                            <h1 id="userbalance"></h1>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <h4><span class="text-info">How to fund your account</span></h4>
-                        <p class="text-sm-left">
-                            Use your telegram TIP wallet <b>@ViewBag.OnlineWallet</b> to play!
-                        </p>
-
-                        <h4><span class="text-info">Price to Win</span></h4>
-
-                        <p><img src="~/images/coin.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">2</span> RISE</p>
-                        <p><img src="~/images/squirrel head.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">4 </span> RISE</p>
-                        <p><img src="~/images/goldnuts2.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">6</span> RISE</p>
-                        <p><img src="~/images/hodler_trophy.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">50</span> RISE</p>
-
-                        <div id="CashOut"></div>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <h4><span class="text-info">Transactions</span></h4>
-                        <div id="UserListTransactions">Updating User Transactions</div>
-                    </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div id="odometer" class="odometer">123</div>
                 </div>
             </div>
+
         }
-     </section>
+    </section>
 </div>
 

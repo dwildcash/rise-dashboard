@@ -56,8 +56,14 @@
         public DbSet<CoinQuote> CoinQuotes { get; set; }
 
         /// <summary>
-        /// Gets or sets the Contributors
+        /// Gets or sets the Delegate Forms
         /// </summary>
         public DbSet<DelegateForm> DelegateForms { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the Roll Hundred Records
+        /// </summary>
+        public DbSet<RollHundredRecord> RollHundredRecords { get; set; }
     }
 }
