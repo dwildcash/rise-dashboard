@@ -27,9 +27,9 @@
 <link rel="stylesheet" href="@Url.Content("~/css/odometer-theme-slot-machine.css")" />
 
 <style>
-.odometer {
-    font-size: 100px;
-}
+    .odometer {
+        font-size: 100px;
+    }
 </style>
 
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Administrator") || User.IsInRole("Member")))
@@ -85,9 +85,15 @@
             }
 
             setTimeout(function(){
-    odometer.innerHTML = 456;
+                odometer1.innerHTML = 50;
             }, 1000);
 
+            $('#ex1').slider({
+	            formatter: function(value) {
+                    return 'Current value: ' + value;
+                     odometer2.innerHTML = 50;
+	            }
+            });
         </script>
     }
 }
@@ -128,10 +134,19 @@
         {
             <div class="row">
                 <div class="col-sm-4">
-                    <div id="odometer" class="odometer">123</div>
+                    <div id="odometer1" class="odometer">00</div>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-sm-4">
+                    <div id="odometer1" class="odometer">50</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="4" data-slider-max="96" data-slider-step="1" data-slider-value="50" />
+                </div>
+            </div>
         }
     </section>
 </div>

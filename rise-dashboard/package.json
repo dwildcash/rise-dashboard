@@ -13,6 +13,7 @@
     "admin-lte": "^3.0.0-alpha.2",
     "animate.css": "^3.7.0",
     "bootstrap": "^4.3.1",
+    "bootstrap-slider": "^10.6.1",
     "bootstrap4": "0.0.1-security",
     "chart.js": "^2.8.0",
     "chartjs-plugin-datalabels": "^0.3.0",
