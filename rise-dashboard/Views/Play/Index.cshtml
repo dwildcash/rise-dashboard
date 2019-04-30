@@ -26,6 +26,12 @@
 
 <link rel="stylesheet" href="@Url.Content("~/css/odometer-theme-slot-machine.css")" />
 
+<style>
+.odometer {
+    font-size: 100px;
+}
+</style>
+
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Administrator") || User.IsInRole("Member")))
 {
     @section Scripts
