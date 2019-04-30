@@ -44,6 +44,13 @@
 
             $(document).ready(function () {
                 GetBalance();
+
+                  $('#ex1').slider({
+                formatter: function (value) {
+                    odometer2.innerHTML = 50;
+                    return 'Current value: ' + value; 
+	            }
+            });
             });
 
             $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Play")');
@@ -88,12 +95,7 @@
                 odometer1.innerHTML = 50;
             }, 1000);
 
-            $('#ex1').slider({
-                formatter: function (value) {
-                    odometer2.innerHTML = 50;
-                    return 'Current value: ' + value; 
-	            }
-            });
+          
         </script>
     }
 }
@@ -144,7 +146,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="4" data-slider-max="96" data-slider-step="1" data-slider-value="50" />
+                    <input id="ex1" type="text" data-slider-min="4" data-slider-max="96" data-slider-step="1" data-slider-value="50" />
                 </div>
             </div>
         }
