@@ -40,17 +40,14 @@
 
         <script type="text/javascript">
 
+            <script>$.fn.slider = null</script>
+
             GetBalance();
 
             $(document).ready(function () {
                 GetBalance();
 
-                  $('#ex1').slider({
-                formatter: function (value) {
-                    odometer2.innerHTML = 50;
-                    return 'Current value: ' + value; 
-	            }
-            });
+               
             });
 
             $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Play")');
@@ -95,7 +92,13 @@
                 odometer1.innerHTML = 50;
             }, 1000);
 
-          
+             $('#ex1').slider({
+                    formatter: function (value) {
+                        odometer2.innerHTML = 50;
+                        return 'Current value: ' + value;
+	                }
+             });
+
         </script>
     }
 }
