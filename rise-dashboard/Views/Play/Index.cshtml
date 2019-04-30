@@ -30,6 +30,10 @@
     .odometer {
         font-size: 80px;
     }
+    body {
+        background-color:#32383e;
+    }
+    
 </style>
 
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Administrator") || User.IsInRole("Member")))
