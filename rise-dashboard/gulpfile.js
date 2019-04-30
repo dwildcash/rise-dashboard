@@ -18,7 +18,7 @@ var deps = {
     },
     "bootstrap-slider": {
         "/dist/css/bootstrap-slider.min.css": "css",
-        "/dist/js/bootstrap-slider.min.js": "js"
+        "/dist/bootstrap-slider.min.js": "js"
     },
     "odometer": {
         "/themes/odometer-theme-slot-machine.css": "css",
