@@ -59,7 +59,6 @@
 }
 
 <div class="content-wrapper">
-    <section class="content">
         @if (!SignInManager.IsSignedIn(User) || User.IsInRole("Guest"))
         {
             <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
@@ -110,6 +109,5 @@
                 </div>
             </div>
         }
-    </section>
 </div>
 
