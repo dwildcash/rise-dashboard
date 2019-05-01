@@ -49,7 +49,6 @@ I changed secret found below please user your own.
     "CoinRewardDay": 345,
     "CoinMarketCapTickerCode": "1294",
     "LiveCoinMarket": "RISE/BTC",
-    "RightBtcMarket": "RISEBTC",
     "IPStackApiKey": "02f394132412341234123246f9211277123",
     "DonationAddress": "5556972430134253533R",
     "SimulateRoundCount": "10",

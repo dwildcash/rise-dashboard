@@ -653,7 +653,6 @@ namespace Rise.Services
                 strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
                 "<b>Altilly</b> - https://altilly.com" + Environment.NewLine +
                 "<b>Livecoin</b> - http://livecoin.net" + Environment.NewLine +
-                "<b>RightBtc</b> - http://rightbtc.com" + Environment.NewLine +
                 "<b>Vinex</b> - https://vinex.network";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }

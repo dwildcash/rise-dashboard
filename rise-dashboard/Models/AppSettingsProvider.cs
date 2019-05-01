@@ -82,9 +82,10 @@
         public static string LiveCoinMarket { get; set; }
 
         /// <summary>
-        /// Gets or sets the RightBtcMarket
+        /// Get or sets AltillyMarket 
         /// </summary>
-        public static string RightBtcMarket { get; set; }
+        public static string AltillyMarket { get; set; }
+
 
         /// <summary>
         /// Gets or sets the APIUrl

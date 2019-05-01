@@ -44,13 +44,6 @@ namespace rise.Code.Tasks
                 CoinbaseBtcQuoteResult.Current = coinbaseBtcQuoteResult;
             }
 
-            RightBtcQuoteResult RightBtcQuoteResult = await RightBtcQuoteFetcher.FetchRightBtcQuote();
-
-            if (RightBtcQuoteResult != null)
-            {
-                RightBtcQuoteResult.Current = RightBtcQuoteResult;
-            }
-
             var transactionsResult = await TransactionsFetcher.FetchTransactions();
 
             if (transactionsResult.success)

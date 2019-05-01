@@ -46,15 +46,6 @@
                         USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * LiveCoinQuote.Current.Last
                     };
 
-                    var quoteRightBtc = new CoinQuote
-                    {
-                        Exchange = "RightBtc",
-                        Price = (double)RightBtcQuoteResult.Current.Result.Last / 100000000,
-                        Volume = RightBtcQuoteResult.Current.Result.Vol24H / 100000000,
-                        TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * ((double)RightBtcQuoteResult.Current.Result.Last / 100000000)
-                    };
-
                     var quoteAltilly = new CoinQuote
                     {
                         Exchange = "Altilly",
@@ -64,19 +55,18 @@
                         USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * (double.Parse(AltillyQuote.Current.last) / 100000000)
                     };
 
-                    var totalVolume = quoteRightBtc.Volume + quoteLivecoin.Volume + quoteAltilly.Volume;
+                    var totalVolume = quoteLivecoin.Volume + quoteAltilly.Volume;
 
                     var quoteAllWeighted = new CoinQuote
                     {
                         Exchange = "All",
-                        Price = (quoteRightBtc.Price * quoteRightBtc.Volume / totalVolume) + (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume),
+                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume),
                         Volume = totalVolume,
                         TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * ((quoteRightBtc.Price * quoteRightBtc.Volume / totalVolume) + (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume))
+                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) *  ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume))
                     };
 
                     dbContext.CoinQuotes.Add(quoteLivecoin);
-                    dbContext.CoinQuotes.Add(quoteRightBtc);
                     dbContext.CoinQuotes.Add(quoteAltilly);
                     dbContext.CoinQuotes.Add(quoteAllWeighted);
 
