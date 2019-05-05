@@ -24,11 +24,10 @@ namespace rise.Code.Tasks
         /// <returns>The <see cref="Task"/></returns>
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            DelegateResult delegateResult = await DelegateFetcher.FetchDelegates();
+            var delegateResult = await DelegateFetcher.FetchDelegates();
 
             if (delegateResult.Success)
             {
-                ForgingChanceCalculator.generateForgingStat2(delegateResult);
                 DelegateResult.Current = ForgingChanceCalculator.SimulateForgingRounds(delegateResult);
             }
         }

@@ -24,7 +24,7 @@ namespace rise.Code.Tasks
         /// <returns></returns>
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            QuoteOfTheDayResult quoteOfTheDayResult = await QuoteOfTheDayFetcher.FetchQuoteOfTheDay();
+            var quoteOfTheDayResult = await QuoteOfTheDayFetcher.FetchQuoteOfTheDay();
 
             if (quoteOfTheDayResult != null)
             {
