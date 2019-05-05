@@ -16,10 +16,6 @@ var deps = {
         "/dist/css/bootstrap.min.css": "css",
         "/dist/js/bootstrap.bundle.min.js": "js"
     },
-    "odometer": {
-        "/themes/odometer-theme-slot-machine.css": "css",
-        "/odometer.min.js": "js"
-    },
     "chart.js": {
         "/dist/Chart.min.js": "js"
     },

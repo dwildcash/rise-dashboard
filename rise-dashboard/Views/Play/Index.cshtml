@@ -21,91 +21,206 @@
 @model rise.Models.ApplicationUser
 
 @{
-    ViewData["Title"] = "Rise Play Page";
+    ViewData["Title"] = "Home Page";
 }
-
-<link rel="stylesheet" href="@Url.Content("~/css/odometer-theme-slot-machine.css")" />
-
-<style>
-    .odometer {
-        font-size: 40px;
-    }
-
-</style>
 
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Administrator") || User.IsInRole("Member")))
 {
     @section Scripts
         {
-        <script src="@Url.Content("~/js/odometer.min.js")"></script>
-
         <script type="text/javascript">
 
-            $(document).ready(function() {
-                $("#slider-range-max").slider({
-                    range: "max",
-                    min: 4,
-                    max: 96,
-                    value: 50,
-                    slide: function (event, ui) {
-                        odometer1.innerHTML = ui.value;
-                        $("#amount").val(ui.value);
+            GetBalance();
+
+            $(document).ready(function () {
+                GetBalance();
+            });
+
+            $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Home")');
+
+            function CreateDrawAjax() {
+                var result = "";
+                $.ajax({
+                    url: '/Home/CreateDraw',
+                    type: "POST",
+                    data: { __RequestVerificationToken: $('#RequestVerificationToken').val() },
+                    error: function (xhr) { alert('Error: ' + xhr.statusText); },
+                    async: false,
+                    success: function (data) {
+                        result = jQuery.parseJSON(data);
                     }
                 });
-            } );
+                return result;
+            }
+
+            function GetBalance() {
+                var result = "";
+                $.ajax({
+                    url: '/Home/GetUserBalance',
+                    type: "POST",
+                    data: { __RequestVerificationToken: $('#RequestVerificationToken').val() },
+                    error: function (xhr) { alert('Error: ' + xhr.statusText); },
+                    success: function (data) {
+                        if (data.balance < 1) {
+                            $('#CashOut').html('');
+                            $('.start').attr('disabled', 'true');
+                            $('#userbalance').html('<h3><span class="badge badge-pill badge-warning"> Need Min 1 HODL to Spin</span></h3>');
+                        }
+                        else {
+                            $('#userbalance').html('<h3><span class="badge badge-pill badge-success">' + data.balance + ' HOdl</span></h3>');
+                            $('#CashOut').html('<h4><span class="text-info">Cash Out your HOdl</span></h4><p class="text-sm-left">Any time you can cash out by Clicking <a href="/Home/CashOut" class="badge badge-pill badge-default">Here</a> you will need to provide your own wallet address.</p>');
+                        }
+                    }
+                });
+            }
+
+            $(function () {
+
+                $('.roulette').find('img').hover(function () {
+                    console.log($(this).height());
+                });
+
+                var p = {
+
+                    startCallback: function () {
+                        var myresult = CreateDrawAjax();    
+                        p['speed'] = 8;
+                        p['duration'] = 3;
+                        p['stopImageNumber'] = myresult.WinNumber;
+                        rouletter.roulette('option', p);
+                        rouletter.roulette.AmountToPay = myresult.AmountToPay;
+                        $('#textstatus').html('<h3>Spinning...</h3>');
+                        $('#stopImageNumber').spinner('disable');
+                        $('.start').attr('disabled', 'true');
+                        $('.stop').removeAttr('disabled');
+                    },
+
+                    slowDownCallback: function () {
+                        $('.stop').attr('disabled', 'true');
+                    },
+
+                    stopCallback: function ($stopElm) {
+                        if (rouletter.roulette.AmountToPay < 0) {
+                            $('#textstatus').html('<h2><img src="images/lose.png" width="50" />&nbsp;<span class="badge badge-pill badge-warning">' + rouletter.roulette.AmountToPay + ' </span> HOdl</h1>');
+                        }
+                        else {
+                            $('#textstatus').html('<h1><img src="images/win.png" width="50" /> &nbsp;<span class="badge badge-pill badge-success">+' + rouletter.roulette.AmountToPay + ' </span> HOdl</h1>');
+                        }
+
+                        $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Home")');
+                        $('#stopImageNumber').spinner('enable');
+                        $('.start').removeAttr('disabled');
+                        $('.stop').attr('disabled', 'true');
+
+                        GetBalance();
+                    }
+                }
+
+                var rouletter = $('div.roulette');
+                rouletter.roulette(p);
+
+                $('.stop').click(function () {
+                    var stopImageNumber;
+                    if (stopImageNumber == "") {
+                        stopImageNumber = null;
+                    }
+                    rouletter.roulette('stop');
+                });
+
+                $('.stop').attr('disabled', 'true');
+
+                $('.start').click(function () {
+                    rouletter.roulette('start');
+                });
+            });
 
         </script>
     }
 }
 
-<div class="content-wrapper">
-        @if (!SignInManager.IsSignedIn(User) || User.IsInRole("Guest"))
+@if (!SignInManager.IsSignedIn(User) || User.IsInRole("Guest"))
+{
+    <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <br /><br /><br /><br /><br />
+        <img src="~/images/hodlplay.svg" alt="riseplay" class="img-fluid" width="700" />
+        <br />
+
+        @if (User.Identity.Name != null)
         {
-            <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-                <br /><br /><br /><br /><br />
-                <img src="~/images/hodlplay.svg" alt="riseplay" class="img-fluid" width="700" />
-                <br />
-
-                <h2>
-                    RisePlay (Beta Testing)
-                </h2>
-                <br />
-                <br /><br />
-
-                @if (User.Identity.Name != null)
-                {
-                    <p class="lead">
-                        <h2>
-                            <span class="text-warning"> Sorry @User.Identity.Name the site is only available on invite.</span>
-                        </h2>
-                    </p>
-                }
-                else
-                {
-                    <p class="lead">
-                        <br />
-                        <h2> <span class="text-warning">At this moment RisePlay is only available on invite.</span></h2>
-                    </p>
-                }
-            </div>
+            <br /><br /><br />
+            <h2>
+                <span class="text-warning"> @User.Identity.Name the site is only available on invite.</span>
+            </h2>
         }
         else
         {
-            <div class="row">
-                <div class="col-sm-6 d-flex justify-content-center">
-                    <div id="odometer1" class="odometer">00</div>
-                    <div id="odometer2" class="odometer ml-3">00</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-8">
-                    <p>
-                        <label for="amount">Lucky Number</label>
-                        <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                    </p>
-                    <div id="slider-range-max"></div>
-                </div>
-            </div>
+            <h2>
+                RisePlay (Beta Testing)
+            </h2>
+            <br />
+            <p class="lead">
+                <br />
+                <h2> <span class="text-warning">At this moment Riseplay is only available on invite.</span></h2>
+            </p>
         }
-</div>
+    </div>
+}
+else
+{
+    <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto">
+        <br />
+        <img src="~/images/hodlplay.svg" alt="riseplay" class="img-fluid" width="250" />
+        <br /><br /><br />
+
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="roulette_container">
+                    <div class="roulette" style="display:none;">
+                        <img data-value="0" src="~/images/mshroom.png" />
+                        <img data-value="1" src="~/images/flower.png" />
+                        <img data-value="2" src="~/images/chomp.png" />
+                        <img data-value="3" src="~/images/trabant.png" />
+                        <img data-value="4" src="~/images/coin.png" />
+                        <img data-value="5" src="~/images/squirrel head.png" />
+                        <img data-value="6" src="~/images/goldnuts2.png" />
+                        <img data-value="7" src="~/images/hodler_trophy.png" />
+                    </div>
+                </div>
+                <div class="btn_container">
+                    <p>
+                        <button class="btn btn-lg btn-primary start"> START </button>
+                        <button class="stop btn-lg btn btn-warning"> STOP </button>
+                    </p>
+                </div>
+                <div class="container-fluid text-center">
+                    <h1 id="textstatus"></h1>
+                </div>
+                <div class="container-fluid text-center">
+                    <h1 id="userbalance"></h1>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h4><span class="text-info">How to fund your account</span></h4>
+                <p class="text-sm-left">
+                    The first step is funding your account by sending HOdl to <b>@ViewBag.OnlineWallet</b> You can also use this address to receive directly from the
+                    <a href="http://faucet.hodlcoin.com" class="badge badge-pill badge-default">Faucet</a> or mine directly to it.
+                </p>
+
+                <h4><span class="text-info">Price to Win</span></h4>
+
+                <p><img src="~/images/coin.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">2</span> HOdl</p>
+                <p><img src="~/images/squirrel head.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">4 </span> HOdl</p>
+                <p><img src="~/images/goldnuts2.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">6</span> HOdl</p>
+                <p><img src="~/images/hodler_trophy.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">50</span> HOdl</p>
+
+                <div id="CashOut"></div>
+            </div>
+
+            <div class="col-lg-3">
+                <h4><span class="text-info">Transactions</span></h4>
+                <div id="UserListTransactions">Updating User Transactions</div>
+            </div>
+        </div>
+    </div>
+}
 

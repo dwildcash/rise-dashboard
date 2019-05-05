@@ -12,11 +12,11 @@ namespace rise
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using rise.Code;
-    using rise.Code.Scheduling;
-    using rise.Data;
-    using rise.Models;
-    using rise.Services;
+    using Code;
+    using Code.Scheduling;
+    using Data;
+    using Models;
+    using Services;
     using Rise.Services;
     using System;
 
@@ -116,15 +116,16 @@ namespace rise
             // Update IP localisation once a day
             services.AddSingleton<IScheduledTask, UpdateIpLocalisationTask>();
 
-            // Save Livecoin quote price every minutes.
+            // Save quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
+
+            // Users Management Service
+            services.AddSingleton<IAppUsersManagerService, AppUsersManagerService>();
 
             // Configure Telegram bot
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
 
-            // Users Management Service
-            services.AddSingleton<IAppUsersManagerService, AppUsersManagerService>();
 
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>

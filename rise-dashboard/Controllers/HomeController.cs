@@ -5,10 +5,10 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using rise.Code.DataFetcher;
-    using rise.Data;
-    using rise.Models;
-    using rise.ViewModels;
+    using Code.DataFetcher;
+    using Data;
+    using Models;
+    using ViewModels;
     using System;
     using System.Linq;
     using System.Threading.Tasks;

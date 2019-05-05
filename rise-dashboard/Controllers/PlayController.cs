@@ -28,7 +28,7 @@ namespace rise.Controllers
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await _userManager.GetUserAsync(this.User);
+            return await _userManager.GetUserAsync(User);
         }
 
         /// <summary>

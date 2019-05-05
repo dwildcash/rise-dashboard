@@ -1,7 +1,7 @@
 ﻿namespace rise.Data
 {
     using Microsoft.AspNetCore.Identity;
-    using rise.Models;
+    using Models;
 
     /// <summary>
     /// Defines the <see cref="DbSeedData" />

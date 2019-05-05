@@ -5,8 +5,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
-    using rise.Data;
-    using rise.Models;
+    using Data;
+    using Models;
     using System.Linq;
     using System.Threading.Tasks;
 

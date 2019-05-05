@@ -6,7 +6,7 @@
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using static rise.Models.Joke;
+    using static Models.Joke;
 
     /// <summary>
     /// Defines the <see cref="JokeFetcher" />

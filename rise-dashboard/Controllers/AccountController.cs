@@ -4,8 +4,8 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using rise.Models;
-    using rise.Services;
+    using Models;
+    using Services;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -38,7 +38,7 @@
         [AllowAnonymous]
         public async Task<IActionResult> LoginCallback(int id, string first_name, string username, string photo_url, string auth_date, string hash)
         {
-            var fields = new Dictionary<string, string>()
+            Dictionary<string,string> fields = new Dictionary<string, string>()
             {
                 { "id", id.ToString() },
                 { "first_name", first_name },
