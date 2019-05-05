@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using rise.Code.DataFetcher;
 using rise.Models;
-using rise_lib;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using rise.Code.Rise;
 
 namespace rise.Controllers
 {

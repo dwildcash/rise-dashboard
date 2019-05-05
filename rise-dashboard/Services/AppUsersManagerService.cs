@@ -4,11 +4,11 @@ using Microsoft.Extensions.Logging;
 using rise.Data;
 using rise.Helpers;
 using rise.Models;
-using rise_lib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using rise.Code.Rise;
 using Telegram.Bot.Types;
 
 namespace rise.Services
@@ -195,9 +195,9 @@ namespace rise.Services
 
                             if (accountresult.success)
                             {
-                                appuser.Address = accountresult.account.address;
+                                appuser.Address = accountresult.account.Address;
                                 appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
-                                appuser.PublicKey = accountresult.account.publicKey;
+                                appuser.PublicKey = accountresult.account.PublicKey;
                             }
                         }
 

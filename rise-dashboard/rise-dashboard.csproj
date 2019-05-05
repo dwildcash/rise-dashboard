@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="dotnetstandard-bip39" Version="1.0.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.6.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" Version="2.2.0" />
@@ -54,10 +55,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\webfonts\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\rise-lib\rise-lib\rise-lib.csproj" />
   </ItemGroup>
 
   <ItemGroup>

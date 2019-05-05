@@ -14,6 +14,13 @@
         [JsonProperty("address")]
         public string Address { get; set; }
 
+
+        /// <summary>
+        /// Get or Set the secret
+        /// </summary>
+        public string secret { get; set; }
+
+
         /// <summary>
         /// Gets or sets the Balance
         /// </summary>

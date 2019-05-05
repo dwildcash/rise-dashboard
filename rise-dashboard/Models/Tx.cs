@@ -1,6 +1,6 @@
-﻿namespace rise_lib.Models
+﻿namespace rise.Models
 {
-    public class Transaction
+    public class Tx
     {
         public bool success { get; set; }
         public string transactionId { get; set; }
