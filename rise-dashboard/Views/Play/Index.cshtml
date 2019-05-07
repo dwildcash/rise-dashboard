@@ -9,6 +9,8 @@
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 
 
+<script src="~/js/roulette.js"></script>
+
 @functions{
     public string GetAntiXsrfRequestToken()
     {
@@ -21,7 +23,7 @@
 @model rise.Models.ApplicationUser
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "RISE Play!";
 }
 
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Administrator") || User.IsInRole("Member")))
@@ -36,12 +38,12 @@
                 GetBalance();
             });
 
-            $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Home")');
+            $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Play")');
 
             function CreateDrawAjax() {
                 var result = "";
                 $.ajax({
-                    url: '/Home/CreateDraw',
+                    url: '/Play/CreateDraw',
                     type: "POST",
                     data: { __RequestVerificationToken: $('#RequestVerificationToken').val() },
                     error: function (xhr) { alert('Error: ' + xhr.statusText); },
@@ -56,19 +58,17 @@
             function GetBalance() {
                 var result = "";
                 $.ajax({
-                    url: '/Home/GetUserBalance',
+                    url: '/Play/GetUserBalance',
                     type: "POST",
                     data: { __RequestVerificationToken: $('#RequestVerificationToken').val() },
                     error: function (xhr) { alert('Error: ' + xhr.statusText); },
                     success: function (data) {
-                        if (data.balance < 1) {
-                            $('#CashOut').html('');
+                        if (data.balance < 3) {
                             $('.start').attr('disabled', 'true');
-                            $('#userbalance').html('<h3><span class="badge badge-pill badge-warning"> Need Min 1 HODL to Spin</span></h3>');
+                            $('#userbalance').html('<h3><span class="badge badge-pill badge-warning"> Need Min 3 RISE to Spin</span></h3>');
                         }
                         else {
-                            $('#userbalance').html('<h3><span class="badge badge-pill badge-success">' + data.balance + ' HOdl</span></h3>');
-                            $('#CashOut').html('<h4><span class="text-info">Cash Out your HOdl</span></h4><p class="text-sm-left">Any time you can cash out by Clicking <a href="/Home/CashOut" class="badge badge-pill badge-default">Here</a> you will need to provide your own wallet address.</p>');
+                            $('#userbalance').html('<h3><span class="badge badge-pill badge-success">' + data.balance + ' RISE</span></h3>');
                         }
                     }
                 });
@@ -83,9 +83,9 @@
                 var p = {
 
                     startCallback: function () {
-                        var myresult = CreateDrawAjax();    
+                        var myresult = CreateDrawAjax();
                         p['speed'] = 8;
-                        p['duration'] = 3;
+                        p['duration'] = 2;
                         p['stopImageNumber'] = myresult.WinNumber;
                         rouletter.roulette('option', p);
                         rouletter.roulette.AmountToPay = myresult.AmountToPay;
@@ -107,7 +107,7 @@
                             $('#textstatus').html('<h1><img src="images/win.png" width="50" /> &nbsp;<span class="badge badge-pill badge-success">+' + rouletter.roulette.AmountToPay + ' </span> HOdl</h1>');
                         }
 
-                        $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Home")');
+                        $('#UserListTransactions').load('@Url.Action("GetUserListTransactionsPartialView", "Play")');
                         $('#stopImageNumber').spinner('enable');
                         $('.start').removeAttr('disabled');
                         $('.stop').attr('disabled', 'true');
@@ -138,89 +138,95 @@
     }
 }
 
-@if (!SignInManager.IsSignedIn(User) || User.IsInRole("Guest"))
-{
-    <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <br /><br /><br /><br /><br />
-        <img src="~/images/hodlplay.svg" alt="riseplay" class="img-fluid" width="700" />
-        <br />
+<section>
 
-        @if (User.Identity.Name != null)
-        {
-            <br /><br /><br />
-            <h2>
-                <span class="text-warning"> @User.Identity.Name the site is only available on invite.</span>
-            </h2>
+    <style type="text/css">
+        body {
+            background: navy !important;
         }
-        else
-        {
-            <h2>
-                RisePlay (Beta Testing)
-            </h2>
+        /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+    </style>
+
+    @if (!SignInManager.IsSignedIn(User) || User.IsInRole("Guest"))
+    {
+        <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            <br /><br /><br /><br /><br />
+            <img src="~/images/hodlplay.svg" alt="riseplay" class="img-fluid" width="700" />
             <br />
-            <p class="lead">
-                <br />
-                <h2> <span class="text-warning">At this moment Riseplay is only available on invite.</span></h2>
-            </p>
-        }
-    </div>
-}
-else
-{
-    <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto">
-        <br />
-        <img src="~/images/hodlplay.svg" alt="riseplay" class="img-fluid" width="250" />
-        <br /><br /><br />
 
-        <div class="row">
-            <div class="col-lg-5">
-                <div class="roulette_container">
-                    <div class="roulette" style="display:none;">
-                        <img data-value="0" src="~/images/mshroom.png" />
-                        <img data-value="1" src="~/images/flower.png" />
-                        <img data-value="2" src="~/images/chomp.png" />
-                        <img data-value="3" src="~/images/trabant.png" />
-                        <img data-value="4" src="~/images/coin.png" />
-                        <img data-value="5" src="~/images/squirrel head.png" />
-                        <img data-value="6" src="~/images/goldnuts2.png" />
-                        <img data-value="7" src="~/images/hodler_trophy.png" />
+            @if (User.Identity.Name != null)
+            {
+                <br /><br /><br />
+                <h2>
+                    <span class="text-warning"> @User.Identity.Name the site is only available on invite.</span>
+                </h2>
+            }
+            else
+            {
+                <h2>
+                    RisePlay (Beta Testing)
+                </h2>
+                <br />
+                <p class="lead">
+                    <br />
+                    <h2> <span class="text-warning">At this moment Riseplay is only available on invite.</span></h2>
+                </p>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto">
+            <br />
+            <img src="~/images/hodlplay.svg" alt="riseplay" class="img-fluid" width="250" />
+            <br /><br /><br />
+
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="roulette_container">
+                        <div class="roulette" style="display:none;">
+                            <img data-value="0" src="~/images/mshroom.png" />
+                            <img data-value="1" src="~/images/flower.png" />
+                            <img data-value="2" src="~/images/chomp.png" />
+                            <img data-value="3" src="~/images/trabant.png" />
+                            <img data-value="4" src="~/images/coin.png" />
+                            <img data-value="5" src="~/images/squirrel head.png" />
+                            <img data-value="6" src="~/images/goldnuts2.png" />
+                            <img data-value="7" src="~/images/hodler_trophy.png" />
+                        </div>
+                    </div>
+                    <div class="btn_container">
+                        <p>
+                            <button class="btn btn-lg btn-primary start"> START </button>
+                            <button class="stop btn-lg btn btn-warning"> STOP </button>
+                        </p>
+                    </div>
+                    <div class="container-fluid text-center">
+                        <h1 id="textstatus"></h1>
+                    </div>
+                    <div class="container-fluid text-center">
+                        <h1 id="userbalance"></h1>
                     </div>
                 </div>
-                <div class="btn_container">
-                    <p>
-                        <button class="btn btn-lg btn-primary start"> START </button>
-                        <button class="stop btn-lg btn btn-warning"> STOP </button>
+                <div class="col-lg-4">
+                    <h4><span class="text-info">How to fund your account</span></h4>
+                    <p class="text-sm-left">
+                        Using your Telegram Wallet <b>@ViewBag.OnlineWallet</b> You can play roulette!
                     </p>
+
+                    <h4><span class="text-info">Price to Win</span></h4>
+
+                    <p><img src="~/images/coin.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">2</span> RISE</p>
+                    <p><img src="~/images/squirrel head.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">4 </span> RISE</p>
+                    <p><img src="~/images/goldnuts2.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">6</span> RISE</p>
+                    <p><img src="~/images/hodler_trophy.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">50</span> RISE</p>
                 </div>
-                <div class="container-fluid text-center">
-                    <h1 id="textstatus"></h1>
+
+                <div class="col-lg-3">
+                    <h4><span class="text-info">Transactions</span></h4>
+                    <div id="UserListTransactions">Updating User Transactions</div>
                 </div>
-                <div class="container-fluid text-center">
-                    <h1 id="userbalance"></h1>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <h4><span class="text-info">How to fund your account</span></h4>
-                <p class="text-sm-left">
-                    The first step is funding your account by sending HOdl to <b>@ViewBag.OnlineWallet</b> You can also use this address to receive directly from the
-                    <a href="http://faucet.hodlcoin.com" class="badge badge-pill badge-default">Faucet</a> or mine directly to it.
-                </p>
-
-                <h4><span class="text-info">Price to Win</span></h4>
-
-                <p><img src="~/images/coin.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">2</span> HOdl</p>
-                <p><img src="~/images/squirrel head.png" width="45" /> &nbsp;<span class="badge badge-pill badge-default">4 </span> HOdl</p>
-                <p><img src="~/images/goldnuts2.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">6</span> HOdl</p>
-                <p><img src="~/images/hodler_trophy.png" width="45" />&nbsp;<span class="badge badge-pill badge-default">50</span> HOdl</p>
-
-                <div id="CashOut"></div>
-            </div>
-
-            <div class="col-lg-3">
-                <h4><span class="text-info">Transactions</span></h4>
-                <div id="UserListTransactions">Updating User Transactions</div>
             </div>
         </div>
-    </div>
-}
-
+    }
+</section>
