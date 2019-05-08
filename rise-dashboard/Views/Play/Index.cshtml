@@ -65,7 +65,7 @@
                     success: function (data) {
                         if (data.balance < 3) {
                             $('.start').attr('disabled', 'true');
-                            $('#userbalance').html('<h3><span class="badge badge-pill badge-warning"> Need Min 3 RISE to Spin</span></h3>');
+                            $('#userbalance').html('<h3><span class="badge badge-pill badge-warning"> Sorry you need Min 3 RISE to Spin</span></h3>');
                         }
                         else {
                             $('#userbalance').html('<h3><span class="badge badge-pill badge-success">' + data.balance + ' RISE</span></h3>');
@@ -183,7 +183,7 @@
                 <br /><br /><br />
 
                 <div class="row">
-                    <div class="col-lg-5 mx-auto">
+                    <div class="col-lg-5 mx-auto text-center">
                         <div class="roulette_container">
                             <div class="roulette" style="display:none;">
                                 <img data-value="0" src="~/images/mshroom.png" />
