@@ -95,6 +95,9 @@ namespace rise
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
 
+            // Users Management Service
+            services.AddScoped<IAppUsersManagerService, AppUsersManagerService>();
+
             // Assign Identity User and Context for Auth by ASP
             services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
@@ -119,8 +122,6 @@ namespace rise
             // Save quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
 
-            // Users Management Service
-            services.AddSingleton<IAppUsersManagerService, AppUsersManagerService>();
 
             // Configure Telegram bot
             services.AddScoped<IUpdateService, UpdateService>();
