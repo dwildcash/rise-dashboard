@@ -9,7 +9,7 @@
   "author": "dwildcash",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.8.1",
+    "@fortawesome/fontawesome-free": "^5.8.2",
     "admin-lte": "^3.0.0-alpha.2",
     "animate.css": "^3.7.0",
     "bootstrap": "^4.3.1",
@@ -23,7 +23,7 @@
     "datatables.net-responsive-bs4": "^2.2.3",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
-    "ionicons": "^4.5.6",
+    "ionicons": "^4.5.8",
     "jquery": "^3.4.0",
     "jquery-knob": "^1.2.11",
     "jquery-sparkline": "^2.4.0",

@@ -63,6 +63,7 @@
                     slotProb -= dele.VotesWeight;
 
                     var currdel = delegateResult.Delegates.FirstOrDefault(x => x.Address == dele.Address);
+
                     if (currdel.Username == "dwildcash")
                     {
                         System.Diagnostics.Debug.WriteLine("Slot " + slot + " Delegate " + currdel.Username + " chance " + chance);

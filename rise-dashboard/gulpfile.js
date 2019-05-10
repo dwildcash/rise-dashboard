@@ -83,7 +83,6 @@ gulp.task('clean', function () {
         'wwwroot/json/**/*',
         '!wwwroot/css/jquery-ui-autocomplete.css',
         '!wwwroot/js/jquery-jvectormap-world-mill.js',
-        '!wwwroot/js/roulette.js',
         '!wwwroot/css/pace.css'
     ]);
 });
