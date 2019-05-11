@@ -164,9 +164,24 @@
                 if (delegate_account != null)
                 {
                     address = delegate_account.Address;
+                    accountSummaryViewModel = new AccountSummaryViewModel
+                    {
+                        liveCoinQuoteResult = LiveCoinQuote.Current,
+                        coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
+                        coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                        transactionsResult = TransactionsResult.Current,
+                        delegateResult = DelegateResult.Current,
+                        walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
+                        delegateVotesResult = await DelegateVotesFetcher.FetchRiseDelegateVotes(address),
+                        delegateVotersResult = await DelegateVotersFetcher.FetchVoters(delegate_account.PublicKey),
+                        forgedByAccount = await ForgedByAccountFetcher.FetchForgedByAccount(delegate_account.PublicKey),
+                        coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address),
+                        coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)
+                    };
                 }
-
-                accountSummaryViewModel = new AccountSummaryViewModel
+                else
+                {
+                    accountSummaryViewModel = new AccountSummaryViewModel
                     {
                         liveCoinQuoteResult = LiveCoinQuote.Current,
                         coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
@@ -177,8 +192,16 @@
                         coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address),
                         coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)
                     };
+                }
 
-                return accountSummaryViewModel.walletAccountResult == null ? null : PartialView("_AccountSummaryPartial", accountSummaryViewModel);
+                if (accountSummaryViewModel.walletAccountResult == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return PartialView("_AccountSummaryPartial", accountSummaryViewModel);
+                }
             }
 
             return null;
