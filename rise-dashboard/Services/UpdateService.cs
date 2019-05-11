@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using rise.Code.DataFetcher;
+using rise.Code.Rise;
 using rise.Helpers;
 using rise.Models;
 using rise.Services;
@@ -8,9 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
-using rise.Code.Rise;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -118,45 +117,11 @@ namespace Rise.Services
                         // Withdraw RISE to address
                         case "!WITHDRAW":
                             {
-                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), command, lstDestAddress.Count, message.Chat.Id, appuser))
+                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), command,
+                                    lstDestAddress.Count, message.Chat.Id, appuser))
                                 {
-                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), lstDestAddress.FirstOrDefault());
-                                }
-
-                                break;
-                            }
-                        // Splash!
-                        case "!SPLASH":
-                            {
-                                // add any extra users
-                                if (lstAmount.Count == 1)
-                                {
-                                    maxusers = 1;
-                                }
-
-                                if (await cmd_preSend(lstAmount.FirstOrDefault(), command, maxusers, message.Chat.Id, appuser))
-                                {
-                                    var waitMsg = _messagesCount + (int)RandomGenerator.NextLong(1, 4);
-
-                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, " Be active! @" + appuser.UserName + " activated a Splash! a winner will be selected in the next messages!", ParseMode.Html);
-                                    var i = 0;
-
-                                    while (_messagesCount < waitMsg)
-                                    {
-                                        Thread.Sleep(1000);
-
-                                        if (i == 30)
-                                        {
-                                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Timeout! Splash Aborted... sorry guys no winner :(", ParseMode.Html);
-                                            return;
-                                        }
-
-                                        i++;
-                                    }
-
-                                    var lstAppUsers = _appUsersManagerService.GetLastMsgUsers(appuser.UserName, maxusers);
-
-                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault(), lstAppUsers, "SPLASH!!!");
+                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count),
+                                        lstDestAddress.FirstOrDefault());
                                 }
 
                                 break;
@@ -296,7 +261,6 @@ namespace Rise.Services
                 var strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
                                      "<b>!rain</b> - !rain 10 (to random users active min 3 msg)" + Environment.NewLine +
                                      "<b>!boom</b> - !boom 10 (to all users active the in last day min 2 msg)" + Environment.NewLine +
-                                     "<b>!splash</b> - !splash 10 (winner will be in random in next max 10 msg)" + Environment.NewLine +
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
                                      "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
                                      "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
@@ -395,6 +359,7 @@ namespace Rise.Services
 
                     var balance = await RiseManager.AccountBalanceAsync(sender.Address);
 
+
                     if (balance >= amount)
                     {
                         var tx = await RiseManager.CreatePaiment((amount - 0.1) * 100000000, sender.GetSecret(), recipientId);
@@ -489,26 +454,23 @@ namespace Rise.Services
                         {
                             var secret = sender.GetSecret();
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            if (destusers.Count <= 15)
+                            if (destusers.Count <= 15 && tx.success)
                             {
-                                if (tx.success)
+                                try
                                 {
-                                    try
-                                    {
-                                        await _botService.Client.SendTextMessageAsync(destuser.TelegramId,
+                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId,
                                         "You received " + amountToSend + " from @" + sender.UserName,
                                         ParseMode.Html);
-                                        var keyboard = new InlineKeyboardMarkup(
+                                    var keyboard = new InlineKeyboardMarkup(
                                         InlineKeyboardButton.WithUrl("See Transaction",
                                             "https://explorer.rise.vision/tx/" + tx.transactionId));
-                                        await _botService.Client.SendTextMessageAsync(destuser.TelegramId,
+                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId,
                                         "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        _logger.LogError("Received Exception from cmd_Send private Message {0}",
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.LogError("Received Exception from cmd_Send private Message {0}",
                                         ex.Message);
-                                    }
                                 }
                             }
                         }
@@ -601,12 +563,15 @@ namespace Rise.Services
             try
             {
                 await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+                var quote = await QuoteManager.GetRiseQuote();
 
                 if (!string.IsNullOrEmpty(sender.Address))
                 {
+                    var balance = Math.Round(await RiseManager.AccountBalanceAsync(sender.Address), 4);
                     var strResponse = "<b>Current Balance for </b>@" + sender.UserName + Environment.NewLine +
-                                         "Address: <b>" + sender.Address + "</b>" + Environment.NewLine +
-                                         "Balance <b>" + Math.Round(await RiseManager.AccountBalanceAsync(sender.Address), 4) + " RISE </b>";
+                                      "Address: <b>" + sender.Address + "</b>" + Environment.NewLine +
+                                      "Balance: <b>" + balance + " RISE </b>" + Environment.NewLine +
+                                      "USD: <b>" +  Math.Round(balance * quote.USDPrice,4) + "$</b>";
 
                     if (string.IsNullOrEmpty(sender.UserName))
                     {
@@ -646,14 +611,13 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Exchanges(Message message, ApplicationUser appuser)
         {
-            string strResponse;
             try
             {
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
-                strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                "<b>Altilly</b> - https://altilly.com" + Environment.NewLine +
-                "<b>Livecoin</b> - http://livecoin.net" + Environment.NewLine +
-                "<b>Vinex</b> - https://vinex.network";
+                var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
+                                     "<b>Altilly</b> - https://altilly.com" + Environment.NewLine +
+                                     "<b>Livecoin</b> - http://livecoin.net" + Environment.NewLine +
+                                     "<b>Vinex</b> - https://vinex.network";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
@@ -672,8 +636,8 @@ namespace Rise.Services
             await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             var quote = await QuoteManager.GetRiseQuote();
 
-            string strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + "</b>" + Environment.NewLine +
-            "Usd Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
+            var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + "</b>" + Environment.NewLine +
+            "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
             "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + "</b>";
 
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
@@ -688,27 +652,25 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Info(Message message)
         {
-            string strResponse;
-
             try
             {
-                strResponse = "<b>Rise Information/Tools</b>" + Environment.NewLine +
-                "<b>Rise Website</b> - https://rise.vision" + Environment.NewLine +
-                "<b>Rise RoadMap</b> - https://rise.vision/roadmap/" + Environment.NewLine +
-                "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
-                "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
-                "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
-                "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
-                "<b>Rise Dashboard</b> - https://rise.coinquote.io" + Environment.NewLine +
-                "<b>Rise Force Game</b> - http://riseforce.io/" + Environment.NewLine +
-                "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
-                "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
-                "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
-                "<b>Rise Slack</b> - https://risevision.slack.com/" + Environment.NewLine +
-                "<b>Rise Discord</b> - https://discord.gg/6jyWQnJ" + Environment.NewLine +
-                "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
-                "<b>Rise Intro Youtube</b> - https://www.youtube.com/watch?v=wZ2vIGl_gCM&feature=youtu.be" + Environment.NewLine +
-                "<b>Rise Telegram Tipping service</b> -!help";
+                var strResponse = "<b>Rise Information/Tools</b>" + Environment.NewLine +
+                                     "<b>Rise Website</b> - https://rise.vision" + Environment.NewLine +
+                                     "<b>Rise RoadMap</b> - https://rise.vision/roadmap/" + Environment.NewLine +
+                                     "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
+                                     "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
+                                     "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
+                                     "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
+                                     "<b>Rise Dashboard</b> - https://rise.coinquote.io" + Environment.NewLine +
+                                     "<b>Rise Force Game</b> - http://riseforce.io/" + Environment.NewLine +
+                                     "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
+                                     "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
+                                     "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
+                                     "<b>Rise Slack</b> - https://risevision.slack.com/" + Environment.NewLine +
+                                     "<b>Rise Discord</b> - https://discord.gg/6jyWQnJ" + Environment.NewLine +
+                                     "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
+                                     "<b>Rise Intro Youtube</b> - https://www.youtube.com/watch?v=wZ2vIGl_gCM&feature=youtu.be" + Environment.NewLine +
+                                     "<b>Rise Telegram Tipping service</b> -!help";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)

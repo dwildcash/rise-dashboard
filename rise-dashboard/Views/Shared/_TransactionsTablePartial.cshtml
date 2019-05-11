@@ -75,12 +75,12 @@
                                     <td class="align-middle"><h6><small class="text-muted">@DateTime.Parse(Model.FromGenesisTime(t.timestamp).ToString()).ToString("yyyy-MM-dd HH:mm:ss")</small></h6></td>
                                     <td class="align-middle"><h5><small><span class="text-muted"><a href="https://explorer.rise.vision/transaction/@t.id" target="_blank">@t.id</a></span></small></h5></td>
                                     <td>
-                                        <h6 class="text-center"><span class="text-muted">@Html.ActionLink((ToDelegateUser(t.senderId) ?? t.senderId), "Account", "Home", new { address = t.senderId }, null)</span></h6>
+                                        <h6 class="text-center"><span class="text-muted">@Html.ActionLink((ToDelegateUser(t.senderId) ?? t.senderId), "Transactions", "Home", new { address = t.senderId }, null)</span></h6>
                                         <h6 class="text-center"><i class="fa fa-arrow-down align-content-center"></i></h6>
 
                                         @if ((double.Parse(t.amount.ToString()) > 0))
                                         {
-                                            <h6 class="text-center">@Html.ActionLink((ToDelegateUser(t.recipientId) ?? t.recipientId), "Index", "Home", new { address = t.recipientId }, null)</h6>
+                                            <h6 class="text-center">@Html.ActionLink((ToDelegateUser(t.recipientId) ?? t.recipientId), "Transactions", "Home", new { address = t.recipientId }, null)</h6>
                                         }
                                         else
                                         {

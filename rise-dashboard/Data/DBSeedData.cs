@@ -19,7 +19,7 @@ namespace rise.Data
         public static async Task SeedData(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext context)
         {
             await SeedRoles(roleManager);
-            SeedUsers(userManager);
+            await SeedUsers(userManager);
         }
 
         /// <summary>

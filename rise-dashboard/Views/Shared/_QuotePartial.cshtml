@@ -51,6 +51,7 @@
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
+        var dataPack1 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Vinex").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack2 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "LiveCoin").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack4 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Altilly").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
@@ -74,6 +75,15 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
+                    label: 'Vinex',
+                    yAxisID: "volume",
+                    data: dataPack1,
+                    backgroundColor: "rgba(206, 22, 0, 0.6)",
+                    hoverBackgroundColor: "rgba(206, 0, 0, 0.6)",
+                    hoverBorderWidth: 2,
+                    hoverBorderColor: 'lightgrey'
+                },
+                {
                 label: 'LiveCoin',
                     yAxisID: "volume",
                     data: dataPack2,
@@ -90,7 +100,7 @@
                     hoverBackgroundColor: "rgba(139, 0, 220, 0.6)",
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
-                },
+                }
             ]
         },
         options: {

@@ -16,7 +16,7 @@
         /// <summary>
         /// Gets the Schedule
         /// </summary>
-        public string Schedule => "* * * * *";
+        public string Schedule => "*/2 * * * *";
 
         /// <summary>
         /// Defines the scopeFactory
@@ -55,19 +55,28 @@
                         USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * (double.Parse(AltillyQuote.Current.last) / 100000000)
                     };
 
-                    var totalVolume = quoteLivecoin.Volume + quoteAltilly.Volume;
+                    var quoteVinex = new CoinQuote
+                    {
+                        Exchange = "Vinex",
+                        Price = VinexQuote.Current.lastPrice,
+                        Volume = VinexQuote.Current.volume,
+                        TimeStamp = time,
+                        USDPrice = Double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * VinexQuote.Current.lastPrice
+                    };
+                    var totalVolume = quoteLivecoin.Volume + quoteAltilly.Volume + quoteVinex.Volume;
 
                     var quoteAllWeighted = new CoinQuote
                     {
                         Exchange = "All",
-                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume),
+                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume),
                         Volume = totalVolume,
                         TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) *  ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume))
+                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) *  ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume))
                     };
 
                     dbContext.CoinQuotes.Add(quoteLivecoin);
                     dbContext.CoinQuotes.Add(quoteAltilly);
+                    dbContext.CoinQuotes.Add(quoteVinex);
                     dbContext.CoinQuotes.Add(quoteAllWeighted);
 
                     // Save Context in Database

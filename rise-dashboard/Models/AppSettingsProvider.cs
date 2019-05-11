@@ -82,10 +82,14 @@
         public static string LiveCoinMarket { get; set; }
 
         /// <summary>
-        /// Get or sets AltillyMarket 
+        /// Get or sets AltillyMarket
         /// </summary>
         public static string AltillyMarket { get; set; }
 
+        /// <summary>
+        /// Get or sets VinexMarket
+        /// </summary>
+        public static string VinexMarket { get; set; }
 
         /// <summary>
         /// Gets or sets the APIUrl

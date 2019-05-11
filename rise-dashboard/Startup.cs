@@ -57,6 +57,7 @@ namespace rise
             AppSettingsProvider.IPStackApiKey = Configuration["AppSettings:IPStackApiKey"];
             AppSettingsProvider.AltillyMarket = Configuration["AppSettings:AltillyMarket"];
             AppSettingsProvider.LiveCoinMarket = Configuration["AppSettings:LiveCoinMarket"];
+            AppSettingsProvider.VinexMarket = Configuration["AppSettings:VinexMarket"];
             AppSettingsProvider.CoinMarketCapTickerCode = Configuration["AppSettings:CoinMarketCapTickerCode"];
             AppSettingsProvider.CoinName = Configuration["AppSettings:CoinName"];
             AppSettingsProvider.CoinRewardDay = int.Parse(Configuration["AppSettings:CoinRewardDay"]);
