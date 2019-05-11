@@ -168,7 +168,7 @@ namespace rise
             }
 
             // Seed Initial User
-            DbSeedData.SeedData(userManager, roleManager, context);
+            DbSeedData.SeedData(userManager, roleManager, context).Wait();
 
             app.UseStaticFiles();
 
