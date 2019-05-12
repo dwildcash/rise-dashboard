@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using rise.Code.DataFetcher;
 using rise.Code.Rise;
-using rise.Helpers;
+using rise.Data;
 using rise.Models;
 using rise.Services;
 using System;
@@ -16,18 +16,19 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Rise.Services
 {
-    public class UpdateService : IUpdateService
+    public class UpdateService : QuoteStats, IUpdateService
     {
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
         private readonly IAppUsersManagerService _appUsersManagerService;
-        private static long _messagesCount;
+        private readonly ApplicationDbContext _appdb;
 
-        public UpdateService(IBotService botService, ILogger<UpdateService> logger, IAppUsersManagerService appUsersManagerService)
+        public UpdateService(IBotService botService, ILogger<UpdateService> logger, IAppUsersManagerService appUsersManagerService, ApplicationDbContext context)
         {
             _botService = botService;
             _appUsersManagerService = appUsersManagerService;
             _logger = logger;
+            _appdb = context;
         }
 
         public async Task EchoAsync(Update update)
@@ -39,14 +40,9 @@ namespace Rise.Services
 
             var message = update.Message;
 
-            var flagMsgUpdate = false;
+            var flagMsgUpdate = message.Chat.Id == AppSettingsProvider.TelegramChannelId;
 
             // Count only message coming from channel
-            if (message.Chat.Id == AppSettingsProvider.TelegramChannelId)
-            {
-                flagMsgUpdate = true;
-                _messagesCount++;
-            }
 
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
@@ -332,17 +328,6 @@ namespace Rise.Services
         }
 
         /// <summary>
-        /// Show Wallet Address and Key
-        /// </summary>
-        /// <param name="appuser"></param>
-        private async Task cmd_Key(ApplicationUser appuser)
-        {
-            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "This is the private key for your TIP wallet account, please note it and delete this message!", ParseMode.Html);
-            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Address: <b>" + appuser.Address + "</b>", ParseMode.Html);
-            await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "Passphrase: " + appuser.GetSecret(), ParseMode.Html);
-        }
-
-        /// <summary>
         /// Withdraw coin
         /// </summary>
         /// <param name="sender"></param>
@@ -358,7 +343,6 @@ namespace Rise.Services
                     await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
 
                     var balance = await RiseManager.AccountBalanceAsync(sender.Address);
-
 
                     if (balance >= amount)
                     {
@@ -563,7 +547,8 @@ namespace Rise.Services
             try
             {
                 await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
-                var quote = await QuoteManager.GetRiseQuote();
+                coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
+                var quote = LastAllQuote();
 
                 if (!string.IsNullOrEmpty(sender.Address))
                 {
@@ -571,7 +556,7 @@ namespace Rise.Services
                     var strResponse = "<b>Current Balance for </b>@" + sender.UserName + Environment.NewLine +
                                       "Address: <b>" + sender.Address + "</b>" + Environment.NewLine +
                                       "Balance: <b>" + balance + " RISE </b>" + Environment.NewLine +
-                                      "USD: <b>" +  Math.Round(balance * quote.USDPrice,4) + "$</b>";
+                                      "USD: <b>" + Math.Round(balance * quote.USDPrice, 4) + "$</b>";
 
                     if (string.IsNullOrEmpty(sender.UserName))
                     {
@@ -634,11 +619,15 @@ namespace Rise.Services
         private async Task cmd_Price(Message message)
         {
             await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-            var quote = await QuoteManager.GetRiseQuote();
+            coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
+            var quote = LastAllQuote();
+
 
             var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + "</b>" + Environment.NewLine +
-            "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
-            "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + "</b>";
+                              "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
+                              "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + "</b>" + Environment.NewLine +
+                              "24h % Change: <b>" + Math.Round(PercentChange(1), 2) + "% </b>" + Environment.NewLine +
+                              "Week % Change: <b>" + Math.Round(PercentChange(7), 2) + "% </b>";
 
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));

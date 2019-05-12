@@ -23,7 +23,7 @@
         /// <returns></returns>
         public DateTime FromGenesisTime(long unixTime)
         {
-            DateTime epoch = new DateTime(2016, 05, 24, 17, 5, 0, 0).ToLocalTime();
+            var epoch = new DateTime(2016, 05, 24, 17, 5, 0, 0).ToLocalTime();
             return epoch.AddSeconds(unixTime);
         }
 
