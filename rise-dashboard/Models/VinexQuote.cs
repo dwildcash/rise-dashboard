@@ -1,7 +1,5 @@
 ﻿namespace rise.Models
 {
-    using System;
-
     /// <summary>
     /// rise Quote Object ex:https://api.altilly.com/api/public/Ticker/RISEBTC
     /// </summary>
@@ -30,8 +28,7 @@
 
         public double bidPrice { get; set; }
         public double askPrice { get; set; }
-
-}
+    }
 
     public class VinexQuoteResult
     {

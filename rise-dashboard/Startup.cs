@@ -2,6 +2,9 @@
 
 namespace rise
 {
+    using Code;
+    using Code.Scheduling;
+    using Data;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -12,12 +15,9 @@ namespace rise
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Code;
-    using Code.Scheduling;
-    using Data;
     using Models;
-    using Services;
     using Rise.Services;
+    using Services;
     using System;
 
     /// <summary>
@@ -25,7 +25,6 @@ namespace rise
     /// </summary>
     public class Startup
     {
-
         private readonly ILogger<Startup> _logger;
 
         /// <summary>
@@ -123,11 +122,9 @@ namespace rise
             // Save quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
 
-
             // Configure Telegram bot
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
-
 
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>

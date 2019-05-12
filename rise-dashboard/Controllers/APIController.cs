@@ -1,8 +1,8 @@
 ﻿namespace rise.Controllers
 {
+    using Data;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Data;
     using Models;
     using Rise.Services;
     using System.Linq;
@@ -13,7 +13,6 @@
     /// </summary>
     public class apiController : Controller
     {
-
         /// <summary>
         /// Defines the _appdb
         /// </summary>
@@ -23,7 +22,6 @@
         /// Telegram Update Service
         /// </summary>
         private readonly IUpdateService _updateService;
-
 
         // POST api/WebHook
         [HttpPost]
@@ -41,12 +39,11 @@
             return Ok();
         }
 
-
-       /// <summary>
-       /// api Controller
-       /// </summary>
-       /// <param name="context"></param>
-       /// <param name="updateService"></param>
+        /// <summary>
+        /// api Controller
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="updateService"></param>
         public apiController(ApplicationDbContext context, IUpdateService updateService)
         {
             _updateService = updateService;
@@ -57,7 +54,7 @@
         /// Return the latest Quote
         /// </summary>
         /// <returns></returns>
-        /// 
+        ///
         [AllowAnonymous]
         public JsonResult GetQuote()
         {

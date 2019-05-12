@@ -1,9 +1,9 @@
 ﻿namespace rise.Controllers
 {
+    using Data;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using Data;
     using Models;
     using System.Linq;
     using System.Threading.Tasks;

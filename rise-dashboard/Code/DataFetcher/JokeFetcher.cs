@@ -2,7 +2,6 @@
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Models;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using rise.Code.Rise;
 using rise.Data;
 using rise.Helpers;
 using rise.Models;
@@ -8,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using rise.Code.Rise;
 using Telegram.Bot.Types;
 
 namespace rise.Services

@@ -11,6 +11,7 @@
         /// Gets or sets the Current
         /// </summary>
         public static AltillyQuote Current { get; set; }
+
         public string ask { get; set; }
         public string bid { get; set; }
         public string last { get; set; }

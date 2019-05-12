@@ -2,7 +2,6 @@
 {
     using rise.Code.Rise;
     using rise.Models;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Defines the <see cref="QuoteViewModel" />

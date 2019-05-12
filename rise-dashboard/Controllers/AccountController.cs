@@ -33,12 +33,11 @@
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> LoginCallback(int id, string first_name, string username, string photo_url, string auth_date, string hash)
         {
-            Dictionary<string,string> fields = new Dictionary<string, string>()
+            Dictionary<string, string> fields = new Dictionary<string, string>()
             {
                 { "id", id.ToString() },
                 { "first_name", first_name },

@@ -1,7 +1,7 @@
 ﻿namespace rise.Models
 {
-    using Microsoft.AspNetCore.Identity;
     using Helpers;
+    using Microsoft.AspNetCore.Identity;
     using System;
 
     /// <summary>

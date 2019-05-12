@@ -622,7 +622,6 @@ namespace Rise.Services
             coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
             var quote = LastAllQuote();
 
-
             var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + "</b>" + Environment.NewLine +
                               "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
                               "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + "</b>" + Environment.NewLine +

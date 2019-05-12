@@ -1,8 +1,8 @@
 ﻿namespace rise.Code.DataFetcher
 {
+    using Models;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Models;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -12,7 +12,6 @@
     /// </summary>
     public static class VinexQuoteFetcher
     {
-
         public static async Task<VinexQuote> FetchVinexCoinQuote()
         {
             try

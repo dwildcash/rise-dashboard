@@ -1,7 +1,7 @@
 ﻿namespace rise.ViewModels
 {
-    using rise.Code.Rise;
     using Models;
+    using rise.Code.Rise;
 
     /// <summary>
     /// Defines the <see cref="TransactionsViewModel" />

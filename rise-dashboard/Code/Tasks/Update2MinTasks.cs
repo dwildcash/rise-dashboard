@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using rise.Code.DataFetcher;
+﻿using rise.Code.DataFetcher;
 using rise.Code.Scheduling;
 using rise.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace rise.Code.Tasks
 {

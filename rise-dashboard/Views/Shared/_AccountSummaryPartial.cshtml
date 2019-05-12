@@ -148,7 +148,7 @@
                                     @if (mydelegate.Rank > 1)
                                     {
                                         var NextDelegate = GetPreviousDelegate(mydelegate.Rank - 1);
-                                        double neededVotes = Math.Round(((double)NextDelegate.VotesWeight - (double)mydelegate.VotesWeight) / 100000000,2);
+                                        double neededVotes = Math.Round(((double)NextDelegate.VotesWeight - (double)mydelegate.VotesWeight) / 100000000, 2);
                                         <td><h4>@(mydelegate.Rank) - <small>Next Level in @neededVotes Votes </small></h4></td>
                                     }
                                     else

@@ -27,7 +27,6 @@
             return epoch.AddSeconds(unixTime);
         }
 
-    
         /// <summary>
         /// Return Time to Genesis format
         /// </summary>
@@ -119,7 +118,7 @@
         /// <returns></returns>
         public CoinQuote LastAllQuote()
         {
-            return coinQuoteCol.Where(x=>x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "All").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+            return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "All").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿namespace rise.Controllers
 {
+    using Code.DataFetcher;
+    using Data;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using Code.DataFetcher;
-    using Data;
     using Models;
-    using ViewModels;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using ViewModels;
 
     /// <summary>
     /// Defines the <see cref="HomeController" />
@@ -243,18 +243,26 @@
         [AllowAnonymous]
         public async Task<PartialViewResult> AccountPartialViewAsync(string address)
         {
-            var accountSummaryViewModel = new AccountSummaryViewModel
+            try
             {
-                liveCoinQuoteResult = LiveCoinQuote.Current,
-                coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
-                transactionsResult = TransactionsResult.Current,
-                delegateResult = DelegateResult.Current,
-                walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
-                delegateVotesResult = await DelegateVotesFetcher.FetchRiseDelegateVotes(address),
-                coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address)
-            };
+                var accountSummaryViewModel = new AccountSummaryViewModel
+                {
+                    liveCoinQuoteResult = LiveCoinQuote.Current,
+                    coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                    transactionsResult = TransactionsResult.Current,
+                    delegateResult = DelegateResult.Current,
+                    walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
+                    delegateVotesResult = await DelegateVotesFetcher.FetchRiseDelegateVotes(address),
+                    coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address)
+                };
 
-            return PartialView("_AccountPartial", accountSummaryViewModel);
+                return PartialView("_AccountPartial", accountSummaryViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from QuotePartial {0}", ex.Message);
+                return null;
+            }     
         }
 
         /// <summary>
@@ -265,33 +273,42 @@
         [AllowAnonymous]
         public async Task<PartialViewResult> TransactionsTablePartialView(string address = "")
         {
-            TransactionsViewModel transactionsViewModel = new TransactionsViewModel
+            try
             {
-                coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
-                LiveCoinQuoteResult = LiveCoinQuote.Current,
-                CoinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
-                DelegateResult = DelegateResult.Current
-            };
-
-            if (address?.Length == 0)
-            {
-                transactionsViewModel.TransactionsResult = TransactionsResult.Current;
-            }
-            else
-            {
-                var account = DelegateResult.Current.Delegates.Where(x => x.Username.Contains(address.ToLower()) || x.Address == address).OrderBy(j => j.Username.Length).FirstOrDefault();
-
-                if (account != null)
+                TransactionsViewModel transactionsViewModel = new TransactionsViewModel
                 {
-                    transactionsViewModel.TransactionsResult = await TransactionsFetcher.FetchAllUserTransactions(account.Address);
+                    coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
+                    LiveCoinQuoteResult = LiveCoinQuote.Current,
+                    CoinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                    DelegateResult = DelegateResult.Current
+                };
+
+                if (address?.Length == 0)
+                {
+                    transactionsViewModel.TransactionsResult = TransactionsResult.Current;
                 }
                 else
                 {
-                    transactionsViewModel.TransactionsResult = await TransactionsFetcher.FetchAllUserTransactions(address);
-                }
-            }
+                    var account = DelegateResult.Current.Delegates.Where(x => x.Username.Contains(address.ToLower()) || x.Address == address).OrderBy(j => j.Username.Length).FirstOrDefault();
 
-            return PartialView("_TransactionsTablePartial", transactionsViewModel);
+                    if (account != null)
+                    {
+                        transactionsViewModel.TransactionsResult = await TransactionsFetcher.FetchAllUserTransactions(account.Address);
+                    }
+                    else
+                    {
+                        transactionsViewModel.TransactionsResult = await TransactionsFetcher.FetchAllUserTransactions(address);
+                    }
+                }
+
+                return PartialView("_TransactionsTablePartial", transactionsViewModel);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from QuotePartial {0}", ex.Message);
+                return null;
+            }
         }
 
         /// <summary>

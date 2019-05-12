@@ -1,9 +1,9 @@
 ﻿namespace rise.Code
 {
-    using Microsoft.Extensions.DependencyInjection;
-    using Scheduling;
     using Data;
+    using Microsoft.Extensions.DependencyInjection;
     using Models;
+    using Scheduling;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -71,7 +71,7 @@
                         Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume),
                         Volume = totalVolume,
                         TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) *  ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume))
+                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume))
                     };
 
                     dbContext.CoinQuotes.Add(quoteLivecoin);

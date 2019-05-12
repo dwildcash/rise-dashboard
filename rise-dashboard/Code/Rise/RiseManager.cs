@@ -1,11 +1,11 @@
 ﻿using dotnetstandard_bip39;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using rise.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using rise.Models;
 
 namespace rise.Code.Rise
 {
