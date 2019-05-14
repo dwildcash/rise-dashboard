@@ -59,7 +59,7 @@
                     {
                         Exchange = "Vinex",
                         Price = VinexQuote.Current.lastPrice,
-                        Volume = VinexQuote.Current.volume,
+                        Volume = VinexQuote.Current.baseVolume,
                         TimeStamp = time,
                         USDPrice = Double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * VinexQuote.Current.lastPrice
                     };

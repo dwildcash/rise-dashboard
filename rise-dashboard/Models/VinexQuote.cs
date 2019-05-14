@@ -16,6 +16,8 @@
 
         public double highPrice { get; set; }
 
+        public double baseVolume { get; set; }
+
         public double lowPrice { get; set; }
 
         public double volume { get; set; }
@@ -27,6 +29,7 @@
         public double threshold { get; set; }
 
         public double bidPrice { get; set; }
+
         public double askPrice { get; set; }
     }
 
