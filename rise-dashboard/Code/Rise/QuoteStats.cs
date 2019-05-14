@@ -67,7 +67,7 @@
                 return 0;
             }
 
-            return Math.Round(quoteXdays.Price);
+            return quoteXdays.Price;
         }
 
         /// <summary>
@@ -84,7 +84,7 @@
                 return 0;
             }
 
-            return Math.Round(quoteXdays.Price);
+            return quoteXdays.Price;
         }
 
         /// <summary>
