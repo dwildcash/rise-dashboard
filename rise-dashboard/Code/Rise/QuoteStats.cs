@@ -60,7 +60,7 @@
         /// <returns></returns>
         public double DaysHigh(int days)
         {
-            var quoteXdays = coinQuoteCol.Where(x => x.Exchange == "LiveCoin" && x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-days)).OrderByDescending(i => i.Price).FirstOrDefault();
+            var quoteXdays = coinQuoteCol.Where(x => x.Exchange == "All" && x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-days)).OrderByDescending(i => i.Price).FirstOrDefault();
 
             if (quoteXdays == null)
             {
@@ -77,7 +77,7 @@
         /// <returns></returns>
         public double DaysLow(int days)
         {
-            var quoteXdays = coinQuoteCol.Where(x => x.Exchange == "LiveCoin" && x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-days)).OrderBy(i => i.Price).FirstOrDefault();
+            var quoteXdays = coinQuoteCol.Where(x => x.Exchange == "All" && x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-days)).OrderBy(i => i.Price).FirstOrDefault();
 
             if (quoteXdays == null)
             {
