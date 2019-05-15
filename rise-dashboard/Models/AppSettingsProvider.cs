@@ -112,6 +112,11 @@
         public static string LiveCoinWalletAddress { get; set; }
 
         /// <summary>
+        /// Get or set the VinexWalletAddress
+        /// </summary>
+        public static string VinexWalletAddress { get; set; }
+
+        /// <summary>
         /// Secret used for Telegram webhook
         /// </summary>
         public static string WebHookSecret { get; set; }

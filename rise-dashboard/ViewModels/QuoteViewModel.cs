@@ -38,9 +38,5 @@
         /// </summary>
         public CoinbaseBtcQuoteResult coinbaseBtcQuoteResult { get; set; }
 
-        /// <summary>
-        /// Get All coins sent or received from LiveCoin
-        /// </summary>
-        public TransactionsResult liveCoinTx { get; set; }
     }
 }

@@ -65,6 +65,7 @@ namespace rise
             AppSettingsProvider.CoinExplorer = Configuration["AppSettings:CoinExplorer"];
             AppSettingsProvider.DonationAddress = Configuration["AppSettings:DonationAddress"];
             AppSettingsProvider.LiveCoinWalletAddress = Configuration["AppSettings:LiveCoinWalletAddress"];
+            AppSettingsProvider.VinexWalletAddress = Configuration["AppSettings:VinexWalletAddress"];
             AppSettingsProvider.SimulateRoundCount = int.Parse(Configuration["AppSettings:SimulateRoundCount"]);
             AppSettingsProvider.MaxTransactionsToFetch = int.Parse(Configuration["AppSettings:MaxTransactionsToFetch"]);
             AppSettingsProvider.BotApiKey = Configuration["AppSettings:BotApiKey"];

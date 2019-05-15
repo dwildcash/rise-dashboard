@@ -322,7 +322,7 @@
             {
                 var quoteViewModel = new QuoteViewModel
                 {
-                    liveCoinTx = await TransactionsFetcher.FetchAllUserTransactions(AppSettingsProvider.LiveCoinWalletAddress),
+                    //liveCoinTx = await TransactionsFetcher.FetchAllUserTransactions(AppSettingsProvider.LiveCoinWalletAddress),
                     transactionsResult = TransactionsResult.Current,
                     liveCoinQuoteResult = LiveCoinQuote.Current,
                     coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
