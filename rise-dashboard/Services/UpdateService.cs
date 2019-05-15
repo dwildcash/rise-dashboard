@@ -597,14 +597,17 @@ namespace Rise.Services
         private async Task cmd_Exchanges(Message message, ApplicationUser appuser)
         {
             
+            var volAltilly = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault().Volume;
+            var volVinex = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault().Volume;
+            var volLivecoin = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Livecoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault().Volume;
 
             try
             {
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                     "<b>Altilly</b> - https://altilly.com" + Environment.NewLine +
-                                     "<b>Livecoin</b> - http://livecoin.net" + Environment.NewLine +
-                                     "<b>Vinex</b> - https://vinex.network";
+                                     "<b>Altilly</b> - https://altilly.com  (24H Volume:" + volAltilly + ")" + Environment.NewLine +
+                                     "<b>Livecoin</b> - http://livecoin.net (24H Volume:" + volLivecoin + ")" + Environment.NewLine +
+                                     "<b>Vinex</b> - https://vinex.network (24H Volume:" + volVinex + ")";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
