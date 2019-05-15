@@ -625,9 +625,9 @@ namespace Rise.Services
 
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                     "<b>Altilly</b> - https://altilly.com  (24H Volume:" + volAltilly + ")" + Environment.NewLine +
-                                     "<b>Livecoin</b> - http://livecoin.net (24H Volume:" + volLivecoin + ")" + Environment.NewLine +
-                                     "<b>Vinex</b> - https://vinex.network (24H Volume:" + volVinex + ")";
+                                     "<b>Altilly</b> - https://altilly.com  (24H Volume:" + volAltilly.ToString("N0") + ")" + Environment.NewLine +
+                                     "<b>Livecoin</b> - http://livecoin.net (24H Volume:" + volLivecoin.ToString("N0") + ")" + Environment.NewLine +
+                                     "<b>Vinex</b> - https://vinex.network (24H Volume:" + volVinex.ToString("N0") + ")";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
