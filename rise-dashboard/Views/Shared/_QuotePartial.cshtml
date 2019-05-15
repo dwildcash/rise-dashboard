@@ -274,7 +274,11 @@
                                     <img src="~/img/livecoin.png" alt="Product 1" class="img-circle img-size-32 mr-2">
                                     Livecoin
                                 </td>
-                                <td>@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</td>
+                                <td>@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")
+                                    <small class="text-info mr-1">
+                                        (@toLiveCoin.Count() Tx)
+                                    </small>
+                                </td>
                                 <td>
                                     @fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0") 
                                     <small class="text-info mr-1">
@@ -287,7 +291,12 @@
                                     <img src="~/img/vinex.jpg" alt="Product 1" class="img-circle img-size-32 mr-2">
                                     Vinex
                                 </td>
-                                <td> @toVinex.Sum(x => x.amount / 100000000).ToString("N0")</td>
+                                <td>
+                                    @toVinex.Sum(x => x.amount / 100000000).ToString("N0")
+                                    <small class="text-info mr-1">
+                                        (@toVinex.Count() Tx)
+                                    </small>
+                                </td>
                                 <td>
                                     @fromVinex.Sum(x => x.amount / 100000000).ToString("N0") 
                                     <small class="text-info mr-1">
