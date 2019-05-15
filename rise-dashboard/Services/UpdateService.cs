@@ -606,21 +606,21 @@ namespace Rise.Services
 
                 if (qvolAltilly != null)
                 {
-                    volAltilly = qvolAltilly.Volume;
+                    volAltilly = Math.Round(qvolAltilly.Volume);
                 }
 
                 CoinQuote qvolVinex = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
 
                 if (qvolVinex != null)
                 {
-                    volVinex = qvolVinex.Volume;
+                    volVinex = Math.Round(qvolVinex.Volume);
                 }
 
-                CoinQuote qvolLivecoin = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Livecoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+                CoinQuote qvolLivecoin = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "LiveCoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
 
                 if (qvolLivecoin != null)
                 {
-                    volLivecoin = qvolLivecoin.Volume;
+                    volLivecoin = Math.Round(qvolLivecoin.Volume);
                 }
 
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
