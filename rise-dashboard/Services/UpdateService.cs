@@ -598,9 +598,30 @@ namespace Rise.Services
         {
             try
             {
-                double volAltilly = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault()?.Volume ?? 0.0;
-                double volVinex = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault()?.Volume ?? 0.0;
-                double volLivecoin = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Livecoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault()?.Volume ?? 0.0;
+                double volAltilly = 0;
+                double volLivecoin = 0;
+                double volVinex = 0;
+
+                CoinQuote qvolAltilly = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+
+                if (qvolAltilly != null)
+                {
+                    volAltilly = qvolAltilly.Volume;
+                }
+
+                CoinQuote qvolVinex = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+
+                if (qvolVinex != null)
+                {
+                    volVinex = qvolVinex.Volume;
+                }
+
+                CoinQuote qvolLivecoin = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Livecoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+
+                if (qvolLivecoin != null)
+                {
+                    volLivecoin = qvolLivecoin.Volume;
+                }
 
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
