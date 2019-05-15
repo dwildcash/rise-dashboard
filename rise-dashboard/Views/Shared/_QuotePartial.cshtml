@@ -246,19 +246,54 @@
             <div class="position-relative mb-4">
                 <canvas id="priceQuoteChart" height="200"></canvas>
             </div>
-            <p class="d-flex flex-column">
-                <span>@(AppSettingsProvider.CoinName) 24H Tx to/from Exchanges</span>
 
-                @{
-                    var toLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
-                    var fromLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.LiveCoinWalletAddress);
-                    var toVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.VinexWalletAddress);
-                    var fromVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.VinexWalletAddress);
-                }
+            @{
+                var toLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
+                var fromLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.LiveCoinWalletAddress);
+                var toVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.VinexWalletAddress);
+                var fromVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.VinexWalletAddress);
+            }
 
-                <span class="text-muted text-lg">Sent to LiveCoin @toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0") (@toLiveCoin.Count() Tx) - From LiveCoin @fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0") (@fromLiveCoin.Count() Tx)</span>
-                <span class="text-muted text-lg">Sent to Vinex @toVinex.Sum(x => x.amount / 100000000).ToString("N0") (@toVinex.Count() Tx) - From Vinex @fromVinex.Sum(x => x.amount / 100000000).ToString("N0") (@fromVinex.Count() Tx)</span>
-            </p>
+            <!-- /.card -->
+            <div class="card">
+                <div class="card-header no-border">
+                    <h3 class="card-title">@(AppSettingsProvider.CoinName) 24H Tx to/from Exchanges</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped table-valign-middle">
+                        <thead>
+                            <tr>
+                                <th>Exchange</th>
+                                <th>Sent</th>
+                                <th>Receive</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="~/img/livecoin.png" alt="Product 1" class="img-circle img-size-32 mr-2">
+                                    Livecoin
+                                </td>
+                                <td>@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0") (@toLiveCoin.Count() Tx) </td>
+                                <td>
+                                    @fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0") (@fromLiveCoin.Count() Tx)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="~/img/vinex.jpg" alt="Product 1" class="img-circle img-size-32 mr-2">
+                                    Vinex
+                                </td>
+                                <td> @toVinex.Sum(x => x.amount / 100000000).ToString("N0") (@toVinex.Count() Tx)</td>
+                                <td>
+                                    @fromVinex.Sum(x => x.amount / 100000000).ToString("N0") (@fromVinex.Count() Tx)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.card -->
         </div>
     </div>
 </div>
