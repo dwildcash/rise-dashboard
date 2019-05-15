@@ -596,13 +596,12 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Exchanges(Message message, ApplicationUser appuser)
         {
-            
-            var volAltilly = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault().Volume;
-            var volVinex = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault().Volume;
-            var volLivecoin = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Livecoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault().Volume;
-
             try
             {
+                double volAltilly = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault()?.Volume ?? 0.0;
+                double volVinex = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault()?.Volume ?? 0.0;
+                double volLivecoin = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Livecoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault()?.Volume ?? 0.0;
+
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
                                      "<b>Altilly</b> - https://altilly.com  (24H Volume:" + volAltilly + ")" + Environment.NewLine +
@@ -630,7 +629,7 @@ namespace Rise.Services
             var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + "</b>" + Environment.NewLine +
                               "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
                               "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + "</b>" + Environment.NewLine +
-                              "Day Range: <b>" + Math.Round(DaysLow(1) *100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + "</b>" + Environment.NewLine +
+                              "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + "</b>" + Environment.NewLine +
                               "24h % Change: <b>" + Math.Round(PercentChange(1), 2) + "% </b>" + Environment.NewLine +
                               "Week % Change: <b>" + Math.Round(PercentChange(7), 2) + "% </b>";
 
