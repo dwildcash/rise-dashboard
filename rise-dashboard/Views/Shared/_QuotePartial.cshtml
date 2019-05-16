@@ -274,16 +274,17 @@
                                     <img src="~/img/livecoin.png" alt="livecoin" class="img-circle img-size-32 mr-2">
                                     Livecoin
                                 </td>
-                                <td>@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")
-                                    <small class="text-info mr-1">
+                                <td>
+                                    @toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")
+                                    <span class="badge badge-primary align-top">
                                         @toLiveCoin.Count() Tx
-                                    </small>
+                                    </span>
                                 </td>
                                 <td>
-                                    @fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0") 
-                                    <small class="text-info mr-1">
+                                    @fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")
+                                    <span class="badge badge-primary align-top">
                                         @fromLiveCoin.Count() Tx
-                                    </small>
+                                    </span>
                                 </td>
                             </tr>
                             <tr>
@@ -293,15 +294,13 @@
                                 </td>
                                 <td>
                                     @toVinex.Sum(x => x.amount / 100000000).ToString("N0")
-                                    <small class="text-info mr-1">
+                                    <span class="badge badge-primary align-top">
                                         @toVinex.Count() Tx
-                                    </small>
+                                    </span>
                                 </td>
                                 <td>
-                                    @fromVinex.Sum(x => x.amount / 100000000).ToString("N0") 
-                                    <small class="text-info mr-1">
-                                        @fromVinex.Count() Tx
-                                    </small>                           
+                                    @fromVinex.Sum(x => x.amount / 100000000).ToString("N0")
+                                    <span class="badge badge-primary align-top">@fromVinex.Count() Tx</span>
                                 </td>
                             </tr>
                         </tbody>
