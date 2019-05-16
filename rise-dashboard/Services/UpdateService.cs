@@ -43,7 +43,7 @@ namespace Rise.Services
 
             if (message.PinnedMessage != null)
             {
-                // got a pinnedmsg?
+         
             }
 
             var flagMsgUpdate = message.Chat.Id == AppSettingsProvider.TelegramChannelId;

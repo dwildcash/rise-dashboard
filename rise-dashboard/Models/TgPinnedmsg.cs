@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace rise.Models
 {
-    public class TgPinnedmsg
+    public class TgPinnedMsg
     {
         /// <summary>
         /// Gets or sets the Id
