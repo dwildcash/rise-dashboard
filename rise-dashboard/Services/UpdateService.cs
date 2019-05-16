@@ -41,17 +41,22 @@ namespace Rise.Services
 
             var message = update.Message;
 
-            if (message.PinnedMessage != null)
-            {
-         
-            }
-
             var flagMsgUpdate = message.Chat.Id == AppSettingsProvider.TelegramChannelId;
 
             // Count only message coming from channel
 
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
+
+            if (message.PinnedMessage != null)
+            {
+                TgPinnedMsg tgPinnedMsg = new TgPinnedMsg();
+                tgPinnedMsg.Date = DateTime.Now;
+                tgPinnedMsg.AppUser = appuser;
+                tgPinnedMsg.Message = message.Text;
+                _appdb.Add(tgPinnedMsg);
+                await _appdb.SaveChangesAsync();
+            }
 
             var maxusers = 5;
             var botcommands = new List<string>();
