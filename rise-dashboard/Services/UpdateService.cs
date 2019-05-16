@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -39,6 +40,11 @@ namespace Rise.Services
             }
 
             var message = update.Message;
+
+            if (message.PinnedMessage != null)
+            {
+                // got a pinnedmsg?
+            }
 
             var flagMsgUpdate = message.Chat.Id == AppSettingsProvider.TelegramChannelId;
 
