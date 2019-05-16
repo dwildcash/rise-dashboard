@@ -274,8 +274,18 @@
                 <tbody>
                     <tr>
                         <td>
-                            <img src="~/img/livecoin.png" alt="livecoin" class="img-circle img-size-32 mr-2">
-                            Livecoin
+                            <div class="container align-">
+                                <div class="row align-items-center justify-content-center">
+                                    <div>
+                                        <img src="~/img/livecoin.png" alt="livecoin" class="img-circle img-size-32 mr-2">
+                                    </div>
+                                </div>
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="d-flex align-items-center">
+                                        Livecoin
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             @toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")
@@ -292,8 +302,18 @@
                     </tr>
                     <tr>
                         <td>
-                            <img src="~/img/vinex.jpg" alt="vinex" class="img-circle img-size-32 mr-2">
-                            Vinex
+                            <div class="container">
+                                <div class="row align-items-center justify-content-center">
+                                    <div>
+                                        <img src="~/img/vinex.jpg" alt="livecoin" class="img-circle img-size-32 mr-2">
+                                    </div>
+                                </div>
+                                <div class="row align-items-center justify-content-center">
+                                    <div>
+                                        Vinex
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             @toVinex.Sum(x => x.amount / 100000000).ToString("N0")
