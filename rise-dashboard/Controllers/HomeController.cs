@@ -350,6 +350,7 @@
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
+
         public IActionResult Index(string address = "")
         {
             if (!String.IsNullOrEmpty(address))
@@ -357,6 +358,8 @@
                 SetCookie("addr", address, 100000000);
                 ViewBag.SearchText = address;
             }
+
+            ViewBag.Info = _appdb.TgPinnedMsgs.OrderByDescending(x => x.Date).FirstOrDefault()?.Message;
 
             return View("Index");
         }

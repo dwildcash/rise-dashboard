@@ -51,7 +51,15 @@
         </div>
         <!-- /.container-fluid -->
     </section>
-
+    <section class="content">
+        @if (ViewBag.Info != null)
+        {
+            <div class="callout callout-info">
+                <h5><i class="fa fa-info"></i> Note:</h5>
+                @ViewBag.Info
+            </div>
+        }
+    </section>
     <section class="content">
         <div id="QuoteView"></div>
     </section>
