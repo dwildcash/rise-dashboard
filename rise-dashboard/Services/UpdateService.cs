@@ -50,11 +50,13 @@ namespace Rise.Services
 
             if (message.PinnedMessage != null)
             {
-                TgPinnedMsg tgPinnedMsg = new TgPinnedMsg();
-                tgPinnedMsg.Date = DateTime.Now;
-                tgPinnedMsg.AppUser = appuser;
-                tgPinnedMsg.Message = message.Text;
-                _appdb.Add(tgPinnedMsg);
+                TgPinnedMsg tgPinnedMsg = new TgPinnedMsg
+                {
+                    Date = DateTime.Now,
+                    AppUser = appuser,
+                    Message = message.Text
+                };
+                _appdb.TgPinnedMsgs.Add(tgPinnedMsg);
                 await _appdb.SaveChangesAsync();
             }
 
