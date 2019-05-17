@@ -116,6 +116,13 @@
         /// </summary>
         public static string VinexWalletAddress { get; set; }
 
+
+        /// <summary>
+        /// Get or set for Altilly Address
+        /// </summary>
+        public static string AltillyWalletAddress { get; set; }
+
+
         /// <summary>
         /// Secret used for Telegram webhook
         /// </summary>
