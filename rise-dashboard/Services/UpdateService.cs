@@ -48,6 +48,7 @@ namespace Rise.Services
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
 
+            /*
             if (message.PinnedMessage != null)
             {
                 TgPinnedMsg tgPinnedMsg = new TgPinnedMsg
@@ -58,7 +59,7 @@ namespace Rise.Services
                 };
                 _appdb.TgPinnedMsgs.Add(tgPinnedMsg);
                 await _appdb.SaveChangesAsync();
-            }
+            }*/
 
             var maxusers = 5;
             var botcommands = new List<string>();
