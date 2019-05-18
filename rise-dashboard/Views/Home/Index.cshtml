@@ -1,4 +1,5 @@
-﻿@using rise.Models
+﻿@using System.Net.Sockets
+@using rise.Models
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
@@ -9,26 +10,25 @@
 @{string cookieValueFromContext = HttpContextAccessor.HttpContext.Request.Cookies["addr"]; }
 <title>@(AppSettingsProvider.CoinName) Dashboard</title>
 
-@section Scripts
+
+@{
+    string Address = null;
+    if (!String.IsNullOrEmpty(ViewBag.SearchText))
     {
-    <script type="text/javascript">
+        Address = ViewBag.SearchText;
 
-    @{
-        if (!String.IsNullOrEmpty(ViewBag.SearchText))
-        {
-            <text>
-                $('#AccountSummary').load('@Url.Action("AccountSummaryAsync", "Home")?address=@(ViewBag.SearchText)');
-            </text>
-        }
-        else if (cookieValueFromContext != null)
-        {
-            <text>
-                $('#AccountSummary').load('@Url.Action("AccountSummaryAsync", "Home")?address=@(cookieValueFromContext)');
-            </text>
-        }
     }
+    else if (cookieValueFromContext != null)
+    {
+        Address = cookieValueFromContext;
+    }
+}
 
-     $('#QuoteView').load('@Url.Action("QuotePartialView", "Home")');
+@section Scripts
+{
+    <script type="text/javascript"> 
+        $('#AccountSummary').load('@Url.Action("AccountSummaryAsync", "Home")?address=@Address');
+        $('#QuoteView').load('@Url.Action("QuotePartialView", "Home")');
     </script>
 }
 
@@ -54,9 +54,8 @@
     <section class="content">
         @if (ViewBag.Info != null)
         {
-            <div class="callout callout-info">
-                <h5><i class="fa fa-info"></i> Note:</h5>
-                @ViewBag.Info
+            <div class="callout callout-info text-center">
+                <h4>@ViewBag.Info</h4>
             </div>
         }
     </section>
