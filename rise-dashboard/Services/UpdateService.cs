@@ -48,18 +48,25 @@ namespace Rise.Services
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
 
-            /*
-            if (message.PinnedMessage != null)
+            try
             {
-                TgPinnedMsg tgPinnedMsg = new TgPinnedMsg
+                if (message.PinnedMessage != null)
                 {
-                    Date = DateTime.Now,
-                    AppUser = appuser,
-                    Message = message.Text
-                };
-                _appdb.TgPinnedMsgs.Add(tgPinnedMsg);
-                await _appdb.SaveChangesAsync();
-            }*/
+                    TgPinnedMsg tgPinnedMsg = new TgPinnedMsg
+                    {
+                        Date = DateTime.Now,
+                        AppUser = appuser,
+                        Message = message.Text
+                    };
+                    await _appdb.AddAsync(tgPinnedMsg);
+                    await _appdb.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error saving pinned msg {0}" + ex.Message);
+                return;
+            }
 
             var maxusers = 5;
             var botcommands = new List<string>();
