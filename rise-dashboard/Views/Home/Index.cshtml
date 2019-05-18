@@ -13,6 +13,7 @@
 
 @{
     string Address = null;
+
     if (!String.IsNullOrEmpty(ViewBag.SearchText))
     {
         Address = ViewBag.SearchText;
@@ -26,9 +27,13 @@
 
 @section Scripts
 {
-    <script type="text/javascript"> 
+    <script type="text/javascript">
         $('#AccountSummary').load('@Url.Action("AccountSummaryAsync", "Home")?address=@Address');
         $('#QuoteView').load('@Url.Action("QuotePartialView", "Home")');
+
+        $( function() {
+            $( "#tabs" ).tabs();
+        } );
     </script>
 }
 
@@ -64,7 +69,15 @@
     </section>
 
     <section class="content">
-        <div id="AccountSummary"></div>
+        <div id="tabs">
+            <ul>
+                <li><a href="#AccountSummary">@Address</a></li>
+                <li><a href="#tabs-2">Proin dolor</a></li>
+                <li><a href="#tabs-3">Aenean lacinia</a></li>
+            </ul>
+            <div id="AccountSummary"></div>
+        </div>
+        
     </section>
 </div>
 <!-- /.content-wrapper -->
