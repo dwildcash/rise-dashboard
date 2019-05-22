@@ -10,7 +10,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -189,7 +188,7 @@ namespace Rise.Services
 
                                 break;
                             }
-                        // Withdraw coin to address
+                        // send coin to address
                         case "!SEND":
                             {
                                 var lstAppUsers = new List<ApplicationUser>();
@@ -620,35 +619,43 @@ namespace Rise.Services
             try
             {
                 double volAltilly = 0;
+                double priceAltilly = 0;
+
                 double volLivecoin = 0;
+                double priceLivecoin = 0;
+
                 double volVinex = 0;
+                double priceVinex = 0;
 
-                CoinQuote qvolAltilly = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+                CoinQuote quoteAltilly = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
 
-                if (qvolAltilly != null)
+                if (quoteAltilly != null)
                 {
-                    volAltilly = Math.Round(qvolAltilly.Volume);
+                    volAltilly = Math.Round(quoteAltilly.Volume);
+                    priceAltilly = Math.Round(quoteAltilly.Price * 100000000);
                 }
 
-                CoinQuote qvolVinex = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+                CoinQuote quoteVinex = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
 
-                if (qvolVinex != null)
+                if (quoteVinex != null)
                 {
-                    volVinex = Math.Round(qvolVinex.Volume);
+                    volVinex = Math.Round(quoteVinex.Volume);
+                    priceVinex = Math.Round(quoteVinex.Price * 100000000);
                 }
 
-                CoinQuote qvolLivecoin = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "LiveCoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+                CoinQuote quoteLivecoin = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "LiveCoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
 
-                if (qvolLivecoin != null)
+                if (quoteLivecoin != null)
                 {
-                    volLivecoin = Math.Round(qvolLivecoin.Volume);
+                    volLivecoin = Math.Round(quoteLivecoin.Volume);
+                    priceLivecoin = Math.Round(quoteLivecoin.Price * 100000000);
                 }
 
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                     "<b>Altilly</b> - https://altilly.com  (24H Volume:" + volAltilly.ToString("N0") + ")" + Environment.NewLine +
-                                     "<b>Livecoin</b> - http://livecoin.net (24H Volume:" + volLivecoin.ToString("N0") + ")" + Environment.NewLine +
-                                     "<b>Vinex</b> - https://vinex.network (24H Volume:" + volVinex.ToString("N0") + ")";
+                                     "<b>Altilly</b> - https://altilly.com  (24H V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
+                                     "<b>Livecoin</b> - http://livecoin.net (24H V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +
+                                     "<b>Vinex</b> - https://vinex.network (24H V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
