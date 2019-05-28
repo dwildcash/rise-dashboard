@@ -366,7 +366,7 @@ namespace Rise.Services
 
                     if (balance >= amount)
                     {
-                        var tx = await RiseManager.CreatePaiment((amount - 0.1) * 100000000, sender.GetSecret(), recipientId);
+                        var tx = await RiseManager.CreatePaiment(amount * 100000000, sender.GetSecret(), recipientId);
 
                         await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Successfully sent <b>" + amount + "</b> RISE to " + recipientId, ParseMode.Html);
 
