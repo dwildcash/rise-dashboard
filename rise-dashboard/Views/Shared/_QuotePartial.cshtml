@@ -143,7 +143,7 @@
 <div class="row">
     <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-white">
+        <div class="small-box">
             <div class="inner">
                 <h3>
                     <span class="text-muted">@(Math.Round(LastQuote.Price * 100000000))</span>
@@ -164,7 +164,7 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-white">
+        <div class="small-box">
             <div class="inner">
                 <h3>
                     <span class="text-muted">
@@ -183,7 +183,7 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-white">
+        <div class="small-box">
             <div class="inner">
                 <h3><span class="text-muted">@(Math.Round(LastQuote.Volume).ToString("N0"))</span></h3>
                 <p>24H Volume (<i>$@(Math.Round(LastQuote.Volume * LastQuote.USDPrice, 2).ToString("N0")) USD</i>)</p>
@@ -196,7 +196,7 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-white">
+        <div class="small-box">
             <div class="inner">
                 <h3><span class="text-muted">@(Math.Round(LastQuote.USDPrice, 4))$ </span></h3>
                 <p>USD Price</p>
@@ -211,7 +211,7 @@
 <!-- /.row -->
 
 <div class="col-lg-12">
-    <div class="card">
+    <div class="box card">
         <div class="card-header no-border">
             <div class="d-flex justify-content-between">
                 <h3 class="card-title">@(AppSettingsProvider.CoinName) Market Stats</h3>
@@ -260,7 +260,7 @@
     }
 
     <!-- /.card -->
-    <div class="card col-sm-12">
+    <div class="box card col-sm-12">
         <div class="card-header no-border col-sm-12">
             <h3 class="card-title">@(AppSettingsProvider.CoinName) 24H Tx Sent To/Receive From Exchanges</h3>
         </div>
