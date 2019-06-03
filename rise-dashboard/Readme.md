@@ -10,9 +10,6 @@ The source code is available here
 A working exemple is available here
 - https://rise.coinquote.io
 
-# This command will build the dashboard
-cd  ./rise-dashboard/rise-dashboard/
-dotnet build
 
 When running on Linux you will need to configure Nginx/Kestrel the following URL contain a lot of information on how to setup
 
@@ -37,10 +34,9 @@ I changed secret found below please user your own.
     }
   },
 
-  "Authentication:Twitter:ConsumerKey": "pKp6NsfdafasJa2IIjzt",
-  "Authentication:Twitter:ConsumerSecret": "Q9ccY543523421431241234123lP5wbdoD1iwYE4UY",
-
   "AppSettings": {
+    "SiteUrl": "https://rise.coinquote.io",
+    "BotName": "RiseStar_bot",
     "CoinName": "RISE",
     "CoinFullName": "RISE",
     "CoinMainSite": "https://rise.vision",
@@ -49,11 +45,19 @@ I changed secret found below please user your own.
     "CoinRewardDay": 345,
     "CoinMarketCapTickerCode": "1294",
     "LiveCoinMarket": "RISE/BTC",
-    "IPStackApiKey": "02f394132412341234123246f9211277123",
-    "DonationAddress": "5556972430134253533R",
-    "SimulateRoundCount": "10",
-    "MaxTransactionsToFetch": "200",
-    "SiteAdminKey": "fjdhajhfdasj542442314123412341234123d"
+    "LiveCoinWalletAddress": "5920507067941756798R",
+    "VinexWalletAddress": "7705924848357154463R",
+    "AltillyMarket": "RISEBTC",
+    "VinexMarket": "BTC_RISE",
+    "IPStackApiKey": "63456345634563456345",
+    "DonationAddress": "5953135380169360325R",
+    "SimulateRoundCount": "100",
+    "MaxTransactionsToFetch": "1000",
+    "BotApiKey": "64534564536345634564356345",
+    "EncryptionKey": "gfdsgfsdgsdfgsdfgsd",
+    "TelegramChannelId": "-1001377697093",
+    "Salt": "gsdfgsdfgfsd",
+    "WebHookSecret":  "7346sdafsad432311"
   }
 }
 
@@ -62,16 +66,9 @@ I changed secret found below please user your own.
 # Database creation
 #############################################################################
 
+To create the database go to the rise-dashboard project folder and type
 
-How to create the database manually. (The db should create itself when the app start)
-
-Tools –> NuGet Package Manager –> Package Manager Console
-
-Run Add-Migration InitialCreate	to scaffold a migration to create the initial set of tables for your model. If you receive an error stating The term 'add-migration' is not recognized as the name of a cmdlet, close and reopen Visual Studio.
-
-Run Update-Database to apply the new migration to the database. This command creates the database before applying migrations.
-
-Add-Migration AddProductReviews
+dotnet ef database update
 
 
 
