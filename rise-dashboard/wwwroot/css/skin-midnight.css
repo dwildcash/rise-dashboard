@@ -3,7 +3,7 @@
  * ------------
  */
 .skin-midnight {
-    color: #bec5cb;
+    color: #c6ccd1;
 }
 
     .skin-midnight h4 {
@@ -11,7 +11,7 @@
     }
 
     .skin-midnight .content-header > .breadcrumb > li > a {
-        color: #bec5cb;
+        color: #c6ccd1;
     }
 
     .skin-midnight .table > thead > tr > th,
@@ -20,7 +20,7 @@
     .skin-midnight .table > thead > tr > td,
     .skin-midnight .table > tbody > tr > td,
     .skin-midnight .table > tfoot > tr > td {
-        color: #bec5cb;
+        color: #c6ccd1;
         border-top: 0px;
     }
 
@@ -52,7 +52,7 @@
         border-radius: 4px;
         background-color: #353c42;
         border: 0;
-        color: #bec5cb;
+        color: #c6ccd1;
     }
 
     .skin-midnight .dataTables_paginate .pagination li > a {
@@ -93,7 +93,7 @@
     }
 
     .skin-midnight .sidebar a {
-        color: #bec5cb;
+        color: #c6ccd1;
     }
 
         .skin-midnight .sidebar a:hover {
@@ -155,7 +155,7 @@
     .skin-midnight .box-comment,
     .skin-midnight .comment-text,
     .skin-midnight .comment-text .username {
-        color: #bec5cb;
+        color: #c6ccd1;
         background-color: #272c30;
     }
 
@@ -178,7 +178,7 @@
 
         .skin-midnight .box-solid > .box-header,
         .skin-midnight .box > .box-header {
-            color: #bec5cb;
+            color: #c6ccd1;
             background: #272c30;
             background-color: #272c30;
         }
@@ -187,7 +187,7 @@
             .skin-midnight .box > .box-header a,
             .skin-midnight .box-solid > .box-header .btn,
             .skin-midnight .box > .box-header .btn {
-                color: #bec5cb;
+                color: #c6ccd1;
             }
 
         .skin-midnight .box.box-info,
@@ -223,7 +223,7 @@
     }
 
         .skin-midnight .main-header .navbar .nav > li > a {
-            color: #bec5cb;
+            color: #c6ccd1;
         }
 
             .skin-midnight .main-header .navbar .nav > li > a:hover,
@@ -238,7 +238,7 @@
             }
 
         .skin-midnight .main-header .navbar .sidebar-toggle {
-            color: #bec5cb;
+            color: #c6ccd1;
         }
 
             .skin-midnight .main-header .navbar .sidebar-toggle:hover {
@@ -247,7 +247,7 @@
             }
 
     .skin-midnight .timeline li .timeline-item {
-        color: #bec5cb;
+        color: #c6ccd1;
         background-color: #272c30;
         border-color: #353c42;
     }
@@ -257,7 +257,7 @@
     }
 
     .skin-midnight .nav-stacked > li > a {
-        color: #bec5cb;
+        color: #c6ccd1;
     }
 
         .skin-midnight .nav-stacked > li > a:hover {
@@ -274,7 +274,7 @@
     .skin-midnight .nav-tabs-custom {
         background-color: #272c30;
         border-top-color: #353c42;
-        color: #bec5cb;
+        color: #c6ccd1;
     }
 
         .skin-midnight .main-footer .nav-tabs,
@@ -297,7 +297,7 @@
         }
 
         .skin-midnight .nav-tabs-custom > .nav-tabs > li {
-            color: #bec5cb;
+            color: #c6ccd1;
         }
 
             .skin-midnight .nav-tabs-custom > .nav-tabs > li.active > a {
@@ -305,7 +305,7 @@
             }
 
             .skin-midnight .nav-tabs-custom > .nav-tabs > li > a {
-                color: #bec5cb;
+                color: #c6ccd1;
             }
 
     .skin-midnight .form-group .input-group-addon,
@@ -315,12 +315,12 @@
     .skin-midnight .form-group textarea,
     .skin-midnight .input-group textarea {
         background-color: #353c42;
-        color: #bec5cb;
+        color: #c6ccd1;
         border: 1px solid #353c42;
     }
 
     .skin-midnight .list-group {
-        color: #bec5cb;
+        color: #c6ccd1;
         background-color: #272c30;
     }
 
@@ -340,7 +340,7 @@
 
     .skin-midnight .select2 .select2-selection {
         background-color: #353c42;
-        color: #bec5cb;
+        color: #c6ccd1;
         border: 1px solid #353c42;
     }
 
@@ -348,18 +348,18 @@
         .skin-midnight .select2 .select2-selection .select2-selection--single,
         .skin-midnight .select2 .select2-selection .select2-selection--multiple,
         .skin-midnight .select2 .select2-selection .select2-selection__rendered {
-            color: #bec5cb;
+            color: #c6ccd1;
         }
 
     .skin-midnight .select2-dropdown {
         background-color: #353c42;
-        color: #bec5cb;
+        color: #c6ccd1;
         border: 1px solid #353c42;
     }
 
         .skin-midnight .select2-dropdown .select2-search__field {
             background-color: #272c30;
-            color: #bec5cb;
+            color: #c6ccd1;
             border: 1px solid #353c42;
         }
 
