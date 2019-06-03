@@ -146,7 +146,7 @@
         <div class="small-box">
             <div class="inner">
                 <h3>
-                    <span class="text-muted">@(Math.Round(LastQuote.Price * 100000000))</span>
+                    <span>@(Math.Round(LastQuote.Price * 100000000))</span>
                     <small class="@(TextColor(Percentchange)) mr-1">
                         <sup style="font-size: 20px">
                             <i class="@GetArrowSymbol(Percentchange)"></i>
@@ -167,7 +167,7 @@
         <div class="small-box">
             <div class="inner">
                 <h3>
-                    <span class="text-muted">
+                    <span>
                         @Math.Round(Model.DaysLow(1) * 100000000)
                         <font size="5"><i class="fa fa-arrows-alt-h" /></font>
                         @Math.Round(Model.DaysHigh(1) * 100000000)
@@ -185,7 +185,7 @@
         <!-- small box -->
         <div class="small-box">
             <div class="inner">
-                <h3><span class="text-muted">@(Math.Round(LastQuote.Volume).ToString("N0"))</span></h3>
+                <h3><span>@(Math.Round(LastQuote.Volume).ToString("N0"))</span></h3>
                 <p>24H Volume (<i>$@(Math.Round(LastQuote.Volume * LastQuote.USDPrice, 2).ToString("N0")) USD</i>)</p>
             </div>
             <div class="icon">
@@ -198,7 +198,7 @@
         <!-- small box -->
         <div class="small-box">
             <div class="inner">
-                <h3><span class="text-muted">@(Math.Round(LastQuote.USDPrice, 4))$ </span></h3>
+                <h3><span>@(Math.Round(LastQuote.USDPrice, 4))$ </span></h3>
                 <p>USD Price</p>
             </div>
             <div class="icon">
@@ -246,8 +246,6 @@
             <div class="position-relative mb-4">
                 <canvas id="priceQuoteChart" height="200"></canvas>
             </div>
-
-
         </div>
     </div>
     @{
