@@ -75,7 +75,7 @@ var deps = {
     }
 };
 
-gulp.task('clean', function () {
+gulp.task('clean', function (done) {
     return del([
         'wwwroot/js/**/*',
         'wwwroot/fonts/**/*',
@@ -84,11 +84,11 @@ gulp.task('clean', function () {
         '!wwwroot/css/jquery-ui-autocomplete.css',
         '!wwwroot/js/jquery-jvectormap-world-mill.js',
         '!wwwroot/css/pace.css'
-    ]);
+    ], done);
 });
 
 // Copy required scripts
-gulp.task("scripts", function () {
+gulp.task("scripts", function (cb) {
     var streams = [];
 
     for (var prop in deps) {
@@ -99,7 +99,7 @@ gulp.task("scripts", function () {
         }
     }
 
-    return streams;
+    cb();
 });
 
-gulp.task("default", ['clean', 'scripts']);
+gulp.task("default", gulp.series('clean','scripts'));
