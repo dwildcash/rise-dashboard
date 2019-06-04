@@ -77,7 +77,7 @@
                     label: 'Vinex',
                     yAxisID: "volume",
                     data: dataPack1,
-                    backgroundColor: "rgba(254, 210, 75, 0.6)",
+                    backgroundColor: "rgba(247, 255, 33, 0.6)",
                     hoverBackgroundColor: "rgba(254, 0, 0, 0.6)",
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
@@ -86,7 +86,7 @@
                 label: 'LiveCoin',
                     yAxisID: "volume",
                     data: dataPack2,
-                    backgroundColor: "rgba(29, 136, 202, 0.6)",
+                    backgroundColor: "rgba(93, 206, 244, 0.2)",
                     hoverBackgroundColor: "rgba(225, 58, 55, 0.6)",
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
@@ -141,68 +141,71 @@
 
 <!-- Small boxes (Stat box) -->
 <div class="row">
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box">
-            <div class="inner">
-                <h3>
-                    <span>@(Math.Round(LastQuote.Price * 100000000))</span>
-                    <small class="@(TextColor(Percentchange)) mr-1">
-                        <sup style="font-size: 20px">
-                            <i class="@GetArrowSymbol(Percentchange)"></i>
-                            @(Percentchange)%
-                        </sup>
-                    </small>
-                </h3>
-                <p>Sat Price</p>
-            </div>
-            <div class="icon">
-                <i class="fab fa-bitcoin"></i>
+    <div class="col-lg-3 grid-margin stretch-card">
+        <div class="box card aligner-wrapper">
+            <div class="card-body">
+                <div class="absolute left top bottom h-100 v-strock-2 bg-success"></div>
+                <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) price in Sat.</p>
+                <div class="d-flex align-items-center">
+                    <h1 class="font-weight-medium mb-2">@(Math.Round(LastQuote.Price * 100000000))</h1>
+                    <h5 class="font-weight-medium @TextColor(Percentchange) ml-2"> @(Percentchange)%</h5>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success dot-indicator"></div>
+                    <p class="text-muted mb-0">Price calculated for the last 24H</p>
+                </div>
             </div>
         </div>
     </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box">
-            <div class="inner">
-                <h3>
-                    <span>
+    <div class="col-lg-3 grid-margin stretch-card">
+        <div class="box card aligner-wrapper">
+            <div class="card-body">
+                <div class="absolute left top bottom h-100 v-strock-2 bg-success"></div>
+                <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) 24H Range</p>
+                <div class="d-flex align-items-center">
+                    <h1 class="font-weight-medium mb-2">
                         @Math.Round(Model.DaysLow(1) * 100000000)
                         <font size="5"><i class="fa fa-arrows-alt-h" /></font>
                         @Math.Round(Model.DaysHigh(1) * 100000000)
-                    </span>
-                </h3>
-                <p>24H Range</p>
-            </div>
-            <div class="icon">
-                <i class="fa fa-exchange-alt"></i>
-            </div>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box">
-            <div class="inner">
-                <h3><span>@(Math.Round(LastQuote.Volume).ToString("N0"))</span></h3>
-                <p>24H Volume (<i>$@(Math.Round(LastQuote.Volume * LastQuote.USDPrice, 2).ToString("N0")) USD</i>)</p>
-            </div>
-            <div class="icon">
-                <i class="fa fa-chart-line"></i>
+                    </h1>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success dot-indicator"></div>
+                    <p class="text-muted mb-0">Range calculated for the last 24H</p>
+                </div>
             </div>
         </div>
     </div>
     <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box">
-            <div class="inner">
-                <h3><span>@(Math.Round(LastQuote.USDPrice, 4))$ </span></h3>
-                <p>USD Price</p>
+    <div class="col-lg-3 grid-margin stretch-card">
+        <div class="box card aligner-wrapper">
+            <div class="card-body">
+                <div class="absolute left top bottom h-100 v-strock-2 bg-success"></div>
+                <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) price in Sat.</p>
+                <div class="d-flex align-items-center">
+                    <h1 class="font-weight-medium mb-2">@(Math.Round(LastQuote.Volume).ToString("N0"))</h1>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success dot-indicator"></div>
+                    <p class="text-muted mb-0">Volume last 24H $@(Math.Round(LastQuote.Volume * LastQuote.USDPrice, 2).ToString("N0")) USD</p>
+                </div>
             </div>
-            <div class="icon">
-                <i class="fa fa-dollar-sign"></i>
+        </div>
+    </div>
+    <!-- ./col -->
+
+    <div class="col-lg-3 grid-margin stretch-card">
+        <div class="box card aligner-wrapper">
+            <div class="card-body">
+                <div class="absolute left top bottom h-100 v-strock-2 bg-success"></div>
+                <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) USD Price.</p>
+                <div class="d-flex align-items-center">
+                    <h1 class="font-weight-medium mb-2">$@(Math.Round(LastQuote.USDPrice, 4))</h1>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success dot-indicator"></div>
+                    <p class="text-muted mb-0">Based on Coinbase btc price</p>
+                </div>
             </div>
         </div>
     </div>
@@ -210,8 +213,8 @@
 </div>
 <!-- /.row -->
 
-<div class="col-lg-12">
-    <div class="box card">
+
+<div class="box card">
         <div class="card-header no-border">
             <div class="d-flex justify-content-between">
                 <h3 class="card-title">@(AppSettingsProvider.CoinName) Market Stats</h3>
@@ -256,109 +259,87 @@
         var toVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == "2644104824710583527R");
         var fromVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.VinexWalletAddress);
     }
+    
 
-    <!-- /.card -->
-    <div class="box card col-sm-12">
-        <div class="card-header no-border col-sm-12">
-            <h3 class="card-title">@(AppSettingsProvider.CoinName) 24H Tx Sent To/Receive From Exchanges</h3>
-        </div>
-        <div class="card-body p-0 col-sm-12">
-            <table class="table table-responsive-sm">
-                <thead>
-                    <tr>
-                        <th>Exchange</th>
-                        <th>Deposit</th>
-                        <th>Withdraw</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="container align-">
-                                <div class="row align-items-center justify-content-center">
-                                    <div>
-                                        <img src="~/img/livecoin.png" alt="livecoin" class="img-circle img-size-32 mr-2">
-                                    </div>
-                                </div>
-                                <div class="row align-items-center justify-content-center">
-                                    <div class="d-flex align-items-center">
-                                        <a href="https://www.livecoin.net/">Livecoin</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            @toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")
-                            <small class="badge badge-secondary">
-                                @toLiveCoin.Count() Tx
-                            </small>
-                        </td>
-                        <td>
-                            @fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")
-                            <small class="badge badge-secondary">
-                                @fromLiveCoin.Count() Tx
-                            </small>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="container">
-                                <div class="row align-items-center justify-content-center">
-                                    <div>
-                                        <img src="~/img/vinex.jpg" alt="livecoin" class="img-circle img-size-32 mr-2">
-                                    </div>
-                                </div>
-                                <div class="row align-items-center justify-content-center">
-                                    <div>
-                                        <a href="https://vinex.network/">Vinex</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            @toVinex.Sum(x => x.amount / 100000000).ToString("N0")
-                            <small class="badge badge-secondary">
-                                @toVinex.Count() Tx
-                            </small>
-                        </td>
-                        <td>
-                            @fromVinex.Sum(x => x.amount / 100000000).ToString("N0")
-                            <small class="badge badge-secondary">
-                                @fromVinex.Count() Tx
-                            </small>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="container">
-                                <div class="row align-items-center justify-content-center">
-                                    <div>
-                                        <img src="~/img/altilly.jpg" alt="altilly" class="img-circle img-size-32 mr-2">
-                                    </div>
-                                </div>
-                                <div class="row align-items-center justify-content-center">
-                                    <div>
-                                        <a href="https://www.altilly.com/">Altilly</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            @toAltilly.Sum(x => x.amount / 100000000).ToString("N0")
-                            <small class="badge badge-secondary">
-                                @toAltilly.Count() Tx
-                            </small>
-                        </td>
-                        <td>
-                            @fromAltilly.Sum(x => x.amount / 100000000).ToString("N0")
-                            <small class="badge badge-secondary">
-                                @fromAltilly.Count() Tx
-                            </small>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+<div class="row">
+    <div class="col-lg-4 grid-margin stretch-card">
+        <div class="box card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <div align="center">
+                        <img src="~/img/livecoin.png" alt="livecoin" class="img-circle img-size-32 mr-2">
+                        <div><a href="https://www.livecoin.net/">Livecoin</a></div>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Deposit</p>
+                            <h4 class="font-weight-bold">@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                        </span>
+                        <small class="text-muted">On @toLiveCoin.Count() Tx</small>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Withdraw</p>
+                            <h4 class="font-weight-bold">@fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                        </span>
+                        <small class="text-muted">On @fromLiveCoin.Count() Tx</small>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <!-- /.card -->
+
+    <div class="col-lg-4 grid-margin stretch-card">
+        <div class="box card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <div align="center">
+                        <img src="~/img/vinex.png" alt="vinex" class="img-circle img-size-32 mr-2">
+                        <div><a href="https://vinex.network/">Vinex</a></div>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Deposit</p>
+                            <h4 class="font-weight-bold">@toVinex.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                        </span>
+                        <small class="text-muted">On @toVinex.Count() Tx</small>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Withdraw</p>
+                            <h4 class="font-weight-bold">@fromVinex.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                        </span>
+                        <small class="text-muted">On @fromVinex.Count() Tx</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 grid-margin stretch-card">
+        <div class="box card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <div align="center">
+                        <img src="~/img/altilly.png" alt="livecoin" class="img-circle img-size-32 mr-2">
+                        <div> <a href="https://www.altilly.com/">Altilly</a></div>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Deposit</p>
+                            <h4 class="font-weight-bold">@toAltilly.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                        </span>
+                        <small class="text-muted">On @toAltilly.Count() Tx</small>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Withdraw</p>
+                            <h4 class="font-weight-bold">@fromAltilly.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                        </span>
+                        <small class="text-muted">On @fromAltilly.Count() Tx</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
