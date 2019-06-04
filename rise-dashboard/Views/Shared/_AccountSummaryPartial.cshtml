@@ -53,20 +53,16 @@
     TimeSpan spanweek = DateTime.Now.Subtract(sunday);
 }
 
-<section class="content-header">
 
-        <div class="row mb-2">
-            <div class="col-sm-12 nowrap">
-                <div class="box callout callout-info text-center">
-                    <p>
-                        <strong class="d-block dashtext-3">Account Summary for <a href="/Home/Index?address=@ToDelegateUser(Model.walletAccountResult.account.Address)">@Model.walletAccountResult.account.Address</a></strong>
-                    </p>
-                </div>
-            </div>
+<div class="row">
+    <div class="col-sm-12 nowrap">
+        <div class="box callout callout-info">
+            <h5 class="card-title">Account Summary for <a href="/Home/Index?address=@ToDelegateUser(Model.walletAccountResult.account.Address)">@Model.walletAccountResult.account.Address</a></h5>
         </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
 
-    <!-- /.container-fluid -->
-</section>
 
 <div class="row">
     <!-- Column -->

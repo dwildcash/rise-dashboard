@@ -86,8 +86,8 @@
                 label: 'LiveCoin',
                     yAxisID: "volume",
                     data: dataPack2,
-                    backgroundColor: "rgba(93, 206, 244, 0.2)",
-                    hoverBackgroundColor: "rgba(225, 58, 55, 0.6)",
+                    backgroundColor: "rgba(0, 0, 255, 0.6)",
+                    hoverBackgroundColor: "rgba(0, 0, 255, 0.3)",
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 },
@@ -220,37 +220,13 @@
             <h3 class="card-title">@(AppSettingsProvider.CoinName) Market Stats</h3>
         </div>
     </div>
-    <div class="card-body">
-        <div class="d-flex">
-            <p class="d-flex flex-column">
-                <span class="text-bold text-lg">@(Math.Round(LastQuote.Price * 100000000)) - sat</span>
-                <span>@(AppSettingsProvider.CoinName) Price</span>
-            </p>
-            <p class="ml-auto d-flex flex-column">
-                <span class="text-bold text-lg text-center">@((Model.liveCoinQuoteResult.BestBid * 100000000).ToString())  <i class="fa fa-caret-left"></i> <i class="fa fa-caret-right"></i>@((Model.liveCoinQuoteResult.BestAsk * 100000000).ToString())</span>
-                <span class="text-center">Bid - Ask</span>
-            </p>
-            <p class="ml-auto d-flex flex-column text-right">
-                @if (Model.PercentChange(1) >= 0)
-                {
-                    <span class="text-success text-bold">
-                        <i class="fa fa-arrow-up"></i>@(Percentchange)%
-                    </span>
-                }
-                else
-                {
-                    <span class="text-danger text-bold">
-                        <i class="fa fa-arrow-down"></i> @(Percentchange)%
-                    </span>
-                }
-                <span class="text-muted">24H % Change</span>
-            </p>
-        </div>
+    <div class="card-body"> 
         <div class="position-relative mb-4">
             <canvas id="priceQuoteChart" height="200"></canvas>
         </div>
     </div>
 </div>
+
 @{
     var toAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.AltillyWalletAddress).ToList();
     var fromAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.AltillyWalletAddress).ToList();
