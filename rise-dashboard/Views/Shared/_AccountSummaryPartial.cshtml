@@ -10,7 +10,7 @@
     }
 
     // return the account name of previous delegate
-    public rise.Models.Delegate GetPreviousDelegate(int rank)
+    public rise.Models.Delegate GetDelegateByRank(int rank)
     {
         return Model.delegateResult.Delegates.Where(x => x.Rank == rank).FirstOrDefault();
     }
@@ -145,17 +145,26 @@
                             <table class="table table-hover">
                                 <tr>
                                     <td>Rank</td>
-                                    @if (mydelegate.Rank > 1)
-                                    {
-                                        var NextDelegate = GetPreviousDelegate(mydelegate.Rank - 1);
-                                        double neededVotes = Math.Round(((double)NextDelegate.VotesWeight - (double)mydelegate.VotesWeight) / 100000000, 2);
-                                        <td><h4>@(mydelegate.Rank) - <small>Next Level in @neededVotes Votes </small></h4></td>
-                                    }
-                                    else
-                                    {
-                                        <td><h4>@(mydelegate.Rank)</h4></td>
-                                    }
+                                    <td><h4>@(mydelegate.Rank)</h4></td>
                                 </tr>
+
+                                @if (mydelegate.Rank > 1)
+                                {
+                                    <tr>
+                                        <td>Position</td>
+                                        @{
+                                            var NextDelegate = GetDelegateByRank(mydelegate.Rank - 1);
+                                            var PreviousDelegate = GetDelegateByRank(mydelegate.Rank + 1);
+
+                                            double neededVotes = Math.Round(((double)NextDelegate.VotesWeight - (double)mydelegate.VotesWeight) / 100000000, 2);
+                                            double spaceVotes = Math.Round(((double)mydelegate.VotesWeight - (double)PreviousDelegate.VotesWeight) / 100000000, 2);
+                                        }
+                                        <td>
+                                            <h4><small>Next Rank in @neededVotes Votes </small></h4>
+                                            <h4><small>Previous Rank advance @spaceVotes Votes </small></h4>
+                                        </td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td>@(AppSettingsProvider.CoinName) Forged</td>
                                     <td><h4>@Math.Round((double)Model.forgedByAccount.Forged / 100000000, 2)</h4></td>

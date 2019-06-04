@@ -42,8 +42,6 @@ namespace Rise.Services
 
             var flagMsgUpdate = message.Chat.Id == AppSettingsProvider.TelegramChannelId;
 
-            // Count only message coming from channel
-
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
 
@@ -245,6 +243,10 @@ namespace Rise.Services
                             await cmd_Joke(message);
                             break;
                         // Return a  geek joke
+                        case "!CHUCKNORRIS":
+                            await cmd_ChuckNorrisJoke(message);
+                            break;
+                        // Return a  geek joke
                         case "!HOPE":
                             await cmd_Hope(message);
                             break;
@@ -282,6 +284,7 @@ namespace Rise.Services
                                      "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
                                      "<b>!balance</b> - Show current RISE Balance" + Environment.NewLine +
                                      "<b>!joke</b> - Display a geek joke" + Environment.NewLine +
+                                     "<b>!chucknorris</b> - Display a chucknorris joke" + Environment.NewLine +
                                      "<b>!hope</b> - Show hope quote" + Environment.NewLine +
                                      "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
                                      "<b>!price</b> - Show current RISE Price" + Environment.NewLine;
@@ -606,6 +609,22 @@ namespace Rise.Services
             catch (Exception ex)
             {
                 _logger.LogError("Received Exception from cmd_ShowUserBalance {0}", ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Show a random geek joke
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private async Task cmd_ChuckNorrisJoke(Message message)
+        {
+            await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+            var strResponse = await ChuckNorrisJokeFetcher.FetchChuckNorrisJoke();
+
+            if (strResponse != null)
+            {
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.value, ParseMode.Html);
             }
         }
 
