@@ -54,13 +54,17 @@
 }
 
 <section class="content-header">
-    <div class="container-fluid">
+
         <div class="row mb-2">
-            <div class="col-sm-6 nowrap">
-                <h5 class="card-title"><strong class="d-block dashtext-3">Account Summary <a href="/Home/Index?address=@ToDelegateUser(Model.walletAccountResult.account.Address)">@Model.walletAccountResult.account.Address</a></strong></h5>
+            <div class="col-sm-12 nowrap">
+                <div class="box callout callout-info text-center">
+                    <p>
+                        <strong class="d-block dashtext-3">Account Summary for <a href="/Home/Index?address=@ToDelegateUser(Model.walletAccountResult.account.Address)">@Model.walletAccountResult.account.Address</a></strong>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
+
     <!-- /.container-fluid -->
 </section>
 
