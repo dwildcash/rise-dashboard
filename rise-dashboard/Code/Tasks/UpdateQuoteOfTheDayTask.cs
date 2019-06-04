@@ -15,7 +15,7 @@ namespace rise.Code.Tasks
         /// <summary>
         /// Gets the Schedule
         /// </summary>
-        public string Schedule => "*/30 * * * *";
+        public string Schedule => "*/60 * * * *";
 
         /// <summary>
         /// Fetch IP Localisation once a day
