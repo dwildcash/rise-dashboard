@@ -9,9 +9,9 @@
   "author": "dwildcash",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.8.2",
+    "@fortawesome/fontawesome-free": "^5.9.0",
     "admin-lte": "^3.0.0-alpha.2",
-    "animate.css": "^3.7.1",
+    "animate.css": "^3.7.2",
     "bootstrap": "^4.3.1",
     "bootstrap4": "0.0.1-security",
     "chart.js": "^2.8.0",
