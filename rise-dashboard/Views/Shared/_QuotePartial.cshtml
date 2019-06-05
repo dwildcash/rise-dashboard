@@ -56,7 +56,13 @@
         var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
         var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
 
-        var bar_ctx = document.getElementById('priceQuoteChart');
+
+        var bar_ctx = document.getElementById('priceQuoteChart').getContext("2d");
+    
+        var purple_orange_gradient = bar_ctx.createLinearGradient(0, 0, 0, 200);
+        purple_orange_gradient.addColorStop(0, 'orange');
+        purple_orange_gradient.addColorStop(1, 'purple');
+
         var bar_chart = new Chart(bar_ctx, {
         type: 'bar',
         data: {
@@ -77,17 +83,17 @@
                     label: 'Vinex',
                     yAxisID: "volume",
                     data: dataPack1,
-                    backgroundColor: "rgba(247, 255, 33, 0.6)",
+                    backgroundColor: "rgba(150, 77, 247,1)",
                     hoverBackgroundColor: "rgba(254, 0, 0, 0.6)",
                     hoverBorderWidth: 2,
-                    hoverBorderColor: 'lightgrey'
+                    hoverBorderColor: 'purple'
                 },
                 {
                 label: 'LiveCoin',
                     yAxisID: "volume",
                     data: dataPack2,
-                    backgroundColor: "rgba(0, 0, 255, 0.6)",
-                    hoverBackgroundColor: "rgba(0, 0, 255, 0.3)",
+                    backgroundColor: purple_orange_gradient,
+					hoverBackgroundColor: purple_orange_gradient,
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 },
@@ -143,8 +149,7 @@
 <div class="row">
     <div class="col-lg-3 grid-margin stretch-card">
         <div class="box card aligner-wrapper">
-            <div class="card-body">
-                <div class="absolute left top bottom h-100 v-strock-2 bg-success"></div>
+            <div class="card-body"> 
                 <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) price in Sat.</p>
                 <div class="d-flex align-items-center">
                     <h1 class="font-weight-medium mb-2">@(Math.Round(LastQuote.Price * 100000000))</h1>
@@ -160,7 +165,6 @@
     <div class="col-lg-3 grid-margin stretch-card">
         <div class="box card aligner-wrapper">
             <div class="card-body">
-                <div class="absolute left top bottom h-100 v-strock-2 bg-success"></div>
                 <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) 24H Range</p>
                 <div class="d-flex align-items-center">
                     <h1 class="font-weight-medium mb-2">
@@ -180,7 +184,6 @@
     <div class="col-lg-3 grid-margin stretch-card">
         <div class="box card aligner-wrapper">
             <div class="card-body">
-                <div class="absolute left top bottom h-100 v-strock-2 bg-success"></div>
                 <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) Volume.</p>
                 <div class="d-flex align-items-center">
                     <h1 class="font-weight-medium mb-2">@(Math.Round(LastQuote.Volume).ToString("N0"))</h1>
@@ -197,7 +200,6 @@
     <div class="col-lg-3 grid-margin stretch-card">
         <div class="box card aligner-wrapper">
             <div class="card-body">
-                <div class="absolute left top bottom h-100 v-strock-2 bg-success"></div>
                 <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) USD Price.</p>
                 <div class="d-flex align-items-center">
                     <h1 class="font-weight-medium mb-2">$@(Math.Round(LastQuote.USDPrice, 4))</h1>
@@ -209,10 +211,7 @@
             </div>
         </div>
     </div>
-    <!-- ./col -->
 </div>
-<!-- /.row -->
-
 
 <div class="box card">
     <div class="card-header no-border">
