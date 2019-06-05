@@ -59,9 +59,15 @@
 
         var bar_ctx = document.getElementById('priceQuoteChart').getContext("2d");
     
-        var purple_orange_gradient = bar_ctx.createLinearGradient(0, 0, 0, 200);
-        purple_orange_gradient.addColorStop(0, 'orange');
-        purple_orange_gradient.addColorStop(1, 'purple');
+        var gradient1 = bar_ctx.createLinearGradient(0, 0, 0, 200);
+        gradient1.addColorStop(0, 'rgba(66, 134,244, 0.5)');
+        gradient1.addColorStop(0.5, 'rgba(66, 134, 244, 0.25)');
+        gradient1.addColorStop(1, 'rgba(66, 134, 244, 0)');
+
+        var gradient2 = bar_ctx.createLinearGradient(0, 0, 0, 200);
+        gradient2.addColorStop(0, 'rgba(190, 65,244, 0.5)');
+        gradient2.addColorStop(0.5, 'rgba(190, 65, 244, 0.25)');
+        gradient2.addColorStop(1, 'rgba(190, 65, 244, 0)');
 
         var bar_chart = new Chart(bar_ctx, {
         type: 'bar',
@@ -83,8 +89,8 @@
                     label: 'Vinex',
                     yAxisID: "volume",
                     data: dataPack1,
-                    backgroundColor: "rgba(150, 77, 247,1)",
-                    hoverBackgroundColor: "rgba(254, 0, 0, 0.6)",
+                    backgroundColor: gradient2,
+                    hoverBackgroundColor: gradient2,
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'purple'
                 },
@@ -92,8 +98,8 @@
                 label: 'LiveCoin',
                     yAxisID: "volume",
                     data: dataPack2,
-                    backgroundColor: purple_orange_gradient,
-					hoverBackgroundColor: purple_orange_gradient,
+                    backgroundColor: gradient1,
+					hoverBackgroundColor: gradient1,
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 },
