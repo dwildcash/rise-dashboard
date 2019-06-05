@@ -60,14 +60,19 @@
         var bar_ctx = document.getElementById('priceQuoteChart').getContext("2d");
     
         var gradient1 = bar_ctx.createLinearGradient(0, 0, 0, 200);
-        gradient1.addColorStop(0, 'rgba(66, 134,244, 0.5)');
-        gradient1.addColorStop(0.5, 'rgba(66, 134, 244, 0.25)');
-        gradient1.addColorStop(1, 'rgba(66, 134, 244, 0)');
+        gradient1.addColorStop(0, 'rgba(0,153,255, 0.5)');
+        gradient1.addColorStop(0.5, 'rgba(0, 153, 255, 0.25)');
+        gradient1.addColorStop(1, 'rgba(0, 153, 255, 0)');
 
         var gradient2 = bar_ctx.createLinearGradient(0, 0, 0, 200);
         gradient2.addColorStop(0, 'rgba(190, 65,244, 0.5)');
         gradient2.addColorStop(0.5, 'rgba(190, 65, 244, 0.25)');
         gradient2.addColorStop(1, 'rgba(190, 65, 244, 0)');
+ 
+        var gradient3 = bar_ctx.createLinearGradient(0, 0, 0, 200);
+        gradient3.addColorStop(0, 'rgba(255, 204,51, 0.5)');
+        gradient3.addColorStop(0.5, 'rgba(255, 204, 51, 0.25)');
+        gradient3.addColorStop(1, 'rgba(255, 204, 51, 0)');
 
         var bar_chart = new Chart(bar_ctx, {
         type: 'bar',
@@ -107,8 +112,8 @@
                 label: 'Altilly',
                     yAxisID: "volume",
                     data: dataPack4,
-                    backgroundColor: "rgba(2, 52, 77, 0.6)",
-                    hoverBackgroundColor: "rgba(139, 0, 220, 0.6)",
+                    backgroundColor: gradient3,
+                    hoverBackgroundColor: gradient3,
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 }
