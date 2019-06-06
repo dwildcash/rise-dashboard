@@ -708,15 +708,13 @@ namespace Rise.Services
         private async Task cmd_Price(Message message)
         {
             await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-            coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
+            this.coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
             var quote = LastAllQuote();
 
-            var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + "</b>" + Environment.NewLine +
-                              "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + "</b>" + Environment.NewLine +
-                              "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + "</b>" + Environment.NewLine +
-                              "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + "</b>" + Environment.NewLine +
-                              "24h % Change: <b>" + Math.Round(PercentChange(1), 2) + "% </b>" + Environment.NewLine +
-                              "Week % Change: <b>" + Math.Round(PercentChange(7), 2) + "% </b>";
+            var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " 24H:" + Math.Round(PercentChange(1), 2) + "% 1W: " + Math.Round(PercentChange(7), 2) + "%</b>" + Environment.NewLine +
+                              "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + " " + USDPricePercentChange(1) + "%</b>" + Environment.NewLine +
+                              "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " " + VolumePercentChange(1) + "% </b>" + Environment.NewLine +
+                              "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + "</b>";
 
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));
