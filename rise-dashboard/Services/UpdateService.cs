@@ -689,9 +689,9 @@ namespace Rise.Services
 
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                     "<b>Altilly</b> - https://altilly.com  (24H V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
-                                     "<b>Livecoin</b> - http://livecoin.net (24H V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +
-                                     "<b>Vinex</b> - https://vinex.network (24H V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")";
+                                  "<b>Altilly</b> - https://altilly.com  (24h V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
+                                  "<b>Livecoin</b> - http://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +
+                                  "<b>Vinex</b> - https://vinex.network (24h V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
@@ -711,7 +711,7 @@ namespace Rise.Services
             this.coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
             var quote = LastAllQuote();
 
-            var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " (24H:" + Math.Round(PercentChange(1), 2) + "%) (1W: " + Math.Round(PercentChange(7), 2) + "%)</b>" + Environment.NewLine +
+            var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " (24h:" + Math.Round(PercentChange(1), 2) + "%) (1w: " + Math.Round(PercentChange(7), 2) + "%)</b>" + Environment.NewLine +
                               "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + " (" + USDPricePercentChange(1) + "%)</b>" + Environment.NewLine +
                               "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " (" + VolumePercentChange(1) + "%) </b>" + Environment.NewLine +
                               "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>";
@@ -731,22 +731,22 @@ namespace Rise.Services
             try
             {
                 var strResponse = "<b>Rise Information/Tools</b>" + Environment.NewLine +
-                                     "<b>Rise Website</b> - https://rise.vision" + Environment.NewLine +
-                                     "<b>Rise RoadMap</b> - https://rise.vision/roadmap/" + Environment.NewLine +
-                                     "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
-                                     "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
-                                     "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
-                                     "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
-                                     "<b>Rise Dashboard</b> - https://rise.coinquote.io" + Environment.NewLine +
-                                     "<b>Rise Force Game</b> - http://riseforce.io/" + Environment.NewLine +
-                                     "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
-                                     "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
-                                     "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
-                                     "<b>Rise Slack</b> - https://risevision.slack.com/" + Environment.NewLine +
-                                     "<b>Rise Discord</b> - https://discord.gg/6jyWQnJ" + Environment.NewLine +
-                                     "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
-                                     "<b>Rise Intro Youtube</b> - https://www.youtube.com/watch?v=wZ2vIGl_gCM&feature=youtu.be" + Environment.NewLine +
-                                     "<b>Rise Telegram Tipping service</b> -!help";
+                                  "<b>Rise Website</b> - https://rise.vision" + Environment.NewLine +
+                                  "<b>Rise RoadMap</b> - https://rise.vision/roadmap/" + Environment.NewLine +
+                                  "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
+                                  "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
+                                  "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
+                                  "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
+                                  "<b>Rise Dashboard</b> - https://rise.coinquote.io" + Environment.NewLine +
+                                  "<b>Rise Force Game</b> - http://riseforce.io/" + Environment.NewLine +
+                                  "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
+                                  "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
+                                  "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
+                                  "<b>Rise Slack</b> - https://risevision.slack.com/" + Environment.NewLine +
+                                  "<b>Rise Discord</b> - https://discord.gg/6jyWQnJ" + Environment.NewLine +
+                                  "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
+                                  "<b>Rise Intro Youtube</b> - https://www.youtube.com/watch?v=wZ2vIGl_gCM&feature=youtu.be" + Environment.NewLine +
+                                  "<b>Rise Telegram Tipping service</b> -!help";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)

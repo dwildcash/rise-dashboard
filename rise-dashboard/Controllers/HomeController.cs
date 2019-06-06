@@ -28,6 +28,7 @@
         /// </summary>
         private readonly UserManager<ApplicationUser> _userManager;
 
+
         /// <summary>
         /// Defines the _appdb
         /// </summary>
@@ -310,6 +311,42 @@
                 return null;
             }
         }
+
+
+        /// <summary>
+        /// Render Quote Partial View
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        public async Task<PartialViewResult> QuoteTipBotPartialView()
+        {
+            try
+            {
+                var address = GetCurrentUserAsync().Address;
+                ViewBag.userpic = GetCurrentUserAsync().Photo_Url;
+
+                var tipAccountSummaryViewModel = new AccountSummaryViewModel
+                {
+                    liveCoinQuoteResult = LiveCoinQuote.Current,
+                    coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
+                    coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                    transactionsResult = TransactionsResult.Current,
+                    delegateResult = DelegateResult.Current,
+                    walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
+                    coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address),
+                    coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)
+                };
+
+                return PartialView("_QuoteTipBotPartial", tipAccountSummaryViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from QuotePartial {0}", ex.Message);
+                return null;
+            }
+        }
+
+
 
         /// <summary>
         /// Render Quote Partial View
