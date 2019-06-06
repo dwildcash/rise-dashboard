@@ -88,7 +88,7 @@
         }
 
         /// <summary>
-        /// Return the Price Change vs X days
+        /// Return the Price % Change vs X days
         /// </summary>
         /// <param name="days">The days<see cref="int"/></param>
         /// <returns></returns>
@@ -109,6 +109,56 @@
             else
             {
                 return Math.Round(100 - (quoteXdays.Price / quoteLast.Price * 100), 2);
+            }
+        }
+
+        /// <summary>
+        /// Return the Volume % Change vs X days
+        /// </summary>
+        /// <param name="days">The days<see cref="int"/></param>
+        /// <returns></returns>
+        public double VolumePercentChange(int days)
+        {
+            var quoteXdays = coinQuoteCol.Where(x => x.Exchange == "All" && x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-days)).OrderBy(x => x.TimeStamp).FirstOrDefault();
+            var quoteLast = LastAllQuote();
+
+            if (quoteXdays == null)
+            {
+                return 0;
+            }
+
+            if (quoteXdays.Volume > quoteLast.Volume)
+            {
+                return Math.Round(-(100 - (quoteLast.Volume / quoteXdays.Volume * 100)), 2);
+            }
+            else
+            {
+                return Math.Round(100 - (quoteXdays.Volume / quoteLast.Volume * 100), 2);
+            }
+        }
+
+        /// <summary>
+        /// Return the Volume % Change vs X days
+        /// </summary>
+        /// <param name="days">The days<see cref="int"/></param>
+        /// <returns></returns>
+        public double USDPricePercentChange(int days)
+        {
+            var quoteXdays = coinQuoteCol.Where(x => x.Exchange == "All" && x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-days)).OrderBy(x => x.TimeStamp).FirstOrDefault();
+            var quoteLast = LastAllQuote();
+
+            if (quoteXdays == null)
+            {
+                return 0;
+            }
+
+            if (quoteXdays.USDPrice > quoteLast.USDPrice)
+            {
+                return Math.Round(-(100 - (quoteLast.USDPrice / quoteXdays.USDPrice * 100)), 2);
+            }
+            else
+            {
+                return Math.Round(100 - (quoteXdays.USDPrice / quoteLast.USDPrice * 100), 2);
             }
         }
 

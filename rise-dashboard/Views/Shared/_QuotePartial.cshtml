@@ -41,21 +41,22 @@
     var CoinQuoteMonth = Model.CoinQuoteByDays(15);
     var LastQuote = Model.LastAllQuote();
     var Percentchange = Math.Round(Model.PercentChange(1), 2);
+    var VolumePercentchange = Math.Round(Model.VolumePercentChange(1), 2);
+    var USDPricePercentchange = Math.Round(Model.USDPricePercentChange(1), 2);
 }
 
 <script type="text/javascript">
 
-    // Return with commas in between
-    var numberWithCommas = function (x) {
+        // Return with commas in between
+        var numberWithCommas = function (x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    };
+        };
 
         var dataPack1 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Vinex").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack2 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "LiveCoin").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack4 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Altilly").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
         var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
-
 
         var bar_ctx = document.getElementById('priceQuoteChart').getContext("2d");
     
@@ -198,6 +199,7 @@
                 <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) Volume.</p>
                 <div class="d-flex align-items-center">
                     <h1 class="font-weight-medium mb-2">@(Math.Round(LastQuote.Volume).ToString("N0"))</h1>
+                    <h5 class="font-weight-medium @TextColor(VolumePercentchange) ml-2"> @(VolumePercentchange)%</h5>
                 </div>
                 <div class="d-flex align-items-center">
                     <div class="bg-success dot-indicator"></div>
@@ -214,6 +216,7 @@
                 <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) USD Price.</p>
                 <div class="d-flex align-items-center">
                     <h1 class="font-weight-medium mb-2">$@(Math.Round(LastQuote.USDPrice, 4))</h1>
+                    <h5 class="font-weight-medium @TextColor(USDPricePercentchange) ml-2"> @(USDPricePercentchange)%</h5>
                 </div>
                 <div class="d-flex align-items-center">
                     <div class="bg-success dot-indicator"></div>
