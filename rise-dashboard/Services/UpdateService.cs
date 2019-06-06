@@ -711,10 +711,10 @@ namespace Rise.Services
             this.coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
             var quote = LastAllQuote();
 
-            var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " 24H:" + Math.Round(PercentChange(1), 2) + "% 1W: " + Math.Round(PercentChange(7), 2) + "%</b>" + Environment.NewLine +
-                              "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + " " + USDPricePercentChange(1) + "%</b>" + Environment.NewLine +
-                              "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " " + VolumePercentChange(1) + "% </b>" + Environment.NewLine +
-                              "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + "</b>";
+            var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " (24H:" + Math.Round(PercentChange(1), 2) + "%) (1W: " + Math.Round(PercentChange(7), 2) + "%)</b>" + Environment.NewLine +
+                              "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + " (" + USDPricePercentChange(1) + "%)</b>" + Environment.NewLine +
+                              "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " (" + VolumePercentChange(1) + "%) </b>" + Environment.NewLine +
+                              "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>";
 
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));
