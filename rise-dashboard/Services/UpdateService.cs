@@ -240,11 +240,11 @@ namespace Rise.Services
                             break;
                         // Return a  geek joke
                         case "!JOKE":
-                            await cmd_Joke(message);
+                            // await cmd_Joke(message);
                             break;
                         // Return a  geek joke
                         case "!CHUCKNORRIS":
-                            await cmd_ChuckNorrisJoke(message);
+                            // await cmd_ChuckNorrisJoke(message);
                             break;
                         // Return a  geek joke
                         case "!HOPE":
