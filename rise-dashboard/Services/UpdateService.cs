@@ -239,12 +239,16 @@ namespace Rise.Services
                             await cmd_Price(message);
                             break;
                         // Return a  geek joke
+                        case "!CHUCKNORRIS":
+                            // await cmd_ChuckNorrisJoke(message);
+                            break;
+                        // Return a  geek joke
                         case "!JOKE":
                             // await cmd_Joke(message);
                             break;
                         // Return a  geek joke
-                        case "!CHUCKNORRIS":
-                            // await cmd_ChuckNorrisJoke(message);
+                        case "!V2":
+                            await cmd_V2(message);
                             break;
                         // Return a  geek joke
                         case "!HOPE":
@@ -500,7 +504,7 @@ namespace Rise.Services
                         }
 
                         var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + " thanks to @" + sender.UserName + " he sent <b>" + Math.Round(amountToSend, 3) + " RISE</b> to you :)", ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + "  @" + sender.UserName + " sent you <b>" + Math.Round(amountToSend, 3) + " RISE</b> to you :)", ParseMode.Html);
                     }
                     else
                     {
@@ -628,6 +632,30 @@ namespace Rise.Services
             }
         }
 
+        private async Task cmd_V2(Message message)
+        {
+            try
+            {
+                await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+
+                var strResponse = @"Thanks to yarn and Lerna we were able to rewrite all main RISE functionalities separating the concerns of each module.  The underlying technology of the RISE core needs to be constantly updated to leverage both performance and security improvements.
+                            With this in mind we decided to update:" + Environment.NewLine +
+
+                                "Node.JS from v8 to v10" + Environment.NewLine +
+                                "TypeScript from 2.8 to 3.4.5" + Environment.NewLine +
+                                "PostgresSQL from 10.4 to 11.3" + Environment.NewLine +
+                                "We then decided to remove Redis entirely as it was no longer used in the codebase and there was no real reason to keep it as third - party dep.";
+
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Medium Article", "https://medium.com/rise-vision/introducing-rise-v2-521a58e1e9de"));
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "More details here", replyMarkup: keyboard);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_V2 {0}", ex.Message);
+            }
+        }
+
         /// <summary>
         /// Show Chuck Norris Joke
         /// </summary>
@@ -635,12 +663,19 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Joke(Message message)
         {
-            await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-            var strResponse = await JokeFetcher.FetchJoke();
-
-            if (strResponse != null)
+            try
             {
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.attachments.FirstOrDefault().text, ParseMode.Html);
+                await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                var strResponse = await JokeFetcher.FetchJoke();
+
+                if (strResponse != null)
+                {
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.attachments.FirstOrDefault().text, ParseMode.Html);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_Joke {0}", ex.Message);
             }
         }
 
@@ -707,18 +742,25 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_Price(Message message)
         {
-            await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-            this.coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
-            var quote = LastAllQuote();
+            try
+            {
+                await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                this.coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
+                var quote = LastAllQuote();
 
-            var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " (24h:" + Math.Round(PercentChange(1), 2) + "%) (1w: " + Math.Round(PercentChange(7), 2) + "%)</b>" + Environment.NewLine +
-                              "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + " (" + USDPricePercentChange(1) + "%)</b>" + Environment.NewLine +
-                              "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " (" + VolumePercentChange(1) + "%) </b>" + Environment.NewLine +
-                              "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>";
+                var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " (24h:" + Math.Round(PercentChange(1), 2) + "%) (1w: " + Math.Round(PercentChange(7), 2) + "%)</b>" + Environment.NewLine +
+                                  "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + " (" + USDPricePercentChange(1) + "%)</b>" + Environment.NewLine +
+                                  "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " (" + VolumePercentChange(1) + "%) </b>" + Environment.NewLine +
+                                  "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>";
 
-            await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));
-            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "click to open website", replyMarkup: keyboard);
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "click to open website", replyMarkup: keyboard);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_Price {0}", ex.Message);
+            }
         }
 
         /// <summary>

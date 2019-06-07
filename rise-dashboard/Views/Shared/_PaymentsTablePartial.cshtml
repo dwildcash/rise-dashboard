@@ -97,49 +97,49 @@
                                         sumAvg = Math.Round(Model.coinReceivedByAccount.transactions.Where(x => x.senderId == myvote.Address).Average(x => Double.Parse(x.amount.ToString()) / 100000000) / avgpaymentspan, 2);
                                     }
 
-                                    <tr class="table-default">
-                                        <td></td>
-                                        <td class="align-middle"><h4><span class="badge badge-primary">@myvote.Rank</span></h4></td>
-                                        <td class="align-middle">
-                                            <span class="align-middle"><a href="/Home/DelegateStats?Username=@myvote.Username"> @myvote.Username</a></span>
-                                        </td>
-                                        <td>
-                                            <div class="description-block margin-bottom">
-                                                <div>
-                                                   <p><span class="inlinebar">@String.Join(", ", list10Payments.ToArray().Reverse())</span></p>
-                                                    @if (!Double.IsNaN(sumAvg) && !Double.IsInfinity(sumAvg) && sumAvg != 0)
+                                <tr class="table-default">
+                                    <td></td>
+                                    <td class="align-middle"><h4><span class="badge badge-primary">@myvote.Rank</span></h4></td>
+                                    <td class="align-middle">
+                                        <span class="align-middle"><a href="/Home/DelegateStats?Username=@myvote.Username"> @myvote.Username</a></span>
+                                    </td>
+                                    <td>
+                                        <div class="description-block margin-bottom">
+                                            <div>
+                                                <p><span class="inlinebar">@String.Join(", ", list10Payments.ToArray().Reverse())</span></p>
+                                                @if (!Double.IsNaN(sumAvg) && !Double.IsInfinity(sumAvg) && sumAvg != 0)
                                                     {
-                                                        <small><span class="dashtext-2">@sumAvg</span></small>
+                                                <small><span class="dashtext-2">@sumAvg</span></small>
                                                     }
-                                                </div>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <h6><span class="small text-muted dashtext-3"><b>@Math.Round(sumDay, 2)</b></span>&nbsp;<span class="text-muted">1 D</span></h6>
-                                            <h6><span class="small text-muted dashtext-3"><b>@Math.Round(sumWeek, 2)</b></span>&nbsp;<span class="text-muted">1 W</span></h6>
-                                            <h6><span class="small text-muted dashtext-3"><b>@Math.Round(sumAll, 2)</b></span>&nbsp;<span class="text-muted">All</span> </h6>
-                                        <td class="align-middle">
-                                            @if (lastpayment != 0)
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h6><span class="small text-muted dashtext-3"><b>@Math.Round(sumDay, 2)</b></span>&nbsp;<span class="text-muted">1 D</span></h6>
+                                        <h6><span class="small text-muted dashtext-3"><b>@Math.Round(sumWeek, 2)</b></span>&nbsp;<span class="text-muted">1 W</span></h6>
+                                        <h6><span class="small text-muted dashtext-3"><b>@Math.Round(sumAll, 2)</b></span>&nbsp;<span class="text-muted">All</span> </h6>
+                                    <td class="align-middle">
+                                        @if (lastpayment != 0)
                                             {
-                                                <h5><span class="text-muted">@Math.Round((DateTime.Now - Model.FromGenesisTime(lastpayment)).TotalDays, 1)</span></h5>
+                                        <h5><span class="text-muted">@Math.Round((DateTime.Now - Model.FromGenesisTime(lastpayment)).TotalDays, 1)</span></h5>
                                             }
                                             else
                                             {
-                                                <span class="badge badge-danger">No payment</span>
+                                        <span class="badge badge-danger">No payment</span>
                                             }
-                                        </td>
-                                        <td class="align-middle"><h5><span class="text-muted">@transactionsCount </span></h5></td>
-                                        <td class="align-middle">
-                                            @if (!Double.IsNaN(avgpaymentspan) && !Double.IsInfinity(avgpaymentspan))
+                                    </td>
+                                    <td class="align-middle"><h5><span class="text-muted">@transactionsCount </span></h5></td>
+                                    <td class="align-middle">
+                                        @if (!Double.IsNaN(avgpaymentspan) && !Double.IsInfinity(avgpaymentspan))
                                             {
-                                                <h5><span class="text-muted">@avgpaymentspan </span></h5>
+                                        <h5><span class="text-muted">@avgpaymentspan </span></h5>
                                             }
                                             else
                                             {
-                                                <h5><span class="text-muted">NA</span></h5>
+                                        <h5><span class="text-muted">NA</span></h5>
                                             }
-                                        </td>
-                                    </tr>
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>

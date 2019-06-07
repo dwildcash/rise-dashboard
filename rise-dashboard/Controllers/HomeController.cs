@@ -28,7 +28,6 @@
         /// </summary>
         private readonly UserManager<ApplicationUser> _userManager;
 
-
         /// <summary>
         /// Defines the _appdb
         /// </summary>
@@ -263,7 +262,7 @@
             {
                 _logger.LogError("Received Exception from QuotePartial {0}", ex.Message);
                 return null;
-            }     
+            }
         }
 
         /// <summary>
@@ -303,7 +302,6 @@
                 }
 
                 return PartialView("_TransactionsTablePartial", transactionsViewModel);
-
             }
             catch (Exception ex)
             {
@@ -311,7 +309,6 @@
                 return null;
             }
         }
-
 
         /// <summary>
         /// Render Quote Partial View
@@ -345,8 +342,6 @@
                 return null;
             }
         }
-
-
 
         /// <summary>
         /// Render Quote Partial View
@@ -387,7 +382,6 @@
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-
         public IActionResult Index(string address = "")
         {
             if (!String.IsNullOrEmpty(address))

@@ -60,7 +60,6 @@
         /// </summary>
         public DbSet<DelegateForm> DelegateForms { get; set; }
 
-
         public DbSet<TgPinnedMsg> TgPinnedMsgs { get; set; }
     }
 }

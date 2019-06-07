@@ -59,7 +59,7 @@
         var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
 
         var bar_ctx = document.getElementById('priceQuoteChart').getContext("2d");
-    
+
         var gradient1 = bar_ctx.createLinearGradient(0, 0, 0, 200);
         gradient1.addColorStop(0, 'rgba(0,153,255, 0.5)');
         gradient1.addColorStop(0.5, 'rgba(0, 153, 255, 0.25)');
@@ -69,7 +69,7 @@
         gradient2.addColorStop(0, 'rgba(190, 65,244, 0.5)');
         gradient2.addColorStop(0.5, 'rgba(190, 65, 244, 0.25)');
         gradient2.addColorStop(1, 'rgba(190, 65, 244, 0)');
- 
+
         var gradient3 = bar_ctx.createLinearGradient(0, 0, 0, 200);
         gradient3.addColorStop(0, 'rgba(255, 204,51, 0.5)');
         gradient3.addColorStop(0.5, 'rgba(255, 204, 51, 0.25)');
@@ -161,7 +161,7 @@
 <div class="row">
     <div class="col-lg-3 grid-margin stretch-card">
         <div class="box card aligner-wrapper">
-            <div class="card-body"> 
+            <div class="card-body">
                 <p class="text-muted mb-2">@(AppSettingsProvider.CoinName) price in Sat.</p>
                 <div class="d-flex align-items-center">
                     <h1 class="font-weight-medium mb-2">@(Math.Round(LastQuote.Price * 100000000))</h1>
@@ -233,7 +233,7 @@
             <h3 class="card-title">@(AppSettingsProvider.CoinName) Market Stats</h3>
         </div>
     </div>
-    <div class="card-body"> 
+    <div class="card-body">
         <div class="position-relative mb-4">
             <canvas id="priceQuoteChart" height="200"></canvas>
         </div>
@@ -248,7 +248,6 @@
     var toVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == "2644104824710583527R");
     var fromVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.VinexWalletAddress);
 }
-
 
 <div class="row">
     <div class="col-lg-4 grid-margin stretch-card">

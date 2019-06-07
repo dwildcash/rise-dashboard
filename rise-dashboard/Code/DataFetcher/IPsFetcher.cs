@@ -1,8 +1,8 @@
 ﻿namespace rise.Code.DataFetcher
 {
+    using Models;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;

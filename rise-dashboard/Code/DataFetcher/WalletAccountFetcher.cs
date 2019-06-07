@@ -1,8 +1,8 @@
 ﻿namespace rise.Code.DataFetcher
 {
+    using Models;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Models;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -21,7 +21,6 @@
         {
             try
             {
-
                 using (var hc = new HttpClient())
                 {
                     var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/accounts?address=" + walletAddress));

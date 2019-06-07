@@ -37,6 +37,5 @@
         /// Gets or sets the coinbaseBtcQuoteResult
         /// </summary>
         public CoinbaseBtcQuoteResult coinbaseBtcQuoteResult { get; set; }
-
     }
 }

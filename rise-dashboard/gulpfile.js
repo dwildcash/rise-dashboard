@@ -103,4 +103,4 @@ gulp.task("scripts", function (cb) {
     cb();
 });
 
-gulp.task("default", gulp.series('clean','scripts'));
+gulp.task("default", gulp.series('clean', 'scripts'));

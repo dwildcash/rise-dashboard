@@ -143,6 +143,6 @@
 <!-- Bar Chart for Payment-->
 @if (Model.coinReceivedByAccount.transactions.Where(y => y.timestamp >= ToGenesisTime(ViewBag.Minutes)).Count() > 0)
 {
-    <canvas id="myChart_@guid" height="@((Model.delegateVotesResult.Delegates.OrderBy(x => x.Username).Count() * 20) + 80)" width="800"></canvas>
+<canvas id="myChart_@guid" height="@((Model.delegateVotesResult.Delegates.OrderBy(x => x.Username).Count() * 20) + 80)" width="800"></canvas>
 }
 <!-- End Bar Chart for Payments-->
