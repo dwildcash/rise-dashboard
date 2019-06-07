@@ -382,12 +382,18 @@
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        public IActionResult Index(string address = "")
+        public IActionResult Index(string address = "", string theme="black")
         {
             if (!String.IsNullOrEmpty(address))
             {
                 SetCookie("addr", address, 100000000);
                 ViewBag.SearchText = address;
+            }
+
+            if (!String.IsNullOrEmpty(theme))
+            {
+                SetCookie("theme", theme, 100000000);
+                ViewBag.Theme = theme;
             }
 
             ViewBag.Info = _appdb.TgPinnedMsgs.OrderByDescending(x => x.Date).FirstOrDefault()?.Message;

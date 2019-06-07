@@ -119,7 +119,7 @@
                     <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
                     <div class="m-l-10 align-self-center">
                         <h3 class="m-b-0 font-lgiht">@Math.Round(Model.coinSentByAccount.transactions.Where(y => y.timestamp >= Model.ToGenesisTime(7 * 24 * 60)).Sum(x => Double.Parse(x.amount.ToString()) / 100000000)).ToString("N0")</h3>
-                        <h5 class="text-muted m-b-0">Sent Last 7D</h5>
+                        <h5 class="text-muted m-b-0">Sent Last 7d</h5>
                     </div>
                 </div>
             </div>
