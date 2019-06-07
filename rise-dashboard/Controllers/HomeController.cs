@@ -382,7 +382,7 @@
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        public IActionResult Index(string address = "", string theme)
+        public IActionResult Index(string theme, string address = "")
         {
             if (!String.IsNullOrEmpty(address))
             {
