@@ -1,282 +1,60 @@
-﻿@model rise.ViewModels.AccountSummaryViewModel
-@using rise.Models
-
-@functions{
-
-    // return the account name of delegate
-    public rise.Models.Delegate GetDelegateObj(string address)
-    {
-        return Model.delegateResult.Delegates.Where(x => x.Address == address).FirstOrDefault();
-    }
-
-    // return the account name of previous delegate
-    public rise.Models.Delegate GetDelegateByRank(int rank)
-    {
-        return Model.delegateResult.Delegates.Where(x => x.Rank == rank).FirstOrDefault();
-    }
-
-    // Return the Sum Of Weight for all possiblie delegate
-    public long sumOfDelegateWeight()
-    {
-        return Model.delegateResult.Delegates.Where(x => x.Rank <= 199).Sum(x => x.VotesWeight) / 100000000;
-    }
-
-    // Return delegateuser
-    public string ToDelegateUser(string address)
-    {
-        var mydelegate = Model.delegateResult.Delegates.Where(x => x.Address == address).FirstOrDefault();
-
-        if (mydelegate != null)
-        {
-            return mydelegate.Username;
-        }
-
-        return address;
-    }
-
-    // Return true if its a delegate
-    public bool IsDelegate(string address)
-    {
-        if (Model.delegateResult.Delegates.Where(x => x.Address == address).Count() > 0)
-        {
-            return true;
-        }
-
-        return false;
-    }
-}
-
-@{
-    DateTime theBegin = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 0, 0, 0);
-    var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
-    TimeSpan spanday = DateTime.Now.Subtract(theBegin);
-    TimeSpan spanweek = DateTime.Now.Subtract(sunday);
-}
-
-
-<div class="row">
-    <div class="col-sm-12 nowrap">
-        <div class="box callout callout-info">
-            <h5 class="card-title">Account Summary for <a href="/Home/Index?address=@ToDelegateUser(Model.walletAccountResult.account.Address)">@Model.walletAccountResult.account.Address</a></h5>
-        </div>
-    </div>
-</div>
-<!-- /.container-fluid -->
-
-
-<div class="row">
-    <!-- Column -->
-    <div class="col-lg-3 col-md-6">
-        <div class="box card">
-            <div class="card-body">
-                <div class="d-flex flex-row">
-                    <div class="icon">
-                    </div>
-                    <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-light"> @(Math.Round((Double.Parse(Model.walletAccountResult.account.Balance.ToString()) / 100000000)).ToString("N0"))</h3>
-                        <h5 class="text-muted m-b-0">@AppSettingsProvider.CoinName Balance</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Column -->
-    <!-- Column -->
-    <div class="col-lg-3 col-md-6">
-        <div class="box card">
-            <div class="card-body">
-                <div class="d-flex flex-row">
-                    <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
-                    <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">$@(Math.Round(((Double.Parse(Model.walletAccountResult.account.Balance.ToString()) / 100000000) * Double.Parse(Model.coinbaseBtcQuoteResult.data.amount) * Model.LastAllQuote().Price), 5).ToString("#,###.00;(0);0"))</h3>
-                        <h5 class="text-muted m-b-0">Account Value</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Column -->
-    <!-- Column -->
-    <div class="col-lg-3 col-md-6">
-        <div class="box card">
-            <div class="card-body">
-                <div class="d-flex flex-row">
-                    <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
-                    <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">@Math.Round(Model.coinReceivedByAccount.transactions.Where(y => y.timestamp >= Model.ToGenesisTime(7 * 24 * 60)).Sum(x => Double.Parse(x.amount.ToString()) / 100000000)).ToString("N0")</h3>
-                        <h5 class="text-muted m-b-0">Received Last 7D</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Column -->
-    <!-- Column -->
-    <div class="col-lg-3 col-md-6">
-        <div class="box card">
-            <div class="card-body">
-                <div class="d-flex flex-row">
-                    <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
-                    <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">@Math.Round(Model.coinSentByAccount.transactions.Where(y => y.timestamp >= Model.ToGenesisTime(7 * 24 * 60)).Sum(x => Double.Parse(x.amount.ToString()) / 100000000)).ToString("N0")</h3>
-                        <h5 class="text-muted m-b-0">Sent Last 7D</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Column -->
-</div>
-
-<!-- Delegate Zone-->
-<div class="row">
-    @if (IsDelegate(Model.walletAccountResult.account.Address))
-    {
-        var mydelegate = GetDelegateObj(Model.walletAccountResult.account.Address);
-        <div class="col-md-12">
-            <div class="box card">
-                <div class="card-header">
-                    <h5 class="card-title">Delegate Stats for <a href="/Home/Index?address=@ToDelegateUser(Model.walletAccountResult.account.Address)">@ToDelegateUser(Model.walletAccountResult.account.Address)</a></h5>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <table class="table table-hover">
-                                <tr>
-                                    <td>Rank</td>
-                                    <td><h4>@(mydelegate.Rank)</h4></td>
-                                </tr>
-
-                                @if (mydelegate.Rank > 1)
-                                {
-                                    <tr>
-                                        <td>Position</td>
-                                        @{
-                                            var NextDelegate = GetDelegateByRank(mydelegate.Rank - 1);
-                                            var PreviousDelegate = GetDelegateByRank(mydelegate.Rank + 1);
-
-                                            double neededVotes = Math.Round(((double)NextDelegate.VotesWeight - (double)mydelegate.VotesWeight) / 100000000, 2);
-                                            double spaceVotes = Math.Round(((double)mydelegate.VotesWeight - (double)PreviousDelegate.VotesWeight) / 100000000, 2);
-                                        }
-                                        <td>
-                                            <h4><small>Next Rank in @neededVotes Votes </small></h4>
-                                            <h4><small>Previous Rank advance @spaceVotes Votes </small></h4>
-                                        </td>
-                                    </tr>
-                                }
-                                <tr>
-                                    <td>@(AppSettingsProvider.CoinName) Forged</td>
-                                    <td><h4>@Math.Round((double)Model.forgedByAccount.Forged / 100000000, 2)</h4></td>
-                                </tr>
-                                <tr>
-                                    <td>Voters</td>
-                                    @{ var votersCount = 0;
-                                        if (Model.delegateVotersResult.Accounts != null)
-                                        {
-                                            votersCount = Model.delegateVotersResult.Accounts.Count();
-                                        }
-                                    }
-                                    <td><h4>@(Model.delegateVotersResult.Accounts.Count())</h4></td>
-                                </tr>
-                                <tr>
-                                    <td>Votes</td>
-                                    @{ var delegatesCount = 0;
-                                        if (Model.delegateVotesResult.Delegates != null)
-                                        {
-                                            delegatesCount = Model.delegateVotesResult.Delegates.Count();
-                                        }
-                                    }
-
-                                    <td><h4>@delegatesCount</h4></td>
-                                </tr>
-                                <tr>
-                                    <td>Blocks</td>
-                                    <td><h4>@(mydelegate.Producedblocks) <span class="muted text-sm"> [@(mydelegate.Missedblocks) missed]</span></h4></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="row">
-                                <!-- /.col -->
-                                <div class="col-md-6 col-sm-6 col-6">
-                                    <div class="info-box">
-                                        <div class="d-none d-lg-block">
-                                            <span class="info-box-icon"><i class="fa fa-project-diagram" style="color:#B6B2B2"></i></span>
-                                        </div>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Productivity</span>
-                                            <span class="info-box-number">@(mydelegate.Productivity)%</span>
-
-                                            <div class="progress">
-                                                <div class="progress-bar bg-primary" style="width: @(mydelegate.Productivity)%"></div>
-                                            </div>
-                                        </div>
-                                        <!-- /.info-box-content -->
-                                    </div>
-                                    <!-- /.info-box -->
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-6">
-                                    <div class="info-box">
-                                        <div class="d-none d-lg-block">
-                                            <span class="info-box-icon"><i class="fa fa-hammer" style="color:#B6B2B2"></i></span>
-                                        </div>
-
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Forging Chance</span>
-                                            <span class="info-box-number">@(Math.Round(mydelegate.ForgingChance, 2))%</span>
-
-                                            <div class="progress">
-                                                <div class="progress-bar bg-primary" style="width: @(Math.Round(mydelegate.ForgingChance,2))%"></div>
-                                            </div>
-                                        </div>
-                                        <!-- /.info-box-content -->
-                                    </div>
-                                    <!-- /.info-box -->
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-6">
-                                    <div class="info-box">
-                                        <div class="d-none d-lg-block">
-                                            <span class="info-box-icon"><i class="fa fa-vote-yea" style="color:#B6B2B2"></i></span>
-                                        </div>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Vote Weight</span>
-                                            <span class="info-box-number text-sm">@(mydelegate.VotesWeight / 100000000) [@(Math.Round((double)mydelegate.VotesWeight / 100000000 / (double)sumOfDelegateWeight() * 100, 2))%]</span>
-
-                                            <div class="progress">
-                                                <div class="progress-bar" style="width: @(Math.Round((double)mydelegate.VotesWeight / 100000000 / (double)sumOfDelegateWeight() * 100))%"></div>
-                                            </div>
-                                        </div>
-                                        <!-- /.info-box-content -->
-                                    </div>
-                                    <!-- /.info-box -->
-                                </div>
-                                <!-- /.col -->
-                                <div class="col-md-6 col-sm-6 col-6">
-                                    <div class="info-box">
-                                        <div class="d-none d-lg-block">
-                                            <span class="info-box-icon"><i class="fa fa-ban" style="color:#B6B2B2"></i></span>
-                                        </div>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">CMB</span>
-                                            <span class="info-box-number text-sm">@(mydelegate.CMB)/85</span>
-                                            <div class="progress">
-                                                <div class="progress-bar" style="width: @((double)mydelegate.CMB / 85 * 100)%"></div>
-                                            </div>
-                                        </div>
-                                        <!-- /.info-box-content -->
-                                    </div>
-                                    <!-- /.info-box -->
+﻿<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card card-statistics">
+            <div class="row">
+                <div class="card-col col-xl-3 col-lg-3 col-md-3 col-6">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-center flex-column flex-sm-row">
+                            <i class="mdi mdi-account-multiple-outline text-primary mr-0 mr-sm-4 icon-lg"></i>
+                            <div class="wrapper text-center text-sm-left">
+                                <p class="card-text mb-0">New Users</p>
+                                <div class="fluid-container">
+                                    <h3 class="mb-0 font-weight-medium">65,650</h3>
                                 </div>
                             </div>
-                            <!-- /.row -->
                         </div>
                     </div>
                 </div>
-                <!-- /.card -->
+                <div class="card-col col-xl-3 col-lg-3 col-md-3 col-6">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-center flex-column flex-sm-row">
+                            <i class="mdi mdi-checkbox-marked-circle-outline text-primary mr-0 mr-sm-4 icon-lg"></i>
+                            <div class="wrapper text-center text-sm-left">
+                                <p class="card-text mb-0">New Feedbacks</p>
+                                <div class="fluid-container">
+                                    <h3 class="mb-0 font-weight-medium">32,604</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-col col-xl-3 col-lg-3 col-md-3 col-6">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-center flex-column flex-sm-row">
+                            <i class="mdi mdi-trophy-outline text-primary mr-0 mr-sm-4 icon-lg"></i>
+                            <div class="wrapper text-center text-sm-left">
+                                <p class="card-text mb-0">Employees</p>
+                                <div class="fluid-container">
+                                    <h3 class="mb-0 font-weight-medium">17,583</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-col col-xl-3 col-lg-3 col-md-3 col-6">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-center flex-column flex-sm-row">
+                            <i class="mdi mdi-target text-primary mr-0 mr-sm-4 icon-lg"></i>
+                            <div class="wrapper text-center text-sm-left">
+                                <p class="card-text mb-0">Total Sales</p>
+                                <div class="fluid-container">
+                                    <h3 class="mb-0 font-weight-medium">61,119</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- /.col -->
-            <!-- /.row -->
         </div>
-    }
+    </div>
 </div>

@@ -1,6 +1,9 @@
 ﻿@using System.Net.Sockets
 @using rise.Models
+@using Microsoft.AspNetCore.Identity
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = AppSettingsProvider.CoinName + " Dashboard";
@@ -30,6 +33,13 @@
     <script type="text/javascript">
         $('#AccountSummary').load('@Url.Action("AccountSummaryAsync", "Home")?address=@Address');
         $('#QuoteView').load('@Url.Action("QuotePartialView", "Home")');
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <text>
+            $('#TipAccountSummary').load('@Url.Action("AccountSummaryTipBotPartialView", "Home")');
+            </text>
+        }
     </script>
 }
 
@@ -55,18 +65,26 @@
     <section class="content">
         <div class="box callout callout-info text-center">
             <p>
-                <img src="/img/risebw.png" height="25"/>We are thrilled to announce $RISE core v2, designed to be modular, simpler and more flexible. You are invited to read more about this important update <a href="https://medium.com/rise-vision/introducing-rise-v2-521a58e1e9de">here</a>
+                <img src="/img/risebw.png" height="25" />We are thrilled to announce $RISE core v2, designed to be modular, simpler and more flexible. You are invited to read more about this important update <a href="https://medium.com/rise-vision/introducing-rise-v2-521a58e1e9de">here</a>
             </p>
         </div>
-
     </section>
+
     <section class="content">
         <div id="QuoteView"></div>
     </section>
 
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <section class="content">
+            <div id="TipAccountSummary"></div>
+        </section>
+    }
+
     <section class="content">
-        <div id="AccountSummary"></div>
+           <div id="AccountSummary"></div>
     </section>
+
 </div>
 <!-- /.content-wrapper -->
 

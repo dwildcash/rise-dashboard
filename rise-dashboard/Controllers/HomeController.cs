@@ -318,7 +318,7 @@
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        public async Task<PartialViewResult> QuoteTipBotPartialView()
+        public async Task<PartialViewResult> AccountSummaryTipBotPartialView()
         {
             try
             {
@@ -337,7 +337,7 @@
                     coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)
                 };
 
-                return PartialView("_QuoteTipBotPartial", tipAccountSummaryViewModel);
+                return PartialView("_AccountSummaryTipBotPartial", tipAccountSummaryViewModel);
             }
             catch (Exception ex)
             {
