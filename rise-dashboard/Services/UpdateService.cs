@@ -7,6 +7,7 @@ using rise.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -638,13 +639,17 @@ namespace Rise.Services
             {
                 await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
 
-                var strResponse = @"Thanks to yarn and Lerna we were able to rewrite all main RISE functionalities separating the concerns of each module.  The underlying technology of the RISE core needs to be constantly updated to leverage both performance and security improvements.
-                            With this in mind we decided to update:" + Environment.NewLine +
-
+                var strResponse = @"Thanks to yarn and Lerna we were able to rewrite all main RISE functionalities separating the concerns of each module.  The underlying technology of the RISE core needs to be constantly updated to leverage both performance and security improvements." + Environment.NewLine +
+                                "With this in mind we decided to update:" + Environment.NewLine +
                                 "Node.JS from v8 to v10" + Environment.NewLine +
                                 "TypeScript from 2.8 to 3.4.5" + Environment.NewLine +
                                 "PostgresSQL from 10.4 to 11.3" + Environment.NewLine +
                                 "We then decided to remove Redis entirely as it was no longer used in the codebase and there was no real reason to keep it as third - party dep.";
+
+                using (var stream = System.IO.File.Open("./wwwroot/img/v2.png", FileMode.Open))
+                {
+                    var rep = await _botService.Client.SendPhotoAsync(message.Chat.Id, stream, "V2");
+                }
 
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
                 var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Medium Article", "https://medium.com/rise-vision/introducing-rise-v2-521a58e1e9de"));
