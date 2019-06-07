@@ -648,7 +648,7 @@ namespace Rise.Services
 
                 using (var stream = System.IO.File.Open("./wwwroot/img/v2.png", FileMode.Open))
                 {
-                    var rep = await _botService.Client.SendPhotoAsync(message.Chat.Id, stream, "V2");
+                    var rep = await _botService.Client.SendPhotoAsync(message.Chat.Id, stream, "Rise vision Core Update V2");
                 }
 
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
