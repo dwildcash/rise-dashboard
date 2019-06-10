@@ -89,7 +89,7 @@
         /// <summary>
         /// Get or set Number of voters
         /// </summary>
-        public int Voters { get; set; }
+        public int? Voters { get; set; }
 
         /// <summary>
         /// Gets or sets the Productivity

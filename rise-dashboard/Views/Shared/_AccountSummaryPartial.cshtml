@@ -171,13 +171,7 @@
                                 </tr>
                                 <tr>
                                     <td>Voters</td>
-                                    @{ var votersCount = 0;
-                                        if (Model.delegateVotersResult.Accounts != null)
-                                        {
-                                            votersCount = Model.delegateVotersResult.Accounts.Count();
-                                        }
-                                    }
-                                    <td><h4>@(Model.delegateVotersResult.Accounts.Count())</h4></td>
+                                    <td><h4>@(mydelegate.Voters ?? 0)</h4></td>
                                 </tr>
                                 <tr>
                                     <td>Votes</td>

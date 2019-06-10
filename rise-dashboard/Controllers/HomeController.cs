@@ -138,7 +138,6 @@
             var quoteInfoViewModel = new DelegateStatsViewModel
             {
                 DelegateResult = DelegateResult.Current,
-                VotersResult = await DelegateVotersFetcher.FetchVoters(mydelegate.PublicKey),
                 TransactionsResult = await TransactionsFetcher.FetchOutgoingTransactions(address)
             };
 
@@ -173,7 +172,6 @@
                         delegateResult = DelegateResult.Current,
                         walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
                         delegateVotesResult = await DelegateVotesFetcher.FetchRiseDelegateVotes(address),
-                        delegateVotersResult = await DelegateVotersFetcher.FetchVoters(delegate_account.PublicKey),
                         forgedByAccount = await ForgedByAccountFetcher.FetchForgedByAccount(delegate_account.PublicKey),
                         coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address),
                         coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)

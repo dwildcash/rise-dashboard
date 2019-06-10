@@ -38,10 +38,6 @@
         /// </summary>
         public DelegateResult delegateVotesResult { get; set; }
 
-        /// <summary>
-        /// Gets or sets the delegateVotersResult
-        /// </summary>
-        public VotersResult delegateVotersResult { get; set; }
 
         /// <summary>
         /// Gets or sets the coinReceivedByAccount
