@@ -19,7 +19,7 @@
         /// <summary>
         /// Gets the Schedule
         /// </summary>
-        public string Schedule => "*/5 * * * *";
+        public string Schedule => "*/2 * * * *";
 
         /// <summary>
         /// Defines the scopeFactory
@@ -46,20 +46,25 @@
                     TipAccountStats.AddressLst = dbContext.ApplicationUsers.Select(x => x.Address).ToList();
 
                     // Reset the balance
-                    TipAccountStats.TotalBalance = 0;
-                    TipAccountStats.TotalTransactions = 0;
-                    TipAccountStats.TotalAmountTransactions = 0;
+                    double TotalBalance = 0;
+                    int TotalTransactions = 0;
+                    long TotalAmountTransactions = 0;
 
                     foreach (var account in UsersLst)
                     {
                         if (account.Address != null)
                         {
-                            TipAccountStats.TotalBalance += await RiseManager.AccountBalanceAsync(account.Address);
+                            TotalBalance += await RiseManager.AccountBalanceAsync(account.Address);
                             var tx = TransactionsFetcher.FetchAllUserTransactions(account.Address).Result.transactions.ToList();
-                            TipAccountStats.TotalTransactions += tx.Count();
-                            TipAccountStats.TotalAmountTransactions += tx.Sum(x=>x.amount / 100000000);
+                            TotalTransactions += tx.Count();
+                            TotalAmountTransactions += tx.Sum(x=>x.amount / 100000000);
                         }
-                    }                
+                    }
+
+                    TipAccountStats.TotalBalance = TotalBalance;
+                    TipAccountStats.TotalTransactions = TotalTransactions;
+                    TipAccountStats.TotalAmountTransactions = TotalTransactions;
+                    TipAccountStats.LastGenerated = DateTime.Now;
                 }
             }
             catch (Exception e)

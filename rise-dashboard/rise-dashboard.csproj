@@ -38,9 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Shared\_AccountSummaryTipBotPartial.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Views\Shared\_AccountSummaryPartial.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

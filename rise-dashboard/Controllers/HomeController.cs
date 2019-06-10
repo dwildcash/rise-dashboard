@@ -423,6 +423,14 @@
             return View(PeersResult.Current);
         }
 
+
+        /// <summary>
+        /// Render About Page
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        public IActionResult TipBotStats() => View();
+
         /// <summary>
         /// Render About Page
         /// </summary>

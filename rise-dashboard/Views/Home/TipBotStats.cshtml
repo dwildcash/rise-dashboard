@@ -1,0 +1,88 @@
+﻿@using System.Net.Sockets
+@using rise.Models
+@using Microsoft.AspNetCore.Identity
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = AppSettingsProvider.CoinName + " Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@(AppSettingsProvider.CoinName) tip Bot Stats</title>
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1><img src="@Url.Content("~/img/"+ AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />@(AppSettingsProvider.CoinName) Dashboard</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">TipBotStats</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-lg-3 grid-margin stretch-card">
+                <div class="box card aligner-wrapper">
+                    <div class="card-body">
+                        <p class="text-muted mb-2">Telegram Tip Account Balance</p>
+                        <div class="d-flex align-items-center">
+                            <h1 class="font-weight-medium mb-2">
+                                @Math.Round(TipAccountStats.TotalBalance, 2).ToString("N0") <small class="text-muted">Rise</small>
+                            </h1>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-success dot-indicator"></div>
+                            <p class="text-muted mb-0">Total from @TipAccountStats.UsersCount users account</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 grid-margin stretch-card">
+                <div class="box card aligner-wrapper">
+                    <div class="card-body">
+                        <p class="text-muted mb-2">Telegram Tip Account Transactions</p>
+                        <div class="d-flex align-items-center">
+                            <h1 class="font-weight-medium mb-2">
+                                @TipAccountStats.TotalTransactions.ToString("N0") <small class="text-muted">Tx</small>
+                            </h1>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-success dot-indicator"></div>
+                            <p class="text-muted mb-0">Last updated @TipAccountStats.LastGenerated</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 grid-margin stretch-card">
+                <div class="box card aligner-wrapper">
+                    <div class="card-body">
+                        <p class="text-muted mb-2">Telegram Tip Rise Traded</p>
+                        <div class="d-flex align-items-center">
+                            <h1 class="font-weight-medium mb-2">
+                                @TipAccountStats.TotalAmountTransactions.ToString("N0") <small class="text-muted">Rise</small>
+                            </h1>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-success dot-indicator"></div>
+                            <p class="text-muted mb-0">Last updated  @TipAccountStats.LastGenerated</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
