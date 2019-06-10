@@ -72,11 +72,12 @@
                                         <th align-middle data-priority="2" class="align-middle">Name</th>
                                         <th align-middle data-priority="4" class="align-middle">Uptime</th>
                                         <th align-middle data-priority="5" class="align-middle">VoteWeight</th>
-                                        <th align-middle data-priority="8" class="align-middle">Missed Blocks</th>
+                                        <th align-middle data-priority="6" class="align-middle">Voters</th>
+                                        <th align-middle data-priority="9" class="align-middle">Missed Blocks</th>
                                         <th align-middle data-priority="3" class="align-middle">Forging Chance</th>
-                                        <th align-middle data-priority="7" class="align-middle">Approval</th>
+                                        <th align-middle data-priority="8" class="align-middle">Approval</th>
                                         <th align-middle data-priority="5" class="align-middle">Forged</th>
-                                        <th align-middle data-priority="6" class="align-middle">Votes</th>
+                                        <th align-middle data-priority="7" class="align-middle">Votes</th>
                                         <th align-middle data-priority="10" class="align-middle">CMB</th>
                                         <th></th>
                                     </tr>
@@ -86,17 +87,18 @@
                                     {
                                     <tr>
                                         @if (t.Rank <= 199)
-                                            {
-                                        <td class="align-middle"><h6><span class="badge badge-primary">@t.Rank</span></h6></td>
-                                            }
-                                            else
-                                            {
-                                        <td class="align-middle"><h6><span class="badge badge-secondary">@t.Rank</span></h6></td>
-                                            }
+                                        {
+                                            <td class="align-middle"><h6><span class="badge badge-primary">@t.Rank</span></h6></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="align-middle"><h6><span class="badge badge-secondary">@t.Rank</span></h6></td>
+                                        }
 
                                         <td class="align-middle"><h6><small class="text-muted"><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@t.Username</a></small></h6></td>
                                         <td class="align-middle"><h6><small class="text-muted">@t.Productivity%</small></h6></td>
                                         <td class="align-middle"><h6><small class="text-muted">@(Math.Round((double)t.VotesWeight / 100000000, 2).ToString("N0"))</small></h6></td>
+                                        <td class="align-middle"><h6><small class="text-muted">@t.Voters</small></h6></td>
                                         <td class="align-middle"><h6><small class="text-muted">@t.Missedblocks</small></h6></td>
                                         <td class="align-middle"><h6><small class="text-muted">@Math.Round(t.ForgingChance, 2)%</small></h6></td>
                                         <td class="align-middle"><h6><small class="text-muted">@t.Approval%</small></h6></td>
