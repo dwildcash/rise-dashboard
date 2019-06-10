@@ -30,6 +30,11 @@ namespace rise.Code.Tasks
             {
                 DelegateResult.Current = ForgingChanceCalculator.SimulateForgingRounds(delegateResult);
             }
+
+            foreach (var mdelegate in delegateResult.Delegates)
+            {
+                mdelegate.Voters = DelegateVotersFetcher.FetchVoters(mdelegate.PublicKey).Result.Accounts.Count;
+            }
         }
     }
 }

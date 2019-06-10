@@ -87,6 +87,11 @@
         public double Approval { get; set; }
 
         /// <summary>
+        /// Get or set Number of voters
+        /// </summary>
+        public int Voters { get; set; }
+
+        /// <summary>
         /// Gets or sets the Productivity
         /// </summary>
         [JsonProperty("productivity")]

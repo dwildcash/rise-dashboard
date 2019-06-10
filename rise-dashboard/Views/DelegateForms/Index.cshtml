@@ -33,7 +33,7 @@
                 "fixedHeader": true,
                 "pageLength": 10,
                 "scrollCollapse": true,
-                "order": [[7, "desc"]],
+                "order": [[8, "desc"]],
                 "autoWidth": true,
                 responsive:
                 {
@@ -114,10 +114,11 @@
                             <table id="delegatesForm" class="table display dt-responsive" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th align-middle data-priority="4" class="align-middle">Rank</th>
+                                        <th align-middle data-priority="5" class="align-middle">Rank</th>
                                         <th align-middle data-priority="1" class="align-middle">Name</th>
                                         <th align-middle data-priority="2" class="align-middle">Votes</th>
-                                        <th align-middle data-priority="3" class="align-middle">Share</th>
+                                        <th align-middle data-priority="3" class="align-middle">Voters</th>
+                                        <th align-middle data-priority="4" class="align-middle">Share</th>
                                         <th align-middle data-priority="6" class="align-middle">Pay.(days)</th>
                                         <th align-middle data-priority="5" class="align-middle">Forging Chance</th>
                                         <th align-middle data-priority="7" class="align-middle">Percent Reward</th>
@@ -160,6 +161,7 @@
 
                                             <td class="align-middle"><h6><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@mydelegate.Username</a></h6></td>
                                             <td class="align-middle"><h6><span class="badge badge-secondary">@((mydelegate.VotesWeight / 100000000).ToString("N0"))</span></h6></td>
+                                            <td class="align-middle"><h6><span class="badge badge-secondary">@((mydelegate.Voters).ToString("N0"))</span></h6></td>
                                         }
                                         else
                                         {
