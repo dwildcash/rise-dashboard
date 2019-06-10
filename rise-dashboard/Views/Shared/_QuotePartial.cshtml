@@ -136,13 +136,13 @@
             scales: {
                 xAxes: [{
                     stacked: true,
-                    gridLines: { display: false },
+                    gridLines: { drawOnChartArea: false },
                 }],
                 yAxes: [{
                     id: 'volume',
                     position: 'left',
                     stacked: true,
-                    gridLines: { display: false },
+                    gridLines: { drawOnChartArea: false },
                     ticks: {
                         callback: function (value) { return numberWithCommas(value); },
                     }
