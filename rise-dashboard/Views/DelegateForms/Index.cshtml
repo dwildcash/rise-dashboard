@@ -116,6 +116,7 @@
                                     <tr>
                                         <th align-middle data-priority="4" class="align-middle">Rank</th>
                                         <th align-middle data-priority="1" class="align-middle">Name</th>
+                                        <th align-middle data-priority="1" class="align-middle">Votes</th>
                                         <th align-middle data-priority="3" class="align-middle">Share</th>
                                         <th align-middle data-priority="6" class="align-middle">Pay.(days)</th>
                                         <th align-middle data-priority="5" class="align-middle">Forging Chance</th>
@@ -144,37 +145,39 @@
                                     <tr class="@matchVote(string.IsNullOrEmpty(mydelegate?.Address) ? "" : mydelegate.Address, currentAccount)">
 
                                         @if (mydelegate != null)
-                                            {
-                                                delegateVoteWeight = mydelegate.VotesWeight;
-                                                forgingChance = mydelegate.ForgingChance;
+                                        {
+                                            delegateVoteWeight = mydelegate.VotesWeight;
+                                            forgingChance = mydelegate.ForgingChance;
 
-                                                if (mydelegate.Rank >= 199)
-                                                {
-                                        <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Rank</span></h6></td>
-                                                }
-                                                else
-                                                {
-                                        <td class="align-middle"><h6><span class="badge badge-secondary">@mydelegate.Rank</span></h6></td>
-                                                }
-                                        <td class="align-middle"><h6><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@mydelegate.Username</a></h6></td>
+                                            if (mydelegate.Rank >= 199)
+                                            {
+                                                <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Rank</span></h6></td>
                                             }
                                             else
                                             {
-                                        <td class="align-middle"><h6><span class="badge badge-primary">N/A</span></h6></td>
-                                        <td class="align-middle"><h6><span class="badge badge-secondary">N/A</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">@mydelegate.Rank</span></h6></td>
                                             }
+
+                                            <td class="align-middle"><h6><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@mydelegate.Username</a></h6></td>
+                                            <td class="align-middle"><h6><span class="badge badge-secondary">@((mydelegate.VotesWeight / 100000000).ToString("N0"))</span></h6></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="align-middle"><h6><span class="badge badge-primary">N/A</span></h6></td>
+                                            <td class="align-middle"><h6><span class="badge badge-secondary">N/A</span></h6></td>
+                                        }
 
                                         <td class="align-middle"><h6><strong>@t.Share%</strong></h6></td>
                                         <td class="align-middle"><h6>@t.Payout_interval</h6></td>
 
                                         @if (mydelegate != null)
-                                            {
-                                        <td class="align-middle"><h6><small class="text-muted">@Math.Round(mydelegate.ForgingChance, 2)%</small></h6></td>
-                                            }
-                                            else
-                                            {
-                                        <td class="align-middle"><h6><small class="text-muted">N/A</small></h6></td>
-                                            }
+                                        {
+                                            <td class="align-middle"><h6><small class="text-muted">@Math.Round(mydelegate.ForgingChance, 2)%</small></h6></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="align-middle"><h6><small class="text-muted">N/A</small></h6></td>
+                                        }
 
                                         @{ var clibalance = @ViewBag.balance; }
                                         @{ var delvoteweight = delegateVoteWeight / 100000000; }
@@ -185,12 +188,12 @@
                                         <td class="align-middle"><h6><strong>@Math.Round(30 * (double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 2)</strong></h6></td>
                                         <td>
                                             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
-                                                {
-                                            <text>
-                                                <a asp-action="Edit" asp-route-id="@t.Id">Edit</a> |
-                                                <a asp-action="Delete" asp-route-id="@t.Id"> Delete </a>
-                                            </text>
-                                                }
+                                            {
+                                                <text>
+                                                    <a asp-action="Edit" asp-route-id="@t.Id">Edit</a> |
+                                                    <a asp-action="Delete" asp-route-id="@t.Id"> Delete </a>
+                                                </text>
+                                            }
                                         </td>
                                         <td></td>
                                     </tr>

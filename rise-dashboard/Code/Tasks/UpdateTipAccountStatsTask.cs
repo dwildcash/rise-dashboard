@@ -63,7 +63,7 @@
 
                     TipAccountStats.TotalBalance = TotalBalance;
                     TipAccountStats.TotalTransactions = TotalTransactions;
-                    TipAccountStats.TotalAmountTransactions = TotalTransactions;
+                    TipAccountStats.TotalAmountTransactions = TotalAmountTransactions;
                     TipAccountStats.LastGenerated = DateTime.Now;
                 }
             }
