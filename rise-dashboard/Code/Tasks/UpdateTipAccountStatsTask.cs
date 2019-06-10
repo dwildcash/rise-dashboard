@@ -48,6 +48,7 @@
                     // Reset the balance
                     TipAccountStats.TotalBalance = 0;
                     TipAccountStats.TotalTransactions = 0;
+                    TipAccountStats.TotalAmountTransactions = 0;
 
                     foreach (var account in UsersLst)
                     {
