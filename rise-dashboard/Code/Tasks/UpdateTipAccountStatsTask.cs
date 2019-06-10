@@ -3,6 +3,7 @@
     using Data;
     using Microsoft.Extensions.DependencyInjection;
     using Models;
+    using rise.Code.DataFetcher;
     using rise.Code.Rise;
     using Scheduling;
     using System;
@@ -41,14 +42,21 @@
                     var UsersLst = dbContext.ApplicationUsers.ToList<ApplicationUser>();
                     TipAccountStats.UsersCount = UsersLst.Count();
 
+                    // List all account address
+                    TipAccountStats.AddressLst = dbContext.ApplicationUsers.Select(x => x.Address).ToList();
+
                     // Reset the balance
                     TipAccountStats.TotalBalance = 0;
+                    TipAccountStats.TotalTransactions = 0;
 
                     foreach (var account in UsersLst)
                     {
                         if (account.Address != null)
                         {
                             TipAccountStats.TotalBalance += await RiseManager.AccountBalanceAsync(account.Address);
+                            var tx = TransactionsFetcher.FetchAllUserTransactions(account.Address).Result.transactions.ToList();
+                            TipAccountStats.TotalTransactions += tx.Count();
+                            TipAccountStats.TotalAmountTransactions += tx.Sum(x=>x.amount / 100000000);
                         }
                     }                
                 }

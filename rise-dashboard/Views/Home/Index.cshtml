@@ -10,10 +10,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@{string cookieValueFromContext = HttpContextAccessor.HttpContext.Request.Cookies["addr"]; }
 <title>@(AppSettingsProvider.CoinName) Dashboard</title>
 
 @{
+    string cookieValueFromContext = HttpContextAccessor.HttpContext.Request.Cookies["addr"];
     string Address = null;
 
     if (!String.IsNullOrEmpty(ViewBag.SearchText))

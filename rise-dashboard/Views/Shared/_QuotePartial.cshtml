@@ -142,6 +142,7 @@
                     id: 'volume',
                     position: 'left',
                     stacked: true,
+                    gridLines: { display: false },
                     ticks: {
                         callback: function (value) { return numberWithCommas(value); },
                     }
@@ -247,12 +248,44 @@
                 <p class="text-muted mb-2">Telegram Tip Account Balance</p>
                 <div class="d-flex align-items-center">
                     <h1 class="font-weight-medium mb-2">
-                        @Math.Round(TipAccountStats.TotalBalance,2).ToString("N0") <small class="text-muted">Rise</small>
-</h1>
+                        @Math.Round(TipAccountStats.TotalBalance, 2).ToString("N0") <small class="text-muted">Rise</small>
+                    </h1>
                 </div>
                 <div class="d-flex align-items-center">
                     <div class="bg-success dot-indicator"></div>
                     <p class="text-muted mb-0">Total from @TipAccountStats.UsersCount users account</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 grid-margin stretch-card">
+        <div class="box card aligner-wrapper">
+            <div class="card-body">
+                <p class="text-muted mb-2">Telegram Tip Account Transactions</p>
+                <div class="d-flex align-items-center">
+                    <h1 class="font-weight-medium mb-2">
+                        @TipAccountStats.TotalTransactions <small class="text-muted">Tx</small>
+                    </h1>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success dot-indicator"></div>
+                    <p class="text-muted mb-0">Last updated @DateTime.Now</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 grid-margin stretch-card">
+        <div class="box card aligner-wrapper">
+            <div class="card-body">
+                <p class="text-muted mb-2">Telegram Tip Rise Traded</p>
+                <div class="d-flex align-items-center">
+                    <h1 class="font-weight-medium mb-2">
+                        @TipAccountStats.TotalAmountTransactions <small class="text-muted">Rise</small>
+                    </h1>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success dot-indicator"></div>
+                    <p class="text-muted mb-0">Last updated @DateTime.Now</p>
                 </div>
             </div>
         </div>
@@ -265,7 +298,7 @@
                     <h1 class="font-weight-medium mb-2">
                         @((Model.liveCoinQuoteResult.BestBid * 100000000).ToString())
                         <font size="5"><i class="fa fa-caret-left"></i>&nbsp;<i class="fa fa-caret-right"></i></font>
-                        @((Model.liveCoinQuoteResult.BestAsk* 100000000).ToString())
+                        @((Model.liveCoinQuoteResult.BestAsk * 100000000).ToString())
                     </h1>
                 </div>
                 <div class="d-flex align-items-center">
@@ -299,14 +332,20 @@
                             <p class="mb-0">Deposit</p>
                             <h4 class="font-weight-bold">@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</h4>
                         </span>
-                        <small class="text-muted">On @toLiveCoin.Count() Tx</small>
+                        @if (toLiveCoin.Count() > 0)
+                        {
+                            <small class="text-muted">On @toLiveCoin.Count() Tx</small>
+                        }
                     </div>
                     <div class="d-flex flex-column ml-4">
                         <span class="d-flex flex-column">
                             <p class="mb-0">Withdraw</p>
                             <h4 class="font-weight-bold">@fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</h4>
                         </span>
-                        <small class="text-muted">On @fromLiveCoin.Count() Tx</small>
+                        @if (fromLiveCoin.Count() > 0)
+                        {
+                            <small class="text-muted">On <b>@fromLiveCoin.Count()</b> Tx</small>
+                        }
                     </div>
                 </div>
             </div>
@@ -326,14 +365,20 @@
                             <p class="mb-0">Deposit</p>
                             <h4 class="font-weight-bold">@toVinex.Sum(x => x.amount / 100000000).ToString("N0")</h4>
                         </span>
-                        <small class="text-muted">On @toVinex.Count() Tx</small>
+                        @if (toVinex.Count() > 0)
+                        {
+                            <small class="text-muted">On <b>@toVinex.Count()</b> Tx</small>
+                        }
                     </div>
                     <div class="d-flex flex-column ml-4">
                         <span class="d-flex flex-column">
                             <p class="mb-0">Withdraw</p>
                             <h4 class="font-weight-bold">@fromVinex.Sum(x => x.amount / 100000000).ToString("N0")</h4>
                         </span>
-                        <small class="text-muted">On @fromVinex.Count() Tx</small>
+                        @if (fromVinex.Count() > 0)
+                        {
+                            <small class="text-muted">On <b>@fromVinex.Count()</b> Tx</small>
+                        }
                     </div>
                 </div>
             </div>
@@ -353,14 +398,20 @@
                             <p class="mb-0">Deposit</p>
                             <h4 class="font-weight-bold">@toAltilly.Sum(x => x.amount / 100000000).ToString("N0")</h4>
                         </span>
-                        <small class="text-muted">On @toAltilly.Count() Tx</small>
+                        @if (toAltilly.Count() > 0)
+                        {
+                            <small class="text-muted">On <b>@toAltilly.Count()</b> Tx</small>
+                        }
                     </div>
                     <div class="d-flex flex-column ml-4">
                         <span class="d-flex flex-column">
                             <p class="mb-0">Withdraw</p>
                             <h4 class="font-weight-bold">@fromAltilly.Sum(x => x.amount / 100000000).ToString("N0")</h4>
                         </span>
-                        <small class="text-muted">On @fromAltilly.Count() Tx</small>
+                        @if (fromAltilly.Count() > 0)
+                        {
+                            <small class="text-muted">On <b>@fromAltilly.Count()</b> Tx</small>
+                        }
                     </div>
                 </div>
             </div>
