@@ -20,8 +20,10 @@ https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=as
 # Important! Appsettings.json
 #############################################################################
 
-You will need to create appsettings.json.  Iam using twitter oauth for authentification. Trust me
-I changed secret found below please user your own.
+You will need to create the appsettings.json file in the project folder.  
+Iam using a telegram bot for authentification part. 
+
+Trust me all secret below wont work... found below please use your own.
 
 
 --> Appsettings.json for Rise<--
@@ -71,12 +73,13 @@ To create the database go to the rise-dashboard project folder and type
 dotnet ef database update
 
 
-
 #############################################################################
 # Note
 #############################################################################
 
-The success of this project depends largely on the contributions of the community. If you meet me on Telegram or Slack I will be happy to take notes of your suggestions and improvements.
+The success of this project depends largely on the contributions of the community. 
+
+If you meet me on Telegram or Slack I will be happy to take notes of your suggestions and improvements.
 
 Its always fun to receive contribution! look for dwildcash in explorer or (5953135380169360325R).
 

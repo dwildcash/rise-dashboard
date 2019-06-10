@@ -124,7 +124,10 @@ namespace rise
             // Save quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
 
-            // Configure Telegram bot
+            // Update Tip Account Task
+            services.AddSingleton<IScheduledTask, UpdateTipAccountStatsTask>();
+
+            // Configure Telegram bot and bot response
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
 

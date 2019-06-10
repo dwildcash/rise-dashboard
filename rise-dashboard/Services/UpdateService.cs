@@ -494,7 +494,7 @@ namespace Rise.Services
                                         InlineKeyboardButton.WithUrl("See Transaction",
                                             "https://explorer.rise.vision/tx/" + tx.transactionId));
                                     await _botService.Client.SendTextMessageAsync(destuser.TelegramId,
-                                        "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
+                                        "Transaction Id:" + tx.transactionId, replyMarkup: keyboard);
                                 }
                                 catch (Exception ex)
                                 {
@@ -505,7 +505,7 @@ namespace Rise.Services
                         }
 
                         var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + "  @" + sender.UserName + " sent you <b>" + Math.Round(amountToSend, 3) + " RISE</b> to you :)", ParseMode.Html);
+                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + "  @" + sender.UserName + " sent you <b>" + Math.Round(amountToSend, 3) + " RISE</b> :)", ParseMode.Html);
                     }
                     else
                     {

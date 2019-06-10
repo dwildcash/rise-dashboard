@@ -240,6 +240,42 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-lg-3 grid-margin stretch-card">
+        <div class="box card aligner-wrapper">
+            <div class="card-body">
+                <p class="text-muted mb-2">Telegram Tip Account Balance</p>
+                <div class="d-flex align-items-center">
+                    <h1 class="font-weight-medium mb-2">
+                        @Math.Round(TipAccountStats.TotalBalance,2).ToString("N0") <small class="text-muted">Rise</small>
+</h1>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success dot-indicator"></div>
+                    <p class="text-muted mb-0">Total from @TipAccountStats.UsersCount users account</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 grid-margin stretch-card">
+        <div class="box card aligner-wrapper">
+            <div class="card-body">
+                <p class="text-muted mb-2">Livecoin Best Bid and Ask</p>
+                <div class="d-flex align-items-center">
+                    <h1 class="font-weight-medium mb-2">
+                        @((Model.liveCoinQuoteResult.BestBid * 100000000).ToString())
+                        <font size="5"><i class="fa fa-caret-left"></i>&nbsp;<i class="fa fa-caret-right"></i></font>
+                        @((Model.liveCoinQuoteResult.BestAsk* 100000000).ToString())
+                    </h1>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success dot-indicator"></div>
+                    <p class="text-muted mb-0">Bid / Ask</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @{
     var toAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.AltillyWalletAddress).ToList();
     var fromAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.AltillyWalletAddress).ToList();

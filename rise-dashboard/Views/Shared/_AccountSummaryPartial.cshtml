@@ -53,16 +53,15 @@
     TimeSpan spanweek = DateTime.Now.Subtract(sunday);
 }
 
-
 <div class="row">
     <div class="col-sm-12 nowrap">
-        <div class="box callout callout-info">
-            <h5 class="card-title">Account Summary for <a href="/Home/Index?address=@ToDelegateUser(Model.walletAccountResult.account.Address)">@Model.walletAccountResult.account.Address</a></h5>
+        <div class="box">
+            <h5>Account Summary for <a href="/Home/Index?address=@ToDelegateUser(Model.walletAccountResult.account.Address)">@Model.walletAccountResult.account.Address</a></h5>
         </div>
     </div>
 </div>
 <!-- /.container-fluid -->
-
+<br />
 
 <div class="row">
     <!-- Column -->
@@ -128,6 +127,7 @@
     <!-- Column -->
 </div>
 
+
 <!-- Delegate Zone-->
 <div class="row">
     @if (IsDelegate(Model.walletAccountResult.account.Address))
@@ -160,14 +160,14 @@
                                             double spaceVotes = Math.Round(((double)mydelegate.VotesWeight - (double)PreviousDelegate.VotesWeight) / 100000000, 2);
                                         }
                                         <td>
-                                            <h4><small>Next Rank in @neededVotes Votes </small></h4>
-                                            <h4><small>Previous Rank advance @spaceVotes Votes </small></h4>
+                                            <h4><small>Next Rank in @neededVotes.ToString("N0") Votes </small></h4>
+                                            <h4><small>Previous Rank advance @spaceVotes.ToString("N0") Votes </small></h4>
                                         </td>
                                     </tr>
                                 }
                                 <tr>
                                     <td>@(AppSettingsProvider.CoinName) Forged</td>
-                                    <td><h4>@Math.Round((double)Model.forgedByAccount.Forged / 100000000, 2)</h4></td>
+                                    <td><h4>@(Math.Round((double)Model.forgedByAccount.Forged / 100000000, 2).ToString("N0"))</h4></td>
                                 </tr>
                                 <tr>
                                     <td>Voters</td>
@@ -192,7 +192,7 @@
                                 </tr>
                                 <tr>
                                     <td>Blocks</td>
-                                    <td><h4>@(mydelegate.Producedblocks) <span class="muted text-sm"> [@(mydelegate.Missedblocks) missed]</span></h4></td>
+                                    <td><h4>@(mydelegate.Producedblocks.ToString("N0")) <span class="muted text-sm"> [@(mydelegate.Missedblocks) missed]</span></h4></td>
                                 </tr>
                             </table>
                         </div>
@@ -241,7 +241,7 @@
                                         </div>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Vote Weight</span>
-                                            <span class="info-box-number text-sm">@(mydelegate.VotesWeight / 100000000) [@(Math.Round((double)mydelegate.VotesWeight / 100000000 / (double)sumOfDelegateWeight() * 100, 2))%]</span>
+                                            <span class="info-box-number text-sm">@((mydelegate.VotesWeight / 100000000).ToString("N0")) [@(Math.Round((double)mydelegate.VotesWeight / 100000000 / (double)sumOfDelegateWeight() * 100, 2))%]</span>
 
                                             <div class="progress">
                                                 <div class="progress-bar" style="width: @(Math.Round((double)mydelegate.VotesWeight / 100000000 / (double)sumOfDelegateWeight() * 100))%"></div>

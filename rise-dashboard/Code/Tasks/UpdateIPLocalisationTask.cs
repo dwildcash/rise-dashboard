@@ -23,7 +23,7 @@ namespace rise.Code.Tasks
         /// <summary>
         /// Gets the Schedule
         /// </summary>
-        public string Schedule => "*/2 * * * *";
+        public string Schedule => "*/5 * * * *";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateIpLocalisationTask"/> class.
