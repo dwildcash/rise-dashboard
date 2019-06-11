@@ -31,7 +31,6 @@ namespace rise.Services
             
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Send(DateTime.Now + " scanning livecoin");
 
                 using (StreamReader reader = new StreamReader(new FileStream(AppSettingsProvider.NodeLogFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
                 {
@@ -52,7 +51,7 @@ namespace rise.Services
                         //read out of the file until the EOF
                         string line = string.Empty;
                         while ((line = reader.ReadLine()) != null)
-                            await Send(DateTime.Now + " " + line);
+                            await Send(line);
 
                         //update the last max offset
                         lastMaxOffset = reader.BaseStream.Position;
