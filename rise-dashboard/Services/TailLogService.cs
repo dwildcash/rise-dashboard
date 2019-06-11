@@ -63,6 +63,7 @@ namespace rise.Services
 
             //call delegates with the string
             //this.MoreData(this, sb.ToString());
+            if (!lastLine.Contains("Account not found"))
             _notificationHub.Clients.All.SendAsync("Send", lastLine);
         }
     }
