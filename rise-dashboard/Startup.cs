@@ -97,7 +97,7 @@ namespace rise
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
-            services.AddSingleton<NotifyService, NotifyService>();
+            //services.AddSingleton<NotifyService, NotifyService>();
 
             // Start tail log service
             services.AddSingleton<IHostedService, TailLogService>();
