@@ -202,7 +202,7 @@ namespace rise
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<NotificationHub>("/notificationHub");
+                routes.MapHub<NotificationHub>("/Hub/notificationHub");
             });
         }
     }
