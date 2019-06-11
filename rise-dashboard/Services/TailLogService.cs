@@ -14,24 +14,8 @@ namespace rise.Services
     public class TailLogService : BackgroundService
     {
         private readonly IHubContext<NotificationHub> _notificationHub;
-        private string filename = "";
+        private string filename = string.Empty;
         private FileSystemWatcher fileSystemWatcher = null;
-        private long previousSeekPosition;
-
-        public delegate void MoreDataHandler(object sender, string newData);
-
-        private int maxBytes = 1024 * 16;
-
-        public int MaxBytes
-        {
-            get { return this.maxBytes; }
-            set { this.maxBytes = value; }
-        }
-
-        public TailLogService(IHubContext<NotificationHub> notificationHub)
-        {
-            _notificationHub = notificationHub;
-        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -39,13 +23,13 @@ namespace rise.Services
             {
                 this.filename = AppSettingsProvider.NodeLogFile;
                 FileInfo targetFile = new FileInfo(filename);
-               
 
-
-                fileSystemWatcher = new FileSystemWatcher();
-                fileSystemWatcher.IncludeSubdirectories = false;
-                fileSystemWatcher.Path = targetFile.DirectoryName;
-                fileSystemWatcher.Filter = targetFile.Name;
+                fileSystemWatcher = new FileSystemWatcher
+                {
+                    IncludeSubdirectories = false,
+                    Path = targetFile.DirectoryName,
+                    Filter = targetFile.Name
+                };
                 fileSystemWatcher.Changed += new FileSystemEventHandler(TargetFile_Changed);
                 fileSystemWatcher.EnableRaisingEvents = true;
             }
@@ -57,8 +41,6 @@ namespace rise.Services
 
         public void TargetFile_Changed(object source, FileSystemEventArgs e)
         {
-            FileStream fs = new FileStream(this.filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
             var lastLine = File.ReadLines(AppSettingsProvider.NodeLogFile).Last();
 
             //call delegates with the string
