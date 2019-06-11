@@ -43,7 +43,7 @@ namespace rise.Services
                 this.previousSeekPosition = (int)fs.Seek(this.previousSeekPosition, SeekOrigin.Begin);
                 fs.Dispose();
 
-                previousSeekPosition = 0;
+            
 
                 fileSystemWatcher = new FileSystemWatcher();
                 fileSystemWatcher.IncludeSubdirectories = false;
