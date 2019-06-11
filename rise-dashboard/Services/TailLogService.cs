@@ -81,7 +81,7 @@ namespace rise.Services
 
             //call delegates with the string
             //this.MoreData(this, sb.ToString());
-            _notificationHub.Clients.All.SendAsync("Send", sb.ToString());
+            _notificationHub.Clients.All.SendAsync("Send", sb.ToString() + "\n");
         }
     }
 }
