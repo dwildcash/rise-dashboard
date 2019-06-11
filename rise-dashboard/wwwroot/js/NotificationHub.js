@@ -8,6 +8,9 @@ connection.on("Send", function (message) {
         var li = document.createElement("li");
         li.textContent = encodedMsg;
     document.getElementById("messagesList").appendChild(li);
+
+    var element = document.getElementById("messagesList");
+    element.scrollTop = element.scrollHeight - element.clientHeight;
 });
 
 connection.start().then(function () {

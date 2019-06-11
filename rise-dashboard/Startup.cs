@@ -187,6 +187,11 @@ namespace rise
             // Use Authentication
             app.UseAuthentication();
 
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotificationHub>("/Hub/notificationHub");
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -198,11 +203,6 @@ namespace rise
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
-
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<NotificationHub>("/Hub/notificationHub");
             });
         }
     }

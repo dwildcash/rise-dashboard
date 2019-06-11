@@ -39,6 +39,10 @@ namespace rise.Services
                 this.filename = AppSettingsProvider.NodeLogFile;
                 FileInfo targetFile = new FileInfo(filename);
 
+                FileStream fs = new FileStream(this.filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                this.previousSeekPosition = (int)fs.Seek(this.previousSeekPosition, SeekOrigin.Begin);
+                fs.Dispose();
+
                 previousSeekPosition = 0;
 
                 fileSystemWatcher = new FileSystemWatcher();
