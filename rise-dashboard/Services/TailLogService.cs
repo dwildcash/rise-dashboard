@@ -38,12 +38,12 @@ namespace rise.Services
             {
                 this.filename = AppSettingsProvider.NodeLogFile;
                 FileInfo targetFile = new FileInfo(filename);
-
+                byte[] bytesRead = new byte[maxBytes];
                 FileStream fs = new FileStream(this.filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                this.previousSeekPosition = (int)fs.Seek(this.previousSeekPosition, SeekOrigin.Begin);
-                fs.Dispose();
+                int numBytes = fs.Read(bytesRead, 0, maxBytes);
+                this.previousSeekPosition += numBytes;
+                fs.Close();
 
-            
 
                 fileSystemWatcher = new FileSystemWatcher();
                 fileSystemWatcher.IncludeSubdirectories = false;
@@ -81,7 +81,7 @@ namespace rise.Services
 
             //call delegates with the string
             //this.MoreData(this, sb.ToString());
-            _notificationHub.Clients.All.SendAsync("Send", sb.ToString() + "\n");
+            _notificationHub.Clients.All.SendAsync("Send", sb.ToString());
         }
     }
 }
