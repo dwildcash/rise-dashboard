@@ -40,7 +40,7 @@ namespace rise.Services
                 FileInfo targetFile = new FileInfo(filename);
                 byte[] bytesRead = new byte[maxBytes];
                 FileStream fs = new FileStream(this.filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                this.previousSeekPosition = fs.Length
+                this.previousSeekPosition = fs.Length;
                 fs.Close();
 
 
