@@ -100,7 +100,7 @@ namespace rise
             //services.AddSingleton<NotifyService, NotifyService>();
 
             // Start tail log service
-            services.AddSingleton<IHostedService, TailLogService>();
+            //services.AddSingleton<IHostedService, TailLogService>();
 
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
@@ -189,11 +189,12 @@ namespace rise
 
             // Use Authentication
             app.UseAuthentication();
-
+            
+            /**
             app.UseSignalR(routes =>
             {
                 routes.MapHub<NotificationHub>("/notificationHub");
-            });
+            });**/
 
             app.UseMvc(routes =>
             {

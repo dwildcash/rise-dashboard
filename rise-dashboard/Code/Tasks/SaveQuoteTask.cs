@@ -95,7 +95,7 @@
         /// Initializes a new instance of the <see cref="SaveQuoteTask"/> class.
         /// </summary>
         /// <param name="scopeFactory">The scopeFactory<see cref="IServiceScopeFactory"/></param>
-        public SaveQuoteTask(IServiceScopeFactory scopeFactory, NotifyService service)
+        public SaveQuoteTask(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
         }
