@@ -8,6 +8,9 @@ var del = require('del');
 
 // Node_modules deps
 var deps = {
+    "@aspnet": {
+        "signalr/dist/browser/signalr.min.js": "js"
+    },
     "admin-lte": {
         "/dist/css/adminlte.min.css": "css",
         "/dist/js/adminlte.min.js": "js"
@@ -83,6 +86,7 @@ gulp.task('clean', function (done) {
         'wwwroot/json/**/*',
         '!wwwroot/css/jquery-ui-autocomplete.css',
         '!wwwroot/js/jquery-jvectormap-world-mill.js',
+        '!wwwroot/js/NotificationHub.js',
         '!wwwroot/css/pace.css',
         '!wwwroot/css/skin-midnight.css'
     ], done);

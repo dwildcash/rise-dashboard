@@ -16,6 +16,7 @@ namespace rise
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Models;
+    using rise.Hubs;
     using Rise.Services;
     using Services;
     using System;
@@ -94,6 +95,8 @@ namespace rise
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
+            services.AddSingleton<NotifyService, NotifyService>();
+
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
 
@@ -109,6 +112,9 @@ namespace rise
             // Force Anti Forgery token Validation
             services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
+            // Add signalr service
+            services.AddSignalR();
+
             // Configure 1Min Update Tasks
             services.AddSingleton<IScheduledTask, Update2MinTasks>();
 
@@ -123,13 +129,14 @@ namespace rise
 
             // Save quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
-
+    
             // Update Tip Account Task
             services.AddSingleton<IScheduledTask, UpdateTipAccountStatsTask>();
 
             // Configure Telegram bot and bot response
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
+
 
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>
@@ -177,6 +184,11 @@ namespace rise
 
             // Use Authentication
             app.UseAuthentication();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotificationHub>("/notificationHub");
+            });
 
             app.UseMvc(routes =>
             {

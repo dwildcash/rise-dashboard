@@ -1,0 +1,44 @@
+﻿@using System.Net.Sockets
+@using rise.Models
+@using Microsoft.AspNetCore.Identity
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = AppSettingsProvider.CoinName + " Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@(AppSettingsProvider.CoinName) Node Realtime Logs</title>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1><img src="@Url.Content("~/img/"+ AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />@(AppSettingsProvider.CoinName) Dashboard</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">NotificationHub</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="box callout callout-info text-center">
+                <ul id="messagesList">Work in progress</ul>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="~/js/signalr.min.js"></script>
+<script src="~/js/NotificationHub.js"></script>

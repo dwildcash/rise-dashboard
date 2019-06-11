@@ -3,6 +3,7 @@
     using Data;
     using Microsoft.Extensions.DependencyInjection;
     using Models;
+    using rise.Services;
     using Scheduling;
     using System;
     using System.Threading;
@@ -23,6 +24,8 @@
         /// </summary>
         private readonly IServiceScopeFactory _scopeFactory;
 
+        private readonly NotifyService _service;
+
         /// <summary>
         /// The ExecuteAsync
         /// </summary>
@@ -36,6 +39,8 @@
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var time = DateTime.Now.ToUniversalTime();
+
+                    await Send(DateTime.Now + " scanning livecoin");
 
                     var quoteLivecoin = new CoinQuote
                     {
@@ -89,13 +94,19 @@
             }
         }
 
+        public Task Send(string message)
+        {
+            return _service.SendNotificationAsync(message);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveQuoteTask"/> class.
         /// </summary>
         /// <param name="scopeFactory">The scopeFactory<see cref="IServiceScopeFactory"/></param>
-        public SaveQuoteTask(IServiceScopeFactory scopeFactory)
+        public SaveQuoteTask(IServiceScopeFactory scopeFactory, NotifyService service)
         {
             _scopeFactory = scopeFactory;
+            _service = service;
         }
     }
 }
