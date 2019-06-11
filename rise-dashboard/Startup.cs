@@ -14,6 +14,7 @@ namespace rise
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Models;
     using rise.Hubs;
@@ -32,7 +33,7 @@ namespace rise
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
         /// <param name="env">The env<see cref="IHostingEnvironment"/></param>
-        public Startup(IHostingEnvironment env, ILogger<Startup> logger)
+        public Startup(Microsoft.AspNetCore.Hosting.IHostingEnvironment env, ILogger<Startup> logger)
         {
             var builder = new ConfigurationBuilder()
                .SetBasePath(env.ContentRootPath)
@@ -76,6 +77,7 @@ namespace rise
             AppSettingsProvider.EncryptionKey = Configuration["AppSettings:EncryptionKey"];
             AppSettingsProvider.WebHookSecret = Configuration["AppSettings:WebHookSecret"];
             AppSettingsProvider.TelegramChannelId = long.Parse(Configuration["AppSettings:TelegramChannelId"]);
+            AppSettingsProvider.NodeLogFile = Configuration["AppSettings:NodeLogFile"];
         }
 
         /// <summary>
@@ -96,6 +98,9 @@ namespace rise
             });
 
             services.AddSingleton<NotifyService, NotifyService>();
+
+            // Start tail log service
+            services.AddSingleton<IHostedService, TailLogService>();
 
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
@@ -154,7 +159,7 @@ namespace rise
         /// <param name="userManager">The userManager<see cref="UserManager{ApplicationUser}"/></param>
         /// <param name="roleManager">The roleManager<see cref="RoleManager{ApplicationRole}"/></param>
         /// <param name="context">The context<see cref="ApplicationDbContext"/></param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext context)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext context)
         {
             if (env.IsDevelopment())
             {

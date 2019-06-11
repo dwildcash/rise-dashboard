@@ -125,5 +125,11 @@
         /// Secret used for Telegram webhook
         /// </summary>
         public static string WebHookSecret { get; set; }
+
+
+        /// <summary>
+        /// Node Log File to stream
+        /// </summary>
+        public static string NodeLogFile { get; set; }
     }
 }

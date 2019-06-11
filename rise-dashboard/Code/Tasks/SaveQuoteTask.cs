@@ -24,8 +24,6 @@
         /// </summary>
         private readonly IServiceScopeFactory _scopeFactory;
 
-        private readonly NotifyService _service;
-
         /// <summary>
         /// The ExecuteAsync
         /// </summary>
@@ -39,8 +37,6 @@
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var time = DateTime.Now.ToUniversalTime();
-
-                    await Send(DateTime.Now + " scanning livecoin");
 
                     var quoteLivecoin = new CoinQuote
                     {
@@ -94,10 +90,6 @@
             }
         }
 
-        public Task Send(string message)
-        {
-            return _service.SendNotificationAsync(message);
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveQuoteTask"/> class.
@@ -106,7 +98,6 @@
         public SaveQuoteTask(IServiceScopeFactory scopeFactory, NotifyService service)
         {
             _scopeFactory = scopeFactory;
-            _service = service;
         }
     }
 }
