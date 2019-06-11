@@ -3,7 +3,6 @@
     using Data;
     using Microsoft.Extensions.DependencyInjection;
     using Models;
-    using rise.Services;
     using Scheduling;
     using System;
     using System.Threading;
@@ -89,7 +88,6 @@
                 Console.Write(e.InnerException);
             }
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveQuoteTask"/> class.

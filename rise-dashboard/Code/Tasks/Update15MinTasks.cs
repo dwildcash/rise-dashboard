@@ -34,7 +34,7 @@ namespace rise.Code.Tasks
             if (delegateResult.Success)
             {
                 DelegateResult.Current = ForgingChanceCalculator.SimulateForgingRounds(delegateResult);
-            }      
+            }
         }
     }
 }

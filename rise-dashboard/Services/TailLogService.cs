@@ -5,7 +5,6 @@ using rise.Models;
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,6 +15,11 @@ namespace rise.Services
         private readonly IHubContext<NotificationHub> _notificationHub;
         private string filename = string.Empty;
         private FileSystemWatcher fileSystemWatcher = null;
+
+        public TailLogService(IHubContext<NotificationHub> notificationHub)
+        {
+            _notificationHub = notificationHub;
+        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -43,10 +47,8 @@ namespace rise.Services
         {
             var lastLine = File.ReadLines(AppSettingsProvider.NodeLogFile).Last();
 
-            //call delegates with the string
-            //this.MoreData(this, sb.ToString());
             if (!lastLine.Contains("Account not found"))
-            _notificationHub.Clients.All.SendAsync("Send", lastLine);
+                _notificationHub.Clients.All.SendAsync("Send", lastLine);
         }
     }
 }
