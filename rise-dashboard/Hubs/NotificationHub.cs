@@ -10,7 +10,7 @@ namespace rise.Hubs
     {
         public async Task SendMessage(string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", message);
+            await Clients.All.SendAsync("Send", message);
         }
     }
 }

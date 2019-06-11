@@ -96,12 +96,7 @@ namespace rise
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
-
-            //services.AddSingleton<NotifyService, NotifyService>();
-
-            // Start tail log service
-            //services.AddSingleton<IHostedService, TailLogService>();
-
+    
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
 
@@ -119,6 +114,9 @@ namespace rise
 
             // Add signalr service
             services.AddSignalR();
+
+            // Start tail log service
+            services.AddHostedService<TailLogService>();
 
             // Configure 1Min Update Tasks
             services.AddSingleton<IScheduledTask, Update2MinTasks>();
@@ -141,7 +139,6 @@ namespace rise
             // Configure Telegram bot and bot response
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
-
 
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>
@@ -189,12 +186,6 @@ namespace rise
 
             // Use Authentication
             app.UseAuthentication();
-            
-            /**
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<NotificationHub>("/notificationHub");
-            });**/
 
             app.UseMvc(routes =>
             {
@@ -207,6 +198,11 @@ namespace rise
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotificationHub>("/notificationHub");
             });
         }
     }

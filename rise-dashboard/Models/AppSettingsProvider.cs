@@ -126,7 +126,6 @@
         /// </summary>
         public static string WebHookSecret { get; set; }
 
-
         /// <summary>
         /// Node Log File to stream
         /// </summary>
