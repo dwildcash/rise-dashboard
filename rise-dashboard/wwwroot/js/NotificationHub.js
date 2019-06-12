@@ -4,10 +4,7 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/Hub/notificationHu
 
 connection.on("Send", function (message) {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var encodedMsg = msg;
-        var p = document.createElement("p");
-        p.textContent = encodedMsg;
-    document.getElementById("messagesList").appendChild(p);
+    document.getElementById("messagesList").append(msg + '<br>');
 
     var element = document.getElementById("messagesList");
     element.scrollTop = element.scrollHeight - element.clientHeight;
