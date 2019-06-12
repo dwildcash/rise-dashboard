@@ -1,5 +1,9 @@
 ﻿"use strict";
 
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+};
+
 var connection = new signalR.HubConnectionBuilder().withUrl("/Hub/notificationHub").build();
 
 connection.on("Send", function (message) {
@@ -12,6 +16,11 @@ connection.on("Send", function (message) {
 connection.start().then(function () {
     var element = document.getElementById("master");
     element.innerHTML += "<p class='text-success'>Connected to server</p>";
+
+    sleep(1000).then(() => {
+        element.innerHTML += "<p class='text-success'>Waiting for next log...</p>";
+
+    });
 }).catch(function (err) {
     return console.error(err.toString());
 });
