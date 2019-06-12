@@ -11,7 +11,7 @@ connection.on("Send", function (message) {
 
 connection.start().then(function () {
     var element = document.getElementById("master");
-    element.innerHTML += "<p class='success'>Connected to server</p>";
+    element.innerHTML += "<p class='text-success'>Connected to server</p>";
 }).catch(function (err) {
     return console.error(err.toString());
 });
