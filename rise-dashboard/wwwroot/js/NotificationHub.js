@@ -15,7 +15,9 @@ connection.on("Send", function (message) {
 
 connection.start().then(function () {
     var li = document.createElement("li");
-    li.textContent = "Connected to server...";
+    li.textContent = "Connected to server.";
+    var li = document.createElement("li");
+    li.textContent = "Waiting for logs ...";
     document.getElementById("messagesList").appendChild(li);
 }).catch(function (err) {
     return console.error(err.toString());
