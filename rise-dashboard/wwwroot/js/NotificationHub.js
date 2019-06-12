@@ -18,7 +18,7 @@ connection.start().then(function () {
     element.innerHTML += "<p class='text-success'>Connected to server</p>";
 
     sleep(1000).then(() => {
-        element.innerHTML += "<p class='text-success'>Waiting for next log...</p>";
+        element.innerHTML += "<p class='text-info'>Waiting for next log...</p>";
 
     });
 }).catch(function (err) {
