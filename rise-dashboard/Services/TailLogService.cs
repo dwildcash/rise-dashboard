@@ -34,6 +34,7 @@ namespace rise.Services
                     Path = targetFile.DirectoryName,
                     Filter = targetFile.Name
                 };
+                fileSystemWatcher.Created += new FileSystemEventHandler(TargetFile_Created);
                 fileSystemWatcher.Changed += new FileSystemEventHandler(TargetFile_Changed);
                 fileSystemWatcher.EnableRaisingEvents = true;
             }
@@ -41,6 +42,16 @@ namespace rise.Services
             {
                 Console.WriteLine("Received Exception from TailLogService {0}", ex.Message);
             }
+        }
+        public void TargetFile_Created(object source, FileSystemEventArgs e)
+        {
+            StartMonitoring();
+        }
+
+        public void StartMonitoring()
+        {
+            fileSystemWatcher.Changed += new FileSystemEventHandler(TargetFile_Changed);
+            fileSystemWatcher.EnableRaisingEvents = true;
         }
 
         public void TargetFile_Changed(object source, FileSystemEventArgs e)
