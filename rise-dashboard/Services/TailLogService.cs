@@ -45,10 +45,17 @@ namespace rise.Services
 
         public void TargetFile_Changed(object source, FileSystemEventArgs e)
         {
-            var lastLine = File.ReadLines(AppSettingsProvider.NodeLogFile).Last();
+            try
+            {
+                var lastLine = File.ReadLines(AppSettingsProvider.NodeLogFile).Last();
 
-            if (!lastLine.Contains("Account not found"))
-                _notificationHub.Clients.All.SendAsync("Send", lastLine);
+                if (!lastLine.Contains("Account not found"))
+                    _notificationHub.Clients.All.SendAsync("Send", lastLine);
+            }
+            catch (Exception ex)
+            {
+                _notificationHub.Clients.All.SendAsync("Send", ex.Message);
+            }
         }
     }
 }
