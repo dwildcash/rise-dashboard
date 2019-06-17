@@ -237,7 +237,7 @@ namespace Rise.Services
                             }
                         // Info Price
                         case "!PRICE":
-                            await cmd_Price(message);
+                            await cmd_Price(appuser);
                             break;
                         // Return a  geek joke
                         case "!CHUCKNORRIS":
@@ -288,8 +288,8 @@ namespace Rise.Services
                                      "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
                                      "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
                                      "<b>!balance</b> - Show current RISE Balance" + Environment.NewLine +
-                                     "<b>!joke</b> - Display a geek joke" + Environment.NewLine +
-                                     "<b>!chucknorris</b> - Display a chucknorris joke" + Environment.NewLine +
+                                     //"<b>!joke</b> - Display a geek joke" + Environment.NewLine +
+                                     //"<b>!chucknorris</b> - Display a chucknorris joke" + Environment.NewLine +
                                      "<b>!hope</b> - Show hope quote" + Environment.NewLine +
                                      "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
                                      "<b>!price</b> - Show current RISE Price" + Environment.NewLine;
@@ -729,8 +729,9 @@ namespace Rise.Services
 
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
+                                  "<b>Bitker</b> - https://www.bitker.com/ (New)" + Environment.NewLine +
                                   "<b>Altilly</b> - https://altilly.com  (24h V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
-                                  "<b>Livecoin</b> - http://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +
+                                  "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +
                                   "<b>Vinex</b> - https://vinex.network (24h V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
@@ -745,11 +746,11 @@ namespace Rise.Services
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        private async Task cmd_Price(Message message)
+        private async Task cmd_Price(ApplicationUser sender)
         {
             try
             {
-                await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
                 this.coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
                 var quote = LastAllQuote();
 
@@ -758,9 +759,9 @@ namespace Rise.Services
                                   "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " (" + VolumePercentChange(1) + "%) </b>" + Environment.NewLine +
                                   "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>";
 
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
+                await _botService.Client.SendTextMessageAsync(sender.TelegramId, strResponse, ParseMode.Html);
                 var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "click to open website", replyMarkup: keyboard);
+                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "click to open website", replyMarkup: keyboard);
             }
             catch (Exception ex)
             {
