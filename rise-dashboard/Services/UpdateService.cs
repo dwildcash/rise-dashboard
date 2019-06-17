@@ -678,6 +678,7 @@ namespace Rise.Services
                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.attachments.FirstOrDefault().text, ParseMode.Html);
                 }
             }
+
             catch (Exception ex)
             {
                 _logger.LogError("Received Exception from cmd_Joke {0}", ex.Message);
