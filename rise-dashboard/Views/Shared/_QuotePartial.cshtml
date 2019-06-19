@@ -153,7 +153,9 @@
                     stacked: true,
                     gridLines: {
                         color: 'none',
-                        show: false
+                        display: false,
+                        drawOnChartArea: false,
+                        drawTicks: false
                     },
                 }],
                 yAxes: [{
@@ -162,7 +164,9 @@
                     stacked: true,
                     gridLines: {
                         color: 'none',
-                        show: false
+                        display: false,
+                        drawOnChartArea: false,
+                        drawTicks: false
                     },
                     ticks: {
                         callback: function (value) { return numberWithCommas(value); },
