@@ -715,7 +715,6 @@ namespace Rise.Services
                 var quoteLivecoin = LastLiveCoinQuote();
 
                
-
                 if (quoteAltilly != null)
                 {
                     volAltilly = Math.Round(quoteAltilly.Volume);

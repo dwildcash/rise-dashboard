@@ -198,7 +198,7 @@
         /// <returns></returns>
         public CoinQuote LastLiveCoinQuote()
         {
-            return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Livecoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+            return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "LiveCoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
         }
 
         public CoinQuote LastooobtcCoinQuote()
