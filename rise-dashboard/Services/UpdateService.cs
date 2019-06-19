@@ -712,6 +712,8 @@ namespace Rise.Services
                 var quoteooobtc = LastooobtcCoinQuote();
                 var quoteLivecoin = LastLiveCoinQuote();
 
+                coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
+
                 if (quoteAltilly != null)
                 {
                     volAltilly = Math.Round(quoteAltilly.Volume);
