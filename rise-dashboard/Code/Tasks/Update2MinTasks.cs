@@ -37,6 +37,13 @@ namespace rise.Code.Tasks
                 VinexQuote.Current = vinexQuoteResult;
             }
 
+            var ooobtcQuoteResult = await ooobtcQuoteFetcher.FetchooobtcCoinQuote();
+
+            if (ooobtcQuoteResult != null)
+            {
+                ooobtcCoinQuote.Current = ooobtcQuoteResult;
+            }
+
             var altillyQuoteResult = await AltillyQuoteFetcher.FetchAltillyQuote();
 
             if (altillyQuoteResult != null)

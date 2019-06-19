@@ -37,6 +37,15 @@
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var time = DateTime.Now.ToUniversalTime();
 
+                    var quoteOoobtc = new CoinQuote
+                    {
+                        Exchange = "ooobtc",
+                        Price = double.Parse(ooobtcCoinQuote.Current.Lastprice),
+                        Volume = ooobtcCoinQuote.Current.Volume,
+                        TimeStamp = time,
+                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * double.Parse(ooobtcCoinQuote.Current.Lastprice),
+                    };
+
                     var quoteLivecoin = new CoinQuote
                     {
                         Exchange = "LiveCoin",
@@ -68,15 +77,16 @@
                     var quoteAllWeighted = new CoinQuote
                     {
                         Exchange = "All",
-                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume),
+                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume) + (quoteOoobtc.Price * quoteOoobtc.Volume / totalVolume),
                         Volume = totalVolume,
                         TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume))
+                        USDPrice = double.Parse(CoinbaseBtcQuoteResult.Current.data.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume) + (quoteOoobtc.Price * quoteOoobtc.Volume / totalVolume))
                     };
 
                     dbContext.CoinQuotes.Add(quoteLivecoin);
                     dbContext.CoinQuotes.Add(quoteAltilly);
                     dbContext.CoinQuotes.Add(quoteVinex);
+                    dbContext.CoinQuotes.Add(quoteOoobtc);
                     dbContext.CoinQuotes.Add(quoteAllWeighted);
 
                     // Save Context in Database

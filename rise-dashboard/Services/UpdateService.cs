@@ -695,6 +695,9 @@ namespace Rise.Services
         {
             try
             {
+                double volooobtc = 0;
+                double priceooobtc = 0;
+
                 double volAltilly = 0;
                 double priceAltilly = 0;
 
@@ -704,15 +707,17 @@ namespace Rise.Services
                 double volVinex = 0;
                 double priceVinex = 0;
 
-                CoinQuote quoteAltilly = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+                var quoteAltilly = LastAltillyQuote();
+                var quoteVinex = LastVinexQuote();
+                var quoteooobtc = LastooobtcCoinQuote();
+                var quoteLivecoin = LastLiveCoinQuote();
 
                 if (quoteAltilly != null)
                 {
                     volAltilly = Math.Round(quoteAltilly.Volume);
                     priceAltilly = Math.Round(quoteAltilly.Price * 100000000);
                 }
-
-                CoinQuote quoteVinex = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+            
 
                 if (quoteVinex != null)
                 {
@@ -720,16 +725,23 @@ namespace Rise.Services
                     priceVinex = Math.Round(quoteVinex.Price * 100000000);
                 }
 
-                CoinQuote quoteLivecoin = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "LiveCoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
-
+               
                 if (quoteLivecoin != null)
                 {
                     volLivecoin = Math.Round(quoteLivecoin.Volume);
                     priceLivecoin = Math.Round(quoteLivecoin.Price * 100000000);
                 }
 
+
+                if (quoteooobtc != null)
+                {
+                    volooobtc = Math.Round(quoteooobtc.Volume);
+                    priceooobtc = Math.Round(quoteooobtc.Price * 100000000);
+                }
+
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
+                                  "<b>ooobtc</b> - https://www.ooobtc.com/ (24h V:" + volooobtc.ToString("N0") + " - Price:" + priceooobtc + ")" + Environment.NewLine +
                                   "<b>Bitker</b> - https://www.bitker.com/ (New)" + Environment.NewLine +
                                   "<b>Altilly</b> - https://altilly.com  (24h V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
                                   "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +

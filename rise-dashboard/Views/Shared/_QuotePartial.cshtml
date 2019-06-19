@@ -56,6 +56,7 @@
         var dataPack2 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "LiveCoin").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack4 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Altilly").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
+        var dataPack5 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "ooobtc").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
 
         var bar_ctx = document.getElementById('priceQuoteChart').getContext("2d");
@@ -75,6 +76,11 @@
         gradient3.addColorStop(0.5, 'rgba(255, 204, 51, 0.25)');
         gradient3.addColorStop(1, 'rgba(255, 204, 51, 0)');
 
+        var gradient4 = bar_ctx.createLinearGradient(0, 0, 0, 200);
+        gradient4.addColorStop(0, 'rgba(102, 255,0, 0.5)');
+        gradient4.addColorStop(0.5, 'rgba(51, 255, 255, 0.25)');
+        gradient4.addColorStop(1, 'rgba(102, 255, 0, 0)');
+        
         var bar_chart = new Chart(bar_ctx, {
         type: 'bar',
         data: {
@@ -92,7 +98,7 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                    label: 'Vinex',
+                    label: 'Vinex ' + @(Model.LastVinexQuote().Price * 100000000),
                     yAxisID: "volume",
                     data: dataPack1,
                     backgroundColor: gradient2,
@@ -101,7 +107,7 @@
                     hoverBorderColor: 'purple'
                 },
                 {
-                label: 'LiveCoin',
+                label: 'LiveCoin'  + @(Model.LastLiveCoinQuote().Price * 100000000),
                     yAxisID: "volume",
                     data: dataPack2,
                     backgroundColor: gradient1,
@@ -110,9 +116,18 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                label: 'Altilly',
+                label: 'Altilly' + @(Model.LastAltillyQuote().Price * 100000000),
                     yAxisID: "volume",
                     data: dataPack4,
+                    backgroundColor: gradient3,
+                    hoverBackgroundColor: gradient3,
+                    hoverBorderWidth: 2,
+                    hoverBorderColor: 'lightgrey'
+                },
+                {
+                label: 'ooobtc' + @(Model.LastAltillyQuote().Price * 100000000),
+                    yAxisID: "volume",
+                    data: dataPack5,
                     backgroundColor: gradient3,
                     hoverBackgroundColor: gradient3,
                     hoverBorderWidth: 2,
@@ -136,13 +151,23 @@
             scales: {
                 xAxes: [{
                     stacked: true,
-                    gridLines: { drawOnChartArea: false },
+                    gridLines: {
+                        color: 'none',
+                        display: false,
+                        drawOnChartArea: false,
+                        drawTicks: false
+                    },
                 }],
                 yAxes: [{
                     id: 'volume',
                     position: 'left',
                     stacked: true,
-                    gridLines: { drawOnChartArea: false },
+                    gridLines: {
+                        color: 'none',
+                        display: false,
+                        drawOnChartArea: false,
+                        drawTicks: false
+                    },
                     ticks: {
                         callback: function (value) { return numberWithCommas(value); },
                     }
