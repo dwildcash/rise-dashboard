@@ -707,12 +707,14 @@ namespace Rise.Services
                 double volVinex = 0;
                 double priceVinex = 0;
 
+                coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
+
                 var quoteAltilly = LastAltillyQuote();
                 var quoteVinex = LastVinexQuote();
                 var quoteooobtc = LastooobtcCoinQuote();
                 var quoteLivecoin = LastLiveCoinQuote();
 
-                coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
+               
 
                 if (quoteAltilly != null)
                 {
