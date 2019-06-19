@@ -128,8 +128,8 @@
                 label: 'ooobtc',
                     yAxisID: "volume",
                     data: dataPack5,
-                    backgroundColor: gradient3,
-                    hoverBackgroundColor: gradient3,
+                    backgroundColor: gradient4,
+                    hoverBackgroundColor: gradient4,
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 }
@@ -153,9 +153,7 @@
                     stacked: true,
                     gridLines: {
                         color: 'none',
-                        display: false,
-                        drawOnChartArea: false,
-                        drawTicks: false
+                        show: false
                     },
                 }],
                 yAxes: [{
@@ -164,9 +162,7 @@
                     stacked: true,
                     gridLines: {
                         color: 'none',
-                        display: false,
-                        drawOnChartArea: false,
-                        drawTicks: false
+                        show: false
                     },
                     ticks: {
                         callback: function (value) { return numberWithCommas(value); },
