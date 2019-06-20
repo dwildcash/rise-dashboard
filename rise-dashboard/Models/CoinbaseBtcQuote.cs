@@ -31,8 +31,6 @@
     /// </summary>
     public class CoinbaseBtcQuoteResult
     {
-   
-
         /// <summary>
         /// Gets or sets the data
         /// </summary>

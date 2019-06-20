@@ -324,14 +324,14 @@
                     <div class="d-flex flex-column ml-4">
                         <span class="d-flex flex-column">
                             <p class="mb-0">Deposit</p>
-                            <h4 class="font-weight-bold">@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                            <p class="font-weight-bold">@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</p>
                         </span>
                         <small class="text-muted">On @toLiveCoin.Count() Tx</small>
                     </div>
                     <div class="d-flex flex-column ml-4">
                         <span class="d-flex flex-column">
                             <p class="mb-0">Withdraw</p>
-                            <h4 class="font-weight-bold">@fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                            <p class="font-weight-bold">@fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</p>
                         </span>
                         <small class="text-muted">On <b>@fromLiveCoin.Count()</b> Tx</small>
                     </div>
@@ -351,14 +351,14 @@
                     <div class="d-flex flex-column ml-4">
                         <span class="d-flex flex-column">
                             <p class="mb-0">Deposit</p>
-                            <h4 class="font-weight-bold">@toVinex.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                            <p class="font-weight-bold">@toVinex.Sum(x => x.amount / 100000000).ToString("N0")</p>
                         </span>
                         <small class="text-muted">On <b>@toVinex.Count()</b> Tx</small>
                     </div>
                     <div class="d-flex flex-column ml-4">
                         <span class="d-flex flex-column">
                             <p class="mb-0">Withdraw</p>
-                            <h4 class="font-weight-bold">@fromVinex.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                            <p class="font-weight-bold">@fromVinex.Sum(x => x.amount / 100000000).ToString("N0")</p>
                         </span>
                         <small class="text-muted">On <b>@fromVinex.Count()</b> Tx</small>
                     </div>
@@ -386,7 +386,7 @@
                     <div class="d-flex flex-column ml-4">
                         <span class="d-flex flex-column">
                             <p class="mb-0">Withdraw</p>
-                            <h4 class="font-weight-bold">@fromAltilly.Sum(x => x.amount / 100000000).ToString("N0")</h4>
+                            <p class="font-weight-bold">@fromAltilly.Sum(x => x.amount / 100000000).ToString("N0")</p>
                         </span>
                         <small class="text-muted">On <b>@fromAltilly.Count()</b> Tx</small>
                     </div>
