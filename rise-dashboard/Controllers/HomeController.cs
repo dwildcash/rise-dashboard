@@ -89,7 +89,7 @@
             var accountSummaryViewModel = new AccountSummaryViewModel
             {
                 liveCoinQuoteResult = LiveCoinQuote.Current,
-                coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                 transactionsResult = TransactionsResult.Current,
                 delegateResult = DelegateResult.Current,
                 walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
@@ -113,7 +113,7 @@
             var accountSummaryViewModel = new AccountSummaryViewModel
             {
                 liveCoinQuoteResult = LiveCoinQuote.Current,
-                coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                 transactionsResult = TransactionsResult.Current,
                 delegateResult = DelegateResult.Current,
                 walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
@@ -167,7 +167,7 @@
                     {
                         liveCoinQuoteResult = LiveCoinQuote.Current,
                         coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
-                        coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                        coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                         transactionsResult = TransactionsResult.Current,
                         delegateResult = DelegateResult.Current,
                         walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
@@ -183,7 +183,7 @@
                     {
                         liveCoinQuoteResult = LiveCoinQuote.Current,
                         coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
-                        coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                        coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                         transactionsResult = TransactionsResult.Current,
                         delegateResult = DelegateResult.Current,
                         walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
@@ -246,7 +246,7 @@
                 var accountSummaryViewModel = new AccountSummaryViewModel
                 {
                     liveCoinQuoteResult = LiveCoinQuote.Current,
-                    coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                    coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     transactionsResult = TransactionsResult.Current,
                     delegateResult = DelegateResult.Current,
                     walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
@@ -277,7 +277,7 @@
                 {
                     coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
                     LiveCoinQuoteResult = LiveCoinQuote.Current,
-                    CoinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                    CoinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     DelegateResult = DelegateResult.Current
                 };
 
@@ -324,7 +324,7 @@
                 {
                     liveCoinQuoteResult = LiveCoinQuote.Current,
                     coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
-                    coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                    coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     transactionsResult = TransactionsResult.Current,
                     delegateResult = DelegateResult.Current,
                     walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
@@ -355,7 +355,7 @@
                     //liveCoinTx = await TransactionsFetcher.FetchAllUserTransactions(AppSettingsProvider.LiveCoinWalletAddress),
                     transactionsResult = TransactionsResult.Current,
                     liveCoinQuoteResult = LiveCoinQuote.Current,
-                    coinbaseBtcQuoteResult = CoinbaseBtcQuoteResult.Current,
+                    coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList()
                 };
 

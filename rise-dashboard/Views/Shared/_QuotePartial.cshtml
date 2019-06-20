@@ -57,6 +57,8 @@
         var dataPack4 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Altilly").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
         var dataPack5 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "ooobtc").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
+        var dataPack6 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Bitker").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
+        
         var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
 
         var bar_ctx = document.getElementById('priceQuoteChart').getContext("2d");
@@ -80,7 +82,12 @@
         gradient4.addColorStop(0, 'rgba(255, 55,55, 0.5)');
         gradient4.addColorStop(0.5, 'rgba(255, 102, 102, 0.25)');
         gradient4.addColorStop(1, 'rgba(255, 255, 0, 0)');
-        
+
+        var gradient5 = bar_ctx.createLinearGradient(0, 0, 0, 200);
+        gradient5.addColorStop(0, 'rgba(255, 55,55, 0.5)');
+        gradient5.addColorStop(0.5, 'rgba(255, 102, 102, 0.25)');
+        gradient5.addColorStop(1, 'rgba(255, 255, 0, 0)');
+
         var bar_chart = new Chart(bar_ctx, {
         type: 'bar',
         data: {
@@ -130,6 +137,15 @@
                     data: dataPack5,
                     backgroundColor: gradient4,
                     hoverBackgroundColor: gradient4,
+                    hoverBorderWidth: 2,
+                    hoverBorderColor: 'lightgrey'
+                },
+                {
+                    label: 'Bitker',
+                    yAxisID: "volume",
+                    data: dataPack6,
+                    backgroundColor: gradient5,
+                    hoverBackgroundColor: gradient5,
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 }

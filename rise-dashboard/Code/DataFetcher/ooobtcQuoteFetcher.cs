@@ -8,18 +8,18 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Defines the <see cref="VinexQuoteFetcher" />
+    /// Defines the <see cref="ooobtcQuoteFetcher" />
     /// </summary>
     public static class ooobtcQuoteFetcher
     {
-        public static async Task<ooobtcCoinQuote> FetchooobtcCoinQuote()
+        public static async Task<ooobtcQuote> FetchooobtcCoinQuote()
         {
             try
             {
                 using (var hc = new HttpClient())
                 {
                     var quote = JObject.Parse(await hc.GetStringAsync("https://openapi.ooobtc.com/public/v1/getticker?kv=rise_btc"));
-                    var ooobtcQuoteResult = JsonConvert.DeserializeObject<ooobtcCoinQuoteResult>(quote.ToString());
+                    var ooobtcQuoteResult = JsonConvert.DeserializeObject<ooobtcQuoteResult>(quote.ToString());
 
                     return ooobtcQuoteResult.Status == 200 ? ooobtcQuoteResult.Data : null;
                 }

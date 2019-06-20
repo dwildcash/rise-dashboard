@@ -43,6 +43,7 @@ namespace rise.Services
                 Console.WriteLine("Received Exception from TailLogService {0}", ex.Message);
             }
         }
+
         public void TargetFile_Created(object source, FileSystemEventArgs e)
         {
             StartMonitoring();

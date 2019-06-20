@@ -16,7 +16,7 @@
         /// The FetchCoinbaseBtcQuote
         /// </summary>
         /// <returns>The <see cref="Task{CoinbaseBtcQuoteResult}"/></returns>
-        public static async Task<CoinbaseBtcQuoteResult> FetchCoinbaseBtcQuote()
+        public static async Task<CoinbaseBtcQuote> FetchCoinbaseBtcQuote()
         {
             try
             {
@@ -25,7 +25,7 @@
                     var quote = JObject.Parse(await hc.GetStringAsync("https://api.coinbase.com/v2/prices/BTC-USD/spot"));
                     var coinbaseQuoteResult = JsonConvert.DeserializeObject<CoinbaseBtcQuoteResult>(quote.ToString());
 
-                    return coinbaseQuoteResult;
+                    return coinbaseQuoteResult.data;
                 }
             }
             catch (Exception e)

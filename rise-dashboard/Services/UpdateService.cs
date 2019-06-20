@@ -678,7 +678,6 @@ namespace Rise.Services
                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.attachments.FirstOrDefault().text, ParseMode.Html);
                 }
             }
-
             catch (Exception ex)
             {
                 _logger.LogError("Received Exception from cmd_Joke {0}", ex.Message);
@@ -695,6 +694,9 @@ namespace Rise.Services
         {
             try
             {
+                double volBitker = 0;
+                double priceBitker = 0;
+
                 double volooobtc = 0;
                 double priceooobtc = 0;
 
@@ -711,16 +713,21 @@ namespace Rise.Services
 
                 var quoteAltilly = LastAltillyQuote();
                 var quoteVinex = LastVinexQuote();
-                var quoteooobtc = LastooobtcCoinQuote();
+                var quoteooobtc = LastooobtcQuote();
                 var quoteLivecoin = LastLiveCoinQuote();
+                var quoteBitker = LastBitkerQuote();
 
-               
                 if (quoteAltilly != null)
                 {
                     volAltilly = Math.Round(quoteAltilly.Volume);
                     priceAltilly = Math.Round(quoteAltilly.Price * 100000000);
                 }
-            
+
+                if (quoteBitker != null)
+                {
+                    volBitker = Math.Round(quoteBitker.Volume);
+                    priceBitker = Math.Round(quoteBitker.Price * 100000000);
+                }
 
                 if (quoteVinex != null)
                 {
@@ -728,13 +735,11 @@ namespace Rise.Services
                     priceVinex = Math.Round(quoteVinex.Price * 100000000);
                 }
 
-               
                 if (quoteLivecoin != null)
                 {
                     volLivecoin = Math.Round(quoteLivecoin.Volume);
                     priceLivecoin = Math.Round(quoteLivecoin.Price * 100000000);
                 }
-
 
                 if (quoteooobtc != null)
                 {
@@ -745,7 +750,7 @@ namespace Rise.Services
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
                                   "<b>ooobtc</b> - https://www.ooobtc.com/ (24h V:" + volooobtc.ToString("N0") + " - Price:" + priceooobtc + ")" + Environment.NewLine +
-                                  "<b>Bitker</b> - https://www.bitker.com/ (New)" + Environment.NewLine +
+                                  "<b>Bitker</b> - https://www.bitker.com/ (24h V:" + volBitker.ToString("N0") + " - Price:" + priceBitker + ")" + Environment.NewLine +
                                   "<b>Altilly</b> - https://altilly.com  (24h V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
                                   "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +
                                   "<b>Vinex</b> - https://vinex.network (24h V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")";

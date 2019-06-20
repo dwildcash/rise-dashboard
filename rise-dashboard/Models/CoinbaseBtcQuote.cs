@@ -6,6 +6,11 @@
     public class CoinbaseBtcQuote
     {
         /// <summary>
+        /// Gets or sets the Current
+        /// </summary>
+        public static CoinbaseBtcQuote Current { get; set; }
+
+        /// <summary>
         /// Gets or sets the base
         /// </summary>
         public string @base { get; set; }
@@ -26,10 +31,7 @@
     /// </summary>
     public class CoinbaseBtcQuoteResult
     {
-        /// <summary>
-        /// Gets or sets the Current
-        /// </summary>
-        public static CoinbaseBtcQuoteResult Current { get; set; }
+   
 
         /// <summary>
         /// Gets or sets the data

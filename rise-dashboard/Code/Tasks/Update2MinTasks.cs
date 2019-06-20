@@ -37,11 +37,18 @@ namespace rise.Code.Tasks
                 VinexQuote.Current = vinexQuoteResult;
             }
 
+            var BitkerQuoteResult = await BitkerQuoteFetcher.FetBitkerCoinQuote();
+
+            if (BitkerQuoteResult != null)
+            {
+                BitkerQuote.Current = BitkerQuoteResult;
+            }
+
             var ooobtcQuoteResult = await ooobtcQuoteFetcher.FetchooobtcCoinQuote();
 
             if (ooobtcQuoteResult != null)
             {
-                ooobtcCoinQuote.Current = ooobtcQuoteResult;
+                ooobtcQuote.Current = ooobtcQuoteResult;
             }
 
             var altillyQuoteResult = await AltillyQuoteFetcher.FetchAltillyQuote();
@@ -55,7 +62,7 @@ namespace rise.Code.Tasks
 
             if (coinbaseBtcQuoteResult != null)
             {
-                CoinbaseBtcQuoteResult.Current = coinbaseBtcQuoteResult;
+                CoinbaseBtcQuote.Current = coinbaseBtcQuoteResult;
             }
 
             var transactionsResult = await TransactionsFetcher.FetchTransactions();

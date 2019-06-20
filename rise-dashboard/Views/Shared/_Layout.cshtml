@@ -47,7 +47,7 @@
 
     @if (theme != "white")
     {
-    <link rel="stylesheet" href="@Url.Content("~/css/skin-midnight.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/css/skin-midnight.css")" />
     }
 
     <link rel="stylesheet" href="@Url.Content("~/css/jquery-ui.min.css")" />
@@ -88,39 +88,39 @@
                     addressSaved = ViewBag.SearchText;
                 }
 
-            <div class="right-menu list-inline ml-3">
-                <div class="box input-group">
-                    @if (addressSaved == null)
+                <div class="right-menu list-inline ml-3">
+                    <div class="box input-group">
+                        @if (addressSaved == null)
                         {
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search Delegates/Account" id="address" name="address">
+                            <input class="form-control form-control-navbar" type="search" placeholder="Search Delegates/Account" id="address" name="address">
                         }
                         else
                         {
-                    <input class="form-control form-control-navbar" type="search" value="@addressSaved" id="address" name="address">
+                            <input class="form-control form-control-navbar" type="search" value="@addressSaved" id="address" name="address">
                         }
-                    <span class="box input-group-append">
-                        <button class="box btn btn-navbar" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </span>
-                    <!-- Notifications Dropdown Menu -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" data-toggle="dropdown" href="#">
-                            <i class="fa fa-th-large"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            @if (theme == "white")
+                        <span class="box input-group-append">
+                            <button class="box btn btn-navbar" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                        <!-- Notifications Dropdown Menu -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" data-toggle="dropdown" href="#">
+                                <i class="fa fa-th-large"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                                @if (theme == "white")
                                 {
-                            <a href="~/Home/Index?theme=black" class="dropdown-item dropdown-footer">Switch to black theme</a>
+                                    <a href="~/Home/Index?theme=black" class="dropdown-item dropdown-footer">Switch to black theme</a>
                                 }
                                 else
                                 {
-                            <a href="~/Home/Index?theme=white" class="dropdown-item dropdown-footer">Switch to white theme</a>
+                                    <a href="~/Home/Index?theme=white" class="dropdown-item dropdown-footer">Switch to white theme</a>
                                 }
-                        </div>
-                    </li>
+                            </div>
+                        </li>
+                    </div>
                 </div>
-            </div>
             }
         </nav>
         <!-- /.navbar -->
@@ -139,29 +139,29 @@
                 {
                     ApplicationUser appuser = await UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User);
                     <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
-                    <div class="image">
-                        <img src="@(appuser.Photo_Url)" class="img-circle elevation-2" alt="User Image">
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
+                        <div class="image">
+                            <img src="@(appuser.Photo_Url)" class="img-circle elevation-2" alt="User Image">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block">@User.Identity.Name</a>
+                        </div>
+                        <div class="info">
+                            <button class="btn-info btn-space ml-auto" type="button" onclick="location.href='/Account/Logout'">
+                                Logout
+                            </button>
+                        </div>
                     </div>
-                    <div class="info">
-                        <a href="#" class="d-block">@User.Identity.Name</a>
-                    </div>
-                    <div class="info">
-                        <button class="btn-info btn-space ml-auto" type="button" onclick="location.href='/Account/Logout'">
-                            Logout
-                        </button>
-                    </div>
-                </div>
                 }
                 else
                 {
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
-                    <div class="info">
-                        <span class="input-group-append ml-2">
-                            <script async src="https://telegram.org/js/telegram-widget.js?5" data-telegram-login="@(AppSettingsProvider.BotName)" data-size="medium" data-userpic="false" data-auth-url="@(AppSettingsProvider.SiteUrl)/Account/LoginCallback" data-request-access="write"></script>
-                        </span>
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
+                        <div class="info">
+                            <span class="input-group-append ml-2">
+                                <script async src="https://telegram.org/js/telegram-widget.js?5" data-telegram-login="@(AppSettingsProvider.BotName)" data-size="medium" data-userpic="false" data-auth-url="@(AppSettingsProvider.SiteUrl)/Account/LoginCallback" data-request-access="write"></script>
+                            </span>
+                        </div>
                     </div>
-                </div>
                 }
 
                 <!-- Sidebar Menu -->
@@ -192,34 +192,34 @@
                                 </li>
                                 @if (addressSaved != null)
                                 {
-                                <li class="nav-item">
-                                    <a href="@Url.Action("Transactions", "Home", new { address = addressSaved})" class="nav-link">
-                                        <i class="fa fa-play-circle nav-icon"></i>
-                                        <p>For @(addressSaved)</p>
-                                    </a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Transactions", "Home", new { address = addressSaved})" class="nav-link">
+                                            <i class="fa fa-play-circle nav-icon"></i>
+                                            <p>For @(addressSaved)</p>
+                                        </a>
+                                    </li>
                                 }
                             </ul>
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
                         {
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-book-open"></i>
-                                <p>
-                                    Admin Users
-                                    <i class="right fa fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="@Url.Action("Index", "ApplicationUsers")" class="nav-link">
-                                        <i class="fa fa-play-circle nav-icon"></i>
-                                        <p>Manage Users</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-book-open"></i>
+                                    <p>
+                                        Admin Users
+                                        <i class="right fa fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Index", "ApplicationUsers")" class="nav-link">
+                                            <i class="fa fa-play-circle nav-icon"></i>
+                                            <p>Manage Users</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         }
                         <!-- Delegate List -->
                         <li class="nav-item">
@@ -233,17 +233,17 @@
                         <li class="nav-item">
                             @if (addressSaved != null)
                             {
-                            <a href="@Url.Action("Index", "DelegateForms", new { address = addressSaved})" class="nav-link">
-                                <i class="fa fa-chalkboard-teacher nav-icon"></i>
-                                <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
-                            </a>
+                                <a href="@Url.Action("Index", "DelegateForms", new { address = addressSaved})" class="nav-link">
+                                    <i class="fa fa-chalkboard-teacher nav-icon"></i>
+                                    <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
+                                </a>
                             }
                             else
                             {
-                            <a href="@Url.Action("Index", "DelegateForms")" class="nav-link">
-                                <i class="fa fa-chalkboard-teacher nav-icon"></i>
-                                <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
-                            </a>
+                                <a href="@Url.Action("Index", "DelegateForms")" class="nav-link">
+                                    <i class="fa fa-chalkboard-teacher nav-icon"></i>
+                                    <p>@(AppSettingsProvider.CoinName) Pool Calculator</p>
+                                </a>
                             }
                         </li>
                         <!-- ./Delegate List-->

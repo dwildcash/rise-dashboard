@@ -6,9 +6,9 @@
     /// rise Quote Object from ooobtc
     /// </summary>
 
-    public class ooobtcCoinQuote
+    public class ooobtcQuote
     {
-        public static ooobtcCoinQuote Current { get; set; }
+        public static ooobtcQuote Current { get; set; }
 
         [JsonProperty("timestamp")]
         public long Timestamp { get; set; }
@@ -26,8 +26,9 @@
         public long Volume { get; set; }
     }
 
-    public class ooobtcCoinQuoteResult
+    public class ooobtcQuoteResult
     {
+  
         [JsonProperty("status")]
         public long Status { get; set; }
 
@@ -35,6 +36,6 @@
         public string Msg { get; set; }
 
         [JsonProperty("data")]
-        public ooobtcCoinQuote Data { get; set; }
+        public ooobtcQuote Data { get; set; }
     }
 }

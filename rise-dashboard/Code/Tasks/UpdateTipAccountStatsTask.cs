@@ -73,7 +73,6 @@
             }
         }
 
-      
         public UpdateTipAccountStatsTask(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;

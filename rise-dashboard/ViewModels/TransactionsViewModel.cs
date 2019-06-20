@@ -16,7 +16,7 @@
         /// <summary>
         /// Gets or sets the CoinbaseBtcQuoteResult
         /// </summary>
-        public CoinbaseBtcQuoteResult CoinbaseBtcQuoteResult { get; set; }
+        public CoinbaseBtcQuote CoinbaseBtcQuoteResult { get; set; }
 
         /// <summary>
         /// Gets or sets the TransactionsResult

@@ -19,7 +19,6 @@ connection.start().then(function () {
 
     sleep(1000).then(() => {
         element.innerHTML += "<p class='text-success'>Waiting for next log...</p>";
-
     });
 }).catch(function (err) {
     return console.error(err.toString());

@@ -176,11 +176,19 @@
         /// return Last Vinex Quote
         /// </summary>
         /// <returns></returns>
+        public CoinQuote LastBitkerQuote()
+        {
+            return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Bitker").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// return Last Vinex Quote
+        /// </summary>
+        /// <returns></returns>
         public CoinQuote LastVinexQuote()
         {
             return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
         }
-
 
         /// <summary>
         /// Return last Altilly Quote
@@ -191,7 +199,6 @@
             return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
         }
 
-
         /// <summary>
         /// Return last LiveCoin Quote
         /// </summary>
@@ -201,7 +208,7 @@
             return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "LiveCoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
         }
 
-        public CoinQuote LastooobtcCoinQuote()
+        public CoinQuote LastooobtcQuote()
         {
             return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "ooobtc").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
         }

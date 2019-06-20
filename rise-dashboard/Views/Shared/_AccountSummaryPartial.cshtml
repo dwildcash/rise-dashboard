@@ -87,7 +87,7 @@
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">$@(Math.Round(((Double.Parse(Model.walletAccountResult.account.Balance.ToString()) / 100000000) * Double.Parse(Model.coinbaseBtcQuoteResult.data.amount) * Model.LastAllQuote().Price), 5).ToString("#,###.00;(0);0"))</h3>
+                        <h3 class="m-b-0 font-lgiht">$@(Math.Round(((Double.Parse(Model.walletAccountResult.account.Balance.ToString()) / 100000000) * Double.Parse(Model.coinbaseBtcQuoteResult.amount) * Model.LastAllQuote().Price), 5).ToString("#,###.00;(0);0"))</h3>
                         <h5 class="text-muted m-b-0">Account Value</h5>
                     </div>
                 </div>

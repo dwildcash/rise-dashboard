@@ -78,6 +78,7 @@ namespace rise
             AppSettingsProvider.WebHookSecret = Configuration["AppSettings:WebHookSecret"];
             AppSettingsProvider.TelegramChannelId = long.Parse(Configuration["AppSettings:TelegramChannelId"]);
             AppSettingsProvider.NodeLogFile = Configuration["AppSettings:NodeLogFile"];
+            AppSettingsProvider.BitkerApiKey = Configuration["AppSettings:BitkerApiKey"];
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace rise
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
-    
+
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
 
@@ -132,7 +133,7 @@ namespace rise
 
             // Save quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
-    
+
             // Update Tip Account Task
             services.AddSingleton<IScheduledTask, UpdateTipAccountStatsTask>();
 

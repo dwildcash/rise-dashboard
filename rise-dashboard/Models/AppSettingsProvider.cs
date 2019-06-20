@@ -107,6 +107,11 @@
         public static string IPStackApiKey { get; set; }
 
         /// <summary>
+        /// Bitker exchange API Key
+        /// </summary>
+        public static string BitkerApiKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the LiveCoinWalletAddress
         /// </summary>
         public static string LiveCoinWalletAddress { get; set; }
