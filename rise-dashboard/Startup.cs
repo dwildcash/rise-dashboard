@@ -135,7 +135,7 @@ namespace rise
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
 
             // Update Tip Account Task
-            services.AddSingleton<IScheduledTask, UpdateTipAccountStatsTask>();
+            //services.AddSingleton<IScheduledTask, UpdateTipAccountStatsTask>();
 
             // Configure Telegram bot and bot response
             services.AddScoped<IUpdateService, UpdateService>();
