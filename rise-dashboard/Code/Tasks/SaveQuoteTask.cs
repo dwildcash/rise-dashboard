@@ -96,6 +96,7 @@
                     dbContext.CoinQuotes.Add(quoteAltilly);
                     dbContext.CoinQuotes.Add(quoteVinex);
                     dbContext.CoinQuotes.Add(quoteOoobtc);
+                    dbContext.CoinQuotes.Add(quoteBitker);
                     dbContext.CoinQuotes.Add(quoteAllWeighted);
 
                     // Save Context in Database

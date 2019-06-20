@@ -68,6 +68,7 @@ namespace rise
             AppSettingsProvider.DonationAddress = Configuration["AppSettings:DonationAddress"];
             AppSettingsProvider.LiveCoinWalletAddress = Configuration["AppSettings:LiveCoinWalletAddress"];
             AppSettingsProvider.AltillyWalletAddress = Configuration["AppSettings:AltillyWalletAddress"];
+            AppSettingsProvider.BitkerWalletAddress = Configuration["AppSettings:BitkerWalletAddress"];
             AppSettingsProvider.VinexWalletAddress = Configuration["AppSettings:VinexWalletAddress"];
             AppSettingsProvider.SimulateRoundCount = int.Parse(Configuration["AppSettings:SimulateRoundCount"]);
             AppSettingsProvider.MaxTransactionsToFetch = int.Parse(Configuration["AppSettings:MaxTransactionsToFetch"]);
@@ -135,7 +136,7 @@ namespace rise
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
 
             // Update Tip Account Task
-            //services.AddSingleton<IScheduledTask, UpdateTipAccountStatsTask>();
+            services.AddSingleton<IScheduledTask, UpdateTipAccountStatsTask>();
 
             // Configure Telegram bot and bot response
             services.AddScoped<IUpdateService, UpdateService>();

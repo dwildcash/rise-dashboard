@@ -122,6 +122,12 @@
         public static string VinexWalletAddress { get; set; }
 
         /// <summary>
+        /// Get or set the BitkerWalletAddress
+        /// </summary>
+        public static string BitkerWalletAddress { get; set; }
+
+
+        /// <summary>
         /// Get or set for Altilly Address
         /// </summary>
         public static string AltillyWalletAddress { get; set; }
