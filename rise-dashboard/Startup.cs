@@ -140,6 +140,8 @@ namespace rise
 
             // Configure Telegram bot and bot response
             services.AddScoped<IUpdateService, UpdateService>();
+
+            // Configure BotService
             services.AddSingleton<IBotService, BotService>();
 
             // Config Start Scheduler

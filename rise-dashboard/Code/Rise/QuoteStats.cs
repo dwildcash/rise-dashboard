@@ -138,6 +138,23 @@
         }
 
         /// <summary>
+        /// Return a default Coinquote.
+        /// </summary>
+        /// <returns></returns>
+        private CoinQuote DefaultQuote()
+        {     
+            var e = new CoinQuote
+            {
+                Volume = 0,
+                USDPrice = 0,
+                Price = 0
+            };
+
+            return e;
+        }
+
+
+        /// <summary>
         /// Return the Volume % Change vs X days
         /// </summary>
         /// <param name="days">The days<see cref="int"/></param>
@@ -178,7 +195,9 @@
         /// <returns></returns>
         public CoinQuote LastBitkerQuote()
         {
-            return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Bitker").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+            var r = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Bitker").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+
+            return r == null ? r : DefaultQuote();
         }
 
         /// <summary>
@@ -187,7 +206,9 @@
         /// <returns></returns>
         public CoinQuote LastVinexQuote()
         {
-            return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+            var r = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+
+            return r == null ? r : DefaultQuote();
         }
 
         /// <summary>
@@ -196,7 +217,8 @@
         /// <returns></returns>
         public CoinQuote LastAltillyQuote()
         {
-            return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+            var r = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+            return r == null ? r : DefaultQuote();
         }
 
         /// <summary>

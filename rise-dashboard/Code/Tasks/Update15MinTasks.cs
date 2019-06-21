@@ -26,14 +26,14 @@ namespace rise.Code.Tasks
         {
             var delegateResult = await DelegateFetcher.FetchDelegates();
 
-            foreach (var mdelegate in delegateResult.Delegates)
-            {
-                mdelegate.Voters = DelegateVotersFetcher.FetchVoters(mdelegate.PublicKey).Result.Accounts.Count;
-            }
-
             if (delegateResult.Success)
             {
                 DelegateResult.Current = ForgingChanceCalculator.SimulateForgingRounds(delegateResult);
+
+                foreach (var mdelegate in delegateResult.Delegates)
+                {
+                    mdelegate.Voters = DelegateVotersFetcher.FetchVoters(mdelegate.PublicKey).Result.Accounts.Count;
+                }
             }
         }
     }
