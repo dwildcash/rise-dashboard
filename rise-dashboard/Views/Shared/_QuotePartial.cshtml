@@ -105,7 +105,7 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                    label: 'Vinex',
+                    label: 'Vinex - ' + @Math.Round(Model.LastVinexQuote().Volume),
                     yAxisID: "volume",
                     data: dataPack1,
                     backgroundColor: gradient2,
@@ -114,7 +114,7 @@
                     hoverBorderColor: 'purple'
                 },
                 {
-                label: 'LiveCoin',
+                label: 'LiveCoin - ' + @Math.Round(Model.LastLiveCoinQuote().Volume),
                     yAxisID: "volume",
                     data: dataPack2,
                     backgroundColor: gradient1,
@@ -123,7 +123,7 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                label: 'Altilly',
+                label: 'Altilly - ' + @Math.Round(Model.LastAltillyQuote().Volume),
                     yAxisID: "volume",
                     data: dataPack4,
                     backgroundColor: gradient3,
@@ -132,7 +132,7 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                label: 'ooobtc',
+                label: 'ooobtc - ' + @Math.Round(Model.LastooobtcQuote().Volume),
                     yAxisID: "volume",
                     data: dataPack5,
                     backgroundColor: gradient4,
@@ -141,7 +141,7 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                    label: 'Bitker',
+                    label: 'Bitker - ' + @Model.LastBitkerQuote().Volume,
                     yAxisID: "volume",
                     data: dataPack6,
                     backgroundColor: gradient5,
