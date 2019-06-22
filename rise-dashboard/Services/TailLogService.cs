@@ -25,7 +25,8 @@ namespace rise.Services
         {
             try
             {
-                this.filename = AppSettingsProvider.NodeLogFile;
+               filename = AppSettingsProvider.NodeLogFile;
+
                 FileInfo targetFile = new FileInfo(filename);
 
                 fileSystemWatcher = new FileSystemWatcher
@@ -34,8 +35,10 @@ namespace rise.Services
                     Path = targetFile.DirectoryName,
                     Filter = targetFile.Name
                 };
-                fileSystemWatcher.Created += new FileSystemEventHandler(TargetFile_Created);
-                fileSystemWatcher.Changed += new FileSystemEventHandler(TargetFile_Changed);
+
+                fileSystemWatcher.Created += TargetFile_Created;
+                fileSystemWatcher.Changed += TargetFile_Changed;
+
                 fileSystemWatcher.EnableRaisingEvents = true;
             }
             catch (Exception ex)
@@ -51,7 +54,7 @@ namespace rise.Services
 
         public void StartMonitoring()
         {
-            fileSystemWatcher.Changed += new FileSystemEventHandler(TargetFile_Changed);
+            fileSystemWatcher.Changed += TargetFile_Changed;
             fileSystemWatcher.EnableRaisingEvents = true;
         }
 
