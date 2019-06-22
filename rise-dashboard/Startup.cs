@@ -28,6 +28,7 @@ namespace rise
     public class Startup
     {
         private readonly ILogger<Startup> _logger;
+        private static int debugMode = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
@@ -135,8 +136,11 @@ namespace rise
             // Save quote price every minutes.
             services.AddSingleton<IScheduledTask, SaveQuoteTask>();
 
-            // Update Tip Account Task
-            //services.AddSingleton<IScheduledTask, UpdateTipAccountStatsTask>();
+            if (debugMode != 1)
+            {
+                // Update Tip Account Task
+                services.AddSingleton<IScheduledTask, UpdateTipAccountStatsTask>();
+            }
 
             // Configure Telegram bot and bot response
             services.AddScoped<IUpdateService, UpdateService>();
@@ -164,6 +168,7 @@ namespace rise
         {
             if (env.IsDevelopment())
             {
+                debugMode = 1;
                 app.UseDeveloperExceptionPage();
             }
             else

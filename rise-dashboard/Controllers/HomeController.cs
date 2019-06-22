@@ -159,7 +159,7 @@
             if (address != null)
             {
                 var delegate_account = DelegateResult.Current.Delegates.Where(x => x.Username.Contains(address.ToLower()) || x.Address == address).OrderBy(j => j.Username.Length).FirstOrDefault();
-             
+
                 if (delegate_account != null)
                 {
                     address = delegate_account.Address;

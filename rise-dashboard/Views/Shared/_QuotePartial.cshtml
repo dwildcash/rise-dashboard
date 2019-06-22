@@ -43,23 +43,27 @@
     var Percentchange = Math.Round(Model.PercentChange(1), 2);
     var VolumePercentchange = Math.Round(Model.VolumePercentChange(1), 2);
     var USDPricePercentchange = Math.Round(Model.USDPricePercentChange(1), 2);
+
+    var livecoin = Math.Round(Model.LastLiveCoinQuote().Volume).ToString();
+    var vinex = Math.Round(Model.LastVinexQuote().Volume).ToString();
+    var altilly = Math.Round(Model.LastAltillyQuote().Volume).ToString();
+    var ooobtc = Math.Round(Model.LastooobtcQuote().Volume).ToString();
+    var bitker = Math.Round(Model.LastBitkerQuote().Volume).ToString();
 }
 
 <script type="text/javascript">
 
     var canvas = document.getElementById("pieChart");
     var ctx = canvas.getContext('2d');
-
+    Chart.defaults.global.title = 'Volume';
     var data = {
-        labels: ["LiveCoin", "Vinex", "Altilly", "ooobtc", "Bitker"],
+        labels: ["LiveCoin - " + @livecoin, "Vinex - " + @vinex, "Altilly - " + @altilly, "ooobtc - " + @ooobtc, "Bitker - " + @bitker],
         datasets: [{
             label: "Exchanges Volume 24H",
-            backgroundColor: ["#88CDFF", "#DBA9F1", "#FCE7A9", "#FCA6A8", "#FAA8C6"],
-            data: [@Html.Raw(Math.Round(Model.LastLiveCoinQuote().Volume).ToString() + "," + Math.Round(Model.LastVinexQuote().Volume).ToString() + "," + Math.Round(Model.LastAltillyQuote().Volume).ToString() + "," + Math.Round(Model.LastooobtcQuote().Volume).ToString() + "," + Math.Round(Model.LastBitkerQuote().Volume).ToString())]
+            backgroundColor: ["#36a2eb", "#ffce56", "#7df442", "#cc65fe", "#ff6384"],
+            data: [@Html.Raw(livecoin + "," + vinex + "," + altilly + "," + ooobtc + "," + bitker)]
         }]
     };
-
-    // Notice the rotation from the documentation.
 
     var options = {
         backgroundColor: { fill: 'transparent' },
@@ -67,11 +71,10 @@
             display: true,
             position: 'right',
             labels: {
-                fontColor: 'rgb(255, 99, 132)'
+                fontColor: 'white'
             }
         }
     };
-
 
     // Chart declaration:
     var myBarChart = new Chart(ctx, {
@@ -79,10 +82,7 @@
         data: data,
         options: options
     });
-
-    // Fun Fact: I've lost exactly 3 of my favorite T-shirts and 2 hoodies this way :
 </script>
-
 
 <script type="text/javascript">
 
@@ -103,29 +103,24 @@
         var bar_ctx = document.getElementById('priceQuoteChart').getContext("2d");
 
         var gradient1 = bar_ctx.createLinearGradient(0, 0, 0, 200);
-        gradient1.addColorStop(0, 'rgba(0,153, 255, 0.5)');
-        gradient1.addColorStop(0.5, 'rgba(0, 153, 255, 0.25)');
-        gradient1.addColorStop(1, 'rgba(0, 153, 255, 0)');
+        gradient1.addColorStop(0, 'rgba(54, 152, 235, 0.5)');
+        gradient1.addColorStop(1, 'rgba(54, 152, 235, 0)');
 
         var gradient2 = bar_ctx.createLinearGradient(0, 0, 0, 200);
-        gradient2.addColorStop(0, 'rgba(190, 65, 244, 0.5)');
-        gradient2.addColorStop(0.5, 'rgba(190, 65, 244, 0.25)');
-        gradient2.addColorStop(1, 'rgba(190, 65, 244, 0)');
+        gradient2.addColorStop(0, 'rgba(255,206,86, 0.5)');
+        gradient2.addColorStop(1, 'rgba(255, 206, 86, 0)');
 
         var gradient3 = bar_ctx.createLinearGradient(0, 0, 0, 200);
-        gradient3.addColorStop(0, 'rgba(255, 204, 51, 0.5)');
-        gradient3.addColorStop(0.5, 'rgba(255, 204, 51, 0.25)');
-        gradient3.addColorStop(1, 'rgba(255, 204, 51, 0)');
+        gradient3.addColorStop(0, 'rgba(125,244,66, 0.5)');
+        gradient3.addColorStop(1, 'rgba(125,244,66, 0)');
 
         var gradient4 = bar_ctx.createLinearGradient(0, 0, 0, 200);
-        gradient4.addColorStop(0, 'rgba(255, 55, 55, 0.5)');
-        gradient4.addColorStop(0.5, 'rgba(255, 102, 102, 0.25)');
-        gradient4.addColorStop(1, 'rgba(255, 55, 55, 0)');
+        gradient4.addColorStop(0, 'rgba(204,101,254, 0.5)');
+        gradient4.addColorStop(1, 'rgba(204,101,254, 0)');
 
         var gradient5 = bar_ctx.createLinearGradient(0, 0, 0, 200);
-        gradient5.addColorStop(0, 'rgba(255, 55, 155, 0.5)');
-        gradient5.addColorStop(0.5, 'rgba(255, 102, 102, 0.25)');
-        gradient5.addColorStop(1, 'rgba(255, 55, 155, 0)');
+        gradient5.addColorStop(0, 'rgba(255,99,132, 0.5)');
+        gradient5.addColorStop(1, 'rgba(255,99,132, 0)');
 
         var bar_chart = new Chart(bar_ctx, {
         type: 'bar',
@@ -144,7 +139,7 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                    label: 'Vinex - ' + @Math.Round(Model.LastVinexQuote().Volume),
+                    label: 'Vinex',
                     yAxisID: "volume",
                     data: dataPack1,
                     backgroundColor: gradient2,
@@ -153,7 +148,7 @@
                     hoverBorderColor: 'purple'
                 },
                 {
-                label: 'LiveCoin - ' + @Math.Round(Model.LastLiveCoinQuote().Volume),
+                label: 'LiveCoin',
                     yAxisID: "volume",
                     data: dataPack2,
                     backgroundColor: gradient1,
@@ -162,7 +157,7 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                label: 'Altilly - ' + @Math.Round(Model.LastAltillyQuote().Volume),
+                label: 'Altilly',
                     yAxisID: "volume",
                     data: dataPack4,
                     backgroundColor: gradient3,
@@ -171,7 +166,7 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                label: 'ooobtc - ' + @Math.Round(Model.LastooobtcQuote().Volume),
+                label: 'ooobtc',
                     yAxisID: "volume",
                     data: dataPack5,
                     backgroundColor: gradient4,
@@ -180,7 +175,7 @@
                     hoverBorderColor: 'lightgrey'
                 },
                 {
-                    label: 'Bitker - ' + @Model.LastBitkerQuote().Volume,
+                    label: 'Bitker',
                     yAxisID: "volume",
                     data: dataPack6,
                     backgroundColor: gradient5,
@@ -237,9 +232,9 @@
                     id: 'price',
                     position: 'right'
                 }]
-            }, // scales
+            }, 
             legend: { display: true }
-        } // options
+        }
     }
     );
 </script>
@@ -469,6 +464,33 @@
                                 <p class="font-weight-bold">@fromBitker.Sum(x => x.amount / 100000000).ToString("N0")</p>
                             </span>
                             <small class="text-muted">On <b>@fromBitker.Count()</b> Tx</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 grid-margin stretch-card">
+            <div class="box card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center">
+                        <div align="center">
+                            <img src="~/img/ooobtc.png" alt="ooobtc" class="img-circle img-size-32 mr-2">
+                            <div> <a href="https://www.ooobtc.com/">ooobtc</a></div>
+                        </div>
+                        <div class="d-flex flex-column ml-4">
+                            <span class="d-flex flex-column">
+                                <p class="mb-0">Deposit</p>
+                                <p class="font-weight-bold">NA</p>
+                            </span>
+
+                            <small class="text-muted">On <b>NA</b> Tx</small>
+                        </div>
+                        <div class="d-flex flex-column ml-4">
+                            <span class="d-flex flex-column">
+                                <p class="mb-0">Withdraw</p>
+                                <p class="font-weight-bold">NA</p>
+                            </span>
+                            <small class="text-muted">On <b>NA</b> Tx</small>
                         </div>
                     </div>
                 </div>

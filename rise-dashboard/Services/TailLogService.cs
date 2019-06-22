@@ -25,7 +25,7 @@ namespace rise.Services
         {
             try
             {
-               filename = AppSettingsProvider.NodeLogFile;
+                filename = AppSettingsProvider.NodeLogFile;
 
                 FileInfo targetFile = new FileInfo(filename);
 
