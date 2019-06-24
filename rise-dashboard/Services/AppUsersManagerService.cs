@@ -179,13 +179,7 @@ namespace rise.Services
                         {
                             appuser.UserName = userName;
                         }
-
-                        // Flag update message
-                        if (flagMsgUpdate)
-                        {
-                            appuser.MessageCount++;
-                            appuser.LastMessage = DateTime.Now;
-                        }
+               
 
                         // Create a wallet for everyone
                         if (appuser.Address == null)
@@ -199,6 +193,13 @@ namespace rise.Services
                                 appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
                                 appuser.PublicKey = accountresult.account.PublicKey;
                             }
+                        }
+
+                        // Flag update message
+                        if (flagMsgUpdate)
+                        {
+                            appuser.MessageCount++;
+                            appuser.LastMessage = DateTime.Now;
                         }
 
                         dbContext.SaveChanges();
