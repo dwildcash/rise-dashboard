@@ -128,17 +128,6 @@
             labels: dates,
             datasets: [
                 {
-                label: "Price",
-                    type: "line",
-                    yAxisID: "price",
-                    data: dataPack3,
-                    backgroundColor: "rgba(0, 155, 5, 0.2)",
-                    borderColor: "rgba(0,155,5,1)",
-                    hoverBackgroundColor: "rgba(0, 153, 211, 0.7)",
-                    hoverBorderWidth: 2,
-                    hoverBorderColor: 'lightgrey'
-                },
-                {
                     label: 'Vinex',
                     yAxisID: "volume",
                     data: dataPack1,
@@ -180,6 +169,17 @@
                     data: dataPack6,
                     backgroundColor: gradient5,
                     hoverBackgroundColor: gradient5,
+                    hoverBorderWidth: 2,
+                    hoverBorderColor: 'lightgrey'
+                },
+                {
+                 label: "Price",
+                    type: "line",
+                    yAxisID: "price",
+                    data: dataPack3,
+                    backgroundColor: "rgba(0, 155, 5, 0.2)",
+                    borderColor: "rgba(0,155,5,1)",
+                    hoverBackgroundColor: "rgba(0, 153, 211, 0.7)",
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 }
