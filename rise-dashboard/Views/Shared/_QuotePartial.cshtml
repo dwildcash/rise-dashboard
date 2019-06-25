@@ -226,7 +226,7 @@
                     id: 'price',
                     position: 'right'
                 }]
-            }, 
+            },
             legend: { display: true }
         }
     }
@@ -342,152 +342,153 @@
             <canvas id="pieChart"></canvas>
         </div>
     </div>
+</div>
 
-    @{
-        var toBitker = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.BitkerWalletAddress);
-        var fromBitker = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.BitkerWalletAddress);
-        var toAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.AltillyWalletAddress);
-        var fromAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.AltillyWalletAddress);
-        var toLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
-        var fromLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.LiveCoinWalletAddress);
-        var toVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == "2644104824710583527R");
-        var fromVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.VinexWalletAddress);
-    }
+@{
+    var toBitker = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.BitkerWalletAddress);
+    var fromBitker = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.BitkerWalletAddress);
+    var toAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.AltillyWalletAddress);
+    var fromAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.AltillyWalletAddress);
+    var toLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
+    var fromLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.LiveCoinWalletAddress);
+    var toVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == "2644104824710583527R");
+    var fromVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.VinexWalletAddress);
+}
 
-    <div class="row">
-        <div class="col-lg-3 grid-margin stretch-card">
-            <div class="box card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-center">
-                        <div align="center">
-                            <img src="~/img/livecoin.png" alt="livecoin" class="img-circle img-size-32 mr-2">
-                            <div><a href="https://www.livecoin.net/">Livecoin</a></div>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Deposit</p>
-                                <p class="font-weight-bold">@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                            </span>
-                            <small class="text-muted">On @toLiveCoin.Count() Tx</small>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Withdraw</p>
-                                <p class="font-weight-bold">@fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                            </span>
-                            <small class="text-muted">On <b>@fromLiveCoin.Count()</b> Tx</small>
-                        </div>
+<div class="row">
+    <div class="col-sm-3 grid-margin stretch-card">
+        <div class="box card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <div align="center">
+                        <img src="~/img/livecoin.png" alt="livecoin" class="img-circle img-size-32 mr-2">
+                        <div><a href="https://www.livecoin.net/">Livecoin</a></div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 grid-margin stretch-card">
-            <div class="box card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-center">
-                        <div align="center">
-                            <img src="~/img/vinex.png" alt="vinex" class="img-circle img-size-32 mr-2">
-                            <div><a href="https://vinex.network/">Vinex</a></div>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Deposit</p>
-                                <p class="font-weight-bold">@toVinex.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                            </span>
-                            <small class="text-muted">On <b>@toVinex.Count()</b> Tx</small>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Withdraw</p>
-                                <p class="font-weight-bold">@fromVinex.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                            </span>
-                            <small class="text-muted">On <b>@fromVinex.Count()</b> Tx</small>
-                        </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Deposit</p>
+                            <p class="font-weight-bold">@toLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+                        <small class="text-muted">On @toLiveCoin.Count() Tx</small>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 grid-margin stretch-card">
-            <div class="box card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-center">
-                        <div align="center">
-                            <img src="~/img/altilly.png" alt="altilly" class="img-circle img-size-32 mr-2">
-                            <div> <a href="https://www.altilly.com/">Altilly</a></div>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Deposit</p>
-                                <p class="font-weight-bold">@toAltilly.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                            </span>
-
-                            <small class="text-muted">On <b>@toAltilly.Count()</b> Tx</small>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Withdraw</p>
-                                <p class="font-weight-bold">@fromAltilly.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                            </span>
-                            <small class="text-muted">On <b>@fromAltilly.Count()</b> Tx</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 grid-margin stretch-card">
-            <div class="box card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-center">
-                        <div align="center">
-                            <img src="~/img/bitker.jfif" alt="bitker" class="img-circle img-size-32 mr-2">
-                            <div> <a href="https://www.altilly.com/">Bitker</a></div>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Deposit</p>
-                                <p class="font-weight-bold">@toBitker.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                            </span>
-
-                            <small class="text-muted">On <b>@toBitker.Count()</b> Tx</small>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Withdraw</p>
-                                <p class="font-weight-bold">@fromBitker.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                            </span>
-                            <small class="text-muted">On <b>@fromBitker.Count()</b> Tx</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 grid-margin stretch-card">
-            <div class="box card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-center">
-                        <div align="center">
-                            <img src="~/img/ooobtc.png" alt="ooobtc" class="img-circle img-size-32 mr-2">
-                            <div> <a href="https://www.ooobtc.com/">ooobtc</a></div>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Deposit</p>
-                                <p class="font-weight-bold">NA</p>
-                            </span>
-
-                            <small class="text-muted">On <b>NA</b> Tx</small>
-                        </div>
-                        <div class="d-flex flex-column ml-4">
-                            <span class="d-flex flex-column">
-                                <p class="mb-0">Withdraw</p>
-                                <p class="font-weight-bold">NA</p>
-                            </span>
-                            <small class="text-muted">On <b>NA</b> Tx</small>
-                        </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Withdraw</p>
+                            <p class="font-weight-bold">@fromLiveCoin.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+                        <small class="text-muted">On <b>@fromLiveCoin.Count()</b> Tx</small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="col-sm-3 grid-margin stretch-card">
+        <div class="box card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <div align="center">
+                        <img src="~/img/vinex.png" alt="vinex" class="img-circle img-size-32 mr-2">
+                        <div><a href="https://vinex.network/">Vinex</a></div>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Deposit</p>
+                            <p class="font-weight-bold">@toVinex.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+                        <small class="text-muted">On <b>@toVinex.Count()</b> Tx</small>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Withdraw</p>
+                            <p class="font-weight-bold">@fromVinex.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+                        <small class="text-muted">On <b>@fromVinex.Count()</b> Tx</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 grid-margin stretch-card">
+        <div class="box card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <div align="center">
+                        <img src="~/img/altilly.png" alt="altilly" class="img-circle img-size-32 mr-2">
+                        <div> <a href="https://www.altilly.com/">Altilly</a></div>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Deposit</p>
+                            <p class="font-weight-bold">@toAltilly.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+
+                        <small class="text-muted">On <b>@toAltilly.Count()</b> Tx</small>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Withdraw</p>
+                            <p class="font-weight-bold">@fromAltilly.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+                        <small class="text-muted">On <b>@fromAltilly.Count()</b> Tx</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3 grid-margin stretch-card">
+        <div class="box card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <div align="center">
+                        <img src="~/img/bitker.jfif" alt="bitker" class="img-circle img-size-32 mr-2">
+                        <div> <a href="https://www.altilly.com/">Bitker</a></div>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Deposit</p>
+                            <p class="font-weight-bold">@toBitker.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+
+                        <small class="text-muted">On <b>@toBitker.Count()</b> Tx</small>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Withdraw</p>
+                            <p class="font-weight-bold">@fromBitker.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+                        <small class="text-muted">On <b>@fromBitker.Count()</b> Tx</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3 grid-margin stretch-card">
+        <div class="box card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <div align="center">
+                        <img src="~/img/ooobtc.png" alt="ooobtc" class="img-circle img-size-32 mr-2">
+                        <div> <a href="https://www.ooobtc.com/">ooobtc</a></div>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Deposit</p>
+                            <p class="font-weight-bold">NA</p>
+                        </span>
+
+                        <small class="text-muted">On <b>NA</b> Tx</small>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Withdraw</p>
+                            <p class="font-weight-bold">NA</p>
+                        </span>
+                        <small class="text-muted">On <b>NA</b> Tx</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
