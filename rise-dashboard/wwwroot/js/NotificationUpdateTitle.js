@@ -8,7 +8,7 @@ connection.on("ShowForged", function (message) {
 });
 
 connection.start().then(function () {
-    document.getElementById("mainHeader").innerHTML = 'Connected to rise.coinquote node feed';
+ 
 }).catch(function (err) {
     return console.error(err.toString());
 });
