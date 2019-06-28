@@ -15,8 +15,8 @@ connection.on("Send", function (message) {
 
 connection.on("ShowForged", function (message) {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var element = document.getElementById("MasterHeader");
-    element.innerHTML = '<p>' + msg + '</p>';
+    var elementMaster = document.getElementById("MasterHeader");
+    elementMaster.innerHTML = '<p>' + msg + '</p>';
 });
 
 connection.start().then(function () {
