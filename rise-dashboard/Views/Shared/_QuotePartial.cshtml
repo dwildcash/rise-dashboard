@@ -44,11 +44,11 @@
     var VolumePercentchange = Math.Round(Model.VolumePercentChange(1), 2);
     var USDPricePercentchange = Math.Round(Model.USDPricePercentChange(1), 2);
 
-    var livecoin = Math.Round(Model.LastLiveCoinQuote().Volume).ToString("N0");
-    var vinex = Math.Round(Model.LastVinexQuote().Volume).ToString("N0");
-    var altilly = Math.Round(Model.LastAltillyQuote().Volume).ToString("N0");
-    var ooobtc = Math.Round(Model.LastooobtcQuote().Volume).ToString("N0");
-    var bitker = Math.Round(Model.LastBitkerQuote().Volume).ToString("N0");
+    var livecoin = Math.Round(Model.LastLiveCoinQuote().Volume);
+    var vinex = Math.Round(Model.LastVinexQuote().Volume);
+    var altilly = Math.Round(Model.LastAltillyQuote().Volume);
+    var ooobtc = Math.Round(Model.LastooobtcQuote().Volume);
+    var bitker = Math.Round(Model.LastBitkerQuote().Volume);
 
     var toBitker = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.BitkerWalletAddress);
     var fromBitker = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.BitkerWalletAddress);
@@ -66,7 +66,7 @@
     var ctx = canvas.getContext('2d');
     Chart.defaults.global.title = 'Volume';
     var data = {
-        labels: ["LiveCoin - " + @livecoin, "Vinex - " + @vinex, "Altilly - " + @altilly, "ooobtc - " + @ooobtc, "Bitker - " + @bitker],
+        labels: ["LiveCoin - " + @livecoin.ToString("N0"), "Vinex - " + @vinex.ToString("N0"), "Altilly - " + @altilly.ToString("N0"), "ooobtc - " + @ooobtc.ToString("N0"), "Bitker - " + @bitker.ToString("N0")],
         datasets: [{
             label: "Exchanges Volume 24H",
             backgroundColor: ["#36a2eb", "#ffce56", "#7df442", "#cc65fe", "#ff6384"],
