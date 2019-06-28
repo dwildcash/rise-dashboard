@@ -13,10 +13,6 @@ connection.on("Send", function (message) {
     element.scrollTop = element.scrollHeight - element.clientHeight;
 });
 
-connection.on("ShowForged", function (message) {
-    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    document.getElementById("mainHeader").innerHTML = msg;
-});
 
 connection.start().then(function () {
     var element = document.getElementById("master");

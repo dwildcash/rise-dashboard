@@ -87,6 +87,7 @@ gulp.task('clean', function (done) {
         '!wwwroot/css/jquery-ui-autocomplete.css',
         '!wwwroot/js/jquery-jvectormap-world-mill.js',
         '!wwwroot/js/NotificationHub.js',
+        '!wwwwroot/js/NotificationUpdateTitle.js',
         '!wwwroot/css/pace.css',
         '!wwwroot/css/skin-midnight.css'
     ], done);
