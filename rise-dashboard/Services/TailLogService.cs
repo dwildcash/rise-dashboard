@@ -65,7 +65,15 @@ namespace rise.Services
                 var lastLine = File.ReadLines(AppSettingsProvider.NodeLogFile).Last();
 
                 if (!lastLine.Contains("Account not found"))
+                {
                     _notificationHub.Clients.All.SendAsync("Send", lastLine);
+                }
+
+                // Send forged block in title
+                if (lastLine.Contains("Received new block"))
+                {
+                    _notificationHub.Clients.All.SendAsync("ShowForged", lastLine);
+                }
             }
             catch (Exception ex)
             {
