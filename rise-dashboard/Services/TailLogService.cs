@@ -70,7 +70,7 @@ namespace rise.Services
                 }
 
                 // Send forged block in title
-                if (lastLine.Contains("Received new block"))
+                if (lastLine.Contains("Received new block id"))
                 {
                     _notificationHub.Clients.All.SendAsync("ShowForged", lastLine);
                 }
