@@ -733,7 +733,8 @@ namespace Rise.Services
                                   "<b>Bitker</b> - https://www.bitker.com/ (24h V:" + volBitker.ToString("N0") + " - Price:" + priceBitker + ")" + Environment.NewLine +
                                   "<b>Altilly</b> - https://altilly.com  (24h V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
                                   "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +
-                                  "<b>Vinex</b> - https://vinex.network (24h V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")";
+                                  "<b>Vinex</b> - https://vinex.network (24h V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")" + Environment.NewLine +
+                                  "<b>XT</b> - https://www.xt.com (New!)";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
