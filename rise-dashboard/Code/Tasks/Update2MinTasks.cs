@@ -44,13 +44,6 @@ namespace rise.Code.Tasks
                 BitkerQuote.Current = BitkerQuoteResult;
             }
 
-            var ooobtcQuoteResult = await ooobtcQuoteFetcher.FetchooobtcCoinQuote();
-
-            if (ooobtcQuoteResult != null)
-            {
-                ooobtcQuote.Current = ooobtcQuoteResult;
-            }
-
             var altillyQuoteResult = await AltillyQuoteFetcher.FetchAltillyQuote();
 
             if (altillyQuoteResult != null)

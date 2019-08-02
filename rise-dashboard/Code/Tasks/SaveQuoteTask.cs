@@ -37,15 +37,6 @@
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var time = DateTime.Now.ToUniversalTime();
 
-                    var quoteOoobtc = new CoinQuote
-                    {
-                        Exchange = "ooobtc",
-                        Price = double.Parse(ooobtcQuote.Current.Lastprice),
-                        Volume = ooobtcQuote.Current.Volume,
-                        TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * double.Parse(ooobtcQuote.Current.Lastprice),
-                    };
-
                     var quoteLivecoin = new CoinQuote
                     {
                         Exchange = "LiveCoin",
@@ -81,21 +72,20 @@
                         TimeStamp = time,
                         USDPrice = Double.Parse(CoinbaseBtcQuote.Current.amount) * VinexQuote.Current.lastPrice
                     };
-                    var totalVolume = quoteLivecoin.Volume + quoteAltilly.Volume + quoteVinex.Volume + quoteOoobtc.Volume + quoteBitker.Volume;
+                    var totalVolume = quoteLivecoin.Volume + quoteAltilly.Volume + quoteVinex.Volume + quoteBitker.Volume;
 
                     var quoteAllWeighted = new CoinQuote
                     {
                         Exchange = "All",
-                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume) + (quoteOoobtc.Price * quoteOoobtc.Volume / totalVolume) + (quoteBitker.Price * quoteBitker.Volume / totalVolume),
+                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume) + (quoteBitker.Price * quoteBitker.Volume / totalVolume),
                         Volume = totalVolume,
                         TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume) + (quoteBitker.Price * quoteBitker.Volume / totalVolume) + (quoteOoobtc.Price * quoteOoobtc.Volume / totalVolume))
+                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume) + (quoteBitker.Price * quoteBitker.Volume / totalVolume))
                     };
 
                     dbContext.CoinQuotes.Add(quoteLivecoin);
                     dbContext.CoinQuotes.Add(quoteAltilly);
                     dbContext.CoinQuotes.Add(quoteVinex);
-                    dbContext.CoinQuotes.Add(quoteOoobtc);
                     dbContext.CoinQuotes.Add(quoteBitker);
                     dbContext.CoinQuotes.Add(quoteAllWeighted);
 

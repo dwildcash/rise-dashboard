@@ -677,9 +677,6 @@ namespace Rise.Services
                 double volBitker = 0;
                 double priceBitker = 0;
 
-                double volooobtc = 0;
-                double priceooobtc = 0;
-
                 double volAltilly = 0;
                 double priceAltilly = 0;
 
@@ -693,7 +690,6 @@ namespace Rise.Services
 
                 var quoteAltilly = LastAltillyQuote();
                 var quoteVinex = LastVinexQuote();
-                var quoteooobtc = LastooobtcQuote();
                 var quoteLivecoin = LastLiveCoinQuote();
                 var quoteBitker = LastBitkerQuote();
 
@@ -721,15 +717,8 @@ namespace Rise.Services
                     priceLivecoin = Math.Round(quoteLivecoin.Price * 100000000);
                 }
 
-                if (quoteooobtc != null)
-                {
-                    volooobtc = Math.Round(quoteooobtc.Volume);
-                    priceooobtc = Math.Round(quoteooobtc.Price * 100000000);
-                }
-
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                  "<b>ooobtc</b> - https://www.ooobtc.com/ (24h V:" + volooobtc.ToString("N0") + " - Price:" + priceooobtc + ")" + Environment.NewLine +
                                   "<b>Bitker</b> - https://www.bitker.com/ (24h V:" + volBitker.ToString("N0") + " - Price:" + priceBitker + ")" + Environment.NewLine +
                                   "<b>Altilly</b> - https://altilly.com  (24h V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
                                   "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +

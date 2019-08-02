@@ -47,7 +47,6 @@
     var livecoin = Math.Round(Model.LastLiveCoinQuote().Volume);
     var vinex = Math.Round(Model.LastVinexQuote().Volume);
     var altilly = Math.Round(Model.LastAltillyQuote().Volume);
-    var ooobtc = Math.Round(Model.LastooobtcQuote().Volume);
     var bitker = Math.Round(Model.LastBitkerQuote().Volume);
 
     var toBitker = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.BitkerWalletAddress);
@@ -66,11 +65,11 @@
     var ctx = canvas.getContext('2d');
     Chart.defaults.global.title = 'Volume';
     var data = {
-        labels: ["LiveCoin - " + @livecoin, "Vinex - " + @vinex, "Altilly - " + @altilly, "ooobtc - " + @ooobtc, "Bitker - " + @bitker],
+        labels: ["LiveCoin - " + @livecoin, "Vinex - " + @vinex, "Altilly - " + @altilly, "Bitker - " + @bitker],
         datasets: [{
             label: "Exchanges Volume 24H",
             backgroundColor: ["#36a2eb", "#ffce56", "#7df442", "#cc65fe", "#ff6384"],
-            data: [@Html.Raw(livecoin + "," + vinex + "," + altilly + "," + ooobtc + "," + bitker)]
+            data: [@Html.Raw(livecoin + "," + vinex + "," + altilly + "," + bitker)]
         }]
     };
 
@@ -105,7 +104,6 @@
         var dataPack2 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "LiveCoin").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack4 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Altilly").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
-        var dataPack5 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "ooobtc").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack6 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Bitker").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
 
         var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
@@ -161,15 +159,6 @@
                     data: dataPack4,
                     backgroundColor: gradient3,
                     hoverBackgroundColor: gradient3,
-                    hoverBorderWidth: 2,
-                    hoverBorderColor: 'lightgrey'
-                },
-                {
-                label: 'ooobtc',
-                    yAxisID: "volume",
-                    data: dataPack5,
-                    backgroundColor: gradient4,
-                    hoverBackgroundColor: gradient4,
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 },
@@ -461,33 +450,6 @@
                             <p class="font-weight-bold">@fromBitker.Sum(x => x.amount / 100000000).ToString("N0")</p>
                         </span>
                         <small class="text-muted">On <b>@fromBitker.Count()</b> Tx</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-3 grid-margin stretch-card">
-        <div class="box card">
-            <div class="card-body">
-                <div class="d-flex justify-content-center">
-                    <div align="center">
-                        <img src="~/img/ooobtc.png" alt="ooobtc" class="img-circle img-size-32 mr-2">
-                        <div> <a href="https://www.ooobtc.com/">ooobtc</a></div>
-                    </div>
-                    <div class="d-flex flex-column ml-4">
-                        <span class="d-flex flex-column">
-                            <p class="mb-0">Deposit</p>
-                            <p class="font-weight-bold">NA</p>
-                        </span>
-
-                        <small class="text-muted">On <b>NA</b> Tx</small>
-                    </div>
-                    <div class="d-flex flex-column ml-4">
-                        <span class="d-flex flex-column">
-                            <p class="mb-0">Withdraw</p>
-                            <p class="font-weight-bold">NA</p>
-                        </span>
-                        <small class="text-muted">On <b>NA</b> Tx</small>
                     </div>
                 </div>
             </div>
