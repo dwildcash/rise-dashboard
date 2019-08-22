@@ -156,50 +156,57 @@
         {
             AccountSummaryViewModel accountSummaryViewModel;
 
-            if (address != null)
+            try
             {
-                var delegate_account = DelegateResult.Current.Delegates.Where(x => x.Username.Contains(address.ToLower()) || x.Address == address).OrderBy(j => j.Username.Length).FirstOrDefault();
+                if (address != null)
+                {
+                    var delegate_account = DelegateResult.Current.Delegates.Where(x => x.Username.Contains(address.ToLower()) || x.Address == address).OrderBy(j => j.Username.Length).FirstOrDefault();
 
-                if (delegate_account != null)
-                {
-                    address = delegate_account.Address;
-                    accountSummaryViewModel = new AccountSummaryViewModel
+                    if (delegate_account != null)
                     {
-                        liveCoinQuoteResult = LiveCoinQuote.Current,
-                        coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
-                        coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
-                        transactionsResult = TransactionsResult.Current,
-                        delegateResult = DelegateResult.Current,
-                        walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
-                        delegateVotesResult = await DelegateVotesFetcher.FetchRiseDelegateVotes(address),
-                        forgedByAccount = await ForgedByAccountFetcher.FetchForgedByAccount(delegate_account.PublicKey),
-                        coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address),
-                        coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)
-                    };
-                }
-                else
-                {
-                    accountSummaryViewModel = new AccountSummaryViewModel
+                        address = delegate_account.Address;
+                        accountSummaryViewModel = new AccountSummaryViewModel
+                        {
+                            liveCoinQuoteResult = LiveCoinQuote.Current,
+                            coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
+                            coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
+                            transactionsResult = TransactionsResult.Current,
+                            delegateResult = DelegateResult.Current,
+                            walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
+                            delegateVotesResult = await DelegateVotesFetcher.FetchRiseDelegateVotes(address),
+                            forgedByAccount = await ForgedByAccountFetcher.FetchForgedByAccount(delegate_account.PublicKey),
+                            coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address),
+                            coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)
+                        };
+                    }
+                    else
                     {
-                        liveCoinQuoteResult = LiveCoinQuote.Current,
-                        coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
-                        coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
-                        transactionsResult = TransactionsResult.Current,
-                        delegateResult = DelegateResult.Current,
-                        walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
-                        coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address),
-                        coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)
-                    };
-                }
+                        accountSummaryViewModel = new AccountSummaryViewModel
+                        {
+                            liveCoinQuoteResult = LiveCoinQuote.Current,
+                            coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
+                            coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
+                            transactionsResult = TransactionsResult.Current,
+                            delegateResult = DelegateResult.Current,
+                            walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
+                            coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address),
+                            coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)
+                        };
+                    }
 
-                if (accountSummaryViewModel.walletAccountResult == null)
-                {
-                    return null;
+                    if (accountSummaryViewModel.walletAccountResult == null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return PartialView("_AccountSummaryPartial", accountSummaryViewModel);
+                    }
                 }
-                else
-                {
-                    return PartialView("_AccountSummaryPartial", accountSummaryViewModel);
-                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error:" + e.InnerException);
             }
 
             return null;
