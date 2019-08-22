@@ -19,7 +19,7 @@
         /// <summary>
         /// Gets the Schedule
         /// </summary>
-        public string Schedule => "*/15 * * * *";
+        public string Schedule => "*/30 * * * *";
 
         /// <summary>
         /// Defines the scopeFactory
