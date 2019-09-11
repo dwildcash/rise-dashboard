@@ -106,10 +106,6 @@
         /// </summary>
         public static string IPStackApiKey { get; set; }
 
-        /// <summary>
-        /// Bitker exchange API Key
-        /// </summary>
-        public static string BitkerApiKey { get; set; }
 
         /// <summary>
         /// Gets or sets the LiveCoinWalletAddress
@@ -120,11 +116,6 @@
         /// Get or set the VinexWalletAddress
         /// </summary>
         public static string VinexWalletAddress { get; set; }
-
-        /// <summary>
-        /// Get or set the BitkerWalletAddress
-        /// </summary>
-        public static string BitkerWalletAddress { get; set; }
 
 
         /// <summary>

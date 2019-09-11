@@ -674,9 +674,6 @@ namespace Rise.Services
         {
             try
             {
-                double volBitker = 0;
-                double priceBitker = 0;
-
                 double volAltilly = 0;
                 double priceAltilly = 0;
 
@@ -691,18 +688,11 @@ namespace Rise.Services
                 var quoteAltilly = LastAltillyQuote();
                 var quoteVinex = LastVinexQuote();
                 var quoteLivecoin = LastLiveCoinQuote();
-                var quoteBitker = LastBitkerQuote();
 
                 if (quoteAltilly != null)
                 {
                     volAltilly = Math.Round(quoteAltilly.Volume);
                     priceAltilly = Math.Round(quoteAltilly.Price * 100000000);
-                }
-
-                if (quoteBitker != null)
-                {
-                    volBitker = Math.Round(quoteBitker.Volume);
-                    priceBitker = Math.Round(quoteBitker.Price * 100000000);
                 }
 
                 if (quoteVinex != null)
@@ -719,11 +709,9 @@ namespace Rise.Services
 
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                  "<b>Bitker</b> - https://www.bitker.com/ (24h V:" + volBitker.ToString("N0") + " - Price:" + priceBitker + ")" + Environment.NewLine +
                                   "<b>Altilly</b> - https://altilly.com  (24h V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
                                   "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +
-                                  "<b>Vinex</b> - https://vinex.network (24h V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")" + Environment.NewLine +
-                                  "<b>XT</b> - https://www.xt.com (New!)";
+                                  "<b>Vinex</b> - https://vinex.network (24h V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)

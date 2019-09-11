@@ -69,7 +69,6 @@ namespace rise
             AppSettingsProvider.DonationAddress = Configuration["AppSettings:DonationAddress"];
             AppSettingsProvider.LiveCoinWalletAddress = Configuration["AppSettings:LiveCoinWalletAddress"];
             AppSettingsProvider.AltillyWalletAddress = Configuration["AppSettings:AltillyWalletAddress"];
-            AppSettingsProvider.BitkerWalletAddress = Configuration["AppSettings:BitkerWalletAddress"];
             AppSettingsProvider.VinexWalletAddress = Configuration["AppSettings:VinexWalletAddress"];
             AppSettingsProvider.SimulateRoundCount = int.Parse(Configuration["AppSettings:SimulateRoundCount"]);
             AppSettingsProvider.MaxTransactionsToFetch = int.Parse(Configuration["AppSettings:MaxTransactionsToFetch"]);
@@ -80,7 +79,6 @@ namespace rise
             AppSettingsProvider.WebHookSecret = Configuration["AppSettings:WebHookSecret"];
             AppSettingsProvider.TelegramChannelId = long.Parse(Configuration["AppSettings:TelegramChannelId"]);
             AppSettingsProvider.NodeLogFile = Configuration["AppSettings:NodeLogFile"];
-            AppSettingsProvider.BitkerApiKey = Configuration["AppSettings:BitkerApiKey"];
         }
 
         /// <summary>

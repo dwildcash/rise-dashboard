@@ -47,10 +47,7 @@
     var livecoin = Math.Round(Model.LastLiveCoinQuote().Volume);
     var vinex = Math.Round(Model.LastVinexQuote().Volume);
     var altilly = Math.Round(Model.LastAltillyQuote().Volume);
-    var bitker = Math.Round(Model.LastBitkerQuote().Volume);
 
-    var toBitker = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.BitkerWalletAddress);
-    var fromBitker = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.BitkerWalletAddress);
     var toAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.AltillyWalletAddress);
     var fromAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.AltillyWalletAddress);
     var toLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
@@ -65,11 +62,11 @@
     var ctx = canvas.getContext('2d');
     Chart.defaults.global.title = 'Volume';
     var data = {
-        labels: ["LiveCoin - " + @livecoin, "Vinex - " + @vinex, "Altilly - " + @altilly, "Bitker - " + @bitker],
+        labels: ["LiveCoin - " + @livecoin, "Vinex - " + @vinex, "Altilly - " + @altilly],
         datasets: [{
             label: "Exchanges Volume 24H",
             backgroundColor: ["#36a2eb", "#ffce56", "#7df442", "#cc65fe", "#ff6384"],
-            data: [@Html.Raw(livecoin + "," + vinex + "," + altilly + "," + bitker)]
+            data: [@Html.Raw(livecoin + "," + vinex + "," + altilly)]
         }]
     };
 
@@ -104,7 +101,6 @@
         var dataPack2 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "LiveCoin").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack4 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Altilly").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
-        var dataPack6 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Bitker").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
 
         var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
 
@@ -125,10 +121,6 @@
         var gradient4 = bar_ctx.createLinearGradient(0, 0, 0, 200);
         gradient4.addColorStop(0, 'rgba(204,101,254, 0.5)');
         gradient4.addColorStop(1, 'rgba(204,101,254, 0)');
-
-        var gradient5 = bar_ctx.createLinearGradient(0, 0, 0, 200);
-        gradient5.addColorStop(0, 'rgba(255,99,132, 0.5)');
-        gradient5.addColorStop(1, 'rgba(255,99,132, 0)');
 
         var bar_chart = new Chart(bar_ctx, {
         type: 'bar',
@@ -159,15 +151,6 @@
                     data: dataPack4,
                     backgroundColor: gradient3,
                     hoverBackgroundColor: gradient3,
-                    hoverBorderWidth: 2,
-                    hoverBorderColor: 'lightgrey'
-                },
-                {
-                    label: 'Bitker',
-                    yAxisID: "volume",
-                    data: dataPack6,
-                    backgroundColor: gradient5,
-                    hoverBackgroundColor: gradient5,
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 },
@@ -316,7 +299,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <div class="row">
@@ -428,31 +410,5 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-3 grid-margin stretch-card">
-        <div class="box card">
-            <div class="card-body">
-                <div class="d-flex justify-content-center">
-                    <div align="center">
-                        <img src="~/img/bitker.jfif" alt="bitker" class="img-circle img-size-32 mr-2">
-                        <div> <a href="https://www.altilly.com/">Bitker</a></div>
-                    </div>
-                    <div class="d-flex flex-column ml-4">
-                        <span class="d-flex flex-column">
-                            <p class="mb-0">Deposit</p>
-                            <p class="font-weight-bold">@toBitker.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                        </span>
 
-                        <small class="text-muted">On <b>@toBitker.Count()</b> Tx</small>
-                    </div>
-                    <div class="d-flex flex-column ml-4">
-                        <span class="d-flex flex-column">
-                            <p class="mb-0">Withdraw</p>
-                            <p class="font-weight-bold">@fromBitker.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                        </span>
-                        <small class="text-muted">On <b>@fromBitker.Count()</b> Tx</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

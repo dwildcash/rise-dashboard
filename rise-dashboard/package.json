@@ -10,8 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@aspnet/signalr": "^1.1.4",
-    "@fortawesome/fontawesome-free": "^5.10.0",
-    "admin-lte": "^3.0.0-beta.2",
+    "@fortawesome/fontawesome-free": "^5.10.2",
+    "admin-lte": "^3.0.0-rc.1",
     "animate.css": "^3.7.2",
     "bootstrap": "^4.3.1",
     "bootstrap4": "0.0.1-security",

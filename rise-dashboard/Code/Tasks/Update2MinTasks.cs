@@ -37,12 +37,6 @@ namespace rise.Code.Tasks
                 VinexQuote.Current = vinexQuoteResult;
             }
 
-            var BitkerQuoteResult = await BitkerQuoteFetcher.FetBitkerCoinQuote();
-
-            if (BitkerQuoteResult != null)
-            {
-                BitkerQuote.Current = BitkerQuoteResult;
-            }
 
             var altillyQuoteResult = await AltillyQuoteFetcher.FetchAltillyQuote();
 

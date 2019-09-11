@@ -193,17 +193,6 @@
         /// return Last Vinex Quote
         /// </summary>
         /// <returns></returns>
-        public CoinQuote LastBitkerQuote()
-        {
-            var r = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Bitker").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
-
-            return r == null ? r : DefaultQuote();
-        }
-
-        /// <summary>
-        /// return Last Vinex Quote
-        /// </summary>
-        /// <returns></returns>
         public CoinQuote LastVinexQuote()
         {
             var r = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
