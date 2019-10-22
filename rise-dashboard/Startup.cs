@@ -152,6 +152,8 @@ namespace rise
                 _logger.LogError("Received Exception from Startup Scheduler{0}", args.Exception.Message);
                 args.SetObserved();
             });
+
+            services.AddMvc(option => option.EnableEndpointRouting = false);
         }
 
         /// <summary>
