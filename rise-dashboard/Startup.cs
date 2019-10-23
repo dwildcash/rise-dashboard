@@ -208,6 +208,13 @@ namespace rise
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
             // Use Forwatded Header to keep track of client info.
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {

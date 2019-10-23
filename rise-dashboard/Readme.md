@@ -2,7 +2,7 @@
 
 This is the opensource Dashboard dedicated to the Rise coin.
 
-- In order to build you will need ASP.net core 2.2
+- In order to build you will need ASP.net core 3.0
 
 The source code is available here
 - git clone https://github.com/dwildcash/rise-dashboard.git
