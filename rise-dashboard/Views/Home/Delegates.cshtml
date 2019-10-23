@@ -40,12 +40,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><img src="@Url.Content("~/img/"+ @AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />@(AppSettingsProvider.CoinName) Dashboard</h1>
+                    <h3><img src="@Url.Content("~/img/"+ AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" height="30" />@(AppSettingsProvider.CoinName) Dashboard</h3>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Delegates</li>
+                        <li class="breadcrumb-item active">Index</li>
                     </ol>
                 </div>
             </div>
@@ -83,28 +83,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var t in Model.Delegates.Where(x => x.VotesWeight != 0).OrderBy(r => r.Rank))
+                                    @foreach (var t in Model.Delegates.Where(x => x.VotesWeight != 0).OrderBy(r => r.Infos.rankV1))
                                     {
                                         <tr>
-                                            @if (t.Rank <= 199)
+                                            @if (t.Infos.rankV1 <= 199)
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-primary">@t.Rank</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-primary">@t.Infos.rankV1</span></h6></td>
                                             }
                                             else
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-secondary">@t.Rank</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">@t.Infos.rankV1</span></h6></td>
                                             }
 
                                             <td class="align-middle"><h6><small class="text-muted"><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@t.Username</a></small></h6></td>
-                                            <td class="align-middle"><h6><small class="text-muted">@t.Productivity%</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.Infos.productivity%</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@(Math.Round((double)t.VotesWeight / 100000000, 2).ToString("N0"))</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Voters</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Missedblocks</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@Math.Round(t.ForgingChance, 2)%</small></h6></td>
-                                            <td class="align-middle"><h6><small class="text-muted">@t.Approval%</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.Infos.approval%</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Producedblocks.ToString("N0")</small></td>
                                             <td class="align-middle"><h6><small class="text-muted">@Math.Round((double)t.Vote / 100000000, 2)</small></h6></td>
-                                            <td class="align-middle"><h6><small class="text-muted">@t.CMB</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.Cmb</small></h6></td>
                                             <td></td>
                                         </tr>
                                     }

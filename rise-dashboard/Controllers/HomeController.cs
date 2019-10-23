@@ -174,7 +174,7 @@
                             delegateResult = DelegateResult.Current,
                             walletAccountResult = await WalletAccountFetcher.FetchRiseWalletAccount(address),
                             delegateVotesResult = await DelegateVotesFetcher.FetchRiseDelegateVotes(address),
-                            forgedByAccount = await ForgedByAccountFetcher.FetchForgedByAccount(delegate_account.PublicKey),
+                            forgedByAccount = await ForgedByAccountFetcher.FetchForgedByAccount(delegate_account.ForgingPK),
                             coinReceivedByAccount = await TransactionsFetcher.FetchTransactions(address),
                             coinSentByAccount = await TransactionsFetcher.FetchOutgoingTransactions(address)
                         };
