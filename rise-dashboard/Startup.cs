@@ -113,6 +113,10 @@ namespace rise
             // Force Anti Forgery token Validation
             services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
+            services.AddControllersWithViews();
+
+            services.AddRazorPages();
+
             // Add signalr service
             services.AddSignalR();
 
@@ -153,7 +157,7 @@ namespace rise
                 args.SetObserved();
             });
 
-            services.AddMvc(option => option.EnableEndpointRouting = false);
+            //services.AddMvc(option => option.EnableEndpointRouting = false);
         }
 
         /// <summary>
@@ -196,23 +200,19 @@ namespace rise
             // Use Authentication
             app.UseAuthentication();
 
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<NotificationHub>("/Hub/notificationHub");
-            });
+            //app.UseSignalR(routes =>
+            // {
+            //     routes.MapHub<NotificationHub>("/Hub/notificationHub");
+            //});
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseRouting();
 
-            app.UseMvc(routes =>
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers(); // Map attribute-routed API controllers
+                endpoints.MapDefaultControllerRoute(); // Map conventional MVC controllers using the default route
+                endpoints.MapRazorPages();
             });
 
             // Use Forwatded Header to keep track of client info.

@@ -363,7 +363,7 @@
                     transactionsResult = TransactionsResult.Current,
                     liveCoinQuoteResult = LiveCoinQuote.Current,
                     coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
-                    coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList()
+                    coinQuoteCol = _appdb.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList()
                 };
 
                 return PartialView("_QuotePartial", quoteViewModel);

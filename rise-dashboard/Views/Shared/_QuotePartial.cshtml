@@ -48,12 +48,12 @@
     var vinex = Math.Round(Model.LastVinexQuote().Volume);
     var altilly = Math.Round(Model.LastAltillyQuote().Volume);
 
-    var toAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.AltillyWalletAddress);
-    var fromAltilly = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.AltillyWalletAddress);
-    var toLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
-    var fromLiveCoin = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.LiveCoinWalletAddress);
-    var toVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.recipientId == "2644104824710583527R");
-    var fromVinex = Model.transactionsResult.transactions.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime()).Where(x => x.senderId == AppSettingsProvider.VinexWalletAddress);
+    var toAltilly = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.AltillyWalletAddress);
+    var fromAltilly = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() &&  x.senderId == AppSettingsProvider.AltillyWalletAddress);
+    var toLiveCoin = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
+    var fromLiveCoin = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.LiveCoinWalletAddress);
+    var toVinex = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == "2644104824710583527R");
+    var fromVinex = Model.transactionsResult.transactions.AsEnumerable.Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.VinexWalletAddress);
 }
 
 <script type="text/javascript">
