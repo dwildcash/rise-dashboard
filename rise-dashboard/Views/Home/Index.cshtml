@@ -30,7 +30,7 @@
 @section Scripts
     {
     <script type="text/javascript">
-        $('#AccountSummary').load('@Url.Action("AccountSummaryAsync", "Home")?address=@Address');
+        $('#AccountSummary').load('@Url.Action("AccountSummary", "Home")?address=@Address');
         $('#QuoteView').load('@Url.Action("QuotePartialView", "Home")');
 
         @if (SignInManager.IsSignedIn(User))

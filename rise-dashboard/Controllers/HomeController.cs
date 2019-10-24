@@ -246,7 +246,7 @@
         /// <param name="address"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        public async Task<PartialViewResult> AccountPartialViewAsync(string address)
+        public async Task<PartialViewResult> AccountPartialViewAsync(string address = "")
         {
             try
             {
@@ -276,7 +276,7 @@
         /// <param name="address">The address<see cref="string"/></param>
         /// <returns>The <see cref="Task{PartialViewResult}"/></returns>
         [AllowAnonymous]
-        public async Task<PartialViewResult> TransactionsTablePartialView(string address = "")
+        public async Task<PartialViewResult> TransactionsTablePartialViewAsync(string address = "")
         {
             try
             {

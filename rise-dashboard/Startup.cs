@@ -113,7 +113,6 @@ namespace rise
             // Force Anti Forgery token Validation
             services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
-            services.AddControllersWithViews();
 
             services.AddRazorPages();
 

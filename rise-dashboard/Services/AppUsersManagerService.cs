@@ -191,7 +191,7 @@ namespace rise.Services
                             {
                                 appuser.Address = accountresult.account.Address;
                                 appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
-                                appuser.PublicKey = accountresult.account.PublicKey;
+                                appuser.PublicKey = accountresult.account.ForgingPK;
                             }
                         }
 

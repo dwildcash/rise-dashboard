@@ -5,13 +5,13 @@
     <script type="text/javascript">
     $(document).ready(function() {
         $("body").addClass('sidebar-collapse').trigger('collapsed.pushMenu');
-        $('#Paymentschart').load('@Url.Action("DelegatePaymentsChartAsync", "Home")?address=@(ViewBag.Address)&minutes=10500');
+        $('#Paymentschart').load('@Url.Action("DelegatePaymentsChart", "Home")?address=@(ViewBag.Address)&minutes=10500');
     });
 
     function UpdatePayment(time)
     {
         $('#Paymentschart').html("<div class=\"text-center\"><img src=\"/img/spinner.svg\" /></div>");
-        $('#Paymentschart').load('@Url.Action("DelegatePaymentsChartAsync", "Home")?address=@(ViewBag.Address)&minutes=' + time);
+        $('#Paymentschart').load('@Url.Action("DelegatePaymentsChart", "Home")?address=@(ViewBag.Address)&minutes=' + time);
     }
     </script>
 }
