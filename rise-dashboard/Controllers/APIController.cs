@@ -34,8 +34,15 @@
             {
                 return Unauthorized();
             }
+            try
+            {
+                await _updateService.EchoAsync(update);
+            }
+            catch
+            {
+                return Ok();
+            }
 
-            await _updateService.EchoAsync(update);
             return Ok();
         }
 
