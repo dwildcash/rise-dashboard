@@ -89,12 +89,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><img src="@Url.Content("~/img/"+ @AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />@(AppSettingsProvider.CoinName) Dashboard</h1>
+                    <h3><img src="@Url.Content("~/img/"+ AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" height="30" />@(AppSettingsProvider.CoinName) Dashboard</h3>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">PeerMaps</li>
+                        <li class="breadcrumb-item active">PeersMap</li>
                     </ol>
                 </div>
             </div>
@@ -154,24 +154,24 @@
                             <tbody>
                                 @foreach (var t in Model.Peers)
                                 {
-                                <tr>
-                                    <td class="align-middle"><h6><small class="text-muted">@t.Ip</small></h6></td>
-                                    <td class="align-middle"><h6><small class="text-muted">@t.City</small></h6></td>
-                                    <td class="align-middle"><h6><small class="text-muted">@t.Country</small></h6></td>
-                                    <td class="align-middle"><h6><small class="text-muted">@t.Version</small></h6></td>
-                                    <td class="align-middle"><h6><small class="text-muted">@t.Height</small></h6></td>
-                                    @if (t.State == 2)
-                                    {
-                                    <td class="align-middle"><h6><i class="fa fa-star text-success"></i></h6></td>
-                                    }
-                                    else
-                                    {
-                                    <td class="align-middle"><h6><i class="fa fa-exclamation-circle text-danger"></i></h6></td>
-                                    }
-                                    <td class="align-middle"><h6><small class="text-muted">@t.Updated</small></h6></td>
-                                    <td class="align-middle"><h6><small class="text-muted">@t.Os</small></h6></td>
-                                    <td></td>
-                                </tr>
+                                    <tr>
+                                        <td class="align-middle"><h6><small class="text-muted">@t.Ip</small></h6></td>
+                                        <td class="align-middle"><h6><small class="text-muted">@t.City</small></h6></td>
+                                        <td class="align-middle"><h6><small class="text-muted">@t.Country</small></h6></td>
+                                        <td class="align-middle"><h6><small class="text-muted">@t.Version</small></h6></td>
+                                        <td class="align-middle"><h6><small class="text-muted">@t.Height</small></h6></td>
+                                        @if (t.State == 2)
+                                        {
+                                            <td class="align-middle"><h6><i class="fa fa-star text-success"></i></h6></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="align-middle"><h6><i class="fa fa-exclamation-circle text-danger"></i></h6></td>
+                                        }
+                                        <td class="align-middle"><h6><small class="text-muted">@t.Updated</small></h6></td>
+                                        <td class="align-middle"><h6><small class="text-muted">@t.Os</small></h6></td>
+                                        <td></td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
