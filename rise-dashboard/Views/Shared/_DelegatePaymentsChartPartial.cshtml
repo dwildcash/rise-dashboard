@@ -26,7 +26,7 @@
         type: 'horizontalBar',
         data: {
             labels: [
-                      @foreach (var voter in Model.VotersResult.Accounts)
+                      @foreach (var voter in Model.VotersResult.Voters)
                       {
                             <text>'@(ToDelegateUser(voter.Address) ?? voter.Address)',</text>
                       }
@@ -34,14 +34,14 @@
             datasets: [{
                label: '#@(AppSettingsProvider.CoinName) Delegate Payments to Voters',
                data: [
-                       @foreach (var voter in Model.VotersResult.Accounts)
+                       @foreach (var voter in Model.VotersResult.Voters)
                        {
                            var sum = Model.TransactionsResult.transactions.Where(x => x.recipientId == voter.Address).Where(y => y.timestamp >= Model.ToGenesisTime(ViewBag.Minutes)).Sum(x => Double.Parse(x.amount.ToString()) / 100000000);
                             <text>@sum,</text>
                       }
                 ],
                 metadata: [
-                      @foreach (var voter in Model.VotersResult.Accounts)
+                      @foreach (var voter in Model.VotersResult.Voters)
                       {
                             <text>'@voter.Address',</text>
                       }
@@ -115,6 +115,6 @@
 
 <!-- Bar Chart for Payments -->
 
-<canvas id="myChart_@guid" height="@((Model.VotersResult.Accounts.Count * 20)+80)" width="800"></canvas>
+<canvas id="myChart_@guid" height="@((Model.VotersResult.Voters.Count() * 20)+80)" width="800"></canvas>
 
 <!-- End Bar Chart for Payments -->

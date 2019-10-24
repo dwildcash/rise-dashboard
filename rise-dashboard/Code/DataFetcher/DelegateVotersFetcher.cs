@@ -17,7 +17,7 @@
         /// </summary>
         /// <param name="publickey">The publickey<see cref="string"/></param>
         /// <returns>The <see cref="Task{VotersResult}"/></returns>
-        public static async Task<VotersResult> FetchVoters(string publickey)
+        public static async Task<VotersResult> FetchVoters(string username)
         {
             VotersResult votersResult;
 
@@ -26,7 +26,7 @@
                 // Retreive Quote
                 using (var hc = new HttpClient())
                 {
-                    var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/delegates/voters?publicKey=" + publickey));
+                    var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/delegates/voters?username=" + username));
                     votersResult = JsonConvert.DeserializeObject<VotersResult>(result.ToString());
 
                     return votersResult.Success ? votersResult : null;
