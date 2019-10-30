@@ -95,7 +95,14 @@
                                                 <td class="align-middle"><h6><span class="badge badge-secondary">@t.Infos.rankV1</span></h6></td>
                                             }
 
-                                            <td class="align-middle"><h6><small class="text-muted"><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@t.Username</a></small></h6></td>
+                                            @if (t.Cmb <= 85)
+                                            {
+                                                <td class="align-middle"><h6><small class="text-success"><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@t.Username</a></small></h6></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="align-middle"><h6><small class="text-danger"><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@t.Username</a></small></h6></td>
+                                            }
                                             <td class="align-middle"><h6><small class="text-muted">@t.Infos.productivity%</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@(Math.Round((double)t.VotesWeight / 100000000, 2).ToString("N0"))</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Voters</small></h6></td>
@@ -104,11 +111,11 @@
                                             <td class="align-middle"><h6><small class="text-muted">@t.Infos.approval%</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Producedblocks.ToString("N0")</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@Math.Round((double)t.Vote / 100000000, 2)</small></h6></td>
-                                            @if (t.Cmb >= 85)
-                                            { 
+                                            @if (t.Cmb <= 85)
+                                            {
                                                 <td class="align-middle"><h6><small class="text-success">@t.Cmb</small></h6></td>
                                             }
-                                            else                                               
+                                            else
                                             {
                                                 <td class="align-middle"><h6><small class="text-danger">@t.Cmb</small></h6></td>
                                             }
