@@ -30,6 +30,7 @@
         public async Task<IActionResult> WebHook(string secret)
         {
             // Return if the secret is not correct
+            /*
             if (secret != AppSettingsProvider.WebHookSecret)
             {
                 return Unauthorized();
@@ -41,7 +42,7 @@
             catch
             {
                 return Ok();
-            }
+            }*/
 
             return Ok();
         }
