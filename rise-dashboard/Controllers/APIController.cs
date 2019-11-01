@@ -27,7 +27,7 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> WebHook(string secret, [FromBody]Telegram.Bot.Types.Update update)
+        public async Task<IActionResult> WebHook(string secret)
         {
             // Return if the secret is not correct
             if (secret != AppSettingsProvider.WebHookSecret)
