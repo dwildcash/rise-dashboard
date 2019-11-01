@@ -33,6 +33,8 @@
         public async Task<IActionResult> Post(HttpRequestMessage update)
         {
             var message = update.Content.ReadAsStringAsync();
+            
+            /*
             try
             {
                 await _updateService.EchoAsync(update);
@@ -40,7 +42,7 @@
             catch
             {
                 return Ok();
-            }
+            }*/
 
             return Ok();
         }
