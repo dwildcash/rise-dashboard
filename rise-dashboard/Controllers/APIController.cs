@@ -27,8 +27,11 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> WebHook(string secret, string other)
+        public async Task<IActionResult> WebHook([FromBody] string content)
         {
+
+            
+
             // Return if the secret is not correct
             /*
             if (secret != AppSettingsProvider.WebHookSecret)
