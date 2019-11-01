@@ -6,6 +6,7 @@
     using Models;
     using Rise.Services;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading.Tasks;
     using Telegram.Bot.Types;
 
@@ -29,8 +30,9 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Post([FromBody]Update update)
+        public async Task<IActionResult> Post(HttpRequestMessage update)
         {
+            var message = update.Content.ReadAsStringAsync();
             try
             {
                 await _updateService.EchoAsync(update);
