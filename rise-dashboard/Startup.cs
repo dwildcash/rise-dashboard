@@ -30,6 +30,8 @@ namespace rise
         private readonly ILogger<Startup> _logger;
         private static int debugMode = 0;
 
+        private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -98,6 +100,17 @@ namespace rise
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("https://api.telegram.org/","https://91.108.6.33", "https://www.telegram.org");
+                });
+            });
+
+
+
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
 
@@ -111,7 +124,7 @@ namespace rise
             services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromDays(7));
 
             // Force Anti Forgery token Validation
-            services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+            services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
             services.AddRazorPages();
@@ -206,6 +219,7 @@ namespace rise
 
             app.UseRouting();
 
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {
