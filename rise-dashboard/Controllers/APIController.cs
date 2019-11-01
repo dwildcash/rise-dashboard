@@ -29,10 +29,8 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> PostAsync([FromBody]Update update)
+        public async Task<IActionResult> Post([FromBody]Update update)
         {
-
-          
             try
             {
                 await _updateService.EchoAsync(update);
