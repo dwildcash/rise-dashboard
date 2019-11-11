@@ -180,7 +180,7 @@ namespace rise
         /// <param name="userManager">The userManager<see cref="UserManager{ApplicationUser}"/></param>
         /// <param name="roleManager">The roleManager<see cref="RoleManager{ApplicationRole}"/></param>
         /// <param name="context">The context<see cref="ApplicationDbContext"/></param>
-        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext context)
         {
             if (env.IsDevelopment())
             {
