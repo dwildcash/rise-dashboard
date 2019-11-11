@@ -36,7 +36,7 @@ namespace rise
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
         /// <param name="env">The env<see cref="IHostingEnvironment"/></param>
-        public Startup(Microsoft.AspNetCore.Hosting.IHostingEnvironment env, ILogger<Startup> logger)
+        public Startup(Microsoft.AspNetCore.Hosting.IWebHostEnvironment env, ILogger<Startup> logger)
         {
             var builder = new ConfigurationBuilder()
                .SetBasePath(env.ContentRootPath)
@@ -124,7 +124,7 @@ namespace rise
             services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromDays(7));
 
             // Force Anti Forgery token Validation
-            services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
 
             services.AddRazorPages();
