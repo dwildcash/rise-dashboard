@@ -15,7 +15,7 @@
     "animate.css": "^3.7.2",
     "bootstrap": "^4.3.1",
     "bootstrap4": "0.0.1-security",
-    "chart.js": "^2.9.2",
+    "chart.js": "^2.9.3",
     "chartjs-plugin-datalabels": "^0.3.0",
     "datatables": "^1.10.18",
     "datatables.net": "^1.10.20",
