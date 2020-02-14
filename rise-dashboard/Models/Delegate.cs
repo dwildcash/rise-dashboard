@@ -8,8 +8,7 @@
     /// </summary>
     public class DelegateInfos
     {
-        public int rankV1 { get; set; }
-        public int rankV2 { get; set; }
+        public int rank { get; set; }
         public double approval { get; set; }
         public double productivity { get; set; }
     }
@@ -40,9 +39,8 @@
         [JsonProperty("cmb")]
         public int Cmb { get; set; }
 
-        /// </summary>
-        [JsonProperty("forgingPK")]
-        public string ForgingPK { get; set; }
+        [JsonProperty("publicKey")]
+        public string PublicKey { get; set; }
 
         /// </summary>
         [JsonProperty("username")]
