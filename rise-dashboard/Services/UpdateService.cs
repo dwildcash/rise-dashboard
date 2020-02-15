@@ -220,18 +220,6 @@ namespace Rise.Services
                             await cmd_Price(appuser);
                             break;
                         // Return a  geek joke
-                        case "!CHUCKNORRIS":
-                            // await cmd_ChuckNorrisJoke(message);
-                            break;
-                        // Return a  geek joke
-                        case "!JOKE":
-                            // await cmd_Joke(message);
-                            break;
-                        // Return a  geek joke
-                        case "!V2":
-                            await cmd_V2(message);
-                            break;
-                        // Return a  geek joke
                         case "!HOPE":
                             await cmd_Hope(message);
                             break;
@@ -597,72 +585,6 @@ namespace Rise.Services
             }
         }
 
-        /// <summary>
-        /// Show a random geek joke
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        private async Task cmd_ChuckNorrisJoke(Message message)
-        {
-            await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-            var strResponse = await ChuckNorrisJokeFetcher.FetchChuckNorrisJoke();
-
-            if (strResponse != null)
-            {
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.value, ParseMode.Html);
-            }
-        }
-
-        private async Task cmd_V2(Message message)
-        {
-            try
-            {
-                await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-
-                var strResponse = @"Thanks to yarn and Lerna we were able to rewrite all main RISE functionalities separating the concerns of each module.  The underlying technology of the RISE core needs to be constantly updated to leverage both performance and security improvements." + Environment.NewLine +
-                                "With this in mind we decided to update:" + Environment.NewLine +
-                                "Node.JS from v8 to v10" + Environment.NewLine +
-                                "TypeScript from 2.8 to 3.4.5" + Environment.NewLine +
-                                "PostgresSQL from 10.4 to 11.3" + Environment.NewLine +
-                                "We then decided to remove Redis entirely as it was no longer used in the codebase and there was no real reason to keep it as third - party dep.";
-
-                using (var stream = System.IO.File.Open("./wwwroot/img/v2.png", FileMode.Open))
-                {
-                    var rep = await _botService.Client.SendPhotoAsync(message.Chat.Id, stream, "Rise vision Core Update V2");
-                }
-
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
-                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Medium Article", "https://medium.com/rise-vision/introducing-rise-v2-521a58e1e9de"));
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "More details here", replyMarkup: keyboard);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Received Exception from cmd_V2 {0}", ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Show Chuck Norris Joke
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        private async Task cmd_Joke(Message message)
-        {
-            try
-            {
-                await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-                var strResponse = await JokeFetcher.FetchJoke();
-
-                if (strResponse != null)
-                {
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse.attachments.FirstOrDefault().text, ParseMode.Html);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Received Exception from cmd_Joke {0}", ex.Message);
-            }
-        }
 
         /// <summary>
         /// Show Rise Exchanges

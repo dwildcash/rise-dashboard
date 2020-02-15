@@ -6,15 +6,12 @@
     using Models;
     using Rise.Services;
     using System.Linq;
-    using System.Net.Http;
     using System.Threading.Tasks;
-    using Telegram.Bot.Types;
 
     /// <summary>
-    /// Defines the <see cref="APIController" />
+    /// Defines the <see cref="apiController" />
     /// </summary>
-    [Route("api/[controller]")]
-    public class APIController : Controller
+    public class apiController : Controller
     {
         /// <summary>
         /// Defines the _appdb
@@ -30,20 +27,15 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Post(HttpRequestMessage update)
+        public async Task<IActionResult> WebHook(string secret, [FromBody]Telegram.Bot.Types.Update update)
         {
-            var message = update.Content.ReadAsStringAsync();
-            
-            /*
-            try
+            // Return if the secret is not correct
+            if (secret != AppSettingsProvider.WebHookSecret)
             {
-                await _updateService.EchoAsync(update);
+                return Unauthorized();
             }
-            catch
-            {
-                return Ok();
-            }*/
 
+            await _updateService.EchoAsync(update);
             return Ok();
         }
 
@@ -52,7 +44,7 @@
         /// </summary>
         /// <param name="context"></param>
         /// <param name="updateService"></param>
-        public APIController(ApplicationDbContext context, IUpdateService updateService)
+        public apiController(ApplicationDbContext context, IUpdateService updateService)
         {
             _updateService = updateService;
             _appdb = context;

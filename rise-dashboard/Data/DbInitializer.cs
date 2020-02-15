@@ -1,4 +1,6 @@
-﻿namespace rise.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace rise.Data
 {
     /// <summary>
     /// Defines the <see cref="DbInitializer" />
@@ -11,7 +13,7 @@
         /// <param name="context">The context<see cref="ApplicationDbContext"/></param>
         public static void InitializeApplicationDbContext(ApplicationDbContext context)
         {
-            // context.Database.Migrate();
+            context.Database.Migrate();
         }
     }
 }
