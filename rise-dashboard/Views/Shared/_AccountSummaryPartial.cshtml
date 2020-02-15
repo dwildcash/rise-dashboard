@@ -12,13 +12,13 @@
     // return the account name of previous delegate
     public rise.Models.Delegate GetDelegateByRank(int rank)
     {
-        return Model.delegateResult.Delegates.Where(x => x.Infos.rank == rank).FirstOrDefault();
+        return Model.delegateResult.Delegates.Where(x => x.Rank == rank).FirstOrDefault();
     }
 
     // Return the Sum Of Weight for all possiblie delegate
     public long sumOfDelegateWeight()
     {
-        return Model.delegateResult.Delegates.Where(x => x.Infos.rank <= 199).Sum(x => x.VotesWeight) / 100000000;
+        return Model.delegateResult.Delegates.Where(x => x.Rank <= 199).Sum(x => x.VotesWeight) / 100000000;
     }
 
     // Return delegateuser
@@ -144,16 +144,16 @@
                             <table class="table table-hover">
                                 <tr>
                                     <td>Rank</td>
-                                    <td><h4>@(mydelegate.Infos.rank)</h4></td>
+                                    <td><h4>@(mydelegate.Rank)</h4></td>
                                 </tr>
 
-                                @if (mydelegate.Infos.rank > 1)
+                                @if (mydelegate.Rank > 1)
                                 {
                                     <tr>
                                         <td>Position</td>
                                         @{
-                                            var NextDelegate = GetDelegateByRank(mydelegate.Infos.rank - 1);
-                                            var PreviousDelegate = GetDelegateByRank(mydelegate.Infos.rank + 1);
+                                            var NextDelegate = GetDelegateByRank(mydelegate.Rank - 1);
+                                            var PreviousDelegate = GetDelegateByRank(mydelegate.Rank + 1);
 
                                             double neededVotes = Math.Round(((double)NextDelegate.VotesWeight - (double)mydelegate.VotesWeight) / 100000000, 2);
                                             double spaceVotes = Math.Round(((double)mydelegate.VotesWeight - (double)PreviousDelegate.VotesWeight) / 100000000, 2);
@@ -199,10 +199,10 @@
                                         </div>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Productivity</span>
-                                            <span class="info-box-number">@(mydelegate.Infos.productivity)%</span>
+                                            <span class="info-box-number">@(mydelegate.Productivity)%</span>
 
                                             <div class="progress">
-                                                <div class="progress-bar bg-primary" style="width: @(mydelegate.Infos.productivity)%"></div>
+                                                <div class="progress-bar bg-primary" style="width: @(mydelegate.Productivity)%"></div>
                                             </div>
                                         </div>
                                         <!-- /.info-box-content -->
@@ -252,9 +252,9 @@
                                         </div>
                                         <div class="info-box-content">
                                             <span class="info-box-text">CMB</span>
-                                            <span class="info-box-number text-sm">@(mydelegate.Cmb)/85</span>
+                                            <span class="info-box-number text-sm">@(mydelegate.CMB)/281</span>
                                             <div class="progress">
-                                                <div class="progress-bar" style="width: @((double)mydelegate.Cmb / 281 * 100)%"></div>
+                                                <div class="progress-bar" style="width: @((double)mydelegate.CMB / 281 * 100)%"></div>
                                             </div>
                                         </div>
                                         <!-- /.info-box-content -->

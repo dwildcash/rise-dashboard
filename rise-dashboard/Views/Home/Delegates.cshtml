@@ -87,16 +87,16 @@
                                     @foreach (var t in Model.Delegates.Where(x => x.VotesWeight != 0).OrderByDescending(r => r.VotesWeight))
                                     {
                                         <tr>
-                                            @if (t.Infos.rank <= 199)
+                                            @if (t.Rank <= 199)
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-primary">@t.Infos.rank</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-primary">@t.Rank</span></h6></td>
                                             }
                                             else
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-secondary">@t.Infos.rank</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">@t.Rank</span></h6></td>
                                             }
 
-                                            @if (t.Cmb < 281)
+                                            @if (t.CMB < 281)
                                             {
                                                 <td class="align-middle"><h6><small class="text-success"><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@t.Username</a></small></h6></td>
                                             }
@@ -104,11 +104,11 @@
                                             {
                                                 <td class="align-middle"><h6><span class="adge badge-pill badge-danger">BANNED</span> @t.Username <a href="https://explorer.rise.vision/address/@t.Address" target="_blank"></a></h6></td>
                                             }
-                                            <td class="align-middle"><h6><small class="text-muted">@t.Infos.productivity%</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.Productivity%</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@(Math.Round((double)t.VotesWeight / 100000000, 2).ToString("N0"))</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Voters</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Missedblocks</small></h6></td>
-                                            @if (t.Cmb < 281)
+                                            @if (t.CMB < 281)
                                             {
                                                 <td class="align-middle"><h6><small class="text-muted">@Math.Round(t.ForgingChance, 2)%</small></h6></td>
                                             }
@@ -116,16 +116,16 @@
                                             {
                                                 <td class="align-middle"><h6><small class="text-muted">0%</small></h6></td>
                                             }
-                                            <td class="align-middle"><h6><small class="text-muted">@t.Infos.approval%</small></h6></td>
+                                            <td class="align-middle"><h6><small class="text-muted">@t.Approval%</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Producedblocks.ToString("N0")</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@Math.Round((double)t.Vote / 100000000, 2)</small></h6></td>
-                                            @if (t.Cmb < 281)
+                                            @if (t.CMB < 281)
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-pill badge-success">@t.Cmb</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-pill badge-success">@t.CMB</span></h6></td>
                                             }
                                             else
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-pill badge-danger">@t.Cmb</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-pill badge-danger">@t.CMB</span></h6></td>
                                             }
                                             <td></td>
                                         </tr>

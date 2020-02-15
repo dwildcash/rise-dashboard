@@ -4,20 +4,15 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// Delegate Infos
-    /// </summary>
-    public class DelegateInfos
-    {
-        public int rank { get; set; }
-        public double approval { get; set; }
-        public double productivity { get; set; }
-    }
-
-    /// <summary>
     /// Represent the Delegate Object ex: https://wallet.rise.vision/api/delegates/get?publicKey=1403dfc0d8e5ffc09a4d3fd34a25f5c385103f28bda840dea9824f5c7dfc6136
     /// </summary>
     public class Delegate
     {
+        /// <summary>
+        /// Gets or sets the Username
+        /// </summary>
+        [JsonProperty("username")]
+        public string Username { get; set; }
 
         /// <summary>
         /// Add a Chance on max 5000
@@ -30,46 +25,77 @@
         /// Return The forging Probability based on SimulatedRound
         /// </summary>
         public double ForgingChance => AddChance / AppSettingsProvider.SimulateRoundCount * 100;
-        
+
+        /// <summary>
+        /// Gets or sets the Address
         /// </summary>
         [JsonProperty("address")]
         public string Address { get; set; }
 
+        /// <summary>
+        /// Gets or sets the CMB
         /// </summary>
         [JsonProperty("cmb")]
-        public int Cmb { get; set; }
+        public int CMB { get; set; }
 
+        /// <summary>
+        /// Gets or sets the PublicKey
+        /// </summary>
         [JsonProperty("publicKey")]
         public string PublicKey { get; set; }
 
-        /// </summary>
-        [JsonProperty("username")]
-        public string Username { get; set; }
-
+        /// <summary>
+        /// Gets or sets the Vote
         /// </summary>
         [JsonProperty("vote")]
         public long Vote { get; set; }
 
-        /// </summary>
-        [JsonProperty("votesWeight")]
-        public long VotesWeight { get; set; }
-
+        /// <summary>
+        /// Gets or sets the Producedblocks
         /// </summary>
         [JsonProperty("producedblocks")]
         public int Producedblocks { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Missedblocks
         /// </summary>
         [JsonProperty("missedblocks")]
         public int Missedblocks { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Rate
         /// </summary>
-        [JsonProperty("infos")]
-        public DelegateInfos Infos { get; set; }
+        [JsonProperty("rate")]
+        public int Rate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the VotesWeight
+        /// </summary>
+        [JsonProperty("votesWeight")]
+        public long VotesWeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Rank
+        /// </summary>
+        [JsonProperty("rank")]
+        public int Rank { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Approval
+        /// </summary>
+        [JsonProperty("approval")]
+        public double Approval { get; set; }
 
         /// <summary>
         /// Get or set Number of voters
         /// </summary>
         public int? Voters { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Productivity
+        /// </summary>
+        [JsonProperty("productivity")]
+        public double Productivity { get; set; }
     }
 
     /// <summary>

@@ -25,7 +25,6 @@
         [JsonProperty("balance")]
         public string Balance { get; set; }
 
-
         /// <summary>
         /// Gets or sets the Multisignatures
         /// </summary>
@@ -35,8 +34,8 @@
         /// <summary>
         /// Gets or sets the PublicKey
         /// </summary>
-        [JsonProperty("forgingPK")]
-        public string ForgingPK { get; set; }
+        [JsonProperty("publicKey")]
+        public string PublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the SecondPublicKey
@@ -48,7 +47,13 @@
         /// Gets or sets the SecondSignature
         /// </summary>
         [JsonProperty("secondSignature")]
-        public bool SecondSignature { get; set; }
+        public int SecondSignature { get; set; }
+
+        /// <summary>
+        /// Gets or sets the U_multisignatures
+        /// </summary>
+        [JsonProperty("u_multisignatures")]
+        public List<object> U_multisignatures { get; set; }
 
         /// <summary>
         /// Gets or sets the UnconfirmedBalance
@@ -60,7 +65,7 @@
         /// Gets or sets the UnconfirmedSignature
         /// </summary>
         [JsonProperty("unconfirmedSignature")]
-        public bool UnconfirmedSignature { get; set; }
+        public int UnconfirmedSignature { get; set; }
     }
 
     /// <summary>

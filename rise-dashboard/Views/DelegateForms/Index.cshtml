@@ -150,13 +150,13 @@
                                             delegateVoteWeight = mydelegate.VotesWeight;
                                             forgingChance = mydelegate.ForgingChance;
 
-                                            if (mydelegate.Infos.rank >= 199)
+                                            if (mydelegate.Rank >= 199)
                                             {
-                                        <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Infos.rank</span></h6></td>
+                                        <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Rank</span></h6></td>
                                             }
                                             else
                                             {
-                                        <td class="align-middle"><h6><span class="badge badge-secondary">@mydelegate.Infos.rank</span></h6></td>
+                                        <td class="align-middle"><h6><span class="badge badge-secondary">@mydelegate.Rank</span></h6></td>
                                             }
 
                                         <td class="align-middle"><h6><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@mydelegate.Username</a></h6></td>
