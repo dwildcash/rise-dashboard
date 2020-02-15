@@ -308,14 +308,17 @@
                 <p class="text-muted mb-2">Livecoin Best Bid and Ask</p>
                 <div class="d-flex align-items-center">
                     <h1 class="font-weight-medium mb-2">
-                        @((Math.Round(Model.liveCoinQuoteResult.BestBid) * 100000000).ToString())
+                        @(Math.Round((Model.liveCoinQuoteResult.BestBid) * 100000000))
                         <font size="5"><i class="fa fa-caret-left"></i>&nbsp;<i class="fa fa-caret-right"></i></font>
-                        @((Math.Round(Model.liveCoinQuoteResult.BestAsk) * 100000000).ToString())
+                        @(Math.Round((Model.liveCoinQuoteResult.BestAsk) * 100000000))
                     </h1>
                 </div>
                 <div class="d-flex align-items-center">
-                    <div class="bg-success dot-indicator"></div>
-                    <p class="text-muted mb-0">Bid / Ask</p>
+                    <h4 class="font-weight-medium mb-2">
+                        Bid
+                        <font size="5"><i class="fa fa-caret-left"></i>&nbsp;<i class="fa fa-caret-right"></i></font>
+                        Ask
+                    </h4>
                 </div>
             </div>
         </div>
