@@ -30,15 +30,21 @@
         public async Task<IActionResult> WebHook(string secret, [FromBody]Telegram.Bot.Types.Update update)
         {
 
-
-            await _updateService.EchoAsync(update);
-            return Ok();
-
             // Return if the secret is not correct
             if (secret != AppSettingsProvider.WebHookSecret)
             {
-               // return Unauthorized();
+                return Unauthorized();
             }
+            try
+            {
+                await _updateService.EchoAsync(update);
+            }
+            catch
+            {
+                return Ok();
+            }
+
+            return Ok();
 
         }
 
