@@ -29,14 +29,17 @@
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> WebHook(string secret, [FromBody]Telegram.Bot.Types.Update update)
         {
-            // Return if the secret is not correct
-            if (secret != AppSettingsProvider.WebHookSecret)
-            {
-                return Unauthorized();
-            }
+
 
             await _updateService.EchoAsync(update);
             return Ok();
+
+            // Return if the secret is not correct
+            if (secret != AppSettingsProvider.WebHookSecret)
+            {
+               // return Unauthorized();
+            }
+
         }
 
         /// <summary>
