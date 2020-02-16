@@ -378,6 +378,8 @@ namespace Rise.Services
             }
             catch (Exception ex)
             {
+               await _botService.Client.SendTextMessageAsync(sender.TelegramId, ex.Message.ToString(), ParseMode.Html);
+            
                 _logger.LogError("Received Exception from cmd_Withdraw {0}", ex.Message);
             }
         }
