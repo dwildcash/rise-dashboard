@@ -282,7 +282,7 @@
             {
                 TransactionsViewModel transactionsViewModel = new TransactionsViewModel
                 {
-                    coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now).ToList(),
+                    coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddMinutes(-2)).ToList(),
                     LiveCoinQuoteResult = LiveCoinQuote.Current,
                     CoinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     DelegateResult = DelegateResult.Current
