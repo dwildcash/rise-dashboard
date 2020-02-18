@@ -133,7 +133,7 @@ namespace rise
             services.AddSignalR();
 
             // Start tail log service
-            services.AddHostedService<TailLogService>();
+            //services.AddHostedService<TailLogService>();
 
             // Configure 1Min Update Tasks
             services.AddSingleton<IScheduledTask, Update2MinTasks>();

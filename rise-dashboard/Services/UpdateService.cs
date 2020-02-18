@@ -86,6 +86,7 @@ namespace Rise.Services
             }
             catch (Exception ex)
             {
+                await _botService.Client.SendTextMessageAsync(appuser.TelegramId, ex.Message.ToString(), ParseMode.Html);
                 _logger.LogError("Error parsing parameters {0}" + ex.Message);
                 return;
             }
@@ -231,6 +232,7 @@ namespace Rise.Services
                 }
                 catch (Exception ex)
                 {
+                    await _botService.Client.SendTextMessageAsync(appuser.TelegramId, ex.Message.ToString(), ParseMode.Html);
                     _logger.LogError("Error parsing !command {0}" + ex.Message);
                 }
 
