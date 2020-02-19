@@ -169,7 +169,7 @@ namespace rise
                 args.SetObserved();
             });
 
-            //services.AddMvc(option => option.EnableEndpointRouting = false);
+            services.AddMvc(option => option.EnableEndpointRouting = false);
         }
 
         /// <summary>
@@ -216,6 +216,8 @@ namespace rise
             // {
             //     routes.MapHub<NotificationHub>("/Hub/notificationHub");
             //});
+
+            app.UseAuthorization();
 
             app.UseRouting();
 
