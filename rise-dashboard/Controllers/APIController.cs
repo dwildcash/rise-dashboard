@@ -2,6 +2,7 @@
 {
     using Data;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Newtonsoft.Json;
@@ -29,9 +30,12 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> WebHook(string secret, string input)
+        public async Task<IActionResult> WebHook(string secret, FormCollection input)
         {
-            Update update = JsonConvert.DeserializeObject<Update>(input);
+
+            var e = input;
+               
+            //Update update = JsonConvert.DeserializeObject<Update>(input);
 
             // Return if the secret is not correct
             if (secret != AppSettingsProvider.WebHookSecret)
@@ -39,14 +43,14 @@
                 return Unauthorized();
             }
 
-            try
-            {
-                await _updateService.EchoAsync(update);
-            }
-            catch
-            {
-                return Ok();
-            }
+           // try
+            //{
+           //     await _updateService.EchoAsync(update);
+          //  }
+           // catch
+          //  {
+          //      return Ok();
+          //  }
 
             return Ok();
 
