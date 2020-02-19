@@ -218,9 +218,10 @@ namespace rise
             //     routes.MapHub<NotificationHub>("/Hub/notificationHub");
             //});
 
-            app.UseAuthorization();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseCors(MyAllowSpecificOrigins);
 
