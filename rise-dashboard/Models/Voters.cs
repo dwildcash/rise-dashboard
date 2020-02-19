@@ -9,10 +9,22 @@
     public class Voters
     {
         /// <summary>
+        /// Gets or sets the Username
+        /// </summary>
+        [JsonProperty("username")]
+        public string Username { get; set; }
+
+        /// <summary>
         /// Gets or sets the Address
         /// </summary>
         [JsonProperty("address")]
         public string Address { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PublicKey
+        /// </summary>
+        [JsonProperty("publicKey")]
+        public string PublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the Balance
@@ -35,6 +47,7 @@
         /// <summary>
         /// Gets or sets the Accounts
         /// </summary>
-        public IList<Voters> Voters { get; set; }
+        [JsonProperty("accounts")]
+        public IList<Voters> Accounts { get; set; }
     }
 }

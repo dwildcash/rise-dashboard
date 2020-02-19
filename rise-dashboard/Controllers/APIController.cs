@@ -10,6 +10,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Telegram.Bot.Types;
+    using Telegram.Bot.Types.Enums;
 
     /// <summary>
     /// Defines the <see cref="apiController" />
@@ -30,7 +31,7 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> WebHook(string secret, FormCollection input)
+        public async Task<IActionResult> WebHook(Update input)
         {
 
             var e = input;
@@ -38,19 +39,19 @@
             //Update update = JsonConvert.DeserializeObject<Update>(input);
 
             // Return if the secret is not correct
-            if (secret != AppSettingsProvider.WebHookSecret)
-            {
-                return Unauthorized();
-            }
-
-           // try
+            //if (secret != AppSettingsProvider.WebHookSecret)
             //{
-           //     await _updateService.EchoAsync(update);
-          //  }
-           // catch
-          //  {
-          //      return Ok();
-          //  }
+            //    return Unauthorized();
+           // }
+
+            try
+            { 
+                await _updateService.EchoAsync(e);
+            }
+           catch
+            {
+              return Ok();
+            }
 
             return Ok();
 
