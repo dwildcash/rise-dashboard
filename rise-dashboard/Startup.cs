@@ -126,8 +126,11 @@ namespace rise
             // Force Anti Forgery token Validation
             services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
-
+            // Support For Razor Pages
             services.AddRazorPages();
+
+            // Configure BotService
+            services.AddSingleton<IBotService, BotService>();
 
             // Add signalr service
             services.AddSignalR();
@@ -159,9 +162,7 @@ namespace rise
             // Configure Telegram bot and bot response
             services.AddScoped<IUpdateService, UpdateService>();
 
-            // Configure BotService
-            services.AddSingleton<IBotService, BotService>();
-
+ 
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>
             {

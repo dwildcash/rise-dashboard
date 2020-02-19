@@ -56,17 +56,16 @@
 <br />
 <!--Content Wrapper.Contains page content-->
 <div class="content-wrapper">
-    <!-- Content Header(Page header)-->
+    <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><img src="@Url.Content("~/img/" + @AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />@(AppSettingsProvider.CoinName) Dashboard</h1>
+                    <h3><img src="@Url.Content("~/img/"+ AppSettingsProvider.CoinName.ToLower() + ".png")" alt="@(AppSettingsProvider.CoinName) Logo" class="brand-image img-circle elevation-3" style="opacity: .8" height="30" />@(AppSettingsProvider.CoinName) Dashboard</h3>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item">
-                            <a href="#">DelegateForms </a>
+                        <li class="breadcrumb-item"><a href="#">DelegateForms</a></li>
                         <li class="breadcrumb-item active">Index</li>
                     </ol>
                 </div>
@@ -85,26 +84,26 @@
                         <!-- DELEGATE SEARCH FORM -->
                         @using (Html.BeginForm("Index", "DelegateForms", FormMethod.Get, new { @class = "form-inline ml-auto" }))
                         {
-                        <div class="list-inline ml-3">
-                            <div class="input-group align-items-center h-100">
-                                @if (Model.walletAccountResult != null)
+                            <div class="list-inline ml-3">
+                                <div class="input-group align-items-center h-100">
+                                    @if (Model.walletAccountResult != null)
                                     {
-                                <span class="input-group mr-3">Calculating using wallet <span class="text-muted ml-3">@Model.walletAccountResult.account.Address </span></span>
+                                        <span class="input-group mr-3">Calculating using wallet <span class="text-muted ml-3">@Model.walletAccountResult.account.Address </span></span>
                                     }
                                     else
                                     {
-                                <span class="input-group mr-3">Calculating using custom @AppSettingsProvider.CoinName balance </span>
+                                        <span class="input-group mr-3">Calculating using custom @AppSettingsProvider.CoinName balance </span>
                                     }
 
-                                <input class="form-control" type="search" value="@ViewBag.Balance" id="balance" name="balance">
+                                    <input class="form-control" type="search" value="@ViewBag.Balance" id="balance" name="balance">
 
-                                <span class="input-group-append">
-                                    <button class="btn" type="submit">
-                                        <i class="fa fa-sync-alt"></i>
-                                    </button>
-                                </span>
+                                    <span class="input-group-append">
+                                        <button class="btn" type="submit">
+                                            <i class="fa fa-sync-alt"></i>
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
                         }
                     </div>
 
@@ -143,72 +142,72 @@
                                             currentAccount = Model.walletAccountResult.account.Address;
                                         }
 
-                                    <tr class="@matchVote(string.IsNullOrEmpty(mydelegate?.Address) ? "" : mydelegate.Address, currentAccount)">
+                                        <tr class="@matchVote(string.IsNullOrEmpty(mydelegate?.Address) ? "" : mydelegate.Address, currentAccount)">
 
-                                        @if (mydelegate != null)
-                                        {
-                                            delegateVoteWeight = mydelegate.VotesWeight;
-                                            forgingChance = mydelegate.ForgingChance;
-
-                                            if (mydelegate.Rank >= 199)
+                                            @if (mydelegate != null)
                                             {
-                                        <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Rank</span></h6></td>
+                                                delegateVoteWeight = mydelegate.VotesWeight;
+                                                forgingChance = mydelegate.ForgingChance;
+
+                                                if (mydelegate.Rank >= 199)
+                                                {
+                                                    <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Rank</span></h6></td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="align-middle"><h6><span class="badge badge-secondary">@mydelegate.Rank</span></h6></td>
+                                                }
+
+                                                <td class="align-middle"><h6><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@mydelegate.Username</a></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">@((mydelegate.VotesWeight / 100000000).ToString("N0"))</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">@(mydelegate.Voters)</span></h6></td>
                                             }
                                             else
                                             {
-                                        <td class="align-middle"><h6><span class="badge badge-secondary">@mydelegate.Rank</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-primary">N/A</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">N/A</span></h6></td>
                                             }
 
-                                        <td class="align-middle"><h6><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@mydelegate.Username</a></h6></td>
-                                        <td class="align-middle"><h6><span class="badge badge-secondary">@((mydelegate.VotesWeight / 100000000).ToString("N0"))</span></h6></td>
-                                        <td class="align-middle"><h6><span class="badge badge-secondary">@(mydelegate.Voters)</span></h6></td>
-                                        }
-                                        else
-                                        {
-                                        <td class="align-middle"><h6><span class="badge badge-primary">N/A</span></h6></td>
-                                        <td class="align-middle"><h6><span class="badge badge-secondary">N/A</span></h6></td>
-                                        }
+                                            <td class="align-middle"><h6><strong>@t.Share%</strong></h6></td>
+                                            <td class="align-middle"><h6>@t.Payout_interval</h6></td>
 
-                                        <td class="align-middle"><h6><strong>@t.Share%</strong></h6></td>
-                                        <td class="align-middle"><h6>@t.Payout_interval</h6></td>
-
-                                        @if (mydelegate != null)
-                                        {
-                                        <td class="align-middle"><h6><small class="text-muted">@Math.Round(mydelegate.ForgingChance, 2)%</small></h6></td>
-                                        }
-                                        else
-                                        {
-                                        <td class="align-middle"><h6><small class="text-muted">N/A</small></h6></td>
-                                        }
-
-                                        @{ var clibalance = @ViewBag.balance; }
-                                        @{ var delvoteweight = delegateVoteWeight / 100000000; }
-                                        @{ var percentVoteWeight = clibalance / (delvoteweight + clibalance) * 100;}
-
-                                        <td class="align-middle"><h6>@Math.Round(percentVoteWeight, 2)%</h6></td>
-                                        <td class="align-middle"><h6><strong>@Math.Round((double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 3)</strong></h6></td>
-                                        <td class="align-middle"><h6><strong>@Math.Round(30 * (double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 2)</strong></h6></td>
-                                        <td>
-                                            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                                            @if (mydelegate != null)
                                             {
-                                            <text>
-                                                <a asp-action="Edit" asp-route-id="@t.Id">Edit</a> |
-                                                <a asp-action="Delete" asp-route-id="@t.Id"> Delete </a>
-                                            </text>
+                                                <td class="align-middle"><h6><small class="text-muted">@Math.Round(mydelegate.ForgingChance, 2)%</small></h6></td>
                                             }
-                                        </td>
-                                        <td></td>
-                                    </tr>
+                                            else
+                                            {
+                                                <td class="align-middle"><h6><small class="text-muted">N/A</small></h6></td>
+                                            }
+
+                                            @{ var clibalance = @ViewBag.balance; }
+                                            @{ var delvoteweight = delegateVoteWeight / 100000000; }
+                                            @{ var percentVoteWeight = clibalance / (delvoteweight + clibalance) * 100;}
+
+                                            <td class="align-middle"><h6>@Math.Round(percentVoteWeight, 2)%</h6></td>
+                                            <td class="align-middle"><h6><strong>@Math.Round((double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 3)</strong></h6></td>
+                                            <td class="align-middle"><h6><strong>@Math.Round(30 * (double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 2)</strong></h6></td>
+                                            <td>
+                                                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                                                {
+                                                    <text>
+                                                        <a asp-action="Edit" asp-route-id="@t.Id">Edit</a> |
+                                                        <a asp-action="Delete" asp-route-id="@t.Id"> Delete </a>
+                                                    </text>
+                                                }
+                                            </td>
+                                            <td></td>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
                             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
                             {
-                            <text>
-                                <p>
-                                    <a asp-action="Create">Create New</a>
-                                </p>
-                            </text>
+                                <text>
+                                    <p>
+                                        <a asp-action="Create">Create New</a>
+                                    </p>
+                                </text>
                             }
                         </div>
                     </div>
