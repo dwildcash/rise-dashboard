@@ -7,6 +7,7 @@
     using Rise.Services;
     using System.Linq;
     using System.Threading.Tasks;
+    using Telegram.Bot.Types;
 
     /// <summary>
     /// Defines the <see cref="apiController" />
@@ -27,7 +28,7 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> WebHook(string secret, [FromBody]Telegram.Bot.Types.Update update)
+        public async Task<IActionResult> WebHook(string secret, Update update)
         {
 
             // Return if the secret is not correct
