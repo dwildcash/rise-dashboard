@@ -32,7 +32,7 @@ namespace rise.Code.Tasks
 
                 foreach (var mdelegate in delegateResult.Delegates)
                 {
-                    mdelegate.Voters = DelegateVotersFetcher.FetchVoters(mdelegate.Username).Result.Voters.Count;
+                    mdelegate.Voters = DelegateVotersFetcher.FetchVoters(mdelegate.PublicKey).Result.Voters.Count;
                 }
             }
         }
