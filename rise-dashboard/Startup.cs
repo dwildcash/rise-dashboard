@@ -100,7 +100,8 @@ namespace rise
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
-            services.AddCors(options =>
+            
+            /*services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
@@ -108,7 +109,7 @@ namespace rise
                     builder.WithOrigins("https://api.telegram.org/","https://91.108.6.33", "https://www.telegram.org");
                 });
             });
-
+            */
 
 
             // DB for aspnet
@@ -223,7 +224,7 @@ namespace rise
 
             app.UseAuthorization();
 
-            app.UseCors(MyAllowSpecificOrigins);
+            //app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {
