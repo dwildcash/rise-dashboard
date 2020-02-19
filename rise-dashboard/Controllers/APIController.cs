@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
+    using Newtonsoft.Json;
     using Rise.Services;
     using System.Linq;
     using System.Threading.Tasks;
@@ -28,14 +29,16 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> WebHook(string secret, Update update)
+        public async Task<IActionResult> WebHook(string secret, string input)
         {
+            Update update = JsonConvert.DeserializeObject<Update>(input);
 
             // Return if the secret is not correct
             if (secret != AppSettingsProvider.WebHookSecret)
             {
                 return Unauthorized();
             }
+
             try
             {
                 await _updateService.EchoAsync(update);
