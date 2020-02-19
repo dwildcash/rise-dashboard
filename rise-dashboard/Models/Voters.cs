@@ -33,6 +33,7 @@
         public long Balance { get; set; }
     }
 
+
     /// <summary>
     /// Defines the <see cref="VotersResult" />
     /// </summary>
