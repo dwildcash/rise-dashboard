@@ -31,7 +31,7 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Post([FromBody] Update input)
+        public async Task<IActionResult> Webhook([FromBody] Update input)
         {
 
             var e = input;
