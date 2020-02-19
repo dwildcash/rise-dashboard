@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace rise.Code.Tasks
 {
     /// <summary>
-    /// Defines the <see cref="Update15MinTasks" />
+    /// Defines the <see cref="Update5MinTasks" />
     /// </summary>
-    public class Update15MinTasks : IScheduledTask
+    public class Update5MinTasks : IScheduledTask
     {
         /// <summary>
         /// Gets the Schedule
         /// </summary>
-        public string Schedule => "*/15 * * * *";
+        public string Schedule => "*/5 * * * *";
 
         /// <summary>
         /// The ExecuteAsync

@@ -139,7 +139,7 @@ namespace rise
             services.AddSingleton<IScheduledTask, Update2MinTasks>();
 
             // Configure 30Min Update Task
-            services.AddSingleton<IScheduledTask, Update15MinTasks>();
+            services.AddSingleton<IScheduledTask, Update5MinTasks>();
 
             // Configure Quote of the Day Tasks
             services.AddSingleton<IScheduledTask, UpdateQuoteOfTheDayTask>();

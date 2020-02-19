@@ -353,7 +353,7 @@
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        public PartialViewResult QuotePartialView()
+        public async Task<PartialViewResult> QuotePartialView()
         {
             try
             {
