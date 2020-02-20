@@ -101,16 +101,15 @@ namespace rise
             });
 
             
-            /*services.AddCors(options =>
+            services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins("https://api.telegram.org/","https://91.108.6.33", "https://www.telegram.org");
+                    builder.WithOrigins("https://api.telegram.org/","https://91.108.6.33", "https://www.telegram.org").AllowAnyHeader().AllowAnyMethod(); 
                 });
             });
-            */
-
+            
 
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
@@ -125,7 +124,7 @@ namespace rise
             services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromDays(7));
 
             // Force Anti Forgery token Validation
-            services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+            services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // Support For Razor Pages
             services.AddRazorPages();
@@ -172,6 +171,8 @@ namespace rise
             });
 
             services.AddMvc(option => option.EnableEndpointRouting = false);
+
+
         }
 
         /// <summary>
@@ -224,7 +225,7 @@ namespace rise
 
             app.UseAuthorization();
 
-            //app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {
