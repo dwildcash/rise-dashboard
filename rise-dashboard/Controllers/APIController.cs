@@ -35,12 +35,12 @@
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
 
-        public async Task<IActionResult> Webhook([FromBody] Update content)
+        public async Task<IActionResult> Webhook(Newtonsoft.Json.Linq.JObject jsonresult)
         {
 
             try
             {
-                Telegram.Bot.Types.Update w = content;
+                Telegram.Bot.Types.Update w = JsonConvert.DeserializeObject<Update>(jsonresult.ToString());
 
                 
             //Update update = JsonConvert.DeserializeObject<Update>(input);
