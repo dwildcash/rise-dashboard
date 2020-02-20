@@ -34,10 +34,10 @@
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
 
-        public async Task<IActionResult> Webhook(Update input)
+        public async Task<IActionResult> Webhook([FromBody] string content)
         {
 
-            var e = input;
+            var e = content;
                
             //Update update = JsonConvert.DeserializeObject<Update>(input);
 
@@ -46,7 +46,7 @@
             //{
             //    return Unauthorized();
            // }
-
+           /*
             try
             { 
                 await _updateService.EchoAsync(e);
@@ -54,7 +54,7 @@
            catch
             {
               return Ok();
-            }
+            }*/
 
             return Ok();
 
