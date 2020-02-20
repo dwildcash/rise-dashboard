@@ -55,7 +55,7 @@
            // }
            
          
-                await _updateService.EchoAsync(e);
+                await _updateService.EchoAsync(w);
             }
            catch (Exception ex)
             {
