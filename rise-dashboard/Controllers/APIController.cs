@@ -36,32 +36,26 @@
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
 
-        public async Task<IActionResult> Webhook([FromBody]dynamic jsonresult)
+        public async Task<IActionResult> Webhook(string secret, [FromBody]dynamic jsonresult)
         {
-
             try
             {
-                Telegram.Bot.Types.Update w = JsonConvert.DeserializeObject<Update>(jsonresult.ToString());
+                 Update w = JsonConvert.DeserializeObject<Update>(jsonresult.ToString());
 
-                
-            //Update update = JsonConvert.DeserializeObject<Update>(input);
-
-            // Return if the secret is not correct
-            //if (secret != AppSettingsProvider.WebHookSecret)
-            //{
-            //    return Unauthorized();
-           // }
-           
-         
+                // Return if the secret is not correct
+                if (secret != AppSettingsProvider.WebHookSecret)
+                {
+                    return Unauthorized();
+                }
+                  
                 await _updateService.EchoAsync(w);
             }
-           catch (Exception ex)
+            catch (Exception ex)
             {
               return Ok();
             }
 
             return Ok();
-
         }
 
         /// <summary>
