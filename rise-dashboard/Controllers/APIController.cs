@@ -37,7 +37,7 @@
         public async Task<IActionResult> Webhook([FromBody] dynamic content)
         {
 
-            var e = content;
+           var e = (Update)content;
                
             //Update update = JsonConvert.DeserializeObject<Update>(input);
 
@@ -46,7 +46,7 @@
             //{
             //    return Unauthorized();
            // }
-           /*
+           
             try
             { 
                 await _updateService.EchoAsync(e);
@@ -54,7 +54,7 @@
            catch
             {
               return Ok();
-            }*/
+            }
 
             return Ok();
 
