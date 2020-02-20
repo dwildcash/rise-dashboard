@@ -40,8 +40,12 @@
 
             try
             {
-                var e = (Update)content;
-               
+                Telegram.Bot.Types.Update w = new Update();
+                w.Message.MessageId = content.MessageId;
+                w.Message.From.Id = content.from.Id;
+                w.Message.From.FirstName = content.from.first_name;
+
+                
             //Update update = JsonConvert.DeserializeObject<Update>(input);
 
             // Return if the secret is not correct
