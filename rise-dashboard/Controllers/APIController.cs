@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Rise.Services;
     using System;
     using System.Linq;
@@ -35,7 +36,7 @@
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
 
-        public async Task<IActionResult> Webhook(dynamic jsonresult)
+        public async Task<IActionResult> Webhook([FromBody]JObject jsonresult)
         {
 
             try
