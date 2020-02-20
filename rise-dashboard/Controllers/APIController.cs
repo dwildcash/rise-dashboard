@@ -8,6 +8,7 @@
     using Models;
     using Newtonsoft.Json;
     using Rise.Services;
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Telegram.Bot.Types;
@@ -52,7 +53,7 @@
          
                 await _updateService.EchoAsync(e);
             }
-           catch (Exception e)
+           catch (Exception ex)
             {
               return Ok();
             }
