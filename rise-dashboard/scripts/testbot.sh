@@ -19,4 +19,4 @@ curl --tlsv1.2 -v -k -X POST -H "Content-Type: application/json" -H "Cache-Contr
   },
   "text":"!balance"
 }
-}' "https://dashboard.rise.vision:5000/"
+}' "http://127.0.0.1:5000/API/Webhook"

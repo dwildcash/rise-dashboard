@@ -34,7 +34,7 @@
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
 
-        public async Task<IActionResult> Webhook([FromBody] Update input)
+        public async Task<IActionResult> Webhook(Update input)
         {
 
             var e = input;
