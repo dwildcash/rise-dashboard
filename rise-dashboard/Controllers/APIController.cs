@@ -2,6 +2,7 @@
 {
     using Data;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -31,6 +32,8 @@
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
+        [EnableCors("CorsPolicy")]
+
         public async Task<IActionResult> Webhook([FromBody] Update input)
         {
 

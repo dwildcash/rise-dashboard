@@ -100,16 +100,16 @@ namespace rise
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
-            
+
             services.AddCors(options =>
             {
-                options.AddPolicy(MyAllowSpecificOrigins,
-                builder =>
-                {
-                    builder.WithOrigins("https://api.telegram.org/","https://91.108.6.33", "https://www.telegram.org").AllowAnyHeader().AllowAnyMethod(); 
-                });
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
             });
-            
+
 
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
@@ -225,7 +225,7 @@ namespace rise
 
             app.UseAuthorization();
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
