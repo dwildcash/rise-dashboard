@@ -36,7 +36,7 @@
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
 
-        public async Task<IActionResult> Webhook([FromBody]JObject jsonresult)
+        public async Task<IActionResult> Webhook([FromBody]dynamic jsonresult)
         {
 
             try
