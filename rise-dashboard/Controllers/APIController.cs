@@ -35,7 +35,7 @@
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
 
-        public async Task<IActionResult> Webhook(Newtonsoft.Json.Linq.JObject jsonresult)
+        public async Task<IActionResult> Webhook(dynamic jsonresult)
         {
 
             try
