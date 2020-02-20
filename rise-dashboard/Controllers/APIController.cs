@@ -35,15 +35,12 @@
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
 
-        public async Task<IActionResult> Webhook([FromBody] dynamic content)
+        public async Task<IActionResult> Webhook([FromBody] Update content)
         {
 
             try
             {
-                Telegram.Bot.Types.Update w = new Update();
-                w.Message.MessageId = content.MessageId;
-                w.Message.From.Id = content.from.Id;
-                w.Message.From.FirstName = content.from.first_name;
+                Telegram.Bot.Types.Update w = content;
 
                 
             //Update update = JsonConvert.DeserializeObject<Update>(input);
