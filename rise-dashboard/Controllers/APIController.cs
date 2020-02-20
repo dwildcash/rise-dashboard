@@ -34,7 +34,7 @@
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
 
-        public async Task<IActionResult> Webhook([FromBody] string content)
+        public async Task<IActionResult> Webhook([FromBody] dynamic content)
         {
 
             var e = content;
