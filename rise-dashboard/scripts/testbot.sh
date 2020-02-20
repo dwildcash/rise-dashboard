@@ -19,4 +19,4 @@ curl --tlsv1.2 -v -k -X POST -H "Content-Type: application/json" -H "Cache-Contr
   },
   "text":"!balance"
 }
-}' "https://dwildcash.rise.vision/"
+}' "https://dashboard.rise.vision:5000/"

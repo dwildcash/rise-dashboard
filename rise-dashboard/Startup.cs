@@ -30,8 +30,6 @@ namespace rise
         private readonly ILogger<Startup> _logger;
         private static int debugMode = 0;
 
-        private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -100,7 +98,6 @@ namespace rise
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
-
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -108,7 +105,6 @@ namespace rise
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
-
 
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
@@ -124,6 +120,12 @@ namespace rise
 
             // Force Anti Forgery token Validation
             services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
 
             // Support For Razor Pages
             services.AddRazorPages();
@@ -170,8 +172,6 @@ namespace rise
             });
 
             services.AddMvc(option => option.EnableEndpointRouting = false);
-
-
         }
 
         /// <summary>
@@ -209,6 +209,9 @@ namespace rise
             // Seed Initial User
             DbSeedData.SeedData(userManager, roleManager, context).Wait();
 
+            // Use Forwarded Header to keep track of client info.
+            app.UseForwardedHeaders();
+
             app.UseStaticFiles();
 
             // Use Authentication
@@ -218,6 +221,7 @@ namespace rise
             // {
             //     routes.MapHub<NotificationHub>("/Hub/notificationHub");
             //});
+
 
 
             app.UseRouting();
@@ -231,13 +235,7 @@ namespace rise
                 endpoints.MapControllers(); // Map attribute-routed API controllers
                 endpoints.MapDefaultControllerRoute(); // Map conventional MVC controllers using the default route
                 endpoints.MapRazorPages();
-            });
-
-            // Use Forwatded Header to keep track of client info.
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
+            });      
         }
     }
 }
