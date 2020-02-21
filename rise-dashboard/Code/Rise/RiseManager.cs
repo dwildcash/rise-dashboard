@@ -32,7 +32,7 @@ namespace rise.Code.Rise
                     };
 
                     var content = new FormUrlEncodedContent(values);
-                    var response = await hc.PostAsync("http://localhost:6990/api/accounts/open", content);
+                    var response = await hc.PostAsync("http://localhost:7777/api/accounts/open", content);
                     string responseString = await response.Content.ReadAsStringAsync();
                     var accountResult = JsonConvert.DeserializeObject<WalletAccountResult>(responseString);
                     accountResult.account.secret = passphrase;
