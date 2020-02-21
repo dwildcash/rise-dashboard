@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using rise.Code.DataFetcher;
 using rise.Code.Rise;
 using rise.Data;
 using rise.Models;
@@ -7,7 +6,6 @@ using rise.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -34,7 +32,7 @@ namespace Rise.Services
 
         public async Task EchoAsync(Update update)
         {
-            if (update.Type != UpdateType.Message)
+            if (update.Type != UpdateType.Message || update.Message.Text.Length == 0)
             {
                 return;
             }
@@ -86,7 +84,6 @@ namespace Rise.Services
             }
             catch (Exception ex)
             {
-                await _botService.Client.SendTextMessageAsync(appuser.TelegramId, ex.Message.ToString(), ParseMode.Html);
                 _logger.LogError("Error parsing parameters {0}" + ex.Message);
                 return;
             }
@@ -232,7 +229,6 @@ namespace Rise.Services
                 }
                 catch (Exception ex)
                 {
-                    await _botService.Client.SendTextMessageAsync(appuser.TelegramId, ex.Message.ToString(), ParseMode.Html);
                     _logger.LogError("Error parsing !command {0}" + ex.Message);
                 }
 
@@ -380,8 +376,6 @@ namespace Rise.Services
             }
             catch (Exception ex)
             {
-               await _botService.Client.SendTextMessageAsync(sender.TelegramId, ex.Message.ToString(), ParseMode.Html);
-            
                 _logger.LogError("Received Exception from cmd_Withdraw {0}", ex.Message);
             }
         }
@@ -665,7 +659,7 @@ namespace Rise.Services
                                   "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>";
 
                 await _botService.Client.SendTextMessageAsync(sender.TelegramId, strResponse, ParseMode.Html);
-                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Rise.coinquote.io", "https://rise.coinquote.io"));
+                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("dashbord.rise.vision", "https://dashbord.rise.vision"));
                 await _botService.Client.SendTextMessageAsync(sender.TelegramId, "click to open website", replyMarkup: keyboard);
             }
             catch (Exception ex)
@@ -690,7 +684,7 @@ namespace Rise.Services
                                   "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
                                   "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
                                   "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
-                                  "<b>Rise Dashboard</b> - https://rise.coinquote.io" + Environment.NewLine +
+                                  "<b>Rise Dashboard</b> - https://dashboard.rise.vision" + Environment.NewLine +
                                   "<b>Rise Force Game</b> - http://riseforce.io/" + Environment.NewLine +
                                   "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                                   "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +

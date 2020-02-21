@@ -17,7 +17,6 @@ namespace rise
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Models;
-    using rise.Hubs;
     using Rise.Services;
     using Services;
     using System;

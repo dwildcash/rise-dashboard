@@ -10,7 +10,7 @@ The source code is available here
 - git clone https://github.com/dwildcash/rise-dashboard.git
 
 A working exemple is available here
-- https://rise.coinquote.io
+- https://dashboard.rise.vision
 
 
 When running on Linux you will need to configure a Nginx reverse proxy for Kestrel.

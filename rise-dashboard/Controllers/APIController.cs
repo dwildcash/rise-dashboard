@@ -3,17 +3,14 @@
     using Data;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Cors;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Rise.Services;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Telegram.Bot.Types;
-    using Telegram.Bot.Types.Enums;
 
     /// <summary>
     /// Defines the <see cref="apiController" />
