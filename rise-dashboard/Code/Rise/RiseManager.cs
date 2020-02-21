@@ -66,7 +66,7 @@ namespace rise.Code.Rise
                     };
 
                     var content = new FormUrlEncodedContent(values);
-                    var response = await hc.PutAsync("http://localhost:6990/api/transactions", content);
+                    var response = await hc.PutAsync("http://localhost:7777/api/transactions", content);
                     var responseString = await response.Content.ReadAsStringAsync();
                     var transaction = JsonConvert.DeserializeObject<Tx>(responseString);
 
