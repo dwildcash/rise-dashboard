@@ -659,7 +659,7 @@ namespace Rise.Services
                                   "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>";
 
                 await _botService.Client.SendTextMessageAsync(sender.TelegramId, strResponse, ParseMode.Html);
-                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("dashbord.rise.vision", "https://dashbord.rise.vision"));
+                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("dashboard.rise.vision", "https://dashboard.rise.vision"));
                 await _botService.Client.SendTextMessageAsync(sender.TelegramId, "click to open website", replyMarkup: keyboard);
             }
             catch (Exception ex)
