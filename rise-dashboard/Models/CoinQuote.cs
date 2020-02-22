@@ -1,6 +1,16 @@
 ﻿namespace rise.Models
 {
     using System;
+    using System.Collections.Generic;
+
+    public class CoinQuoteResult
+    {
+        /// <summary>
+        /// Gets or sets the Current
+        /// </summary>
+        public static List<CoinQuote> Current { get; set; }
+    }
+
 
     /// <summary>
     /// Defines the <see cref="CoinQuote" />

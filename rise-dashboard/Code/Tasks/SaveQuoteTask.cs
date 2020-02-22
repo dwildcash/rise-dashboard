@@ -5,6 +5,8 @@
     using Models;
     using Scheduling;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -44,7 +46,7 @@
                         Volume = LiveCoinQuote.Current.Volume,
                         TimeStamp = time,
                         USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * LiveCoinQuote.Current.Last
-                    };                  
+                    };
 
                     var quoteAltilly = new CoinQuote
                     {
@@ -61,7 +63,7 @@
                         Price = VinexQuote.Current.lastPrice,
                         Volume = VinexQuote.Current.baseVolume,
                         TimeStamp = time,
-                        USDPrice = Double.Parse(CoinbaseBtcQuote.Current.amount) * VinexQuote.Current.lastPrice
+                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * VinexQuote.Current.lastPrice
                     };
                     var totalVolume = quoteLivecoin.Volume + quoteAltilly.Volume + quoteVinex.Volume;
 
@@ -81,6 +83,9 @@
 
                     // Save Context in Database
                     await dbContext.SaveChangesAsync();
+
+                    // Load all Last 15 days
+                    CoinQuoteResult.Current = dbContext.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList();
                 }
             }
             catch (Exception e)

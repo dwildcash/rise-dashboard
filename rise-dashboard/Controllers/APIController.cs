@@ -37,19 +37,19 @@
         {
             try
             {
-                 Update w = JsonConvert.DeserializeObject<Update>(jsonresult.ToString());
+                Update w = JsonConvert.DeserializeObject<Update>(jsonresult.ToString());
 
                 // Return if the secret is not correct
                 if (secret != AppSettingsProvider.WebHookSecret)
                 {
                     return Unauthorized();
                 }
-                  
+
                 await _updateService.EchoAsync(w);
             }
             catch (Exception ex)
             {
-              return Ok();
+                return Ok();
             }
 
             return Ok();

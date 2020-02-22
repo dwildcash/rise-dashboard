@@ -162,7 +162,7 @@ namespace rise
             // Configure Telegram bot and bot response
             services.AddScoped<IUpdateService, UpdateService>();
 
- 
+
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>
             {
@@ -222,7 +222,6 @@ namespace rise
             //});
 
 
-
             app.UseRouting();
 
             app.UseAuthorization();
@@ -234,7 +233,7 @@ namespace rise
                 endpoints.MapControllers(); // Map attribute-routed API controllers
                 endpoints.MapDefaultControllerRoute(); // Map conventional MVC controllers using the default route
                 endpoints.MapRazorPages();
-            });      
+            });
         }
     }
 }

@@ -32,6 +32,7 @@ namespace Rise.Services
 
         public async Task EchoAsync(Update update)
         {
+            // Check if we have a message.
             if (update.Type != UpdateType.Message || update.Message.Text.Length == 0)
             {
                 return;
@@ -110,11 +111,9 @@ namespace Rise.Services
                         // Withdraw RISE to address
                         case "!WITHDRAW":
                             {
-                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), command,
-                                    lstDestAddress.Count, message.Chat.Id, appuser))
+                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), command, lstDestAddress.Count, message.Chat.Id, appuser))
                                 {
-                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count),
-                                        lstDestAddress.FirstOrDefault());
+                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), lstDestAddress.FirstOrDefault());
                                 }
 
                                 break;
@@ -131,11 +130,9 @@ namespace Rise.Services
 
                                     var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
 
-                                    if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command,
-                                        lstAppUsers.Count, message.Chat.Id, appuser))
+                                    if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
                                     {
-                                        await cmd_Send(message, appuser,
-                                            lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
                                     }
                                 }
                                 catch (Exception ex)
@@ -156,11 +153,9 @@ namespace Rise.Services
                                 var lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
 
                                 // Check before sending
-                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command,
-                                    lstAppUsers.Count, message.Chat.Id, appuser))
+                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
                                 {
-                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1),
-                                        lstAppUsers, "its Raining!!!");
+                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
                                 }
 
                                 break;
@@ -190,7 +185,7 @@ namespace Rise.Services
                                 }
                                 else
                                 {
-                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Users:" + string.Join(" ", lstDestUsers) + " were not found", ParseMode.Html);
+                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "I cant find any user.", ParseMode.Html);
                                 }
 
                                 break;
@@ -229,7 +224,7 @@ namespace Rise.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Error parsing !command {0}" + ex.Message);
+                    _logger.LogError("Error parsing !command {0}", ex.Message);
                 }
 
                 return;
@@ -253,9 +248,6 @@ namespace Rise.Services
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
                                      "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
                                      "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
-                                     "<b>!balance</b> - Show current RISE Balance" + Environment.NewLine +
-                                     //"<b>!joke</b> - Display a geek joke" + Environment.NewLine +
-                                     //"<b>!chucknorris</b> - Display a chucknorris joke" + Environment.NewLine +
                                      "<b>!hope</b> - Show hope quote" + Environment.NewLine +
                                      "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
                                      "<b>!price</b> - Show current RISE Price" + Environment.NewLine;

@@ -168,7 +168,7 @@
                         accountSummaryViewModel = new AccountSummaryViewModel
                         {
                             liveCoinQuoteResult = LiveCoinQuote.Current,
-                            coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddMinutes(-30)).ToList(),
+                            coinQuoteCol = CoinQuoteResult.Current,
                             coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                             transactionsResult = TransactionsResult.Current,
                             delegateResult = DelegateResult.Current,
@@ -184,7 +184,7 @@
                         accountSummaryViewModel = new AccountSummaryViewModel
                         {
                             liveCoinQuoteResult = LiveCoinQuote.Current,
-                            coinQuoteCol = _appdb.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList(),
+                            coinQuoteCol = CoinQuoteResult.Current,
                             coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                             transactionsResult = TransactionsResult.Current,
                             delegateResult = DelegateResult.Current,
@@ -282,7 +282,7 @@
             {
                 TransactionsViewModel transactionsViewModel = new TransactionsViewModel
                 {
-                    coinQuoteCol = _appdb.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList(),
+                    coinQuoteCol = CoinQuoteResult.Current,
                     LiveCoinQuoteResult = LiveCoinQuote.Current,
                     CoinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     DelegateResult = DelegateResult.Current
@@ -330,7 +330,7 @@
                 var tipAccountSummaryViewModel = new AccountSummaryViewModel
                 {
                     liveCoinQuoteResult = LiveCoinQuote.Current,
-                    coinQuoteCol = _appdb.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList(),
+                    coinQuoteCol = CoinQuoteResult.Current,
                     coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     transactionsResult = TransactionsResult.Current,
                     delegateResult = DelegateResult.Current,
@@ -363,7 +363,7 @@
                     transactionsResult = TransactionsResult.Current,
                     liveCoinQuoteResult = LiveCoinQuote.Current,
                     coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
-                    coinQuoteCol =  _appdb.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList()
+                    coinQuoteCol = CoinQuoteResult.Current
                 };
 
                 return PartialView("_QuotePartial", quoteViewModel);
