@@ -595,7 +595,7 @@ namespace Rise.Services
                 }
 
                 var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Pools List", "https://dashboard.rise.vision/DelegateForms"));
-                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "click to open website", replyMarkup: keyboard);
+                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "click to see more details", replyMarkup: keyboard);
             }
             catch (Exception ex)
             {
