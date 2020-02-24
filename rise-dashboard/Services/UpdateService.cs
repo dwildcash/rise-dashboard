@@ -608,8 +608,8 @@ namespace Rise.Services
 
                     if (walletAccountResult != null)
                     {
-                        double d = @Math.Round((double)mydelegate.ForgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * double.Parse(walletAccountResult.account.Balance) / ((mydelegate.VotesWeight / 100000000) + double.Parse(walletAccountResult.account.Balance)) * (double)pool.Share / 100, 3);
-                        estimateAward = " estimated dail reward:" + d + " Rise";
+                        double d = @Math.Round((double)mydelegate.ForgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * double.Parse(walletAccountResult.account.Balance) / ((mydelegate.VotesWeight / 100000000))) * (double)pool.Share / 100, 1);
+                        estimateAward = "est. daily reward:" + d + " Rise";
                     }
                    
                     await _botService.Client.SendTextMessageAsync(sender.TelegramId, "<b>" + mydelegate.Username + "</b> " + "Sharing " + "<b>" + pool.Share + "%</b> every " + pool.Payout_interval + " day " + estimateAward, ParseMode.Html);
