@@ -123,7 +123,7 @@
                                         <th align-middle data-priority="5" class="align-middle">Forging Chance</th>
                                         <th align-middle data-priority="7" class="align-middle">Percent Reward</th>
                                         <th align-middle data-priority="2" class="align-middle">Daily Estimated Payout</th>
-                                        <th align-middle data-priority="8" class="align-middle">Monthly Estimated Payout</th>
+                                        <th align-middle data-priority="8" class="align-middle">Weekly Estimated Payout</th>
                                         <th></th>
                                         <th></th>
                                     </tr>
@@ -183,7 +183,7 @@
 
                                         @if (mydelegate != null)
                                         {
-                                            <td class="align-middle"><h6><small class="text-muted">@Math.Round(mydelegate.ForgingChance, 2)%</small></h6></td>
+                                            <td class="align-middle"><h6>@Math.Round(mydelegate.ForgingChance, 2)%</h6></td>
                                         }
                                         else
                                         {
@@ -196,7 +196,7 @@
 
                                         <td class="align-middle"><h6>@Math.Round(percentVoteWeight, 2)%</h6></td>
                                         <td class="align-middle"><h6><strong>@Math.Round((double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 3)</strong></h6></td>
-                                        <td class="align-middle"><h6><strong>@Math.Round(30 * (double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 2)</strong></h6></td>
+                                        <td class="align-middle"><h6><strong>@Math.Round(7 * (double)forgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 2)</strong></h6></td>
                                         <td>
                                             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
                                             {
