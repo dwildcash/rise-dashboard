@@ -608,7 +608,7 @@ namespace Rise.Services
 
                     if (walletAccountResult != null)
                     {
-                        double d = @Math.Round((double)mydelegate.ForgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * double.Parse(walletAccountResult.account.Balance) / ((mydelegate.VotesWeight / 100000000))) * (double)pool.Share / 100, 1);
+                        double d = @Math.Round((double)mydelegate.ForgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * double.Parse(walletAccountResult.account.Balance) / (mydelegate.VotesWeight / 100000000) * (double)pool.Share / 100, 3);
                         estimateAward = "est. daily reward:" + d + " Rise";
                     }
                    
