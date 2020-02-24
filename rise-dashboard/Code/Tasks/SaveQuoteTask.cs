@@ -84,7 +84,7 @@
                     // Save Context in Database
                     await dbContext.SaveChangesAsync();
 
-                    // Load all Last 15 days
+                    // Load latest all Last 15 days
                     CoinQuoteResult.Current = dbContext.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList();
                 }
             }

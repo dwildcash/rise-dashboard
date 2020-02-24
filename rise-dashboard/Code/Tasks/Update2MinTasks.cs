@@ -37,7 +37,6 @@ namespace rise.Code.Tasks
                 VinexQuote.Current = vinexQuoteResult;
             }
 
-
             var altillyQuoteResult = await AltillyQuoteFetcher.FetchAltillyQuote();
 
             if (altillyQuoteResult != null)

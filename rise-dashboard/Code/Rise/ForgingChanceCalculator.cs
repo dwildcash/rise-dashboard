@@ -16,26 +16,7 @@
         /// </summary>
         private static List<Models.Delegate> workingDelegatesLst;
 
-        /// <summary>
-        /// Get a Random number from 1 to sum of weight
-        /// </summary>
-        /// <returns></returns>
-        private static long GenerateRandomWeight()
-        {
-            var rnd = new Random();
-            var e = RandomGenerator.NextLong(1, SumofWeight());
-            return RandomGenerator.NextLong(1, SumofWeight());
-        }
-
-        /// <summary>
-        /// Return the Sum of Weight
-        /// </summary>
-        /// <returns></returns>
-        private static long SumofWeight()
-        {
-            return workingDelegatesLst.Sum(x => x.VotesWeight);
-        }
-
+       
         public static void generateForgingStat2(DelegateResult delegateResult)
         {
             workingDelegatesLst = delegateResult.Delegates.Where(x => x.Rank <= 199).OrderBy(x => x.Rank).ToList();
@@ -90,12 +71,12 @@
                 // Generate the possibilities for 101 slot
                 for (int slot = 0; slot < 101; slot++)
                 {
-                    var randomWeight = GenerateRandomWeight();
+                    var remainingWeight = RandomGenerator.NextLong(1, workingDelegatesLst.Sum(x => x.VotesWeight));
 
                     foreach (var del in workingDelegatesLst)
                     {
-                        randomWeight -= del.VotesWeight;
-                        if (randomWeight <= 0)
+                        remainingWeight -= del.VotesWeight;
+                        if (remainingWeight <= 0)
                         {
                             // Got it!
                             delegateResult.Delegates.Where(x => x.Address == del.Address).FirstOrDefault().AddChance += 1;
