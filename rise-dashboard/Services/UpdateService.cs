@@ -95,6 +95,11 @@ namespace Rise.Services
                 {
                     switch (command.Trim())
                     {
+                        // Show Pool
+                        case "!POOL":
+                            await cmd_ShowPool(appuser);
+                            break;
+
                         // Info command
                         case "!INFO":
                             await cmd_Info(message);
@@ -243,6 +248,7 @@ namespace Rise.Services
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
 
                 var strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
+                                     "<b>!pool</b> - (List active Pools)" + Environment.NewLine +
                                      "<b>!rain</b> - !rain 10 (to random users active min 3 msg)" + Environment.NewLine +
                                      "<b>!boom</b> - !boom 10 (to all users active the in last day min 2 msg)" + Environment.NewLine +
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
@@ -445,19 +451,13 @@ namespace Rise.Services
                             {
                                 try
                                 {
-                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId,
-                                        "You received " + amountToSend + " from @" + sender.UserName,
-                                        ParseMode.Html);
-                                    var keyboard = new InlineKeyboardMarkup(
-                                        InlineKeyboardButton.WithUrl("See Transaction",
-                                            "https://explorer.rise.vision/tx/" + tx.transactionId));
-                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId,
-                                        "Transaction Id:" + tx.transactionId, replyMarkup: keyboard);
+                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);
+                                    var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction","https://explorer.rise.vision/tx/" + tx.transactionId));
+                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId,"Transaction Id:" + tx.transactionId, replyMarkup: keyboard);
                                 }
                                 catch (Exception ex)
                                 {
-                                    _logger.LogError("Received Exception from cmd_Send private Message {0}",
-                                        ex.Message);
+                                    _logger.LogError("Received Exception from cmd_Send private Message {0}", ex.Message);
                                 }
                             }
                         }
@@ -575,6 +575,29 @@ namespace Rise.Services
             }
         }
 
+
+
+        /// <summary>
+        /// Show Pools
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <returns></returns>
+        private async Task cmd_ShowPool(ApplicationUser sender)
+        {
+            try
+            {
+                await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+                foreach (var pool in _appdb.DelegateForms)
+                {
+                    var mydelegate = DelegateResult.Current.Delegates.Where(o => o.Address == pool.Address).FirstOrDefault();
+                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, mydelegate.Username + " " + "Sharing " + pool.Share + " each " + pool.Payout_interval + " day", ParseMode.Html);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_ShowUserBalance {0}", ex.Message);
+            }
+        }
 
         /// <summary>
         /// Show Rise Exchanges
