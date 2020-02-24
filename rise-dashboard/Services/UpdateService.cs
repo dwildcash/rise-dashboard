@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using rise.Code.Rise;
 using rise.Data;
 using rise.Models;
@@ -7,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
@@ -97,7 +100,7 @@ namespace Rise.Services
                     {
                         // Show Pool
                         case "!POOL":
-                            await cmd_ShowPool(appuser);
+                            await cmd_ShowPool(appuser, lstDestAddress);
                             break;
 
                         // Info command
@@ -575,23 +578,41 @@ namespace Rise.Services
             }
         }
 
-
-
         /// <summary>
         /// Show Pools
         /// </summary>
         /// <param name="sender"></param>
         /// <returns></returns>
-        private async Task cmd_ShowPool(ApplicationUser sender)
+        private async Task cmd_ShowPool(ApplicationUser sender, List<string> DestList)
         {
             try
             {
+                WalletAccountResult walletAccountResult = null;
+                string estimateAward = null;
+
                 await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+
+                if (DestList.Count > 0)
+                {
+                    using (var hc = new HttpClient())
+                    {
+                        var result = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/accounts?address=" + DestList.FirstOrDefault()));
+                        walletAccountResult = JsonConvert.DeserializeObject<WalletAccountResult>(result.ToString());
+                    }
+                }
+
+                // Show All Pool 
                 foreach (var pool in _appdb.DelegateForms)
                 {
                     var mydelegate = DelegateResult.Current.Delegates.Where(o => o.Address == pool.Address).FirstOrDefault();
-                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, "<b>" + mydelegate.Username + "</b> " + "Sharing " + "<b>" + pool.Share + "%</b> every " + pool.Payout_interval + " day", ParseMode.Html);
-                  
+
+                    if (walletAccountResult != null)
+                    {
+                        double d = @Math.Round((double)mydelegate.ForgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * double.Parse(walletAccountResult.account.Balance) / ((mydelegate.VotesWeight / 100000000) + double.Parse(walletAccountResult.account.Balance)) * (double)pool.Share / 100, 3);
+                        estimateAward = " estimated dail reward:" + d + " Rise";
+                    }
+                   
+                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, "<b>" + mydelegate.Username + "</b> " + "Sharing " + "<b>" + pool.Share + "%</b> every " + pool.Payout_interval + " day " + estimateAward, ParseMode.Html);
                 }
 
                 var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Pools List", "https://dashboard.rise.vision/DelegateForms"));
