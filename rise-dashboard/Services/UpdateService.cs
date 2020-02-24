@@ -591,10 +591,11 @@ namespace Rise.Services
                 {
                     var mydelegate = DelegateResult.Current.Delegates.Where(o => o.Address == pool.Address).FirstOrDefault();
                     await _botService.Client.SendTextMessageAsync(sender.TelegramId, "<b>" + mydelegate.Username + "</b> " + "Sharing " + "<b>" + pool.Share + "%</b> every " + pool.Payout_interval + " day", ParseMode.Html);
-
-                    var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Pools List", "https://dashboard.rise.vision/DelegateForms"));
-                    await _botService.Client.SendTextMessageAsync(sender.TelegramId, "click to open website", replyMarkup: keyboard);
+                  
                 }
+
+                var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Pools List", "https://dashboard.rise.vision/DelegateForms"));
+                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "click to open website", replyMarkup: keyboard);
             }
             catch (Exception ex)
             {
