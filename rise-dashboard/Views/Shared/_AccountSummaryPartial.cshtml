@@ -165,8 +165,8 @@
                                     </tr>
                                 }
                                 <tr>
-                                    <td>@(AppSettingsProvider.CoinName) Forged</td>
-                                    <td><h4>@mydelegate.Producedblocks</h4></td>
+                                    <td>Rise Forged</td>
+                                    <td><h4>@Model.forgedByAccount.Forged.ToString("N0")</h4></td>
                                 </tr>
                                 <tr>
                                     <td>Voters</td>
@@ -184,7 +184,7 @@
                                     <td><h4>@delegatesCount</h4></td>
                                 </tr>
                                 <tr>
-                                    <td>Blocks</td>
+                                    <td>Produced Blocks</td>
                                     <td><h4>@(mydelegate.Producedblocks.ToString("N0")) <span class="muted text-sm"> [@(mydelegate.Missedblocks) missed]</span></h4></td>
                                 </tr>
                             </table>
