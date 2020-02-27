@@ -62,12 +62,7 @@
                                 TotalTransactions += tx.Count();
                                 TotalAmountTransactions += tx.Sum(x => x.amount / 100000000);                       
 
-                                if (tx == null)
-                                {
-                                    dbContext.Users.Remove(account);
-                                    dbContext.SaveChanges();
-                                }
-                                else if (tx.Sum(x => x.amount / 100000000) == 0 && account.UserName == null)
+                                if (tx == null && account.UserName == null)
                                 {
                                     writetext.WriteLine("Account:" + account.TelegramId + " balance:" + tx.Sum(x => x.amount / 100000000));
                                     dbContext.Users.Remove(account);
