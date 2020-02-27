@@ -34,7 +34,7 @@
         /// <returns>The <see cref="Task"/></returns>
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            using (StreamWriter writetext = new StreamWriter("cleanlog_"  + DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss") + ".log"))
+            using (StreamWriter writetext = new StreamWriter("cleanlog_"  + DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH''mm''ss") + ".log"))
             {
                 try
                 {
@@ -60,21 +60,19 @@
                                 TotalBalance += await RiseManager.AccountBalanceAsync(account.Address);
                                 var tx = TransactionsFetcher.FetchAllUserTransactions(account.Address).Result.transactions.ToList();
                                 TotalTransactions += tx.Count();
-                                TotalAmountTransactions += tx.Sum(x => x.amount / 100000000);
-                            }
+                                TotalAmountTransactions += tx.Sum(x => x.amount / 100000000);                       
 
-                            if (TotalAmountTransactions == 0)
-                            {
-                                writetext.WriteLine("Account:" + account.TelegramId + " balance:" + TotalAmountTransactions);
+                                if (tx.Sum(x => x.amount / 100000000) == 0)
+                                {
+                                    writetext.WriteLine("Account:" + account.TelegramId + " balance:" + TotalAmountTransactions);
+                                }
                             }
                         }
 
                         TipAccountStats.TotalBalance = TotalBalance;
                         TipAccountStats.TotalTransactions = TotalTransactions;
                         TipAccountStats.TotalAmountTransactions = TotalAmountTransactions;
-                        TipAccountStats.LastGenerated = DateTime.Now;
-
-          
+                        TipAccountStats.LastGenerated = DateTime.Now;        
                     }
                 }
                 catch (Exception e)
