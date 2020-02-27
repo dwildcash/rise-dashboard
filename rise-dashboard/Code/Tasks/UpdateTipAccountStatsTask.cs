@@ -20,7 +20,7 @@
         /// <summary>
         /// Gets the Schedule
         /// </summary>
-        public string Schedule => "*/10 * * * *";
+        public string Schedule => "*/20 * * * *";
 
         /// <summary>
         /// Defines the scopeFactory
@@ -65,13 +65,12 @@
                                 if (tx.Sum(x => x.amount / 100000000) == 0 && account.UserName == "")
                                 {
                                     writetext.WriteLine("Account:" + account.TelegramId + " balance:" + tx.Sum(x => x.amount / 100000000));
-                                    dbContext.Remove(account);
+                                    dbContext.Users.Remove(account);
+                                    dbContext.SaveChanges();
                                 }
                             }
                         }
-
-                        dbContext.SaveChanges();
-
+                    
                         TipAccountStats.TotalBalance = TotalBalance;
                         TipAccountStats.TotalTransactions = TotalTransactions;
                         TipAccountStats.TotalAmountTransactions = TotalAmountTransactions;
