@@ -7,6 +7,7 @@
     using rise.Code.Rise;
     using Scheduling;
     using System;
+    using System.IO;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -33,43 +34,54 @@
         /// <returns>The <see cref="Task"/></returns>
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            try
+            using (StreamWriter writetext = new StreamWriter("cleanlog_"  + DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss") + ".log"))
             {
-                using (var scope = _scopeFactory.CreateScope())
+                try
                 {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                    var UsersLst = dbContext.ApplicationUsers.ToList<ApplicationUser>();
-                    TipAccountStats.UsersCount = UsersLst.Count();
-
-                    // List all account address
-                    TipAccountStats.AddressLst = dbContext.ApplicationUsers.Select(x => x.Address).ToList();
-
-                    // Reset the balance
-                    double TotalBalance = 0;
-                    int TotalTransactions = 0;
-                    long TotalAmountTransactions = 0;
-
-                    foreach (var account in UsersLst)
+                    using (var scope = _scopeFactory.CreateScope())
                     {
-                        if (account.Address != null)
-                        {
-                            TotalBalance += await RiseManager.AccountBalanceAsync(account.Address);
-                            var tx = TransactionsFetcher.FetchAllUserTransactions(account.Address).Result.transactions.ToList();
-                            TotalTransactions += tx.Count();
-                            TotalAmountTransactions += tx.Sum(x => x.amount / 100000000);
-                        }
-                    }
+                        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                    TipAccountStats.TotalBalance = TotalBalance;
-                    TipAccountStats.TotalTransactions = TotalTransactions;
-                    TipAccountStats.TotalAmountTransactions = TotalAmountTransactions;
-                    TipAccountStats.LastGenerated = DateTime.Now;
+                        var UsersLst = dbContext.ApplicationUsers.ToList<ApplicationUser>();
+                        TipAccountStats.UsersCount = UsersLst.Count();
+
+                        // List all account address
+                        TipAccountStats.AddressLst = dbContext.ApplicationUsers.Select(x => x.Address).ToList();
+
+                        // Reset the balance
+                        double TotalBalance = 0;
+                        int TotalTransactions = 0;
+                        long TotalAmountTransactions = 0;
+
+                        foreach (var account in UsersLst)
+                        {
+                            if (account.Address != null)
+                            {
+                                TotalBalance += await RiseManager.AccountBalanceAsync(account.Address);
+                                var tx = TransactionsFetcher.FetchAllUserTransactions(account.Address).Result.transactions.ToList();
+                                TotalTransactions += tx.Count();
+                                TotalAmountTransactions += tx.Sum(x => x.amount / 100000000);
+                            }
+
+                            if (TotalAmountTransactions == 0)
+                            {
+                                writetext.WriteLine("Account:" + account.TelegramId + " balance:" + TotalAmountTransactions);
+                            }
+                        }
+
+                        TipAccountStats.TotalBalance = TotalBalance;
+                        TipAccountStats.TotalTransactions = TotalTransactions;
+                        TipAccountStats.TotalAmountTransactions = TotalAmountTransactions;
+                        TipAccountStats.LastGenerated = DateTime.Now;
+
+          
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.InnerException);
+                catch (Exception e)
+                {
+                    Console.Write(e.InnerException);
+                }
+             
             }
         }
 
