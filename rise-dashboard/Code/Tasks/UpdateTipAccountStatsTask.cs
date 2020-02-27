@@ -62,12 +62,15 @@
                                 TotalTransactions += tx.Count();
                                 TotalAmountTransactions += tx.Sum(x => x.amount / 100000000);                       
 
-                                if (tx.Sum(x => x.amount / 100000000) == 0)
+                                if (tx.Sum(x => x.amount / 100000000) == 0 && account.UserName == "")
                                 {
                                     writetext.WriteLine("Account:" + account.TelegramId + " balance:" + tx.Sum(x => x.amount / 100000000));
+                                    dbContext.Remove(account);
                                 }
                             }
                         }
+
+                        dbContext.SaveChanges();
 
                         TipAccountStats.TotalBalance = TotalBalance;
                         TipAccountStats.TotalTransactions = TotalTransactions;
