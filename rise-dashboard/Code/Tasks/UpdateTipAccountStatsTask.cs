@@ -64,7 +64,7 @@
 
                                 if (tx.Sum(x => x.amount / 100000000) == 0)
                                 {
-                                    writetext.WriteLine("Account:" + account.TelegramId + " balance:" + TotalAmountTransactions);
+                                    writetext.WriteLine("Account:" + account.TelegramId + " balance:" + tx.Sum(x => x.amount / 100000000));
                                 }
                             }
                         }
