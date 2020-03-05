@@ -723,17 +723,16 @@ namespace Rise.Services
                                   "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
                                   "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
                                   "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
-                                  "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
                                   "<b>Rise Dashboard</b> - https://dashboard.rise.vision" + Environment.NewLine +
+                                  "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +                              
                                   "<b>Rise Force Game</b> - http://riseforce.io/" + Environment.NewLine +
                                   "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                                   "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
                                   "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
                                   "<b>Rise Slack</b> - https://risevision.slack.com/" + Environment.NewLine +
-                                  "<b>Rise Discord</b> - https://discord.gg/6jyWQnJ" + Environment.NewLine +
                                   "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
                                   "<b>Rise Intro Youtube</b> - https://www.youtube.com/watch?v=wZ2vIGl_gCM&feature=youtu.be" + Environment.NewLine +
-                                  "<b>Rise Telegram Tipping service</b> -!help";
+                                  "<b>Rise Telegram Tipping service</b> - type !help";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
