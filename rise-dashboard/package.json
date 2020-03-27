@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@aspnet/signalr": "^1.1.4",
-    "@fortawesome/fontawesome-free": "^5.12.1",
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "admin-lte": "^3.0.2",
     "animate.css": "^3.7.2",
     "bootstrap": "^4.4.1",
@@ -30,7 +30,7 @@
     "jquery-sparkline": "^2.4.0",
     "jquery-ui-dist": "^1.12.1",
     "jquery-ui-touch-punch": "^0.2.3",
-    "jvectormap-next": "^3.1.0",
+    "jvectormap-next": "^3.1.1",
     "pace-js": "^1.0.2",
     "pe7-icon": "^1.0.4",
     "popper.js": "^1.16.1",
