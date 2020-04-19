@@ -11,7 +11,7 @@
   "dependencies": {
     "@aspnet/signalr": "^1.1.4",
     "@fortawesome/fontawesome-free": "^5.13.0",
-    "admin-lte": "^3.0.2",
+    "admin-lte": "^3.0.4",
     "animate.css": "^3.7.2",
     "bootstrap": "^4.4.1",
     "bootstrap4": "0.0.1-security",
@@ -25,7 +25,7 @@
     "del": "^3.0.0",
     "gulp": "^4.0.2",
     "ionicons": "^4.6.3",
-    "jquery": "^3.4.0",
+    "jquery": "^3.5.0",
     "jquery-knob": "^1.2.11",
     "jquery-sparkline": "^2.4.0",
     "jquery-ui-dist": "^1.12.1",
@@ -35,5 +35,6 @@
     "pe7-icon": "^1.0.4",
     "popper.js": "^1.16.1",
     "tempusdominus-core": "^5.0.3"
-  }
+  },
+  "devDependencies": {}
 }
