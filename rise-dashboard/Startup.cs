@@ -56,9 +56,7 @@ namespace rise
             AppSettingsProvider.APIUrl = Configuration["AppSettings:APIUrl"];
             AppSettingsProvider.SiteUrl = Configuration["AppSettings:SiteUrl"];
             AppSettingsProvider.IPStackApiKey = Configuration["AppSettings:IPStackApiKey"];
-            AppSettingsProvider.AltillyMarket = Configuration["AppSettings:AltillyMarket"];
             AppSettingsProvider.LiveCoinMarket = Configuration["AppSettings:LiveCoinMarket"];
-            AppSettingsProvider.VinexMarket = Configuration["AppSettings:VinexMarket"];
             AppSettingsProvider.CoinMarketCapTickerCode = Configuration["AppSettings:CoinMarketCapTickerCode"];
             AppSettingsProvider.CoinName = Configuration["AppSettings:CoinName"];
             AppSettingsProvider.CoinRewardDay = int.Parse(Configuration["AppSettings:CoinRewardDay"]);
@@ -67,8 +65,6 @@ namespace rise
             AppSettingsProvider.CoinExplorer = Configuration["AppSettings:CoinExplorer"];
             AppSettingsProvider.DonationAddress = Configuration["AppSettings:DonationAddress"];
             AppSettingsProvider.LiveCoinWalletAddress = Configuration["AppSettings:LiveCoinWalletAddress"];
-            AppSettingsProvider.AltillyWalletAddress = Configuration["AppSettings:AltillyWalletAddress"];
-            AppSettingsProvider.VinexWalletAddress = Configuration["AppSettings:VinexWalletAddress"];
             AppSettingsProvider.SimulateRoundCount = int.Parse(Configuration["AppSettings:SimulateRoundCount"]);
             AppSettingsProvider.MaxTransactionsToFetch = int.Parse(Configuration["AppSettings:MaxTransactionsToFetch"]);
             AppSettingsProvider.BotApiKey = Configuration["AppSettings:BotApiKey"];

@@ -81,15 +81,6 @@
         /// </summary>
         public static string LiveCoinMarket { get; set; }
 
-        /// <summary>
-        /// Get or sets AltillyMarket
-        /// </summary>
-        public static string AltillyMarket { get; set; }
-
-        /// <summary>
-        /// Get or sets VinexMarket
-        /// </summary>
-        public static string VinexMarket { get; set; }
 
         /// <summary>
         /// Gets or sets the APIUrl
@@ -112,16 +103,6 @@
         /// </summary>
         public static string LiveCoinWalletAddress { get; set; }
 
-        /// <summary>
-        /// Get or set the VinexWalletAddress
-        /// </summary>
-        public static string VinexWalletAddress { get; set; }
-
-
-        /// <summary>
-        /// Get or set for Altilly Address
-        /// </summary>
-        public static string AltillyWalletAddress { get; set; }
 
         /// <summary>
         /// Secret used for Telegram webhook

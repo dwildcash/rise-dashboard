@@ -188,28 +188,6 @@
             return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "All").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
         }
 
-
-        /// <summary>
-        /// return Last Vinex Quote
-        /// </summary>
-        /// <returns></returns>
-        public CoinQuote LastVinexQuote()
-        {
-            var r = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Vinex").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
-
-            return r == null ? r : DefaultQuote();
-        }
-
-        /// <summary>
-        /// Return last Altilly Quote
-        /// </summary>
-        /// <returns></returns>
-        public CoinQuote LastAltillyQuote()
-        {
-            var r = coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Altilly").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
-            return r == null ? r : DefaultQuote();
-        }
-
         /// <summary>
         /// Return last LiveCoin Quote
         /// </summary>
