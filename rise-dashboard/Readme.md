@@ -51,7 +51,6 @@ Trust me all secrets below wont work... found below please use your own.
     "CoinRewardDay": 345,
     "CoinMarketCapTickerCode": "1294",
     "LiveCoinMarket": "RISE/BTC",
-    "VinexMarket": "BTC_RISE",
     "LiveCoinWalletAddress": "5920507067941756798R",
     "IPStackApiKey": "putapikey",
     "DonationAddress": "5556972430134253533R",
