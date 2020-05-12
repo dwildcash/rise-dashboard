@@ -634,32 +634,13 @@ namespace Rise.Services
         {
             try
             {
-                double volAltilly = 0;
-                double priceAltilly = 0;
 
                 double volLivecoin = 0;
                 double priceLivecoin = 0;
 
-                double volVinex = 0;
-                double priceVinex = 0;
-
                 coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
 
-                var quoteAltilly = LastAltillyQuote();
-                var quoteVinex = LastVinexQuote();
                 var quoteLivecoin = LastLiveCoinQuote();
-
-                if (quoteAltilly != null)
-                {
-                    volAltilly = Math.Round(quoteAltilly.Volume);
-                    priceAltilly = Math.Round(quoteAltilly.Price * 100000000);
-                }
-
-                if (quoteVinex != null)
-                {
-                    volVinex = Math.Round(quoteVinex.Volume);
-                    priceVinex = Math.Round(quoteVinex.Price * 100000000);
-                }
 
                 if (quoteLivecoin != null)
                 {
@@ -669,9 +650,7 @@ namespace Rise.Services
 
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                  "<b>Altilly</b> - https://altilly.com  (24h V:" + volAltilly.ToString("N0") + " - Price:" + priceAltilly + ")" + Environment.NewLine +
-                                  "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")" + Environment.NewLine +
-                                  "<b>Vinex</b> - https://vinex.network (24h V:" + volVinex.ToString("N0") + " - Price:" + priceVinex + ")";
+                                  "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)

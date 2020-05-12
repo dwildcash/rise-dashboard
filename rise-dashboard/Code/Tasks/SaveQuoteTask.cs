@@ -48,37 +48,18 @@
                         USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * LiveCoinQuote.Current.Last
                     };
 
-                    var quoteAltilly = new CoinQuote
-                    {
-                        Exchange = "Altilly",
-                        Price = double.Parse(AltillyQuote.Current.last),
-                        Volume = double.Parse(AltillyQuote.Current.volume),
-                        TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * (double.Parse(AltillyQuote.Current.last) / 100000000)
-                    };
-
-                    var quoteVinex = new CoinQuote
-                    {
-                        Exchange = "Vinex",
-                        Price = VinexQuote.Current.lastPrice,
-                        Volume = VinexQuote.Current.baseVolume,
-                        TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * VinexQuote.Current.lastPrice
-                    };
-                    var totalVolume = quoteLivecoin.Volume + quoteAltilly.Volume + quoteVinex.Volume;
+                    var totalVolume = quoteLivecoin.Volume;
 
                     var quoteAllWeighted = new CoinQuote
                     {
                         Exchange = "All",
-                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume),
+                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume),
                         Volume = totalVolume,
                         TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteAltilly.Price * quoteAltilly.Volume / totalVolume) + (quoteVinex.Price * quoteVinex.Volume / totalVolume))
+                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume))
                     };
 
                     dbContext.CoinQuotes.Add(quoteLivecoin);
-                    dbContext.CoinQuotes.Add(quoteAltilly);
-                    dbContext.CoinQuotes.Add(quoteVinex);
                     dbContext.CoinQuotes.Add(quoteAllWeighted);
 
                     // Save Context in Database

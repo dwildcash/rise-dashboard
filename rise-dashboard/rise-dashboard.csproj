@@ -39,6 +39,50 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\css\bootstrap.min.css" />
+    <Content Remove="wwwroot\css\all.css" />
+    <Content Remove="wwwroot\css\jquery-ui.min.css" />
+    <Content Remove="wwwroot\css\responsive.bootstrap4.min.css" />
+    <Content Remove="wwwroot\css\pe-icon-7-stroke.min.css" />
+    <Content Remove="wwwroot\css\fixedHeader.bootstrap4.min.css" />
+    <Content Remove="wwwroot\css\dataTables.bootstrap4.css" />
+    <Content Remove="wwwroot\css\responsive.bootstrap4.css" />
+    <Content Remove="wwwroot\css\adminlte.min.css" />
+    <Content Remove="wwwroot\css\dataTables.bootstrap4.min.css" />
+    <Content Remove="wwwroot\css\ionicons.min.css" />
+    <Content Remove="wwwroot\css\jquery-jvectormap.css" />
+    <Content Remove="wwwroot\js\dataTables.responsive.min.js" />
+    <Content Remove="wwwroot\js\dataTables.bootstrap4.min.js" />
+    <Content Remove="wwwroot\js\pace.min.js" />
+    <Content Remove="wwwroot\js\responsive.bootstrap4.js" />
+    <Content Remove="wwwroot\js\jquery-jvectormap.min.js" />
+    <Content Remove="wwwroot\js\jquery-ui.min.js" />
+    <Content Remove="wwwroot\js\Chart.min.js" />
+    <Content Remove="wwwroot\js\all.js" />
+    <Content Remove="wwwroot\js\dataTables.bootstrap4.js" />
+    <Content Remove="wwwroot\js\responsive.bootstrap4.min.js" />
+    <Content Remove="wwwroot\js\adminlte.min.js" />
+    <Content Remove="wwwroot\js\bootstrap.bundle.min.js" />
+    <Content Remove="wwwroot\js\dataTables.responsive.js" />
+    <Content Remove="wwwroot\js\jquery.ui.touch-punch.min.js" />
+    <Content Remove="wwwroot\js\jquery.min.js" />
+    <Content Remove="wwwroot\js\jquery.dataTables.min.js" />
+    <Content Remove="wwwroot\js\fixedHeader.bootstrap4.min.js" />
+    <Content Remove="wwwroot\js\jquery.knob.min.js" />
+    <Content Remove="wwwroot\js\jquery.dataTables.js" />
+    <Content Remove="wwwroot\js\jquery.sparkline.min.js" />
+    <Content Remove="wwwroot\js\signalr.min.js" />
+    <Content Remove="wwwroot\fonts\Pe-icon-7-stroke.woff" />
+    <Content Remove="wwwroot\fonts\ionicons.eot" />
+    <Content Remove="wwwroot\fonts\ionicons.woff" />
+    <Content Remove="wwwroot\fonts\Pe-icon-7-stroke.eot" />
+    <Content Remove="wwwroot\fonts\ionicons.ttf" />
+    <Content Remove="wwwroot\fonts\Pe-icon-7-stroke.ttf" />
+    <Content Remove="wwwroot\fonts\ionicons.svg" />
+    <Content Remove="wwwroot\fonts\Pe-icon-7-stroke.svg" />
+    <Content Remove="wwwroot\fonts\ionicons.woff2" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="Views\Shared\_AccountSummaryPartial.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

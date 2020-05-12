@@ -45,15 +45,10 @@
     var USDPricePercentchange = Math.Round(Model.USDPricePercentChange(1), 2);
 
     var livecoin = Math.Round(Model.LastLiveCoinQuote().Volume);
-    var vinex = Math.Round(Model.LastVinexQuote().Volume);
-    var altilly = Math.Round(Model.LastAltillyQuote().Volume);
 
-    var toAltilly = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.AltillyWalletAddress);
-    var fromAltilly = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() &&  x.senderId == AppSettingsProvider.AltillyWalletAddress);
     var toLiveCoin = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
     var fromLiveCoin = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.LiveCoinWalletAddress);
-    var toVinex = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == "2644104824710583527R");
-    var fromVinex = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.VinexWalletAddress);
+  
 }
 
 <script type="text/javascript">
@@ -62,11 +57,11 @@
     var ctx = canvas.getContext('2d');
     Chart.defaults.global.title = 'Volume';
     var data = {
-        labels: ["LiveCoin - " + @livecoin, "Vinex - " + @vinex, "Altilly - " + @altilly],
+        labels: ["LiveCoin - " + @livecoin],
         datasets: [{
             label: "Exchanges Volume 24H",
             backgroundColor: ["#36a2eb", "#ffce56", "#7df442", "#cc65fe", "#ff6384"],
-            data: [@Html.Raw(livecoin + "," + vinex + "," + altilly)]
+            data: [@Html.Raw(livecoin)]
         }]
     };
 
@@ -97,9 +92,7 @@
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         };
 
-        var dataPack1 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Vinex").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack2 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "LiveCoin").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
-        var dataPack4 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Altilly").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
 
         var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
@@ -128,29 +121,11 @@
             labels: dates,
             datasets: [
                 {
-                    label: 'Vinex',
-                    yAxisID: "volume",
-                    data: dataPack1,
-                    backgroundColor: gradient2,
-                    hoverBackgroundColor: gradient2,
-                    hoverBorderWidth: 2,
-                    hoverBorderColor: 'purple'
-                },
-                {
                 label: 'LiveCoin',
                     yAxisID: "volume",
                     data: dataPack2,
                     backgroundColor: gradient1,
 					hoverBackgroundColor: gradient1,
-                    hoverBorderWidth: 2,
-                    hoverBorderColor: 'lightgrey'
-                },
-                {
-                label: 'Altilly',
-                    yAxisID: "volume",
-                    data: dataPack4,
-                    backgroundColor: gradient3,
-                    hoverBackgroundColor: gradient3,
                     hoverBorderWidth: 2,
                     hoverBorderColor: 'lightgrey'
                 },
@@ -358,60 +333,4 @@
             </div>
         </div>
     </div>
-
-    <div class="col-sm-3 grid-margin stretch-card">
-        <div class="box card">
-            <div class="card-body">
-                <div class="d-flex justify-content-center">
-                    <div align="center">
-                        <img src="~/img/vinex.png" alt="vinex" class="img-circle img-size-32 mr-2">
-                        <div><a href="https://vinex.network/">Vinex</a></div>
-                    </div>
-                    <div class="d-flex flex-column ml-4">
-                        <span class="d-flex flex-column">
-                            <p class="mb-0">Deposit</p>
-                            <p class="font-weight-bold">@toVinex.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                        </span>
-                        <small class="text-muted">On <b>@toVinex.Count()</b> Tx</small>
-                    </div>
-                    <div class="d-flex flex-column ml-4">
-                        <span class="d-flex flex-column">
-                            <p class="mb-0">Withdraw</p>
-                            <p class="font-weight-bold">@fromVinex.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                        </span>
-                        <small class="text-muted">On <b>@fromVinex.Count()</b> Tx</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-3 grid-margin stretch-card">
-        <div class="box card">
-            <div class="card-body">
-                <div class="d-flex justify-content-center">
-                    <div align="center">
-                        <img src="~/img/altilly.png" alt="altilly" class="img-circle img-size-32 mr-2">
-                        <div> <a href="https://www.altilly.com/">Altilly</a></div>
-                    </div>
-                    <div class="d-flex flex-column ml-4">
-                        <span class="d-flex flex-column">
-                            <p class="mb-0">Deposit</p>
-                            <p class="font-weight-bold">@toAltilly.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                        </span>
-
-                        <small class="text-muted">On <b>@toAltilly.Count()</b> Tx</small>
-                    </div>
-                    <div class="d-flex flex-column ml-4">
-                        <span class="d-flex flex-column">
-                            <p class="mb-0">Withdraw</p>
-                            <p class="font-weight-bold">@fromAltilly.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                        </span>
-                        <small class="text-muted">On <b>@fromAltilly.Count()</b> Tx</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>

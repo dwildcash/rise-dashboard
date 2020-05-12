@@ -30,20 +30,6 @@ namespace rise.Code.Tasks
                 LiveCoinQuote.Current = liveCoinQuoteResult;
             }
 
-            var vinexQuoteResult = await VinexQuoteFetcher.FetchVinexCoinQuote();
-
-            if (vinexQuoteResult != null)
-            {
-                VinexQuote.Current = vinexQuoteResult;
-            }
-
-            var altillyQuoteResult = await AltillyQuoteFetcher.FetchAltillyQuote();
-
-            if (altillyQuoteResult != null)
-            {
-                AltillyQuote.Current = altillyQuoteResult;
-            }
-
             var coinbaseBtcQuoteResult = await CoinbaseBtcFetcher.FetchCoinbaseBtcQuote();
 
             if (coinbaseBtcQuoteResult != null)
