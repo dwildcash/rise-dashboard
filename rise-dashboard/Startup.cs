@@ -101,6 +101,9 @@ namespace rise
                     .AllowAnyHeader());
             });
 
+
+            services.AddControllersWithViews();
+
             // DB for aspnet
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=apps.db"));
 
