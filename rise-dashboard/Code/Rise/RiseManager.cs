@@ -53,6 +53,7 @@ namespace rise.Code.Rise
         /// <returns></returns>
         public static async Task<Tx> CreatePaiment(double amount, string secret, string recipiendId)
         {
+  
             try
             {
                 // Create Paiment
@@ -76,7 +77,9 @@ namespace rise.Code.Rise
             catch (Exception e)
             {
                 Console.Write("Error Creating Transaction Amount:" + amount + " recipientId " + recipiendId + " Exception:" + e.Message);
-                return null;
+                var tx = new Tx();
+                tx.success = false;
+                return tx;
             }
         }
 

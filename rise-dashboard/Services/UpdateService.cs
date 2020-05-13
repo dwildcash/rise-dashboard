@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -450,7 +451,9 @@ namespace Rise.Services
                         {
                             var secret = sender.GetSecret();
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            if (destusers.Count <= 15 && tx.success)
+                            Thread.Sleep(2);
+
+                            if (destusers.Count <= 15 && tx !=null && tx.success)
                             {
                                 try
                                 {
