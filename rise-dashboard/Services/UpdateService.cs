@@ -193,7 +193,7 @@ namespace Rise.Services
                                 }
                                 else
                                 {
-                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "I cant find any user.", ParseMode.Html);
+                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provid a valid user.", ParseMode.Html);
                                 }
 
                                 break;
@@ -252,8 +252,8 @@ namespace Rise.Services
 
                 var strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
                                      "<b>!pool</b> - (List active Pools)" + Environment.NewLine +
-                                     "<b>!rain</b> - !rain 10 (to random users active min 3 msg)" + Environment.NewLine +
-                                     "<b>!boom</b> - !boom 10 (to all users active the in last day min 2 msg)" + Environment.NewLine +
+                                     "<b>!rain</b> - !rain 10 (to any random users active min 3 msg)" + Environment.NewLine +
+                                     "<b>!boom</b> - !boom 10 (to all users active in the last day with min of 2 msg)" + Environment.NewLine +
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
                                      "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
                                      "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
