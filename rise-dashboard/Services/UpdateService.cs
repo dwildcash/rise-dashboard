@@ -451,7 +451,7 @@ namespace Rise.Services
                         {
                             var secret = sender.GetSecret();
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            Thread.Sleep(2);
+                            Thread.Sleep(500);
 
                             if (destusers.Count <= 15 && tx !=null && tx.success)
                             {
@@ -641,6 +641,9 @@ namespace Rise.Services
                 double volLivecoin = 0;
                 double priceLivecoin = 0;
 
+                double volXtcom = 0;
+                double priceXtcom = 0;
+
                 coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
 
                 var quoteLivecoin = LastLiveCoinQuote();
@@ -653,7 +656,8 @@ namespace Rise.Services
 
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                  "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")";
+                                "<b>Xt.com</b> - https://www.xt.com (RISE/USDT)"+
+                                "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)

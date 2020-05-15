@@ -30,6 +30,13 @@ namespace rise.Code.Tasks
                 LiveCoinQuote.Current = liveCoinQuoteResult;
             }
 
+            var XtcomQuoteResult = await XtcomQuoteFetcher.FetchXtcomQuote();
+
+            if (XtcomQuoteResult != null)
+            {
+                XtcomQuoteResult.Current = XtcomQuoteResult;
+            }
+
             var coinbaseBtcQuoteResult = await CoinbaseBtcFetcher.FetchCoinbaseBtcQuote();
 
             if (coinbaseBtcQuoteResult != null)
