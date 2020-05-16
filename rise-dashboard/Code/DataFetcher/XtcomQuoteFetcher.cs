@@ -22,7 +22,7 @@
                     var quote = JObject.Parse(await hc.GetStringAsync("https://kline.xt.com/api/data/v1/ticker?marketName=RISE_USDT"));
                     var xtcomQuoteResult = JsonConvert.DeserializeObject<XtcomQuoteResult>(quote.ToString());
 
-                    if (xtcomQuoteResult.resMsg.message == "success")
+                    if (xtcomQuoteResult.resMsg.message.StartsWith("success"))
                     {
                         return xtcomQuoteResult;
                     }
