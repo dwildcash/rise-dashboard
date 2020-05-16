@@ -58,7 +58,7 @@
     var ctx = canvas.getContext('2d');
     Chart.defaults.global.title = 'Volume';
         var data = {
-            labels: ["LiveCoin - " + @Math.Round(livecoin.Volume) + " - " + @Math.Round(livecoin.Price * 100000000) , "Xt.com - " + @Math.Round(Xtcom.Volume * 100000000) + " - " + @Math.Round(Xtcom.Price)],
+            labels: ["LiveCoin - " + @Math.Round(livecoin.Volume) + " - " + @Math.Round(livecoin.Price * 100000000) , "Xt.com - " + @Math.Round(Xtcom.Volume) + " - " + @Math.Round(Xtcom.Price * 100000000)],
         datasets: [{
             label: "Exchanges Volume 24H",
             backgroundColor: ["#36a2eb", "#ffce56", "#7df442", "#cc65fe", "#ff6384"],
