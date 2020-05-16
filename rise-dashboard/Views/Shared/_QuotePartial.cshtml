@@ -45,23 +45,24 @@
     var USDPricePercentchange = Math.Round(Model.USDPricePercentChange(1), 2);
 
     var livecoin = Math.Round(Model.LastLiveCoinQuote().Volume);
+    var Xtcom = Math.Round(Model.LastXtcomQuote().Volume);
 
     var toLiveCoin = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
     var fromLiveCoin = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.LiveCoinWalletAddress);
 
 }
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
     var canvas = document.getElementById("pieChart");
     var ctx = canvas.getContext('2d');
     Chart.defaults.global.title = 'Volume';
     var data = {
-        labels: ["LiveCoin - " + @livecoin],
+        labels: ["LiveCoin - " + @livecoin, "Xt.com - " + @Xtcom],
         datasets: [{
             label: "Exchanges Volume 24H",
             backgroundColor: ["#36a2eb", "#ffce56", "#7df442", "#cc65fe", "#ff6384"],
-            data: [@Html.Raw(livecoin)]
+            data: [@Html.Raw(livecoin + "," + Xtcom)]
         }]
     };
 
@@ -83,7 +84,7 @@
         data: data,
         options: options
     });
-</script>
+    </script>
 
 <script type="text/javascript">
 
@@ -94,6 +95,7 @@
 
         var dataPack2 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "LiveCoin").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
         var dataPack3 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "All").Select(x => "\"" + Math.Round(x.Price * 100000000) + "\"").ToList()))];
+        var dataPack4 = [@Html.Raw(string.Join(",", CoinQuoteMonth.Where(x => x.Exchange == "Xt.com").Select(x => "\"" + Math.Round(x.Volume) + "\"").ToList()))];
 
         var dates = [@Html.Raw(string.Join(",", CoinQuoteMonth.Select(x => "\"" + x.TimeStamp.ToShortDateString() + "\"").Distinct()))];
 
@@ -120,6 +122,15 @@
         data: {
             labels: dates,
             datasets: [
+                {
+                    label: 'Xt.com',
+                    yAxisID: "volume",
+                    data: dataPack4,
+                    backgroundColor: gradient2,
+                    hoverBackgroundColor: gradient2,
+                    hoverBorderWidth: 2,
+                    hoverBorderColor: 'purple'
+                },
                 {
                 label: 'LiveCoin',
                     yAxisID: "volume",
@@ -297,9 +308,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="col-sm-3 grid-margin stretch-card">
         <div class="box card">
             <div class="card-body">
                 <div class="d-flex justify-content-center">

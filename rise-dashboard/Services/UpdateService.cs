@@ -647,6 +647,7 @@ namespace Rise.Services
                 coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
 
                 var quoteLivecoin = LastLiveCoinQuote();
+                var quoteXtcom = LastXtcomQuote();
 
                 if (quoteLivecoin != null)
                 {
@@ -654,10 +655,16 @@ namespace Rise.Services
                     priceLivecoin = Math.Round(quoteLivecoin.Price * 100000000);
                 }
 
+                if (quoteXtcom != null)
+                {
+                    volXtcom = Math.Round(quoteXtcom.Volume);
+                    priceXtcom = Math.Round(quoteXtcom.Price * 100000000);
+                }
+
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                "<b>Xt.com</b> - https://www.xt.com (RISE/USDT)"+
-                                "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + ")";
+                                "<b>Xt.com</b> - https://www.xt.com (24h V:" + volXtcom.ToString("N0") + " - Price:" + priceXtcom + " sat)" +
+                                "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + " sat)";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
@@ -705,20 +712,19 @@ namespace Rise.Services
             {
                 var strResponse = "<b>Rise Information/Tools</b>" + Environment.NewLine +
                                   "<b>Rise Website</b> - https://rise.vision" + Environment.NewLine +
+                                  "<b>Rise Dashboard</b> - https://dashboard.rise.vision" + Environment.NewLine +
                                   "<b>Rise RoadMap</b> - https://rise.vision/roadmap/" + Environment.NewLine +
                                   "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
                                   "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
-                                  "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
-                                  "<b>Rise Dashboard</b> - https://dashboard.rise.vision" + Environment.NewLine +
+                                  "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine + 
                                   "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +                              
-                                  "<b>Rise Force Game</b> - http://riseforce.io/" + Environment.NewLine +
                                   "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                                   "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
                                   "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
                                   "<b>Rise Slack</b> - https://risevision.slack.com/" + Environment.NewLine +
                                   "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
                                   "<b>Rise Intro Youtube</b> - https://www.youtube.com/watch?v=wZ2vIGl_gCM&feature=youtu.be" + Environment.NewLine +
-                                  "<b>Rise Telegram Tipping service</b> - type !help";
+                                  "<b>Rise Telegram Tipping Bot</b> - type !help";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)

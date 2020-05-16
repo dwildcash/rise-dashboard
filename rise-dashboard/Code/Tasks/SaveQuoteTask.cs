@@ -48,18 +48,28 @@
                         USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * LiveCoinQuote.Current.Last
                     };
 
-                    var totalVolume = quoteLivecoin.Volume;
+                    var quoteXtcom = new CoinQuote
+                    {
+                        Exchange = "Xt.com",
+                        Price = double.Parse(XtcomQuoteResult.Current.datas[0]) / double.Parse(CoinbaseBtcQuote.Current.amount),
+                        Volume = double.Parse(XtcomQuoteResult.Current.datas[4]),
+                        TimeStamp = time,
+                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * LiveCoinQuote.Current.Last
+                    };
+
+                    var totalVolume = quoteLivecoin.Volume + quoteXtcom.Volume;
 
                     var quoteAllWeighted = new CoinQuote
                     {
                         Exchange = "All",
-                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume),
+                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteXtcom.Price * quoteXtcom.Volume / totalVolume),
                         Volume = totalVolume,
                         TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume))
+                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteXtcom.Price * quoteXtcom.Volume / totalVolume))
                     };
-
+         
                     dbContext.CoinQuotes.Add(quoteLivecoin);
+                    dbContext.CoinQuotes.Add(quoteXtcom);
                     dbContext.CoinQuotes.Add(quoteAllWeighted);
 
                     // Save Context in Database

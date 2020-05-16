@@ -195,6 +195,15 @@
         public CoinQuote LastLiveCoinQuote()
         {
             return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "LiveCoin").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
-        }    
+        }
+
+        /// <summary>
+        /// Return last LiveCoin Quote
+        /// </summary>
+        /// <returns></returns>
+        public CoinQuote LastXtcomQuote()
+        {
+            return coinQuoteCol.Where(x => x.TimeStamp >= DateTime.Now.ToUniversalTime().AddDays(-1) && x.Exchange == "Xt.com").OrderByDescending(x => x.TimeStamp).FirstOrDefault();
+        }
     }
 }
