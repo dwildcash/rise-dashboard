@@ -226,7 +226,7 @@ namespace Rise.Services
                                 }
                                 else
                                 {
-                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provid a valid user.", ParseMode.Html);
+                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a valid user.", ParseMode.Html);
                                 }
 
                                 break;
@@ -465,7 +465,7 @@ namespace Rise.Services
         /// <param name="destusers"></param>
         /// <param name="bannerMsg"></param>
         /// <returns></returns>
-        private async Task   (Message message, ApplicationUser sender, double amount, IReadOnlyCollection<ApplicationUser> destusers, string bannerMsg = "")
+        private async Task cmd_Send(Message message, ApplicationUser sender, double amount, IReadOnlyCollection<ApplicationUser> destusers, string bannerMsg = "")
         {
             try
             {
