@@ -219,7 +219,7 @@ namespace Rise.Services
                             }
                         // Info Price
                         case "!PRICE":
-                            await cmd_Price(appuser);
+                            await cmd_Price(message, appuser);
                             break;
                         // Return a  geek joke
                         case "!HOPE":
@@ -661,9 +661,9 @@ namespace Rise.Services
                     priceXtcom = Math.Round(quoteXtcom.Price * 100000000);
                 }
 
-                await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
+                await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                "<b>Xt.com</b> - https://www.xt.com (24h V:" + volXtcom.ToString("N0") + " - Price:" + priceXtcom + " sat)" +
+                                "<b>Xt.com</b> - https://www.xt.com (24h V:" + volXtcom.ToString("N0") + " - Price:" + priceXtcom + " sat)" + Environment.NewLine +
                                 "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + " sat)";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
@@ -678,11 +678,11 @@ namespace Rise.Services
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        private async Task cmd_Price(ApplicationUser sender)
+        private async Task cmd_Price(Message message, ApplicationUser appuser)
         {
             try
             {
-                await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+                await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                 this.coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
                 var quote = LastAllQuote();
 
@@ -691,9 +691,9 @@ namespace Rise.Services
                                   "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " (" + VolumePercentChange(1) + "%) </b>" + Environment.NewLine +
                                   "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>";
 
-                await _botService.Client.SendTextMessageAsync(sender.TelegramId, strResponse, ParseMode.Html);
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
                 var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("dashboard.rise.vision", "https://dashboard.rise.vision"));
-                await _botService.Client.SendTextMessageAsync(sender.TelegramId, "click to open website", replyMarkup: keyboard);
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "click to open website", replyMarkup: keyboard);
             }
             catch (Exception ex)
             {

@@ -51,10 +51,10 @@
                     var quoteXtcom = new CoinQuote
                     {
                         Exchange = "Xt.com",
-                        Price = double.Parse(XtcomQuoteResult.Current.datas[0]) / double.Parse(CoinbaseBtcQuote.Current.amount),
+                        Price = double.Parse(XtcomQuoteResult.Current.datas[0]) / double.Parse(CoinbaseBtcQuote.Current.amount) / 100000000,
                         Volume = double.Parse(XtcomQuoteResult.Current.datas[4]),
                         TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * LiveCoinQuote.Current.Last
+                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * (double.Parse(XtcomQuoteResult.Current.datas[0]) / double.Parse(CoinbaseBtcQuote.Current.amount) / 100000000)
                     };
 
                     var totalVolume = quoteLivecoin.Volume + quoteXtcom.Volume;
