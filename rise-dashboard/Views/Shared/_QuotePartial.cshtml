@@ -44,8 +44,8 @@
     var VolumePercentchange = Math.Round(Model.VolumePercentChange(1), 2);
     var USDPricePercentchange = Math.Round(Model.USDPricePercentChange(1), 2);
 
-    var livecoin = Math.Round(Model.LastLiveCoinQuote().Volume);
-    var Xtcom = Math.Round(Model.LastXtcomQuote().Volume);
+    var livecoin = Model.LastLiveCoinQuote();
+    var Xtcom = Model.LastXtcomQuote();
 
     var toLiveCoin = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.LiveCoinWalletAddress);
     var fromLiveCoin = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.LiveCoinWalletAddress);
@@ -57,8 +57,8 @@
     var canvas = document.getElementById("pieChart");
     var ctx = canvas.getContext('2d');
     Chart.defaults.global.title = 'Volume';
-    var data = {
-        labels: ["LiveCoin - " + @livecoin, "Xt.com - " + @Xtcom],
+        var data = {
+            labels: ["LiveCoin - " + @Math.Round(livecoin.Volume) + " - " + @Math.Round(livecoin.Price) , "Xt.com - " + @Math.Round(Xtcom.Volume) + " - " + @Math.Round(Xtcom.Price)],
         datasets: [{
             label: "Exchanges Volume 24H",
             backgroundColor: ["#36a2eb", "#ffce56", "#7df442", "#cc65fe", "#ff6384"],
