@@ -165,7 +165,21 @@ namespace Rise.Services
                                 // Check before sending
                                 if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
                                 {
-                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "its Raining!!!");
+                                    var txtmsg = string.Empty;
+
+                                    if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
+                                    {
+                                        txtmsg = "wake up!!! its a wonderful day!";
+                                    }
+                                    else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
+                                    {
+                                        txtmsg = "wake up!!! its a nice day!";
+                                    }
+                                    else
+                                    {
+                                        txtmsg = "wake up!! its an okay day!";
+                                    }
+                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
                                 }
 
                                 break;
@@ -451,7 +465,7 @@ namespace Rise.Services
         /// <param name="destusers"></param>
         /// <param name="bannerMsg"></param>
         /// <returns></returns>
-        private async Task cmd_Send(Message message, ApplicationUser sender, double amount, IReadOnlyCollection<ApplicationUser> destusers, string bannerMsg = "")
+        private async Task   (Message message, ApplicationUser sender, double amount, IReadOnlyCollection<ApplicationUser> destusers, string bannerMsg = "")
         {
             try
             {
