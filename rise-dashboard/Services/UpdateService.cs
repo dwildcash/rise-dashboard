@@ -483,9 +483,9 @@ namespace Rise.Services
                         {
                             var secret = sender.GetSecret();
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            Thread.Sleep(500);
+                            Thread.Sleep(1000);
 
-                            if (destusers.Count <= 15 && tx !=null && tx.success)
+                            if (destusers.Count <= 30 && tx !=null && tx.success)
                             {
                                 try
                                 {
