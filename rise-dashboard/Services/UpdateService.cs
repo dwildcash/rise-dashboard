@@ -721,7 +721,8 @@ namespace Rise.Services
                 var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " (24h:" + Math.Round(PercentChange(1), 2) + "%) (1w: " + Math.Round(PercentChange(7), 2) + "%)</b>" + Environment.NewLine +
                                   "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + " (" + USDPricePercentChange(1) + "%)</b>" + Environment.NewLine +
                                   "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " (" + VolumePercentChange(1) + "%) </b>" + Environment.NewLine +
-                                  "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>";
+                                  "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>" + Environment.NewLine +
+                                  "Bitcoin Price: <b>" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2) + "$</b> (Coinbase)";
 
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
                 var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("dashboard.rise.vision", "https://dashboard.rise.vision"));
