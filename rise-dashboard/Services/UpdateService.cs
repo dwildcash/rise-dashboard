@@ -201,8 +201,6 @@ namespace Rise.Services
 
                                 if (lstAppUsers.Count >= 1)
                                 {
-
-
                                     // Check before sending
                                     if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
                                     {
@@ -696,8 +694,9 @@ namespace Rise.Services
                 await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
                                   "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + " sat)" + Environment.NewLine +
-                                  "<b>Xt.com</b> - https://www.xt.com (24h V:" + volXtcom.ToString("N0") + " - Price:" + priceXtcom + " sat)";
-               
+                                  "<b>Xt.com</b> - https://www.xt.com (24h V:" + volXtcom.ToString("N0") + " - Price:" + priceXtcom + " sat)" + Environment.NewLine +
+                                  "<b>Bitcoin Price - " + double.Parse(CoinbaseBtcQuote.Current.amount) + "$ (Coinbase)";
+
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
             catch (Exception ex)
