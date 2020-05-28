@@ -467,6 +467,12 @@ namespace Rise.Services
         {
             try
             {
+                if (destusers.Count > 30)
+                {
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please use a maximum of 30 users!", ParseMode.Html);
+                    return;
+                }
+
                 if (amount > 0 && destusers.Count > 0)
                 {
                     await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
@@ -481,7 +487,7 @@ namespace Rise.Services
                         {
                             var secret = sender.GetSecret();
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            Thread.Sleep(1000);
+                            Thread.Sleep(350);
 
                             if (destusers.Count <= 30 && tx !=null && tx.success)
                             {
