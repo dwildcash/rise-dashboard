@@ -198,7 +198,7 @@
                                         @{ var reward = Math.Round(((double)forgingChance / 100.0) * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 3); }
 
                                         <td class="align-middle"><h6><strong>@reward</strong></h6></td>
-                                        <td class="align-middle"><h6><strong>@Math.Round(Model.LastAllQuote().USDPrice * reward,2)$</strong></h6></td>
+                                        <td class="align-middle"><h6><strong>@Math.Round(Model.LastAllQuote().USDPrice * reward,3)$</strong></h6></td>
                                         <td>
                                             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
                                             {
