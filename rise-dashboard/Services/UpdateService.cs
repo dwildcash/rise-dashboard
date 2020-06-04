@@ -37,15 +37,11 @@ namespace Rise.Services
         public async Task EchoAsync(Update update)
         {
 
-
-
             // Check if we have a message.
             if (update.Type != UpdateType.Message || update.Message.Text.Length == 0)
             {
                 return;
             }
-
-
 
             var message = update.Message;
 
@@ -53,8 +49,6 @@ namespace Rise.Services
 
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
-
-
 
             // Configure Photo Url
             try
@@ -122,6 +116,10 @@ namespace Rise.Services
                 {
                     switch (command.Trim())
                     {
+
+                        case "!TEST":
+                            await cmd_TestFunction(message, appuser);
+                            break;
                         // Show Pool
                         case "!POOL":
                             await cmd_ShowPool(appuser, lstDestAddress);
@@ -321,6 +319,26 @@ namespace Rise.Services
                 _logger.LogError("Received Exception from cmd_Help {0}" + ex.Message);
             }
         }
+
+
+        /// <summary>
+        /// Test Function
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="appuser"></param>
+        /// <returns></returns>
+        private async Task cmd_TestFunction(Message message, ApplicationUser appuser)
+        {
+            try
+            {
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, appuser.Photo_Url + "<b>Hello! </b>", ParseMode.Html);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Received Exception from cmd_Help {0}" + ex.Message);
+            }
+        }
+
 
         /// <summary>
         /// Send Hope Message
