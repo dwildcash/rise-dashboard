@@ -331,7 +331,7 @@ namespace Rise.Services
         {
             try
             {
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "<a href=\"" + appuser.Photo_Url + "\"/><b>Hello!</b>", ParseMode.Html);
+                await _botService.Client.SendPhotoAsync(message.Chat.Id, appuser.Photo_Url);
             }
             catch (Exception ex)
             {
