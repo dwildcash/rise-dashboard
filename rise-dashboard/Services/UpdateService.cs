@@ -331,7 +331,7 @@ namespace Rise.Services
         {
             try
             {
-                await _botService.Client.SendPhotoAsync(message.Chat.Id, appuser.Photo_Url);
+                await _botService.Client.SendPhotoAsync(message.Chat.Id, photo : appuser.Photo_Url, caption:"heya!");
             }
             catch (Exception ex)
             {
