@@ -120,6 +120,7 @@ namespace Rise.Services
                         case "!TEST":
                             await cmd_TestFunction(message, appuser);
                             break;
+
                         // Show Pool
                         case "!POOL":
                             await cmd_ShowPool(appuser, lstDestAddress);
@@ -267,14 +268,17 @@ namespace Rise.Services
                                 await cmd_Seen(appuser, message, lstAppUsers);
                                 break;
                             }
+
                         // Info Price
                         case "!PRICE":
                             await cmd_Price(message, appuser);
                             break;
+
                         // Return a  geek joke
                         case "!HOPE":
                             await cmd_Hope(message);
                             break;
+
                         // Show Rise Exchanges
                         case "!EXCHANGES":
                             await cmd_Exchanges(message, appuser);
