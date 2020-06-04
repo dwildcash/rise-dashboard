@@ -53,19 +53,29 @@ namespace Rise.Services
 
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
-            var file_id = _botService.Client.GetUserProfilePhotosAsync(message.From.Id).Result.Photos[0][0].FileId ;
-            var file = _botService.Client.GetFileAsync(file_id);
 
-            var filepath = file.Result.FilePath;
 
-            var photo_url = "https://api.telegram.org/file/bot" + AppSettingsProvider.BotApiKey + "/" + filepath;
-            _appUsersManagerService.Update_Photourl(appuser.TelegramId, photo_url);
+
+            // Configure Photo Url
+            try
+            {
+                var file_id = _botService.Client.GetUserProfilePhotosAsync(message.From.Id).Result.Photos[0][0].FileId;
+                var file = _botService.Client.GetFileAsync(file_id);
+                var filepath = file.Result.FilePath;
+                var photo_url = "https://api.telegram.org/file/bot" + AppSettingsProvider.BotApiKey + "/" + filepath;
+                _appUsersManagerService.Update_Photourl(appuser.TelegramId, photo_url);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error parsing parameters {0}" + ex.Message);
+            }
 
             var maxusers = 5;
             var botcommands = new List<string>();
             var lstDestUsers = new List<string>();
             var lstDestAddress = new List<string>();
             var lstAmount = new List<double>();
+           
 
             try
             {
