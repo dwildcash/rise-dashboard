@@ -36,11 +36,16 @@ namespace Rise.Services
 
         public async Task EchoAsync(Update update)
         {
+
+
+
             // Check if we have a message.
             if (update.Type != UpdateType.Message || update.Message.Text.Length == 0)
             {
                 return;
             }
+
+
 
             var message = update.Message;
 
@@ -48,6 +53,13 @@ namespace Rise.Services
 
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
+            var file_id = _botService.Client.GetUserProfilePhotosAsync(message.From.Id).Result.Photos[0][0].FileId ;
+            var file = _botService.Client.GetFileAsync(file_id);
+
+            var filepath = file.Result.FilePath;
+
+            var photo_url = "https://api.telegram.org/file/bot" + AppSettingsProvider.BotApiKey + "/" + filepath;
+            _appUsersManagerService.Update_Photourl(appuser.TelegramId, photo_url);
 
             var maxusers = 5;
             var botcommands = new List<string>();
@@ -66,7 +78,7 @@ namespace Rise.Services
                 // Match @username if present
                 if (Regex.Matches(message.Text, @"@(\S+)\s?").Count > 0)
                 {
-                    lstDestUsers = Regex.Matches(message.Text, @"@(\S+)\s?").Select(m => m.Value.Replace("@", "").Trim()).ToList();
+                    lstDestUsers = Regex.Matches(message.Text, @"@(\S+)\s?").Select(m => m.Value.Replace("@", string.Empty).Trim()).ToList();
                 }
 
                 // Match any double Amount if present
@@ -104,7 +116,7 @@ namespace Rise.Services
                         case "!POOL":
                             await cmd_ShowPool(appuser, lstDestAddress);
                             break;
-
+                            
                         // Info command
                         case "!INFO":
                             await cmd_Info(message);
@@ -467,9 +479,9 @@ namespace Rise.Services
         {
             try
             {
-                if (destusers.Count > 30)
+                if (destusers.Count > 20)
                 {
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please use a maximum of 30 users!", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please use a maximum of 20 users!", ParseMode.Html);
                     return;
                 }
 

@@ -105,7 +105,7 @@
                                 </div>
                             </div>
                         }
-                    </div>
+                    </div>f
 
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -122,8 +122,8 @@
                                         <th align-middle data-priority="6" class="align-middle">Pay.(days)</th>
                                         <th align-middle data-priority="5" class="align-middle">Forging Chance</th>
                                         <th align-middle data-priority="7" class="align-middle">Percent Reward</th>
-                                        <th align-middle data-priority="2" class="align-middle">Daily Est Payout</th>
-                                        <th align-middle data-priority="8" class="align-middle">Daily $ Est Payout</th>
+                                        <th align-middle data-priority="2" class="align-middle">Daily Rise</th>
+                                        <th align-middle data-priority="8" class="align-middle">Daily $ (USD)</th>
                                         <th></th>
                                         <th></th>
                                     </tr>
@@ -198,7 +198,7 @@
                                         @{ var reward = Math.Round(((double)forgingChance / 100.0) * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 3); }
 
                                         <td class="align-middle"><h6><strong>@reward</strong></h6></td>
-                                        <td class="align-middle"><h6><strong>@Math.Round(Model.LastAllQuote().USDPrice * reward,3)$</strong></h6></td>
+                                        <td class="align-middle"><h6><strong>@Math.Round(Model.LastAllQuote().USDPrice * reward,4)$</strong></h6></td>
                                         <td>
                                             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
                                             {
