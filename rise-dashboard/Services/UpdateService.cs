@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Rise.Services
@@ -351,11 +352,15 @@ namespace Rise.Services
                             graphics.CompositingMode = CompositingMode.SourceCopy;
                             graphics.DrawImage(image, 0, 0, 50, 50);
 
-                            using (MemoryStream ms = new MemoryStream())
+                            resized.Save("/tmp/e.png", ImageFormat.Png);
+
+                            using (var fileStream = new FileStream("/tmp/e.png", FileMode.Open, FileAccess.Read, FileShare.Read))
                             {
-                                resized.Save(ms, ImageFormat.Png);
-                                ms.Position = 0;
-                                await _botService.Client.SendPhotoAsync(message.Chat.Id, ms, caption: "heya!");
+                                await _botService.Client.SendPhotoAsync(
+                                    chatId: message.Chat.Id,
+                                    photo: new InputOnlineFile(fileStream),
+                                    caption: "Screenshot !"
+                                );
                             }
                         }
                     }
