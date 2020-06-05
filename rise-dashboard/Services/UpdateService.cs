@@ -7,8 +7,11 @@ using rise.Models;
 using rise.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -335,8 +338,17 @@ namespace Rise.Services
         {
             try
             {
+
                 var myurl = appuser.Photo_Url.Replace("https", "http").TrimEnd();
-                await _botService.Client.SendPhotoAsync(message.Chat.Id, photo : myurl, caption:"heya!");
+                
+                var request = WebRequest.Create(myurl);
+
+                using (var response = request.GetResponse())
+                {
+                    var responseStream = response.GetResponseStream();
+                    await _botService.Client.SendPhotoAsync(message.Chat.Id, photo:responseStream, caption: "heya!");
+                }
+
             }
             catch (Exception ex)
             {
