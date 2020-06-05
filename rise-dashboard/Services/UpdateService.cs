@@ -343,22 +343,21 @@ namespace Rise.Services
                 {
                     using (Image img = Image.FromStream(response.GetResponseStream()))
                     {
-                        int h = 100;                  
-                        int w = 100;
+                        int h = 50;
+                        int w = 50;
 
                         using (Bitmap b = new Bitmap(img, new Size(w, h)))
                         {
                             using (MemoryStream ms2 = new MemoryStream())
                             {
                                 b.Save(ms2, System.Drawing.Imaging.ImageFormat.Jpeg);
-                                imageBytes = ms2.ToArray();
-                                
+
+                                ms2.Position = 0;
+                                await _botService.Client.SendPhotoAsync(message.Chat.Id, ms2, caption: "heya!");
                             }
                         }
                     }
                 }
-
-                await _botService.Client.SendPhotoAsync(message.Chat.Id, new MemoryStream(imageBytes), caption: "heya!");
             }
             catch (Exception ex)
             {
