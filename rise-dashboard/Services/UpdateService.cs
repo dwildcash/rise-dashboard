@@ -331,6 +331,8 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_TestFunction(Message message, ApplicationUser appuser)
         {
+            byte[] imageBytes;
+
             try
             {
                 var myurl = appuser.Photo_Url.Replace("https", "http").TrimEnd();
@@ -349,12 +351,14 @@ namespace Rise.Services
                             using (MemoryStream ms2 = new MemoryStream())
                             {
                                 b.Save(ms2, System.Drawing.Imaging.ImageFormat.Jpeg);
-                                ms2.Position = 0;
-                                await _botService.Client.SendPhotoAsync(message.Chat.Id, ms2, caption: "heya!");
+                                imageBytes = ms2.ToArray();
+                                
                             }
                         }
                     }
                 }
+
+                await _botService.Client.SendPhotoAsync(message.Chat.Id, new MemoryStream(imageBytes), caption: "heya!");
             }
             catch (Exception ex)
             {
