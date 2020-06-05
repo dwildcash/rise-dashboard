@@ -39,7 +39,6 @@ namespace Rise.Services
 
         public async Task EchoAsync(Update update)
         {
-
             // Check if we have a message.
             if (update.Type != UpdateType.Message || update.Message.Text.Length == 0)
             {
@@ -72,7 +71,6 @@ namespace Rise.Services
             var lstDestUsers = new List<string>();
             var lstDestAddress = new List<string>();
             var lstAmount = new List<double>();
-           
 
             try
             {
@@ -106,7 +104,6 @@ namespace Rise.Services
                     maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                 }
             }
-            
             catch (Exception ex)
             {
                 _logger.LogError("Error parsing parameters {0}" + ex.Message);
@@ -119,7 +116,6 @@ namespace Rise.Services
                 {
                     switch (command.Trim())
                     {
-
                         case "!TEST":
                             await cmd_TestFunction(message, appuser);
                             break;
@@ -128,7 +124,7 @@ namespace Rise.Services
                         case "!POOL":
                             await cmd_ShowPool(appuser, lstDestAddress);
                             break;
-                            
+
                         // Info command
                         case "!INFO":
                             await cmd_Info(message);
@@ -327,7 +323,6 @@ namespace Rise.Services
             }
         }
 
-
         /// <summary>
         /// Test Function
         /// </summary>
@@ -338,24 +333,32 @@ namespace Rise.Services
         {
             try
             {
-
                 var myurl = appuser.Photo_Url.Replace("https", "http").TrimEnd();
-                
+
                 var request = WebRequest.Create(myurl);
 
                 using (var response = request.GetResponse())
                 {
-                    var responseStream = response.GetResponseStream();
-                    await _botService.Client.SendPhotoAsync(message.Chat.Id, photo:responseStream, caption: "heya!");
-                }
+                    using (Image img = Image.FromStream(response.GetResponseStream()))
+                    {
+                        int h = 100;
+                        int w = 100;
 
+                        using (Bitmap b = new Bitmap(img, new Size(w, h)))
+                        {
+                            using (MemoryStream ms2 = new MemoryStream())
+                            {
+                                await _botService.Client.SendPhotoAsync(message.Chat.Id, photo: ms2, caption: "heya!");
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError("Received Exception from cmd_Help {0}" + ex.Message);
             }
         }
-
 
         /// <summary>
         /// Send Hope Message
@@ -546,13 +549,13 @@ namespace Rise.Services
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
                             Thread.Sleep(350);
 
-                            if (destusers.Count <= 30 && tx !=null && tx.success)
+                            if (destusers.Count <= 30 && tx != null && tx.success)
                             {
                                 try
                                 {
                                     await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);
-                                    var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction","https://explorer.rise.vision/tx/" + tx.transactionId));
-                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId,"Transaction Id:" + tx.transactionId, replyMarkup: keyboard);
+                                    var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
+                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Transaction Id:" + tx.transactionId, replyMarkup: keyboard);
                                 }
                                 catch (Exception ex)
                                 {
@@ -697,17 +700,17 @@ namespace Rise.Services
                     }
                 }
 
-                // Show All Pool 
+                // Show All Pool
                 foreach (var pool in _appdb.DelegateForms)
                 {
                     var mydelegate = DelegateResult.Current.Delegates.Where(o => o.Address == pool.Address).FirstOrDefault();
 
                     if (walletAccountResult != null)
                     {
-                        double d = @Math.Round((double)mydelegate.ForgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * double.Parse(walletAccountResult.account.Balance)/ 100000000 / ((mydelegate.VotesWeight/ 100000000) + double.Parse(walletAccountResult.account.Balance) / 100000000) * (double)pool.Share / 100, 1);
+                        double d = @Math.Round((double)mydelegate.ForgingChance / 100.0 * (double)AppSettingsProvider.CoinRewardDay * double.Parse(walletAccountResult.account.Balance) / 100000000 / ((mydelegate.VotesWeight / 100000000) + double.Parse(walletAccountResult.account.Balance) / 100000000) * (double)pool.Share / 100, 1);
                         estimateAward = "est. daily reward:" + d + " Rise";
                     }
-                   
+
                     await _botService.Client.SendTextMessageAsync(sender.TelegramId, "<b>" + mydelegate.Username + "</b> " + "Sharing " + "<b>" + pool.Share + "%</b> every " + pool.Payout_interval + " day " + estimateAward, ParseMode.Html);
                 }
 
@@ -730,7 +733,6 @@ namespace Rise.Services
         {
             try
             {
-
                 double volLivecoin = 0;
                 double priceLivecoin = 0;
 
@@ -812,8 +814,8 @@ namespace Rise.Services
                                   "<b>Rise RoadMap</b> - https://rise.vision/roadmap/" + Environment.NewLine +
                                   "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
                                   "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
-                                  "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine + 
-                                  "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +                              
+                                  "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
+                                  "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
                                   "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                                   "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
                                   "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
