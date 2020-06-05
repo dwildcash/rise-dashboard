@@ -179,7 +179,6 @@ namespace rise.Services
                         {
                             appuser.UserName = userName;
                         }
-               
 
                         // Create a wallet for everyone
                         if (appuser.Address == null)
