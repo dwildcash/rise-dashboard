@@ -8,6 +8,8 @@ using rise.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -331,29 +333,29 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_TestFunction(Message message, ApplicationUser appuser)
         {
-            byte[] imageBytes;
-
+         
             try
             {
                 var myurl = appuser.Photo_Url.Replace("https", "http").TrimEnd();
-
                 var request = WebRequest.Create(myurl);
 
                 using (var response = request.GetResponse())
                 {
-                    using (Image img = Image.FromStream(response.GetResponseStream()))
+                    using (var image = new Bitmap(Image.FromStream(response.GetResponseStream())))
                     {
-                        int h = 50;
-                        int w = 50;
-
-                        using (Bitmap b = new Bitmap(img, new Size(w, h)))
+                        var resized = new Bitmap(50, 50);
+                        using (var graphics = Graphics.FromImage(resized))
                         {
-                            using (MemoryStream ms2 = new MemoryStream())
-                            {
-                                b.Save(ms2, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            graphics.CompositingQuality = CompositingQuality.HighSpeed;
+                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            graphics.CompositingMode = CompositingMode.SourceCopy;
+                            graphics.DrawImage(image, 0, 0, 50, 50);
 
-                                ms2.Position = 0;
-                                await _botService.Client.SendPhotoAsync(message.Chat.Id, ms2, caption: "heya!");
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                resized.Save(ms, ImageFormat.Png);
+                                ms.Position = 0;
+                                await _botService.Client.SendPhotoAsync(message.Chat.Id, ms, caption: "heya!");
                             }
                         }
                     }
