@@ -49,8 +49,13 @@ namespace Rise.Services
             }
 
             var message = update.Message;
-
             var flagMsgUpdate = message.Chat.Id == AppSettingsProvider.TelegramChannelId;
+            var maxusers = 5;
+            var botcommands = new List<string>();
+            var lstDestUsers = new List<string>();
+            var lstDestAddress = new List<string>();
+            var lstAmount = new List<double>();
+            var lstAppUsers = new List<ApplicationUser>();
 
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
@@ -69,11 +74,6 @@ namespace Rise.Services
                 _logger.LogError("Error parsing parameters {0}" + ex.Message);
             }
 
-            var maxusers = 5;
-            var botcommands = new List<string>();
-            var lstDestUsers = new List<string>();
-            var lstDestAddress = new List<string>();
-            var lstAmount = new List<double>();
 
             try
             {
@@ -153,125 +153,127 @@ namespace Rise.Services
 
                         // Boom!
                         case "!BOOM":
-                            if (appuser.UserName == "Dwildcash")
                             {
-                                try
+                                if (appuser.UserName == "Dwildcash")
+                                {
+                                    try
+                                    {
+                                        if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
+                                        {
+                                            maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                                        }
+
+                                        lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
+
+                                        if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
+                                        {
+                                            await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        _logger.LogError("Received Exception from Boom {0}" + ex.Message);
+                                    }
+                                }
+                            }
+                            break;
+                        // Let it Rain Rise
+                        case "!RAIN":
+                            {
+                                if (appuser.UserName == "Dwildcash")
                                 {
                                     if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                                     {
                                         maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                     }
 
-                                    var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
+                                    lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
 
+                                    // Check before sending
                                     if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
                                     {
-                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                        var txtmsg = string.Empty;
+
+                                        if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
+                                        {
+                                            txtmsg = "wake up!!! its a wonderful day!";
+                                        }
+                                        else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
+                                        {
+                                            txtmsg = "wake up!!! its a nice day!";
+                                        }
+                                        else
+                                        {
+                                            txtmsg = "wake up!! its an okay day!";
+                                        }
+                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
                                     }
+
+
                                 }
-                                catch (Exception ex)
-                                {
-                                    _logger.LogError("Received Exception from Boom {0}" + ex.Message);
-                                }
-                            }
-                            break;
-                        // Let it Rain Rise
-                        case "!RAIN":
-
-                            if (appuser.UserName == "Dwildcash")
-                            {
-                                if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
-                                {
-                                    maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
-                                }
-
-                                var lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
-
-                                // Check before sending
-                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
-                                {
-                                    var txtmsg = string.Empty;
-
-                                    if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
-                                    {
-                                        txtmsg = "wake up!!! its a wonderful day!";
-                                    }
-                                    else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
-                                    {
-                                        txtmsg = "wake up!!! its a nice day!";
-                                    }
-                                    else
-                                    {
-                                        txtmsg = "wake up!! its an okay day!";
-                                    }
-                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
-                                }
-
-
                             }
                             break;
 
                         // send coin to address
                         case "!SEND":
-
-                            var lstAppUsers = new List<ApplicationUser>();
-
-                            foreach (var user in lstDestUsers)
                             {
-                                var e = await _appUsersManagerService.GetUserAsync(user);
-
-                                if (e != null)
+                                foreach (var user in lstDestUsers)
                                 {
-                                    lstAppUsers.Add(e);
+                                    var e = await _appUsersManagerService.GetUserAsync(user);
+
+                                    if (e != null)
+                                    {
+                                        lstAppUsers.Add(e);
+                                    }
+                                }
+
+                                if (lstAppUsers.Count >= 1)
+                                {
+                                    // Check before sending
+                                    if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
+                                    {
+                                        var txtmsg = string.Empty;
+
+                                        if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
+                                        {
+                                            txtmsg = "wake up!!! its a wonderful day!";
+                                        }
+                                        else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
+                                        {
+                                            txtmsg = "wake up!!! its a nice day!";
+                                        }
+                                        else
+                                        {
+                                            txtmsg = "wake up!! its an okay day!";
+                                        }
+
+                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
+                                    }
+                                }
+                                else
+                                {
+                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a valid user.", ParseMode.Html);
                                 }
                             }
-
-                            if (lstAppUsers.Count >= 1)
-                            {
-                                // Check before sending
-                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
-                                {
-                                    var txtmsg = string.Empty;
-
-                                    if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
-                                    {
-                                        txtmsg = "wake up!!! its a wonderful day!";
-                                    }
-                                    else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
-                                    {
-                                        txtmsg = "wake up!!! its a nice day!";
-                                    }
-                                    else
-                                    {
-                                        txtmsg = "wake up!! its an okay day!";
-                                    }
-
-                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
-                                }
-                            }
-                            else
-                            {
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a valid user.", ParseMode.Html);
-                            }
-
                             break;
 
                         // Tell when last message from user
                         case "!SEEN":
-
-                            var lstAppUsers = new List<ApplicationUser>();
-
-                            foreach (var user in lstDestUsers)
                             {
-                                var e = await _appUsersManagerService.GetUserAsync(user);
+                                lstAppUsers = new List<ApplicationUser>();
 
-                                if (e != null)
+                                foreach (var user in lstDestUsers)
                                 {
-                                    lstAppUsers.Add(e);
-                                }
-                            }
+                                    var e = await _appUsersManagerService.GetUserAsync(user);
 
-                            await cmd_Seen(appuser, message, lstAppUsers);
+                                    if (e != null)
+                                    {
+                                        lstAppUsers.Add(e);
+                                    }
+                                }
+
+                                await cmd_Seen(appuser, message, lstAppUsers);
+                            }
                             break;
 
 
