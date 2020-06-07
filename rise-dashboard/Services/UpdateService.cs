@@ -154,58 +154,64 @@ namespace Rise.Services
                         // Boom!
                         case "!BOOM":
                             {
-                                try
+                                if (appuser.UserName == "Dwildcash")
+                                {
+                                    try
+                                    {
+                                        if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
+                                        {
+                                            maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                                        }
+
+                                        var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
+
+                                        if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
+                                        {
+                                            await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        _logger.LogError("Received Exception from Boom {0}" + ex.Message);
+                                    }
+
+                                    break;
+                                }
+                            }
+                        // Let it Rain Rise
+                        case "!RAIN":
+                            {
+                                if (appuser.UserName == "Dwildcash")
                                 {
                                     if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                                     {
                                         maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                     }
 
-                                    var lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
+                                    var lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
 
+                                    // Check before sending
                                     if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
                                     {
-                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                        var txtmsg = string.Empty;
+
+                                        if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
+                                        {
+                                            txtmsg = "wake up!!! its a wonderful day!";
+                                        }
+                                        else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
+                                        {
+                                            txtmsg = "wake up!!! its a nice day!";
+                                        }
+                                        else
+                                        {
+                                            txtmsg = "wake up!! its an okay day!";
+                                        }
+                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
                                     }
+
+                                    break;
                                 }
-                                catch (Exception ex)
-                                {
-                                    _logger.LogError("Received Exception from Boom {0}" + ex.Message);
-                                }
-
-                                break;
-                            }
-                        // Let it Rain Rise
-                        case "!RAIN":
-                            {
-                                if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
-                                {
-                                    maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
-                                }
-
-                                var lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
-
-                                // Check before sending
-                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
-                                {
-                                    var txtmsg = string.Empty;
-
-                                    if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
-                                    {
-                                        txtmsg = "wake up!!! its a wonderful day!";
-                                    }
-                                    else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
-                                    {
-                                        txtmsg = "wake up!!! its a nice day!";
-                                    }
-                                    else
-                                    {
-                                        txtmsg = "wake up!! its an okay day!";
-                                    }
-                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
-                                }
-
-                                break;
                             }
                         // send coin to address
                         case "!SEND":
@@ -334,7 +340,7 @@ namespace Rise.Services
         /// <returns></returns>
         private async Task cmd_TestFunction(Message message, ApplicationUser appuser)
         {
-         
+
             try
             {
                 var myurl = appuser.Photo_Url.Replace("https", "http").TrimEnd();
