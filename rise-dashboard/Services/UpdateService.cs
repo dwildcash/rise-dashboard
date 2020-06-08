@@ -168,6 +168,22 @@ namespace rise.Services
 
                                     if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
                                     {
+
+                                        var txtmsg = string.Empty;
+
+                                        if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
+                                        {
+                                            txtmsg = "wake up!!! its a wonderful boom day! for today active users";
+                                        }
+                                        else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
+                                        {
+                                            txtmsg = "wake up!!! its a nice boom day! for today active users";
+                                        }
+                                        else
+                                        {
+                                            txtmsg = "wake up!! its an okay day! for today active users";
+                                        }
+
                                         await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
                                     }
                                 }
@@ -197,15 +213,15 @@ namespace rise.Services
 
                                     if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                     {
-                                        txtmsg = "wake up!!! its a wonderful day!";
+                                        txtmsg = "wake up!!! its a wonderful rainy day! for this week active users.";
                                     }
                                     else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                     {
-                                        txtmsg = "wake up!!! its a nice day!";
+                                        txtmsg = "wake up!!! its a nice day! for last week active users.";
                                     }
                                     else
                                     {
-                                        txtmsg = "wake up!! its an okay day!";
+                                        txtmsg = "wake up!! its an okay day! for last week active users.";
                                     }
 
                                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
@@ -317,8 +333,8 @@ namespace rise.Services
 
                 var strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
                                      "<b>!pool</b> - (List active Pools)" + Environment.NewLine +
-                                     "<b>!rain</b> - !rain 10 (to any random users active min 3 msg)" + Environment.NewLine +
-                                     "<b>!boom</b> - !boom 10 (to all users active in the last day with min of 2 msg)" + Environment.NewLine +
+                                     "<b>!rain</b> - !rain 10 (to any random users active in last week with min 5 msg)" + Environment.NewLine +
+                                     "<b>!boom</b> - !boom 10 (to any random users active in the last day with min of 5 msg)" + Environment.NewLine +
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
                                      "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
                                      "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
@@ -578,7 +594,7 @@ namespace rise.Services
                         {
                             var secret = sender.GetSecret();
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            Thread.Sleep(500);
+                            Thread.Sleep(200);
 
                             if (destusers.Count <= 20 && tx != null && tx.success)
                             {

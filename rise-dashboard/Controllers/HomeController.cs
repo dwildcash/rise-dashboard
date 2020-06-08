@@ -33,7 +33,7 @@
         /// </summary>
         /// <param name="context">The context<see cref="ApplicationDbContext"/></param>
         /// <param name="userManager">The userManager<see cref="UserManager{ApplicationUser}"/></param>
-        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _appdb = context;
             _userManager = userManager;

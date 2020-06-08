@@ -31,7 +31,7 @@ namespace rise
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
         /// <param name="env">The env<see cref="IHostingEnvironment"/></param>
-        public Startup(Microsoft.AspNetCore.Hosting.IWebHostEnvironment env, ILogger<Startup> logger)
+        public Startup(Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                .SetBasePath(env.ContentRootPath)
@@ -185,7 +185,7 @@ namespace rise
                 var log = new Log();
                 log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 context.Logger.Add(log);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
 
             // Use Forwarded Header to keep track of client info.

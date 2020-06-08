@@ -67,17 +67,18 @@ namespace rise.Services
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 try
                 {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-1) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 2 && x.Address != null).AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-1) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount >= 5 && x.Address != null && x.Address != string.Empty).AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
                 }
                 catch (Exception ex)
                 {
                     var log = new Log();
                     log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                     dbContext.Logger.Add(log);
-                    dbContext.SaveChangesAsync().Wait();
+                    dbContext.SaveChangesAsync().Wait();               
                 }
-                return null;
             }
+
+            return null;
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace rise.Services
 
                 try
                 {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-7) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount > 3 && x.Address != null).AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
+                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-7) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount >= 5 && x.Address != null && x.Address != string.Empty ).AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
                 }
                 catch (Exception ex)
                 {
