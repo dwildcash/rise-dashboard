@@ -176,11 +176,11 @@ namespace rise.Services
                                         }
                                         else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                         {
-                                            txtmsg = "wake up!!! its a nice boom day for today active users!";
+                                            txtmsg = "Wake up!!! its a nice boom day for today active users!";
                                         }
                                         else
                                         {
-                                            txtmsg = "wake up!! its an okay day for today active users!";
+                                            txtmsg = "Wake up!! its an okay day for today active users!";
                                         }
 
                                         await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
@@ -212,7 +212,7 @@ namespace rise.Services
 
                                     if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                     {
-                                        txtmsg = "wake up!!! its a wonderful rainy day for this week active users!";
+                                        txtmsg = "RAIN RAIN!!!! its a wonderful rainy day for this week active users!";
                                     }
                                     else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                     {
@@ -593,7 +593,7 @@ namespace rise.Services
                         {
                             var secret = sender.GetSecret();
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            Thread.Sleep(200);
+                            Thread.Sleep(100);
 
                             if (destusers.Count <= 20 && tx != null && tx.success)
                             {
