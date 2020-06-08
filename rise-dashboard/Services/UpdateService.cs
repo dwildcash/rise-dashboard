@@ -27,7 +27,6 @@ namespace rise.Services
     public class UpdateService : QuoteStats, IUpdateService
     {
         private readonly IBotService _botService;
-        private readonly ILogger<UpdateService> _logger;
         private readonly IAppUsersManagerService _appUsersManagerService;
         private readonly ApplicationDbContext _appdb;
 
@@ -69,7 +68,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error parsing parameters {0}" + ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
 
             try
