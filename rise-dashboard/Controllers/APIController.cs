@@ -4,9 +4,10 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.DependencyInjection;
     using Models;
     using Newtonsoft.Json;
-    using Rise.Services;
+    using rise.Services;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
@@ -26,6 +27,11 @@
         /// Telegram Update Service
         /// </summary>
         private readonly IUpdateService _updateService;
+
+        /// <summary>
+        /// Defines the scopeFactory
+        /// </summary>
+        private readonly IServiceScopeFactory _scopeFactory;
 
         // POST api/WebHook
         [HttpPost]
@@ -49,7 +55,15 @@
             }
             catch (Exception ex)
             {
-                return Ok();
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                    var log = new Log();
+                    log.LogMessage(ex.Message);
+                    dbContext.Logger.Add(log);
+                    dbContext.SaveChangesAsync().Wait();
+                }
             }
 
             return Ok();
@@ -60,10 +74,11 @@
         /// </summary>
         /// <param name="context"></param>
         /// <param name="updateService"></param>
-        public apiController(ApplicationDbContext context, IUpdateService updateService)
+        public apiController(ApplicationDbContext context, IUpdateService updateService, IServiceScopeFactory scopeFactory)
         {
             _updateService = updateService;
             _appdb = context;
+            _scopeFactory = scopeFactory;
         }
 
         /// <summary>

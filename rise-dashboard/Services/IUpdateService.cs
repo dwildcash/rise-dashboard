@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
-namespace Rise.Services
+namespace rise.Services
 {
     public interface IUpdateService
     {

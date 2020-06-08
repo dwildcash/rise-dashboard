@@ -21,7 +21,7 @@ namespace rise.Services
         private readonly IServiceScopeFactory _scopeFactory;
 
         private readonly ILogger<AppUsersManagerService> _logger;
-        private readonly UserManager<ApplicationUser> _userManager;
+
 
         public AppUsersManagerService(IServiceScopeFactory scopeFactory, UserManager<ApplicationUser> userManager, ILogger<AppUsersManagerService> logger)
         {
@@ -49,7 +49,7 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Received Exception from GetLastMsgUser {0}", ex.Message);
+                    LogMessage(ex.Message);
                 }
 
                 return null;
@@ -74,12 +74,29 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Received Exception from GetBoomUsers {0}", ex.Message);
+                    LogMessage(ex.Message);
                 }
                 return null;
             }
         }
 
+
+        /// <summary>
+        /// Log a Message
+        /// </summary>
+        /// <param name="message"></param>
+        private void LogMessage(string message)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                var log = new Log();
+                log.LogMessage(message);
+                dbContext.Logger.Add(log);
+                dbContext.SaveChangesAsync().Wait();
+            }
+        }
         /// <summary>
         /// Get List of Rain Users
         /// </summary>
@@ -100,7 +117,7 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Received Exception from GetRainUsers {0}", ex.Message);
+                    LogMessage(ex.Message);
                     return null;
                 }
             }

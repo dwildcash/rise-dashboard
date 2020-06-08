@@ -4,7 +4,6 @@ using Newtonsoft.Json.Linq;
 using rise.Code.Rise;
 using rise.Data;
 using rise.Models;
-using rise.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -23,7 +22,7 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Rise.Services
+namespace rise.Services
 {
     public class UpdateService : QuoteStats, IUpdateService
     {

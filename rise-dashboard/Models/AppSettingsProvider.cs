@@ -72,15 +72,14 @@
         public static string CoinFullName { get; set; }
 
         /// <summary>
-        /// Gets or sets the CoinMarketCapTickerCode
-        /// </summary>
-        public static string CoinMarketCapTickerCode { get; set; }
-
-        /// <summary>
         /// Gets or sets the LiveCoinMarket
         /// </summary>
         public static string LiveCoinMarket { get; set; }
 
+        /// <summary>
+        /// Gets or sets the LiveCoinWalletAddress
+        /// </summary>
+        public static string LiveCoinWalletAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the APIUrl
@@ -97,21 +96,10 @@
         /// </summary>
         public static string IPStackApiKey { get; set; }
 
-
-        /// <summary>
-        /// Gets or sets the LiveCoinWalletAddress
-        /// </summary>
-        public static string LiveCoinWalletAddress { get; set; }
-
-
         /// <summary>
         /// Secret used for Telegram webhook
         /// </summary>
         public static string WebHookSecret { get; set; }
 
-        /// <summary>
-        /// Node Log File to stream
-        /// </summary>
-        public static string NodeLogFile { get; set; }
     }
 }

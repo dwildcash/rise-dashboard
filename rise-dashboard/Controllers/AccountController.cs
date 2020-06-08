@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Models;
     using Services;
@@ -10,6 +11,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Telegram.Bot.Extensions.LoginWidget;
+    using rise.Data;
 
     [Authorize]
     [Route("[controller]/[action]")]
@@ -19,11 +21,17 @@
         private readonly IAppUsersManagerService _appUsersManagerService;
         private readonly ILogger<AppUsersManagerService> _logger;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService, ILogger<AppUsersManagerService> logger)
+        /// <summary>
+        /// Defines the scopeFactory
+        /// </summary>
+        private readonly IServiceScopeFactory _scopeFactory;
+
+        public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService, ILogger<AppUsersManagerService> logger, IServiceScopeFactory scopeFactory)
         {
             _signInManager = signInManager;
             _appUsersManagerService = appUsersManagerService;
             _logger = logger;
+            _scopeFactory = scopeFactory;
         }
 
         [HttpGet]
@@ -62,7 +70,15 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from loginCallback {0}", ex.Message);
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                    var log = new Log();
+                    log.LogMessage(ex.Message);
+                    dbContext.Logger.Add(log);
+                    dbContext.SaveChangesAsync().Wait();
+                }
             }
 
             return RedirectToAction("Index", "Home");

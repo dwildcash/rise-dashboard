@@ -17,7 +17,7 @@ namespace rise
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Models;
-    using Rise.Services;
+    using rise.Services;
     using Services;
     using System;
 
@@ -57,7 +57,6 @@ namespace rise
             AppSettingsProvider.SiteUrl = Configuration["AppSettings:SiteUrl"];
             AppSettingsProvider.IPStackApiKey = Configuration["AppSettings:IPStackApiKey"];
             AppSettingsProvider.LiveCoinMarket = Configuration["AppSettings:LiveCoinMarket"];
-            AppSettingsProvider.CoinMarketCapTickerCode = Configuration["AppSettings:CoinMarketCapTickerCode"];
             AppSettingsProvider.CoinName = Configuration["AppSettings:CoinName"];
             AppSettingsProvider.CoinRewardDay = int.Parse(Configuration["AppSettings:CoinRewardDay"]);
             AppSettingsProvider.CoinFullName = Configuration["AppSettings:CoinFullName"];
@@ -73,7 +72,6 @@ namespace rise
             AppSettingsProvider.EncryptionKey = Configuration["AppSettings:EncryptionKey"];
             AppSettingsProvider.WebHookSecret = Configuration["AppSettings:WebHookSecret"];
             AppSettingsProvider.TelegramChannelId = long.Parse(Configuration["AppSettings:TelegramChannelId"]);
-            AppSettingsProvider.NodeLogFile = Configuration["AppSettings:NodeLogFile"];
         }
 
         /// <summary>
@@ -101,7 +99,6 @@ namespace rise
                     .AllowAnyHeader());
             });
 
-
             services.AddControllersWithViews();
 
             // DB for aspnet
@@ -121,8 +118,7 @@ namespace rise
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
             // Support For Razor Pages
@@ -130,12 +126,6 @@ namespace rise
 
             // Configure BotService
             services.AddSingleton<IBotService, BotService>();
-
-            // Add signalr service
-            services.AddSignalR();
-
-            // Start tail log service
-            //services.AddHostedService<TailLogService>();
 
             // Configure 1Min Update Tasks
             services.AddSingleton<IScheduledTask, Update2MinTasks>();
@@ -197,11 +187,11 @@ namespace rise
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from Configure {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                context.Logger.Add(log);
+                context.SaveChangesAsync();
             }
-
-            // Seed Initial User
-            DbSeedData.SeedData(userManager, roleManager, context).Wait();
 
             // Use Forwarded Header to keep track of client info.
             app.UseForwardedHeaders();
@@ -210,12 +200,6 @@ namespace rise
 
             // Use Authentication
             app.UseAuthentication();
-
-            //app.UseSignalR(routes =>
-            // {
-            //     routes.MapHub<NotificationHub>("/Hub/notificationHub");
-            //});
-
 
             app.UseRouting();
 
@@ -229,6 +213,10 @@ namespace rise
                 endpoints.MapDefaultControllerRoute(); // Map conventional MVC controllers using the default route
                 endpoints.MapRazorPages();
             });
+
+            // Seed Initial User
+            DbSeedData.SeedData(userManager, roleManager, context).Wait();
+
         }
     }
 }

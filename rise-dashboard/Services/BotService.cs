@@ -1,6 +1,6 @@
 using Telegram.Bot;
 
-namespace Rise.Services
+namespace rise.Services
 {
     public class BotService : IBotService
     {
