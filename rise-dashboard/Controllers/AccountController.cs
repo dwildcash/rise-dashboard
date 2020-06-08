@@ -19,18 +19,16 @@
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAppUsersManagerService _appUsersManagerService;
-        private readonly ILogger<AppUsersManagerService> _logger;
 
         /// <summary>
         /// Defines the scopeFactory
         /// </summary>
         private readonly IServiceScopeFactory _scopeFactory;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService, ILogger<AppUsersManagerService> logger, IServiceScopeFactory scopeFactory)
+        public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService, IServiceScopeFactory scopeFactory)
         {
             _signInManager = signInManager;
             _appUsersManagerService = appUsersManagerService;
-            _logger = logger;
             _scopeFactory = scopeFactory;
         }
 

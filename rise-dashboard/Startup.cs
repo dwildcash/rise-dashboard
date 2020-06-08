@@ -18,7 +18,6 @@ namespace rise
     using Microsoft.Extensions.Logging;
     using Models;
     using rise.Services;
-    using Services;
     using System;
 
     /// <summary>
@@ -26,7 +25,6 @@ namespace rise
     /// </summary>
     public class Startup
     {
-        private readonly ILogger<Startup> _logger;
         private static int debugMode = 0;
 
         /// <summary>
@@ -44,8 +42,6 @@ namespace rise
 
             // Build AppSettings
             BuildAppSettingsProvider();
-
-            _logger = logger;
         }
 
         /// <summary>
@@ -151,7 +147,6 @@ namespace rise
             // Config Start Scheduler
             services.AddScheduler((sender, args) =>
             {
-                _logger.LogError("Received Exception from Startup Scheduler{0}", args.Exception.Message);
                 args.SetObserved();
             });
 
@@ -216,7 +211,6 @@ namespace rise
 
             // Seed Initial User
             DbSeedData.SeedData(userManager, roleManager, context).Wait();
-
         }
     }
 }

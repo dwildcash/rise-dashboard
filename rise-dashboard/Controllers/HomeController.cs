@@ -19,11 +19,6 @@
     public class HomeController : Controller
     {
         /// <summary>
-        /// Logger
-        /// </summary>
-        private readonly ILogger<HomeController> _logger;
-
-        /// <summary>
         /// Defines the _userManager
         /// </summary>
         private readonly UserManager<ApplicationUser> _userManager;
@@ -41,7 +36,6 @@
         public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ILogger<HomeController> logger)
         {
             _appdb = context;
-            _logger = logger;
             _userManager = userManager;
         }
 
@@ -265,7 +259,10 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from QuotePartial {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
                 return null;
             }
         }
@@ -310,7 +307,10 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from QuotePartial {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
                 return null;
             }
         }
@@ -343,7 +343,10 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from QuotePartial {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
                 return null;
             }
         }
@@ -370,7 +373,10 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from QuotePartial {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
                 return null;
             }
         }

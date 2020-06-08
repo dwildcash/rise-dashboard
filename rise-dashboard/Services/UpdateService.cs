@@ -31,11 +31,10 @@ namespace rise.Services
         private readonly IAppUsersManagerService _appUsersManagerService;
         private readonly ApplicationDbContext _appdb;
 
-        public UpdateService(IBotService botService, ILogger<UpdateService> logger, IAppUsersManagerService appUsersManagerService, ApplicationDbContext context)
+        public UpdateService(IBotService botService, IAppUsersManagerService appUsersManagerService, ApplicationDbContext context)
         {
             _botService = botService;
             _appUsersManagerService = appUsersManagerService;
-            _logger = logger;
             _appdb = context;
         }
 
@@ -108,7 +107,11 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error parsing parameters {0}" + ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
+
                 return;
             }
 
@@ -171,7 +174,10 @@ namespace rise.Services
                                     }
                                     catch (Exception ex)
                                     {
-                                        _logger.LogError("Received Exception from Boom {0}" + ex.Message);
+                                        var log = new Log();
+                                        log.LogMessage(ex.Message);
+                                        _appdb.Logger.Add(log);
+                                        _appdb.SaveChangesAsync().Wait();
                                     }
                                 }
                             }
@@ -294,7 +300,10 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Error parsing !command {0}", ex.Message);
+                    var log = new Log();
+                    log.LogMessage(ex.Message);
+                    _appdb.Logger.Add(log);
+                    _appdb.SaveChangesAsync().Wait();
                 }
 
                 return;
@@ -327,7 +336,11 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_Help {0}" + ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
+
             }
         }
 
@@ -373,7 +386,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_Help {0}" + ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
 
@@ -485,7 +501,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_Withdraw {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
 
@@ -524,7 +543,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_preSend private Message {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
                 return false;
             }
 
@@ -576,7 +598,10 @@ namespace rise.Services
                                 }
                                 catch (Exception ex)
                                 {
-                                    _logger.LogError("Received Exception from cmd_Send private Message {0}", ex.Message);
+                                    var log = new Log();
+                                    log.LogMessage(ex.Message);
+                                    _appdb.Logger.Add(log);
+                                    _appdb.SaveChangesAsync().Wait();
                                 }
                             }
                         }
@@ -655,7 +680,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_Seen {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
 
@@ -690,7 +718,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_ShowUserBalance {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
 
@@ -736,7 +767,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_ShowUserBalance {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
 
@@ -783,7 +817,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_Exchanges {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
 
@@ -812,7 +849,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_Price {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
 
@@ -844,7 +884,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_Info {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
     }

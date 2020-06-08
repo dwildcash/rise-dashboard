@@ -20,14 +20,9 @@ namespace rise.Services
         /// </summary>
         private readonly IServiceScopeFactory _scopeFactory;
 
-        private readonly ILogger<AppUsersManagerService> _logger;
-
-
-        public AppUsersManagerService(IServiceScopeFactory scopeFactory, UserManager<ApplicationUser> userManager, ILogger<AppUsersManagerService> logger)
+        public AppUsersManagerService(IServiceScopeFactory scopeFactory, UserManager<ApplicationUser> userManager)
         {
             _scopeFactory = scopeFactory;
-            _userManager = userManager;
-            _logger = logger;
         }
 
         /// <summary>
@@ -49,7 +44,10 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    LogMessage(ex.Message);
+                    var log = new Log();
+                    log.LogMessage(ex.Message);
+                    dbContext.Logger.Add(log);
+                    dbContext.SaveChangesAsync().Wait();
                 }
 
                 return null;
@@ -74,29 +72,15 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    LogMessage(ex.Message);
+                    var log = new Log();
+                    log.LogMessage(ex.Message);
+                    dbContext.Logger.Add(log);
+                    dbContext.SaveChangesAsync().Wait();
                 }
                 return null;
             }
         }
 
-
-        /// <summary>
-        /// Log a Message
-        /// </summary>
-        /// <param name="message"></param>
-        private void LogMessage(string message)
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                var log = new Log();
-                log.LogMessage(message);
-                dbContext.Logger.Add(log);
-                dbContext.SaveChangesAsync().Wait();
-            }
-        }
         /// <summary>
         /// Get List of Rain Users
         /// </summary>
@@ -117,7 +101,10 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    LogMessage(ex.Message);
+                    var log = new Log();
+                    log.LogMessage(ex.Message);
+                    dbContext.Logger.Add(log);
+                    dbContext.SaveChangesAsync().Wait();
                     return null;
                 }
             }
@@ -141,7 +128,10 @@ namespace rise.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Received Exception from GetRainUsers {0}", ex.Message);
+                    var log = new Log();
+                    log.LogMessage(ex.Message);
+                    dbContext.Logger.Add(log);
+                    dbContext.SaveChangesAsync().Wait();
                 }
             }
         }
@@ -164,11 +154,13 @@ namespace rise.Services
         {
             ApplicationUser appuser = null;
 
-            try
+
+            using (var scope = _scopeFactory.CreateScope())
             {
-                using (var scope = _scopeFactory.CreateScope())
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                try
                 {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                     if (telegramId != 0)
                     {
@@ -187,7 +179,10 @@ namespace rise.Services
                         }
                         catch (Exception ex)
                         {
-                            _logger.LogError("Received Exception from CreateUser {0}", ex.Message);
+                            var log = new Log();
+                            log.LogMessage(ex.Message);
+                            dbContext.Logger.Add(log);
+                            dbContext.SaveChangesAsync().Wait();
                             return null;
                         }
 
@@ -225,10 +220,14 @@ namespace rise.Services
                         appuser = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.UserName == userName);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Received Exception from GetUserAsync {0}", ex.Message);
+
+                catch (Exception ex)
+                {
+                    var log = new Log();
+                    log.LogMessage(ex.Message);
+                    dbContext.Logger.Add(log);
+                    dbContext.SaveChangesAsync().Wait();
+                }
             }
 
             return appuser;
