@@ -308,6 +308,7 @@ namespace rise.Services
         /// <returns></returns>
         private async Task cmd_Help(ApplicationUser appuser)
         {
+
             try
             {
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
