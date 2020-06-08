@@ -32,6 +32,9 @@
                     var result399to599 = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/delegates?offset=399"));
                     var delegate399to599 = JsonConvert.DeserializeObject<DelegateResult>(result399to599.ToString());
 
+                    var result499to699 = JObject.Parse(await hc.GetStringAsync(AppSettingsProvider.APIUrl + "/api/delegates?offset=499"));
+                    var delegate499to699 = JsonConvert.DeserializeObject<DelegateResult>(result399to599.ToString());
+
                     // Merge Delegates 200 to 399
                     foreach (var o in delegate200to399.Delegates)
                     {
@@ -39,6 +42,11 @@
                     }
 
                     foreach (var o in delegate399to599.Delegates)
+                    {
+                        delegateResult.Delegates.Add(o);
+                    }
+
+                    foreach (var o in delegate499to699.Delegates)
                     {
                         delegateResult.Delegates.Add(o);
                     }
