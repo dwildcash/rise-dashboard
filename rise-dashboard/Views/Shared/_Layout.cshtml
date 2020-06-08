@@ -192,23 +192,31 @@
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
                         {
-                            <li class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fa fa-book-open"></i>
-                                    <p>
-                                        Admin Users
-                                        <i class="right fa fa-angle-left"></i>
-                                    </p>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-book-open"></i>
+                            <p>
+                                Admin Users
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "ApplicationUsers")" class="nav-link">
+                                    <i class="fa fa-play-circle nav-icon"></i>
+                                    <p>Manage Users</p>
                                 </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="@Url.Action("Index", "ApplicationUsers")" class="nav-link">
-                                            <i class="fa fa-play-circle nav-icon"></i>
-                                            <p>Manage Users</p>
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "Logs")" class="nav-link">
+                                    <i class="fa fa-play-circle nav-icon"></i>
+                                    <p>View Logs</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                         }
                         <!-- Delegate List -->
                         <li class="nav-item">

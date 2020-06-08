@@ -168,20 +168,19 @@ namespace rise.Services
 
                                     if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
                                     {
-
                                         var txtmsg = string.Empty;
 
                                         if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                         {
-                                            txtmsg = "wake up!!! its a wonderful boom day! for today active users";
+                                            txtmsg = "KABOOM!!! its a wonderful boom day for today active users!";
                                         }
                                         else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                         {
-                                            txtmsg = "wake up!!! its a nice boom day! for today active users";
+                                            txtmsg = "wake up!!! its a nice boom day for today active users!";
                                         }
                                         else
                                         {
-                                            txtmsg = "wake up!! its an okay day! for today active users";
+                                            txtmsg = "wake up!! its an okay day for today active users!";
                                         }
 
                                         await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
@@ -213,15 +212,15 @@ namespace rise.Services
 
                                     if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                     {
-                                        txtmsg = "wake up!!! its a wonderful rainy day! for this week active users.";
+                                        txtmsg = "wake up!!! its a wonderful rainy day for this week active users!";
                                     }
                                     else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                     {
-                                        txtmsg = "wake up!!! its a nice day! for last week active users.";
+                                        txtmsg = "wake up!!! its a nice day for last week active users.!";
                                     }
                                     else
                                     {
-                                        txtmsg = "wake up!! its an okay day! for last week active users.";
+                                        txtmsg = "Hey ho! its an okay day for last week active users!";
                                     }
 
                                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
