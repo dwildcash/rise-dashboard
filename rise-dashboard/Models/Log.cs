@@ -6,11 +6,11 @@
 
     public partial class Log
     {
-        private int Id { get; set; }
+        public int Id { get; set; }
 
-        private DateTime Date { get; set; }
+        public DateTime Date { get; set; }
 
-        private string Message { get; set; }
+        public string Message { get; set; }
     }
 
     // Log a Message
