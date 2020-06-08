@@ -25,8 +25,6 @@ namespace rise
     /// </summary>
     public class Startup
     {
-        private static int debugMode = 0;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>

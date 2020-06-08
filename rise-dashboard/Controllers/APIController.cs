@@ -50,19 +50,17 @@
                     return Unauthorized();
                 }
 
-                await _updateService.EchoAsync(w);
+                if (w != null)
+                {
+                    await _updateService.EchoAsync(w);
+                }
             }
             catch (Exception ex)
             {
-                using (var scope = _scopeFactory.CreateScope())
-                {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                    var log = new Log();
-                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                    dbContext.Logger.Add(log);
-                    dbContext.SaveChangesAsync().Wait();
-                }
+                var log = new Log();
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
 
             return Ok();
