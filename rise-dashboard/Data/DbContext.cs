@@ -60,8 +60,14 @@
         /// </summary>
         public DbSet<DelegateForm> DelegateForms { get; set; }
 
+        /// <summary>
+        /// Get or set Telegram Pinned Message
+        /// </summary>
         public DbSet<TgPinnedMsg> TgPinnedMsgs { get; set; }
 
-        public DbSet<Log> Logger;
+        /// <summary>
+        /// Get or Set Logger
+        /// </summary>
+        public DbSet<Log> Logger { get; set;  }
     }
 }
