@@ -163,7 +163,6 @@ namespace rise
         {
             if (env.IsDevelopment())
             {
-                debugMode = 1;
                 app.UseDeveloperExceptionPage();
             }
             else
