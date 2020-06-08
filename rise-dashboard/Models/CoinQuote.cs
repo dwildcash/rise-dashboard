@@ -11,7 +11,6 @@
         public static List<CoinQuote> Current { get; set; }
     }
 
-
     /// <summary>
     /// Defines the <see cref="CoinQuote" />
     /// </summary>

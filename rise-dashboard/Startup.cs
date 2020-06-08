@@ -183,7 +183,7 @@ namespace rise
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 context.Logger.Add(log);
                 context.SaveChangesAsync();
             }

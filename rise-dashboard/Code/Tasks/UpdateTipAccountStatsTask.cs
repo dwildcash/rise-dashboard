@@ -60,7 +60,7 @@
                             TotalAmountTransactions += tx.Sum(x => x.amount / 100000000);
 
                             if (tx == null && account.UserName == null)
-                            {                               
+                            {
                                 dbContext.Users.Remove(account);
                                 dbContext.SaveChanges();
                             }

@@ -44,8 +44,6 @@ namespace rise_dashboard.Controllers
             Response.Cookies.Append(key, value, option);
         }
 
-
-
         // GET: DelegateForms
         [AllowAnonymous]
         public async Task<IActionResult> Index(string address, long balance = 1000)
@@ -92,8 +90,6 @@ namespace rise_dashboard.Controllers
             return View(delegateviewModel);
         }
 
-
-
         // GET: DelegateForms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -121,8 +117,6 @@ namespace rise_dashboard.Controllers
             return View(dl);
         }
 
-
-
         // POST: DelegateForms/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -140,8 +134,6 @@ namespace rise_dashboard.Controllers
             return View(delegateForm);
         }
 
-
-
         // GET: DelegateForms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -157,8 +149,6 @@ namespace rise_dashboard.Controllers
             }
             return View(delegateForm);
         }
-
-
 
         // POST: DelegateForms/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for

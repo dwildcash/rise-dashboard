@@ -16,7 +16,7 @@
         /// <summary>
         /// Gets or sets the coinbaseBtcQuoteResult
         /// </summary>
-        public CoinbaseBtcQuote coinbaseBtcQuoteResult{ get; set; }
+        public CoinbaseBtcQuote coinbaseBtcQuoteResult { get; set; }
 
         /// <summary>
         /// Gets or sets the walletAccountResult
@@ -37,7 +37,6 @@
         /// Gets or sets the delegateVotesResult
         /// </summary>
         public DelegateResult delegateVotesResult { get; set; }
-
 
         /// <summary>
         /// Gets or sets the coinReceivedByAccount

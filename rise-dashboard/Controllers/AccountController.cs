@@ -4,14 +4,13 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
     using Models;
+    using rise.Data;
     using Services;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Telegram.Bot.Extensions.LoginWidget;
-    using rise.Data;
 
     [Authorize]
     [Route("[controller]/[action]")]
@@ -73,7 +72,7 @@
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                     var log = new Log();
-                    log.LogMessage(ex.Message);
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                     dbContext.Logger.Add(log);
                     dbContext.SaveChangesAsync().Wait();
                 }

@@ -142,7 +142,7 @@
         /// </summary>
         /// <returns></returns>
         private CoinQuote DefaultQuote()
-        {     
+        {
             var e = new CoinQuote
             {
                 Volume = 0,
@@ -152,7 +152,6 @@
 
             return e;
         }
-
 
         /// <summary>
         /// Return the Volume % Change vs X days

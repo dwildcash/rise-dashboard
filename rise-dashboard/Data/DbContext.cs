@@ -68,6 +68,6 @@
         /// <summary>
         /// Get or Set Logger
         /// </summary>
-        public DbSet<Log> Logger { get; set;  }
+        public DbSet<Log> Logger { get; set; }
     }
 }

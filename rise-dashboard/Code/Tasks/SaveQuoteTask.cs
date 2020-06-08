@@ -66,7 +66,7 @@
                         TimeStamp = time,
                         USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteXtcom.Price * quoteXtcom.Volume / totalVolume))
                     };
-         
+
                     dbContext.CoinQuotes.Add(quoteLivecoin);
                     dbContext.CoinQuotes.Add(quoteXtcom);
                     dbContext.CoinQuotes.Add(quoteAllWeighted);

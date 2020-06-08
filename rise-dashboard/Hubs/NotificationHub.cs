@@ -4,6 +4,5 @@ namespace rise.Hubs
 {
     public class NotificationHub : Hub
     {
-
     }
 }

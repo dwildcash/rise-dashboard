@@ -129,7 +129,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @{  var currentAccount = string.Empty;
+                                    @{ var currentAccount = string.Empty;
                                         var forgingChance = 0.0;
                                         var delegateVoteWeight = 0.0;
                                     }
@@ -143,73 +143,73 @@
                                             currentAccount = Model.walletAccountResult.account.Address;
                                         }
 
-                                    <tr class="@matchVote(string.IsNullOrEmpty(mydelegate?.Address) ? "" : mydelegate.Address, currentAccount)">
+                                        <tr class="@matchVote(string.IsNullOrEmpty(mydelegate?.Address) ? "" : mydelegate.Address, currentAccount)">
 
-                                        @if (mydelegate != null)
-                                        {
-                                            delegateVoteWeight = mydelegate.VotesWeight;
-                                            forgingChance = mydelegate.ForgingChance;
-
-                                            if (mydelegate.Rank >= 199)
+                                            @if (mydelegate != null)
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Rank</span></h6></td>
+                                                delegateVoteWeight = mydelegate.VotesWeight;
+                                                forgingChance = mydelegate.ForgingChance;
+
+                                                if (mydelegate.Rank >= 199)
+                                                {
+                                                    <td class="align-middle"><h6><span class="badge badge-primary">@mydelegate.Rank</span></h6></td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="align-middle"><h6><span class="badge badge-secondary">@mydelegate.Rank</span></h6></td>
+                                                }
+
+                                                <td class="align-middle"><h6><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@mydelegate.Username</a></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">@((mydelegate.VotesWeight / 100000000).ToString("N0"))</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">@(mydelegate.Voters)</span></h6></td>
+
+                                                if (mydelegate.CMB >= 28)
+                                                {
+                                                    <td class="align-middle"><h6><span class="badge badge-danger">Banned @(mydelegate.CMB)</span></h6></td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="align-middle"><h6><span class="badge badge-secondary">@(mydelegate.CMB)</span></h6></td>
+                                                }
                                             }
                                             else
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-secondary">@mydelegate.Rank</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-primary">N/A</span></h6></td>
+                                                <td class="align-middle"><h6><span class="badge badge-secondary">N/A</span></h6></td>
                                             }
 
-                                            <td class="align-middle"><h6><a href="https://explorer.rise.vision/address/@t.Address" target="_blank">@mydelegate.Username</a></h6></td>
-                                            <td class="align-middle"><h6><span class="badge badge-secondary">@((mydelegate.VotesWeight / 100000000).ToString("N0"))</span></h6></td>
-                                            <td class="align-middle"><h6><span class="badge badge-secondary">@(mydelegate.Voters)</span></h6></td>
+                                            <td class="align-middle"><h6><strong>@t.Share%</strong></h6></td>
+                                            <td class="align-middle"><h6>@t.Payout_interval</h6></td>
 
-                                            if (mydelegate.CMB >= 28)
+                                            @if (mydelegate != null)
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-danger">Banned @(mydelegate.CMB)</span></h6></td>
+                                                <td class="align-middle"><h6>@Math.Round(mydelegate.ForgingChance, 2)%</h6></td>
                                             }
                                             else
                                             {
-                                                <td class="align-middle"><h6><span class="badge badge-secondary">@(mydelegate.CMB)</span></h6></td>
+                                                <td class="align-middle"><h6><small class="text-muted">N/A</small></h6></td>
                                             }
-                                        }
-                                        else
-                                        {
-                                            <td class="align-middle"><h6><span class="badge badge-primary">N/A</span></h6></td>
-                                            <td class="align-middle"><h6><span class="badge badge-secondary">N/A</span></h6></td>
-                                        }
 
-                                        <td class="align-middle"><h6><strong>@t.Share%</strong></h6></td>
-                                        <td class="align-middle"><h6>@t.Payout_interval</h6></td>
+                                            @{ var clibalance = @ViewBag.balance; }
+                                            @{ var delvoteweight = delegateVoteWeight / 100000000; }
+                                            @{ var percentVoteWeight = clibalance / (delvoteweight + clibalance) * 100;}
 
-                                        @if (mydelegate != null)
-                                        {
-                                            <td class="align-middle"><h6>@Math.Round(mydelegate.ForgingChance, 2)%</h6></td>
-                                        }
-                                        else
-                                        {
-                                            <td class="align-middle"><h6><small class="text-muted">N/A</small></h6></td>
-                                        }
+                                            <td class="align-middle"><h6>@Math.Round(percentVoteWeight, 2)%</h6></td>
+                                            @{ var reward = Math.Round(((double)forgingChance / 100.0) * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 3); }
 
-                                        @{ var clibalance = @ViewBag.balance; }
-                                        @{ var delvoteweight = delegateVoteWeight / 100000000; }
-                                        @{ var percentVoteWeight = clibalance / (delvoteweight + clibalance) * 100;}
-
-                                        <td class="align-middle"><h6>@Math.Round(percentVoteWeight, 2)%</h6></td>
-                                        @{ var reward = Math.Round(((double)forgingChance / 100.0) * (double)AppSettingsProvider.CoinRewardDay * clibalance / (delvoteweight + clibalance) * (double)t.Share / 100, 3); }
-
-                                        <td class="align-middle"><h6><strong>@reward</strong></h6></td>
-                                        <td class="align-middle"><h6><strong>@Math.Round(Model.LastAllQuote().USDPrice * reward,4)$</strong></h6></td>
-                                        <td>
-                                            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
-                                            {
-                                                <text>
-                                                    <a asp-action="Edit" asp-route-id="@t.Id">Edit</a> |
-                                                    <a asp-action="Delete" asp-route-id="@t.Id"> Delete </a>
-                                                </text>
-                                            }
-                                        </td>
-                                        <td></td>
-                                    </tr>
+                                            <td class="align-middle"><h6><strong>@reward</strong></h6></td>
+                                            <td class="align-middle"><h6><strong>@Math.Round(Model.LastAllQuote().USDPrice * reward, 4)$</strong></h6></td>
+                                            <td>
+                                                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                                                {
+                                                    <text>
+                                                        <a asp-action="Edit" asp-route-id="@t.Id">Edit</a> |
+                                                        <a asp-action="Delete" asp-route-id="@t.Id"> Delete </a>
+                                                    </text>
+                                                }
+                                            </td>
+                                            <td></td>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>

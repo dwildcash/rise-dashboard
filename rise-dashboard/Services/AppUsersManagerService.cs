@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using rise.Code.Rise;
 using rise.Data;
 using rise.Helpers;
@@ -45,7 +44,7 @@ namespace rise.Services
                 catch (Exception ex)
                 {
                     var log = new Log();
-                    log.LogMessage(ex.Message);
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                     dbContext.Logger.Add(log);
                     dbContext.SaveChangesAsync().Wait();
                 }
@@ -73,7 +72,7 @@ namespace rise.Services
                 catch (Exception ex)
                 {
                     var log = new Log();
-                    log.LogMessage(ex.Message);
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                     dbContext.Logger.Add(log);
                     dbContext.SaveChangesAsync().Wait();
                 }
@@ -102,7 +101,7 @@ namespace rise.Services
                 catch (Exception ex)
                 {
                     var log = new Log();
-                    log.LogMessage(ex.Message);
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                     dbContext.Logger.Add(log);
                     dbContext.SaveChangesAsync().Wait();
                     return null;
@@ -129,7 +128,7 @@ namespace rise.Services
                 catch (Exception ex)
                 {
                     var log = new Log();
-                    log.LogMessage(ex.Message);
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                     dbContext.Logger.Add(log);
                     dbContext.SaveChangesAsync().Wait();
                 }
@@ -154,14 +153,12 @@ namespace rise.Services
         {
             ApplicationUser appuser = null;
 
-
             using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 try
                 {
-
                     if (telegramId != 0)
                     {
                         appuser = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.TelegramId == telegramId);
@@ -180,7 +177,7 @@ namespace rise.Services
                         catch (Exception ex)
                         {
                             var log = new Log();
-                            log.LogMessage(ex.Message);
+                            log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                             dbContext.Logger.Add(log);
                             dbContext.SaveChangesAsync().Wait();
                             return null;
@@ -220,11 +217,10 @@ namespace rise.Services
                         appuser = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.UserName == userName);
                     }
                 }
-
                 catch (Exception ex)
                 {
                     var log = new Log();
-                    log.LogMessage(ex.Message);
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                     dbContext.Logger.Add(log);
                     dbContext.SaveChangesAsync().Wait();
                 }

@@ -1,5 +1,4 @@
-﻿
-var gulp = require('gulp');
+﻿var gulp = require('gulp');
 var del = require('del');
 
 // Node_modules deps

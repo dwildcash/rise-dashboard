@@ -2,7 +2,6 @@
 {
     using Helpers;
     using Models;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -16,7 +15,6 @@
         /// </summary>
         private static List<Models.Delegate> workingDelegatesLst;
 
-       
         public static void generateForgingStat2(DelegateResult delegateResult)
         {
             workingDelegatesLst = delegateResult.Delegates.Where(x => x.Rank <= 199).OrderBy(x => x.Rank).ToList();

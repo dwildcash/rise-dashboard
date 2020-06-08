@@ -53,7 +53,6 @@ namespace rise.Code.Rise
         /// <returns></returns>
         public static async Task<Tx> CreatePaiment(double amount, string secret, string recipiendId)
         {
-  
             try
             {
                 // Create Paiment

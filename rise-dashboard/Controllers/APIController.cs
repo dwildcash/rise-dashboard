@@ -38,7 +38,6 @@
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
-
         public async Task<IActionResult> Webhook(string secret, [FromBody]dynamic jsonresult)
         {
             try
@@ -60,7 +59,7 @@
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                     var log = new Log();
-                    log.LogMessage(ex.Message);
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                     dbContext.Logger.Add(log);
                     dbContext.SaveChangesAsync().Wait();
                 }

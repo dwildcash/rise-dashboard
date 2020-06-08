@@ -13,17 +13,17 @@
     @foreach (var transac in @ViewBag.Transactions)
     {
 
-    @if (double.Parse(transac.amount) <= 0)
-         {
-             badge = "badge-warning";
-         }
-         else
-         {
-             badge = "badge-success";
-         }
+        @if (double.Parse(transac.amount) <= 0)
+        {
+            badge = "badge-warning";
+        }
+        else
+        {
+            badge = "badge-success";
+        }
 
-    <li class="list-group-item">
-        <span class="badge badge-pill @badge">@transac.amount</span>&nbsp;<span class="small">@ConvertFromUnixTimestamp(transac.time)</span>
-    </li>
+        <li class="list-group-item">
+            <span class="badge badge-pill @badge">@transac.amount</span>&nbsp;<span class="small">@ConvertFromUnixTimestamp(transac.time)</span>
+        </li>
     }
 </ul>

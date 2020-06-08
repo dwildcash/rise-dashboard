@@ -100,6 +100,5 @@
         /// Secret used for Telegram webhook
         /// </summary>
         public static string WebHookSecret { get; set; }
-
     }
 }

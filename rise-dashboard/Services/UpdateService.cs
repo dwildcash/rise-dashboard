@@ -72,7 +72,6 @@ namespace rise.Services
                 _logger.LogError("Error parsing parameters {0}" + ex.Message);
             }
 
-
             try
             {
                 // Match !Command if present
@@ -108,7 +107,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
 
@@ -156,65 +155,58 @@ namespace rise.Services
                         // Boom!
                         case "!BOOM":
                             {
-                                if (appuser.UserName == "Dwildcash")
-                                {
-                                    try
-                                    {
-                                        if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
-                                        {
-                                            maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
-                                        }
-
-                                        lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
-
-                                        if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
-                                        {
-                                            await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        var log = new Log();
-                                        log.LogMessage(ex.Message);
-                                        _appdb.Logger.Add(log);
-                                        _appdb.SaveChangesAsync().Wait();
-                                    }
-                                }
-                            }
-                            break;
-                        // Let it Rain Rise
-                        case "!RAIN":
-                            {
-                                if (appuser.UserName == "Dwildcash")
+                                try
                                 {
                                     if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                                     {
                                         maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                     }
 
-                                    lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
+                                    lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
 
-                                    // Check before sending
                                     if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
                                     {
-                                        var txtmsg = string.Empty;
+                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    var log = new Log();
+                                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                                    _appdb.Logger.Add(log);
+                                    _appdb.SaveChangesAsync().Wait();
+                                }
+                            }
+                            break;
+                        // Let it Rain Rise
+                        case "!RAIN":
+                            {
+                                if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
+                                {
+                                    maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                                }
 
-                                        if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
-                                        {
-                                            txtmsg = "wake up!!! its a wonderful day!";
-                                        }
-                                        else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
-                                        {
-                                            txtmsg = "wake up!!! its a nice day!";
-                                        }
-                                        else
-                                        {
-                                            txtmsg = "wake up!! its an okay day!";
-                                        }
-                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
+                                lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
+
+                                // Check before sending
+                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
+                                {
+                                    var txtmsg = string.Empty;
+
+                                    if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
+                                    {
+                                        txtmsg = "wake up!!! its a wonderful day!";
+                                    }
+                                    else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
+                                    {
+                                        txtmsg = "wake up!!! its a nice day!";
+                                    }
+                                    else
+                                    {
+                                        txtmsg = "wake up!! its an okay day!";
                                     }
 
-
+                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
                                 }
                             }
                             break;
@@ -281,7 +273,6 @@ namespace rise.Services
                             }
                             break;
 
-
                         // Info Price
                         case "!PRICE":
                             await cmd_Price(message, appuser);
@@ -301,7 +292,7 @@ namespace rise.Services
                 catch (Exception ex)
                 {
                     var log = new Log();
-                    log.LogMessage(ex.Message);
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                     _appdb.Logger.Add(log);
                     _appdb.SaveChangesAsync().Wait();
                 }
@@ -337,10 +328,9 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
-
             }
         }
 
@@ -352,7 +342,6 @@ namespace rise.Services
         /// <returns></returns>
         private async Task cmd_TestFunction(Message message, ApplicationUser appuser)
         {
-
             try
             {
                 var myurl = appuser.Photo_Url.Replace("https", "http").TrimEnd();
@@ -387,7 +376,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
             }
@@ -502,7 +491,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
             }
@@ -544,7 +533,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
                 return false;
@@ -586,9 +575,9 @@ namespace rise.Services
                         {
                             var secret = sender.GetSecret();
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            Thread.Sleep(350);
+                            Thread.Sleep(500);
 
-                            if (destusers.Count <= 30 && tx != null && tx.success)
+                            if (destusers.Count <= 20 && tx != null && tx.success)
                             {
                                 try
                                 {
@@ -599,10 +588,14 @@ namespace rise.Services
                                 catch (Exception ex)
                                 {
                                     var log = new Log();
-                                    log.LogMessage(ex.Message);
+                                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                                     _appdb.Logger.Add(log);
                                     _appdb.SaveChangesAsync().Wait();
                                 }
+                            }
+                            else
+                            {
+                                await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Sorry transaction failed from @" + sender.UserName + " Status:" + tx.success, ParseMode.Html);
                             }
                         }
 
@@ -621,7 +614,10 @@ namespace rise.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Received Exception from cmd_Send transaction {0}", ex.Message);
+                var log = new Log();
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
 
@@ -681,7 +677,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
             }
@@ -719,7 +715,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
             }
@@ -768,7 +764,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
             }
@@ -818,7 +814,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
             }
@@ -850,7 +846,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
             }
@@ -885,7 +881,7 @@ namespace rise.Services
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
             }

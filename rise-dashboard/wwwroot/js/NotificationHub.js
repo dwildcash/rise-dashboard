@@ -13,7 +13,6 @@ connection.on("Send", function (message) {
     element.scrollTop = element.scrollHeight - element.clientHeight;
 });
 
-
 connection.start().then(function () {
     var element = document.getElementById("master");
     element.innerHTML += "<p class='text-success'>Connected to server</p>";

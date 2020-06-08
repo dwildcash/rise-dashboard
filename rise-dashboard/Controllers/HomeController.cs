@@ -260,7 +260,7 @@
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
                 return null;
@@ -308,7 +308,7 @@
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
                 return null;
@@ -344,7 +344,7 @@
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
                 return null;
@@ -374,7 +374,7 @@
             catch (Exception ex)
             {
                 var log = new Log();
-                log.LogMessage(ex.Message);
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
                 return null;

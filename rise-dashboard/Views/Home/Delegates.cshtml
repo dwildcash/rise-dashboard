@@ -108,7 +108,7 @@
                                             <td class="align-middle"><h6><small class="text-muted">@(Math.Round((double)t.VotesWeight / 100000000, 2).ToString("N0"))</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Voters</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Missedblocks</small></h6></td>
-                                            
+
                                             @if (t.CMB < 28)
                                             {
                                                 <td class="align-middle"><h6><small class="text-muted">@Math.Round(t.ForgingChance, 2)%</small></h6></td>
@@ -117,11 +117,11 @@
                                             {
                                                 <td class="align-middle"><h6><small class="text-muted">0%</small></h6></td>
                                             }
-                                            
+
                                             <td class="align-middle"><h6><small class="text-muted">@t.Approval%</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@t.Producedblocks.ToString("N0")</small></h6></td>
                                             <td class="align-middle"><h6><small class="text-muted">@Math.Round((double)t.Vote / 100000000, 2)</small></h6></td>
-                                            
+
                                             @if (t.CMB < 28)
                                             {
                                                 <td class="align-middle"><h6><span class="badge badge-pill badge-success">@t.CMB</span></h6></td>
