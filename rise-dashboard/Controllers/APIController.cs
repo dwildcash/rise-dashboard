@@ -38,7 +38,7 @@
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
-        public async Task<IActionResult> Webhook(string secret, [FromBody] Update update)
+        public async Task<IActionResult> Webhook([FromBody] Update update)
         {
 
             try
