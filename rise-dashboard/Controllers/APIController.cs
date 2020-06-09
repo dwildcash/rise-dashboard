@@ -38,23 +38,36 @@
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
-        public async Task<IActionResult> Webhook([FromBody] Update update)
+        public async Task<IActionResult> Webhook(string secret, [FromBody] dynamic jsonresult)
         {
-
             try
             {
-                await _updateService.EchoAsync(update);
+                Update w = JsonConvert.DeserializeObject<Update>(jsonresult.ToString());
+
+                // Return if the secret is not correct
+                if (secret != AppSettingsProvider.WebHookSecret)
+                {
+                    return Unauthorized();
+                }
+
+                await _updateService.EchoAsync(w);
             }
             catch (Exception ex)
             {
-                var log = new Log();
-                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                _appdb.Logger.Add(log);
-                _appdb.SaveChangesAsync().Wait();
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                    var log = new Log();
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                    dbContext.Logger.Add(log);
+                    dbContext.SaveChangesAsync().Wait();
+                }
             }
 
             return Ok();
         }
+
 
         /// <summary>
         /// api Controller
