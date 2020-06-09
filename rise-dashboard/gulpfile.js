@@ -84,7 +84,8 @@ gulp.task('clean', function (done) {
         '!wwwroot/js/NotificationHub.js',
         '!wwwwroot/js/NotificationUpdateTitle.js',
         '!wwwroot/css/pace.css',
-        '!wwwroot/css/skin-midnight.css'
+        '!wwwroot/css/skin-midnight.css',
+        '!wwwroot/doc/**/*'
     ], done);
 });
 
