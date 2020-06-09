@@ -38,11 +38,12 @@
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
         [EnableCors("CorsPolicy")]
-        public async Task<IActionResult> Webhook(string secret, Update w)
+        public async Task<IActionResult> Webhook(string secret, [FromBody] Update update)
         {
+
             try
             {
-                await _updateService.EchoAsync(w);
+                await _updateService.EchoAsync(update);
             }
             catch (Exception ex)
             {
@@ -60,11 +61,10 @@
         /// </summary>
         /// <param name="context"></param>
         /// <param name="updateService"></param>
-        public apiController(ApplicationDbContext context, IUpdateService updateService, IServiceScopeFactory scopeFactory)
+        public apiController(ApplicationDbContext context, IUpdateService updateService)
         {
             _updateService = updateService;
             _appdb = context;
-            _scopeFactory = scopeFactory;
         }
 
         /// <summary>
