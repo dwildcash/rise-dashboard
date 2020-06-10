@@ -611,10 +611,6 @@ namespace rise.Services
                                     _appdb.SaveChangesAsync().Wait();
                                 }
                             }
-                            else
-                            {
-                                await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Sorry transaction failed from @" + sender.UserName + " Status:" + tx.success, ParseMode.Html);
-                            }
                         }
 
                         var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
