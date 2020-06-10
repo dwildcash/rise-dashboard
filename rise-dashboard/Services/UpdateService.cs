@@ -878,6 +878,7 @@ namespace rise.Services
                 var strResponse = "<b>Rise Information/Tools</b>" + Environment.NewLine +
                                   "<b>Rise Website</b> - https://rise.vision" + Environment.NewLine +
                                   "<b>Rise Dashboard</b> - https://dashboard.rise.vision" + Environment.NewLine +
+                                  "<b>Riseforce Game</b> - https://riseforce.rise.vision" + Environment.NewLine +
                                   "<b>Rise RoadMap</b> - https://rise.vision/roadmap/" + Environment.NewLine +
                                   "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
                                   "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
