@@ -57,7 +57,7 @@ namespace rise.Services
             // Get the user who sent message
             var appuser = await _appUsersManagerService.GetUserAsync(message.From.Username, message.From.Id, flagMsgUpdate);
 
-            // Configure Photo Url
+            /* Configure Photo Url
             try
             {
                 var file_id = _botService.Client.GetUserProfilePhotosAsync(message.From.Id).Result.Photos[0][0].FileId;
@@ -72,7 +72,7 @@ namespace rise.Services
                 log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                 _appdb.Logger.Add(log);
                 _appdb.SaveChangesAsync().Wait();
-            }
+            }*/
 
             try
             {
