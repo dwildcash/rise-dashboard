@@ -279,15 +279,15 @@ namespace rise.Services
 
                                         if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                         {
-                                            txtmsg = "wake up!!! its a wonderful day!";
+                                            txtmsg = Emoji.Money_With_Wings + "wake up!!! its a wonderful day! " + Emoji.Money_With_Wings;
                                         }
                                         else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                         {
-                                            txtmsg = "wake up!!! its a nice day!";
+                                            txtmsg = Emoji.Moneybag + "wake up!!! its a nice day! " + Emoji.Moneybag;
                                         }
                                         else
                                         {
-                                            txtmsg = "wake up!! its an okay day!";
+                                            txtmsg = Emoji.Star + " wake up!! its an good day!" + Emoji.Star;
                                         }
 
                                         await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
