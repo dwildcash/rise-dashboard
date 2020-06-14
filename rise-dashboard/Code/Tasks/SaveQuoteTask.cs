@@ -19,10 +19,7 @@
         /// </summary>
         public string Schedule => "*/1 * * * *";
 
-        /// <summary>
-        /// Defines the scopeFactory
-        /// </summary>
-        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly ApplicationDbContext _appdb;
 
         /// <summary>
         /// The ExecuteAsync
@@ -33,50 +30,47 @@
         {
             try
             {
-                using (var scope = _scopeFactory.CreateScope())
+                var time = DateTime.Now.ToUniversalTime();
+
+                var quoteLivecoin = new CoinQuote
                 {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    var time = DateTime.Now.ToUniversalTime();
+                    Exchange = "LiveCoin",
+                    Price = LiveCoinQuote.Current.Last,
+                    Volume = LiveCoinQuote.Current.Volume,
+                    TimeStamp = time,
+                    USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * LiveCoinQuote.Current.Last
+                };
 
-                    var quoteLivecoin = new CoinQuote
-                    {
-                        Exchange = "LiveCoin",
-                        Price = LiveCoinQuote.Current.Last,
-                        Volume = LiveCoinQuote.Current.Volume,
-                        TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * LiveCoinQuote.Current.Last
-                    };
+                var quoteXtcom = new CoinQuote
+                {
+                    Exchange = "Xt.com",
+                    Price = double.Parse(XtcomQuoteResult.Current.datas[1]) / double.Parse(CoinbaseBtcQuote.Current.amount),
+                    Volume = double.Parse(XtcomQuoteResult.Current.datas[4]),
+                    TimeStamp = time,
+                    USDPrice = double.Parse(XtcomQuoteResult.Current.datas[1])
+                };
 
-                    var quoteXtcom = new CoinQuote
-                    {
-                        Exchange = "Xt.com",
-                        Price = double.Parse(XtcomQuoteResult.Current.datas[1]) / double.Parse(CoinbaseBtcQuote.Current.amount),
-                        Volume = double.Parse(XtcomQuoteResult.Current.datas[4]),
-                        TimeStamp = time,
-                        USDPrice = double.Parse(XtcomQuoteResult.Current.datas[1])
-                    };
+                var totalVolume = quoteLivecoin.Volume + quoteXtcom.Volume;
 
-                    var totalVolume = quoteLivecoin.Volume + quoteXtcom.Volume;
+                var quoteAllWeighted = new CoinQuote
+                {
+                    Exchange = "All",
+                    Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteXtcom.Price * quoteXtcom.Volume / totalVolume),
+                    Volume = totalVolume,
+                    TimeStamp = time,
+                    USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteXtcom.Price * quoteXtcom.Volume / totalVolume))
+                };
 
-                    var quoteAllWeighted = new CoinQuote
-                    {
-                        Exchange = "All",
-                        Price = (quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteXtcom.Price * quoteXtcom.Volume / totalVolume),
-                        Volume = totalVolume,
-                        TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((quoteLivecoin.Price * quoteLivecoin.Volume / totalVolume) + (quoteXtcom.Price * quoteXtcom.Volume / totalVolume))
-                    };
+                _appdb.CoinQuotes.Add(quoteLivecoin);
+                _appdb.CoinQuotes.Add(quoteXtcom);
+                _appdb.CoinQuotes.Add(quoteAllWeighted);
 
-                    dbContext.CoinQuotes.Add(quoteLivecoin);
-                    dbContext.CoinQuotes.Add(quoteXtcom);
-                    dbContext.CoinQuotes.Add(quoteAllWeighted);
+                // Save Context in Database
+                await _appdb.SaveChangesAsync();
 
-                    // Save Context in Database
-                    await dbContext.SaveChangesAsync();
+                // Load latest all Last 15 days
+                CoinQuoteResult.Current = _appdb.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList();
 
-                    // Load latest all Last 15 days
-                    CoinQuoteResult.Current = dbContext.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList();
-                }
             }
             catch (Exception e)
             {
@@ -88,9 +82,9 @@
         /// Initializes a new instance of the <see cref="SaveQuoteTask"/> class.
         /// </summary>
         /// <param name="scopeFactory">The scopeFactory<see cref="IServiceScopeFactory"/></param>
-        public SaveQuoteTask(IServiceScopeFactory scopeFactory)
+        public SaveQuoteTask(ApplicationDbContext context)
         {
-            _scopeFactory = scopeFactory;
+            _appdb = context;
         }
     }
 }

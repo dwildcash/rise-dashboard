@@ -20,11 +20,6 @@
         private readonly IAppUsersManagerService _appUsersManagerService;
         private readonly ApplicationDbContext _appdb;
 
-        /// <summary>
-        /// Defines the scopeFactory
-        /// </summary>
-        private readonly IServiceScopeFactory _scopeFactory;
-
         public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService, ApplicationDbContext context)
         {
             _signInManager = signInManager;
