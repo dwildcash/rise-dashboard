@@ -182,9 +182,9 @@ namespace rise.Services
                                     {
                                         maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                     }
-                                    else
+                                    else if (lstAmount.Count == 0)
                                     {
-                                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "You forgot to enter a rise amount!", ParseMode.Html);
+                                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Joy + " You forgot to enter a RISE amount!", ParseMode.Html);
                                         return;
                                     }
 
@@ -207,7 +207,7 @@ namespace rise.Services
                                             txtmsg = Emoji.Boom + " Hola!! its a good day for active users! " + Emoji.Boom;
                                         }
 
-                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
+                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
                                     }
                                 }
                                 catch (Exception ex)
@@ -226,7 +226,7 @@ namespace rise.Services
                                 {
                                     maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                 }
-                                else
+                                else if (lstAmount.Count == 0)
                                 {
                                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, "You forgot to enter a rise amount!", ParseMode.Html);
                                     return;
