@@ -126,18 +126,19 @@ namespace rise.Services
 
                             if (lstAmount.Count > 0)
                             {
-                                if (await cmd_preSend(lstAmount.FirstOrDefault() - 0.1, command, 1, message.Chat.Id, appuser))
+                                double amount = lstAmount.FirstOrDefault() - 0.1;
+                                if (await cmd_preSend(amount, command, 1, message.Chat.Id, appuser))
                                 {
-                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - 0.1, "11843004005205985384R");
+                                    await cmd_Withdraw(appuser, amount, "11843004005205985384R");
                                 }
 
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + (lstAmount.FirstOrDefault() - 0.1) + " <b>Rise</b>", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + Math.Round(amount, 2) + " <b>Rise</b>", ParseMode.Html);
                             }
 
                             else
                             {
                                 var balance = await RiseManager.AccountBalanceAsync("11843004005205985384R");
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Current RiseForce Jackpot Balance: " + balance + " <b>Rise</b>", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Current RiseForce Jackpot confirmed Balance: " + balance + " <b>Rise</b>", ParseMode.Html);
                             }
                             break;
 
