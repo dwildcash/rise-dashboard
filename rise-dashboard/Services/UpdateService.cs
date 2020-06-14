@@ -122,8 +122,23 @@ namespace rise.Services
                 {
                     switch (command.Trim())
                     {
-                        case "!TEST":
-                            await cmd_TestFunction(message, appuser);
+                        case "!RISEFORCE":
+
+                            if (lstAmount.Count > 0)
+                            {
+                                if (await cmd_preSend(lstAmount.FirstOrDefault() - 0.1, command, 1, message.Chat.Id, appuser))
+                                {
+                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - 0.1, "11843004005205985384");
+                                }
+
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + (lstAmount.FirstOrDefault() - 0.1) + " <B>Rise</B>", ParseMode.Html);
+                            }
+
+                            else
+                            {
+                                var balance = await RiseManager.AccountBalanceAsync("11843004005205985384");
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Current RiseForce Jackpot Balance: " + balance + " <B>Rise</B>", ParseMode.Html);
+                            }
                             break;
 
                         // Show Pool
@@ -139,7 +154,7 @@ namespace rise.Services
                         case "!BALANCE":
                             await cmd_ShowUserBalance(appuser);
                             break;
-                        // Show Help
+                        // Show Help 
                         case "!HELP":
                             await cmd_Help(appuser);
                             break;
@@ -172,15 +187,15 @@ namespace rise.Services
 
                                         if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                         {
-                                            txtmsg = "KABOOM!!! its a wonderful boom day for today active users!";
+                                            txtmsg = "KABOOM!!! its a wonderful boom for active users!";
                                         }
                                         else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                         {
-                                            txtmsg = "Wake up!!! its a nice boom day for today active users!";
+                                            txtmsg = "BOOM!!! its a nice boom for active users!";
                                         }
                                         else
                                         {
-                                            txtmsg = "Wake up!! its an okay day for today active users!";
+                                            txtmsg = "Wake up!! its an okay day for active users!";
                                         }
 
                                         await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
@@ -212,15 +227,15 @@ namespace rise.Services
 
                                     if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                     {
-                                        txtmsg = "RAIN RAIN!!!! its a wonderful rainy day for this week active users!";
+                                        txtmsg = "RAIN RAIN!!!! its a wonderful rainy day for last day active users!";
                                     }
                                     else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                     {
-                                        txtmsg = "wake up!!! its a nice day for last week active users.!";
+                                        txtmsg = "Rain!!! its a nice day for last day active users.!";
                                     }
                                     else
                                     {
-                                        txtmsg = "Hey ho! its an okay day for last week active users!";
+                                        txtmsg = "Hey ho! its an okay day for last day active users!";
                                     }
 
                                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
@@ -263,6 +278,10 @@ namespace rise.Services
 
                                         await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
                                     }
+                                }
+                                else if (lstAppUsers.Count == 0)
+                                {
+                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please tell me a user to send to!.", ParseMode.Html);
                                 }
                                 else
                                 {
@@ -332,10 +351,11 @@ namespace rise.Services
 
                 var strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
                                      "<b>!pool</b> - (List active Pools)" + Environment.NewLine +
-                                     "<b>!rain</b> - !rain 10 (to any random users active in last week with min 5 msg)" + Environment.NewLine +
-                                     "<b>!boom</b> - !boom 10 (to any random users active in the last day with min of 5 msg)" + Environment.NewLine +
+                                     "<b>!rain</b> - !rain 10 (to any random users active in last day with min 5 msg)" + Environment.NewLine +
+                                     "<b>!boom</b> - !boom 10 (to any random users active in the last 4 hours with min of 5 msg)" + Environment.NewLine +
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
                                      "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
+                                     "<b>!RiseForce</b> - Send Rise to RiseForce JackPot" + Environment.NewLine +
                                      "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
                                      "<b>!hope</b> - Show hope quote" + Environment.NewLine +
                                      "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
@@ -530,7 +550,7 @@ namespace rise.Services
             {
                 if (numReceivers == 0)
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "Sorry I do not find anyone to send RISE", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, "Sorry I did not find any user to send RISE :(", ParseMode.Html);
                     return false;
                 }
 
@@ -593,7 +613,7 @@ namespace rise.Services
                         {
                             var secret = sender.GetSecret();
                             var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            Thread.Sleep(100);
+                            Thread.Sleep(1000);
 
                             if (destusers.Count <= 20 && tx != null && tx.success)
                             {

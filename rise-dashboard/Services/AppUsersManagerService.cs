@@ -14,14 +14,12 @@ namespace rise.Services
 {
     public class AppUsersManagerService : IAppUsersManagerService
     {
-        /// <summary>
-        /// Defines the scopeFactory
-        /// </summary>
-        private readonly IServiceScopeFactory _scopeFactory;
 
-        public AppUsersManagerService(IServiceScopeFactory scopeFactory, UserManager<ApplicationUser> userManager)
+        private readonly ApplicationDbContext _appdb;
+
+        public AppUsersManagerService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _scopeFactory = scopeFactory;
+            _appdb = context;
         }
 
         /// <summary>
@@ -33,24 +31,19 @@ namespace rise.Services
         {
             if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
 
-            using (var scope = _scopeFactory.CreateScope())
+            try
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                try
-                {
-                    return dbContext.ApplicationUsers.Where(x => x.UserName != excludedUsername && x.Address != null).OrderByDescending(x => x.LastMessage).Take(maxusers).ToList();
-                }
-                catch (Exception ex)
-                {
-                    var log = new Log();
-                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                    dbContext.Logger.Add(log);
-                    dbContext.SaveChangesAsync().Wait();
-                }
-
-                return null;
+                return _appdb.ApplicationUsers.Where(x => x.UserName != excludedUsername && x.Address != null).OrderByDescending(x => x.LastMessage).Take(maxusers).ToList();
             }
+            catch (Exception ex)
+            {
+                var log = new Log();
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -62,20 +55,16 @@ namespace rise.Services
         {
             if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
 
-            using (var scope = _scopeFactory.CreateScope())
+            try
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                try
-                {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-1) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount >= 5 && x.Address != null && x.Address != string.Empty).AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
-                }
-                catch (Exception ex)
-                {
-                    var log = new Log();
-                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                    dbContext.Logger.Add(log);
-                    dbContext.SaveChangesAsync().Wait();               
-                }
+                return _appdb.Users.Where(x => x.LastMessage > DateTime.Now.AddMinutes(-240) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount >= 5 && x.Address != null && x.Address != string.Empty).AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
+            }
+            catch (Exception ex)
+            {
+                var log = new Log();
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
 
             return null;
@@ -91,23 +80,19 @@ namespace rise.Services
         {
             if (excludedUsername == null) throw new ArgumentNullException(nameof(excludedUsername));
 
-            using (var scope = _scopeFactory.CreateScope())
+            try
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                try
-                {
-                    return dbContext.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-7) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount >= 5 && x.Address != null && x.Address != string.Empty ).AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
-                }
-                catch (Exception ex)
-                {
-                    var log = new Log();
-                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                    dbContext.Logger.Add(log);
-                    dbContext.SaveChangesAsync().Wait();
-                    return null;
-                }
+                return _appdb.Users.Where(x => x.LastMessage > DateTime.Now.AddDays(-1) && x.UserName != excludedUsername && x.UserName != null && x.MessageCount >= 5 && x.Address != null && x.Address != string.Empty).AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(maxusers).ToList();
             }
+            catch (Exception ex)
+            {
+                var log = new Log();
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -117,22 +102,17 @@ namespace rise.Services
         /// <param name="photourl"></param>
         public void Update_Photourl(long telegramId, string photourl)
         {
-            using (var scope = _scopeFactory.CreateScope())
+            try
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                try
-                {
-                    dbContext.Users.FirstOrDefault(x => x.TelegramId == telegramId).Photo_Url = photourl;
-                    dbContext.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    var log = new Log();
-                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                    dbContext.Logger.Add(log);
-                    dbContext.SaveChangesAsync().Wait();
-                }
+                _appdb.Users.FirstOrDefault(x => x.TelegramId == telegramId).Photo_Url = photourl;
+                _appdb.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                var log = new Log();
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
         }
 
@@ -154,77 +134,71 @@ namespace rise.Services
         {
             ApplicationUser appuser = null;
 
-            using (var scope = _scopeFactory.CreateScope())
+            try
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                try
+                if (telegramId != 0)
                 {
-                    if (telegramId != 0)
+                    appuser = _appdb.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.TelegramId == telegramId);
+
+                    try
                     {
-                        appuser = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.TelegramId == telegramId);
-
-                        try
+                        // New user detected
+                        if (appuser == null)
                         {
-                            // New user detected
-                            if (appuser == null)
-                            {
-                                // Create new user
-                                appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId, Role = "Member" };
-
-                                dbContext.Users.Add(appuser);
-                            }
+                            // Create new user
+                            appuser = new ApplicationUser { UserName = userName, TelegramId = telegramId, Role = "Member" };
+                            _appdb.Users.Add(appuser);
                         }
-                        catch (Exception ex)
-                        {
-                            var log = new Log();
-                            log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                            dbContext.Logger.Add(log);
-                            dbContext.SaveChangesAsync().Wait();
-                            return null;
-                        }
-
-                        // Update Username
-                        if (userName != appuser?.UserName)
-                        {
-                            appuser.UserName = userName;
-                        }
-
-                        // Create a wallet for everyone
-                        if (appuser.Address == null)
-                        {
-                            // Create a Wallet for user
-                            var accountresult = await RiseManager.CreateAccount();
-
-                            if (accountresult.success)
-                            {
-                                appuser.Address = accountresult.account.Address;
-                                appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
-                                appuser.PublicKey = accountresult.account.PublicKey;
-                            }
-                        }
-
-                        // Flag update message
-                        if (flagMsgUpdate)
-                        {
-                            appuser.MessageCount++;
-                            appuser.LastMessage = DateTime.Now;
-                        }
-
-                        dbContext.SaveChanges();
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        appuser = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.UserName == userName);
+                        var log = new Log();
+                        log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                        _appdb.Logger.Add(log);
+                        _appdb.SaveChangesAsync().Wait();
+                        return null;
                     }
+
+                    // Update Username
+                    if (userName != appuser?.UserName)
+                    {
+                        appuser.UserName = userName;
+                    }
+
+                    // Create a wallet for everyone
+                    if (appuser.Address == null)
+                    {
+                        // Create a Wallet for user
+                        var accountresult = await RiseManager.CreateAccount();
+
+                        if (accountresult.success)
+                        {
+                            appuser.Address = accountresult.account.Address;
+                            appuser.Secret = CryptoManager.EncryptStringAES(accountresult.account.secret, AppSettingsProvider.EncryptionKey);
+                            appuser.PublicKey = accountresult.account.PublicKey;
+                        }
+                    }
+
+                    // Flag update message
+                    if (flagMsgUpdate)
+                    {
+                        appuser.MessageCount++;
+                        appuser.LastMessage = DateTime.Now;
+                    }
+
+                    _appdb.SaveChanges();
                 }
-                catch (Exception ex)
+                else
                 {
-                    var log = new Log();
-                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                    dbContext.Logger.Add(log);
-                    dbContext.SaveChangesAsync().Wait();
+                    appuser = _appdb.Users.OfType<ApplicationUser>().FirstOrDefault(x => x.UserName == userName);
                 }
+            }
+            catch (Exception ex)
+            {
+                var log = new Log();
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
 
             return appuser;

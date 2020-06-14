@@ -18,17 +18,18 @@
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAppUsersManagerService _appUsersManagerService;
+        private readonly ApplicationDbContext _appdb;
 
         /// <summary>
         /// Defines the scopeFactory
         /// </summary>
         private readonly IServiceScopeFactory _scopeFactory;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService, IServiceScopeFactory scopeFactory)
+        public AccountController(SignInManager<ApplicationUser> signInManager, IAppUsersManagerService appUsersManagerService, ApplicationDbContext context)
         {
             _signInManager = signInManager;
             _appUsersManagerService = appUsersManagerService;
-            _scopeFactory = scopeFactory;
+            _appdb = context;
         }
 
         [HttpGet]
@@ -67,15 +68,10 @@
             }
             catch (Exception ex)
             {
-                using (var scope = _scopeFactory.CreateScope())
-                {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                    var log = new Log();
-                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                    dbContext.Logger.Add(log);
-                    dbContext.SaveChangesAsync().Wait();
-                }
+                var log = new Log();
+                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                _appdb.Logger.Add(log);
+                _appdb.SaveChangesAsync().Wait();
             }
 
             return RedirectToAction("Index", "Home");

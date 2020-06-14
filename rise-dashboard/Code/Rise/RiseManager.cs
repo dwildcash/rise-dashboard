@@ -58,6 +58,7 @@ namespace rise.Code.Rise
                 // Create Paiment
                 using (var hc = new HttpClient())
                 {
+
                     var values = new Dictionary<string, string>
                     {
                          { "secret", secret },
@@ -76,8 +77,10 @@ namespace rise.Code.Rise
             catch (Exception e)
             {
                 Console.Write("Error Creating Transaction Amount:" + amount + " recipientId " + recipiendId + " Exception:" + e.Message);
-                var tx = new Tx();
-                tx.success = false;
+                var tx = new Tx
+                {
+                    success = false
+                };
                 return tx;
             }
         }
