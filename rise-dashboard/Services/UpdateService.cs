@@ -21,7 +21,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
-using Emoji = rise.Code.Emoji;
+using Emoji = rise.Code.Rise.Emoji;
 
 namespace rise.Services
 {
@@ -196,7 +196,7 @@ namespace rise.Services
 
                                         if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                         {
-                                            txtmsg = Emoji.Boom + Emoji.Boom + Emoji.Boom + " KABOOM!!! its a wonderful boom for active users! " + Emoji.Boom + Emoji.Boom + Emoji.Boom
+                                            txtmsg = Emoji.Boom + Emoji.Boom + Emoji.Boom + " KABOOM!!! its a wonderful boom for active users! " + Emoji.Boom + Emoji.Boom + Emoji.Boom;
                                         }
                                         else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                         {

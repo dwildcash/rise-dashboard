@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-
-namespace J3QQ4
+namespace rise.Code.Rise
 {
-    public class Emoji
+    public static class Emoji
     {
         public const string Hash = "#";
         public const string Zero = "0";
