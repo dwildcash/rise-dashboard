@@ -28,10 +28,6 @@
         /// </summary>
         private readonly IUpdateService _updateService;
 
-        /// <summary>
-        /// Defines the scopeFactory
-        /// </summary>
-        private readonly IServiceScopeFactory _scopeFactory;
 
         // POST api/WebHook
         [HttpPost]

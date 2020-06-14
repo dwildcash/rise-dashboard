@@ -128,16 +128,16 @@ namespace rise.Services
                             {
                                 if (await cmd_preSend(lstAmount.FirstOrDefault() - 0.1, command, 1, message.Chat.Id, appuser))
                                 {
-                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - 0.1, "11843004005205985384");
+                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - 0.1, "11843004005205985384R");
                                 }
 
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + (lstAmount.FirstOrDefault() - 0.1) + " <B>Rise</B>", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + (lstAmount.FirstOrDefault() - 0.1) + " <b>Rise</b>", ParseMode.Html);
                             }
 
                             else
                             {
-                                var balance = await RiseManager.AccountBalanceAsync("11843004005205985384");
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Current RiseForce Jackpot Balance: " + balance + " <B>Rise</B>", ParseMode.Html);
+                                var balance = await RiseManager.AccountBalanceAsync("11843004005205985384R");
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Current RiseForce Jackpot Balance: " + balance + " <b>Rise</b>", ParseMode.Html);
                             }
                             break;
 
