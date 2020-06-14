@@ -68,6 +68,7 @@ namespace rise
             AppSettingsProvider.TelegramChannelId = long.Parse(Configuration["AppSettings:TelegramChannelId"]);
         }
 
+
         /// <summary>
         /// Gets or sets the Configuration
         /// </summary>
