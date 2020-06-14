@@ -103,4 +103,7 @@
     <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="**/*" />
+  </ItemGroup>
 </Project>

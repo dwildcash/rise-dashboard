@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using rise.Code;
 using rise.Code.Rise;
 using rise.Data;
 using rise.Models;
@@ -15,12 +16,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
+using Emoji = rise.Code.Emoji;
 
 namespace rise.Services
 {
@@ -40,7 +41,7 @@ namespace rise.Services
         public async Task EchoAsync(Update update)
         {
             // Check if we have a message.
-            if (update.Type != UpdateType.Message || update.Message.Text.Length == 0)
+            if (update == null || update.Type != UpdateType.Message || update.Message.Text.Length == 0)
             {
                 return;
             }
@@ -134,13 +135,13 @@ namespace rise.Services
                                     await cmd_Withdraw(appuser, amount, "11843004005205985384R");
                                 }
 
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + Math.Round(amount, 2) + " <b>Rise</b> added to the jackpot!", ParseMode.Html);
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Current RiseForce Jackpot confirmed on blockchain: " + balance + " <b>Rise</b>", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + Math.Round(amount, 2) + " <b>RISE</b> added to the jackpot!", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed on blockchain: " + balance + " <b>RISE</b>" + " (" + Math.Round(amount, 2) + " unconfirmed.)", ParseMode.Html);
                             }
 
                             else
                             {
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Current RiseForce Jackpot confirmed Balance: " + balance + " <b>Rise</b>", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed Balance: " + balance + " <b>RISE</b>", ParseMode.Html);
                             }
                             break;
 
@@ -195,15 +196,15 @@ namespace rise.Services
 
                                         if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                         {
-                                            txtmsg = "KABOOM!!! its a wonderful boom for active users!";
+                                            txtmsg = Emoji.Boom + Emoji.Boom + Emoji.Boom + " KABOOM!!! its a wonderful boom for active users! " + Emoji.Boom + Emoji.Boom + Emoji.Boom
                                         }
                                         else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                         {
-                                            txtmsg = "BOOM!!! its a nice boom for active users!";
+                                            txtmsg = Emoji.Boom + Emoji.Boom + " BOOM!!! its a nice boom for active users! " + Emoji.Boom + Emoji.Boom;
                                         }
                                         else
                                         {
-                                            txtmsg = "Hola!! its a good day for active users!";
+                                            txtmsg = Emoji.Boom + " Hola!! its a good day for active users! " + Emoji.Boom;
                                         }
 
                                         await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
@@ -240,15 +241,15 @@ namespace rise.Services
 
                                     if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
                                     {
-                                        txtmsg = "RAIN RAIN!!!! its a wonderful rainy day for last day active users!";
+                                        txtmsg = Emoji.Star + Emoji.Star + Emoji.Star + " RAIN RAIN!!!! its a wonderful rainy day for last day active users! " + Emoji.Star + Emoji.Star + Emoji.Star;
                                     }
                                     else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
                                     {
-                                        txtmsg = "Rain!!! its a nice day for last day active users.!";
+                                        txtmsg = Emoji.Star + Emoji.Star + " Rain!!! its a nice day for last day active users.! " + Emoji.Star + Emoji.Star;
                                     }
                                     else
                                     {
-                                        txtmsg = "Hola! its a good day for last day active users!";
+                                        txtmsg = Emoji.Star + " Hola! its a good day for last day active users! " + Emoji.Star;
                                     }
 
                                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
@@ -568,15 +569,21 @@ namespace rise.Services
         {
             try
             {
+                if (numReceivers > 20)
+                {
+                    await _botService.Client.SendTextMessageAsync(chatId, Emoji.Point_Up + " Please use a maximum of 20 users!", ParseMode.Html);
+                    return false;
+                }
+
                 if (numReceivers == 0)
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "Sorry I did not find any user to send RISE :(", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, Emoji.No_Good + " Sorry I did not find any user to send RISE :(", ParseMode.Html);
                     return false;
                 }
 
                 if (amount <= 0.1)
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "Yish! It make no sense to " + command + " amount lower than 0.1! (network fees are 0.1 RISE)", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, Emoji.Scream_Cat + "It make no sense to " + command + " amount lower than 0.1! (network fees are 0.1 RISE!!)", ParseMode.Html);
                     return false;
                 }
 
@@ -613,59 +620,46 @@ namespace rise.Services
         {
             try
             {
-                if (destusers.Count > 20)
+
+                await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+
+                var amountToSend = amount / destusers.Count;
+
+                foreach (var destuser in destusers.Where(x => x.Address != null))
                 {
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please use a maximum of 20 users!", ParseMode.Html);
-                    return;
-                }
-
-                if (amount > 0 && destusers.Count > 0)
-                {
-                    await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
-
-                    var amountToSend = amount / destusers.Count;
-
-                    var balance = await RiseManager.AccountBalanceAsync(sender.Address);
-
-                    if (balance >= ((0.1 * destusers.Count) + amount))
+                    try
                     {
-                        foreach (var destuser in destusers.Where(x => x.Address != null))
+                        var secret = sender.GetSecret();
+
+                        var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
+
+                        if (tx != null && tx.success)
                         {
-                            var secret = sender.GetSecret();
-                            var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-                            Thread.Sleep(1000);
-
-                            if (destusers.Count <= 20 && tx != null && tx.success)
-                            {
-                                try
-                                {
-                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);
-                                    var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
-                                    await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Transaction Id:" + tx.transactionId, replyMarkup: keyboard);
-                                }
-                                catch (Exception ex)
-                                {
-                                    var log = new Log();
-                                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                                    _appdb.Logger.Add(log);
-                                    _appdb.SaveChangesAsync().Wait();
-                                    continue;
-                                }
-                            }
+                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);
+                            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
+                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Transaction Id:" + tx.transactionId, replyMarkup: keyboard);
                         }
-
-                        var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + "  @" + sender.UserName + " sent you <b>" + Math.Round(amountToSend, 3) + " RISE</b> :)", ParseMode.Html);
+                        else
+                        {
+                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, Emoji.Angry + " Error processing transaction", ParseMode.Html);
+                            var log = new Log();
+                            log.LogMessage("Error processing transaction for " + destuser.UserName + " Id:" + destuser.TelegramId);
+                            _appdb.Logger.Add(log);
+                            _appdb.SaveChangesAsync().Wait();
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Not enough RISE to send <b>" + amount + " RISE</b> to " + destusers.Count + " users. Balance: " + balance + " RISE", ParseMode.Html);
+                        var log = new Log();
+                        log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                        _appdb.Logger.Add(log);
+                        _appdb.SaveChangesAsync().Wait();
+                        continue;
                     }
                 }
-                else
-                {
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please specify amount and user ex: !send 10 @Dwildcash", ParseMode.Html);
-                }
+
+                var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
+                await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + "  @" + sender.UserName + " sent you <b>" + Math.Round(amountToSend, 3) + " RISE</b> :)", ParseMode.Html);
             }
             catch (Exception ex)
             {
@@ -690,7 +684,7 @@ namespace rise.Services
             {
                 if (!lookUsers.Any())
                 {
-                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a user name starting with <b>@</b> ex !seen @Dwildcash", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Eyes + " Please provide a user name starting with <b>@</b> ex !seen @Dwildcash", ParseMode.Html);
                     return;
                 }
 
