@@ -40,7 +40,7 @@ namespace rise.Services
         public async Task EchoAsync(Update update)
         {
             // Check if we have a message.
-            if (update.Type != UpdateType.Message || update.Message.Text.Length == 0)
+            if (update == null || update.Type != UpdateType.Message || update.Message.Text.Length == 0)
             {
                 return;
             }
@@ -124,6 +124,8 @@ namespace rise.Services
                     {
                         case "!RISEFORCE":
 
+                            var balance = await RiseManager.AccountBalanceAsync("11843004005205985384R");
+
                             if (lstAmount.Count > 0)
                             {
                                 double amount = lstAmount.FirstOrDefault() - 0.1;
@@ -132,12 +134,12 @@ namespace rise.Services
                                     await cmd_Withdraw(appuser, amount, "11843004005205985384R");
                                 }
 
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + Math.Round(amount, 2) + " <b>Rise</b>", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + Math.Round(amount, 2) + " <b>Rise</b> added to the jackpot!", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Current RiseForce Jackpot confirmed on blockchain: " + balance + " <b>Rise</b>", ParseMode.Html);
                             }
 
                             else
                             {
-                                var balance = await RiseManager.AccountBalanceAsync("11843004005205985384R");
                                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Current RiseForce Jackpot confirmed Balance: " + balance + " <b>Rise</b>", ParseMode.Html);
                             }
                             break;
@@ -163,9 +165,9 @@ namespace rise.Services
                         // Withdraw RISE to address
                         case "!WITHDRAW":
 
-                            if (await cmd_preSend(lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), command, lstDestAddress.Count, message.Chat.Id, appuser))
+                            if (await cmd_preSend(lstAmount.FirstOrDefault() - 0.1, command, 1, message.Chat.Id, appuser))
                             {
-                                await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - (0.1 * lstDestAddress.Count), lstDestAddress.FirstOrDefault());
+                                await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - 0.1, lstDestAddress.FirstOrDefault());
                             }
 
                             break;
@@ -178,6 +180,11 @@ namespace rise.Services
                                     if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                                     {
                                         maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                                    }
+                                    else
+                                    {
+                                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, "You forgot to enter a rise amount!", ParseMode.Html);
+                                        return;
                                     }
 
                                     lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
@@ -196,7 +203,7 @@ namespace rise.Services
                                         }
                                         else
                                         {
-                                            txtmsg = "Wake up!! its an okay day for active users!";
+                                            txtmsg = "Hola!! its a good day for active users!";
                                         }
 
                                         await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, "BOOM!!!");
@@ -218,6 +225,11 @@ namespace rise.Services
                                 {
                                     maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                 }
+                                else
+                                {
+                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "You forgot to enter a rise amount!", ParseMode.Html);
+                                    return;
+                                }
 
                                 lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
 
@@ -236,7 +248,7 @@ namespace rise.Services
                                     }
                                     else
                                     {
-                                        txtmsg = "Hey ho! its an okay day for last day active users!";
+                                        txtmsg = "Hola! its a good day for last day active users!";
                                     }
 
                                     await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
@@ -508,14 +520,21 @@ namespace rise.Services
 
                     var balance = await RiseManager.AccountBalanceAsync(sender.Address);
 
-                    if (balance >= amount)
+                    if (balance >= (amount + 0.1))
                     {
                         var tx = await RiseManager.CreatePaiment(amount * 100000000, sender.GetSecret(), recipientId);
 
-                        await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Successfully sent <b>" + amount + "</b> RISE to " + recipientId, ParseMode.Html);
+                        if (tx.success)
+                        {
+                            await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Successfully sent <b>" + amount + "</b> RISE to " + recipientId, ParseMode.Html);
 
-                        var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
-                        await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
+                            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
+                            await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Transaction Id:" + tx.transactionId + "", replyMarkup: keyboard);
+                        }
+                        else
+                        {
+                            await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Error withdrawing <b>" + amount + "</b> RISE to " + recipientId + " try to reduce the amount...", ParseMode.Html);
+                        }
                     }
                     else
                     {
@@ -557,7 +576,7 @@ namespace rise.Services
 
                 if (amount <= 0.1)
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "Yish! It make no sense to " + command + " amount lower than 0.1!", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, "Yish! It make no sense to " + command + " amount lower than 0.1! (network fees are 0.1 RISE)", ParseMode.Html);
                     return false;
                 }
 
@@ -630,6 +649,7 @@ namespace rise.Services
                                     log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
                                     _appdb.Logger.Add(log);
                                     _appdb.SaveChangesAsync().Wait();
+                                    continue;
                                 }
                             }
                         }
