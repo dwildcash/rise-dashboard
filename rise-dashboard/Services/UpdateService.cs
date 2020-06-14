@@ -40,7 +40,7 @@ namespace rise.Services
         public async Task EchoAsync(Update update)
         {
             // Check if we have a message.
-            if (update == null || update.Type != UpdateType.Message || update.Message.Text.Length == 0)
+            if (update.Type != UpdateType.Message || update.Message.Text.Length == 0)
             {
                 return;
             }
