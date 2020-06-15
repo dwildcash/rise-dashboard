@@ -366,7 +366,7 @@ namespace rise.Services
         /// <returns></returns>
         private async Task cmd_ClearLogs(ApplicationUser appuser)
         {
-            if (appuser.UserName == "dwildcash")
+            if (appuser.UserName == "Dwildcash")
             {
                 _appdb.Logger.RemoveRange(_appdb.Logger);
                 await _appdb.SaveChangesAsync();
