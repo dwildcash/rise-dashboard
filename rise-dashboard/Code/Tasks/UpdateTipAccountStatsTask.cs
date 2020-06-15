@@ -54,7 +54,9 @@
                     {
                         if (account.Address != null)
                         {
-                            TotalBalance += await RiseManager.AccountBalanceAsync(account.Address);
+                            RiseManager rm = new RiseManager();
+
+                            TotalBalance += await rm.AccountBalanceAsync(account.Address);
                             var tx = TransactionsFetcher.FetchAllUserTransactions(account.Address).Result.transactions.ToList();
                             TotalTransactions += tx.Count();
                             TotalAmountTransactions += tx.Sum(x => x.amount / 100000000);

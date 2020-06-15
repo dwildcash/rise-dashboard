@@ -168,8 +168,10 @@ namespace rise.Services
                     // Create a wallet for everyone
                     if (appuser.Address == null)
                     {
+                        RiseManager rm = new RiseManager();
+
                         // Create a Wallet for user
-                        var accountresult = await RiseManager.CreateAccount();
+                        var accountresult = await rm.CreateAccount();
 
                         if (accountresult.success)
                         {

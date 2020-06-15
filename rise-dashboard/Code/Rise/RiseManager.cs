@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace rise.Code.Rise
 {
-    public static class RiseManager
+    public class RiseManager
     {
         /// <summary>
         /// Create an Account
         /// </summary>
         /// <returns></returns>
-        public static async Task<WalletAccountResult> CreateAccount()
+        public async Task<WalletAccountResult> CreateAccount()
         {
             try
             {
@@ -53,7 +53,7 @@ namespace rise.Code.Rise
         /// Create an Account
         /// </summary>
         /// <returns></returns>
-        public static async Task<Tx> CreatePaiment(double amount, string secret, string recipiendId)
+        public async Task<Tx> CreatePaimentAsync(double amount, string secret, string recipiendId)
         {
             for (int d = 0; d <= 5; d++)
             {
@@ -98,12 +98,13 @@ namespace rise.Code.Rise
             return tx;
         }
 
+
         /// <summary>
         /// Get account Balance
         /// </summary>
         /// <param name="walletAddress"></param>
         /// <returns></returns>
-        public static async Task<double> AccountBalanceAsync(string walletAddress)
+        public async Task<double> AccountBalanceAsync(string walletAddress)
         {
             WalletAccountResult walletAccountResult;
 
