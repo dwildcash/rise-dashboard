@@ -192,6 +192,7 @@ namespace rise.Services
 
                                 if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                                 {
+                                    amount = Math.Round(lstAmount.FirstOrDefault() - 0.1, 2);
                                     maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                 }
                                 else if (lstAmount.Count == 0)
@@ -242,11 +243,12 @@ namespace rise.Services
 
                             if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                             {
+                                amount = Math.Round(lstAmount.FirstOrDefault() - 0.1, 2);
                                 maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                             }
                             else if (lstAmount.Count == 0)
                             {
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "You forgot to enter a rise amount!", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Joy + " You forgot to enter a RISE amount!", ParseMode.Html);
                                 return;
                             }
                             else
