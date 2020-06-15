@@ -63,7 +63,7 @@ namespace rise.Code.Rise
                     var values = new Dictionary<string, string>
                         {
                             { "secret", secret },
-                            { "amount", amount.ToString() },
+                            { "amount", Math.Round(amount).ToString() },
                             { "recipientId", recipiendId }
                         };
 
