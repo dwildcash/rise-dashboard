@@ -5,6 +5,7 @@ using rise.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace rise.Code.Rise
@@ -53,36 +54,48 @@ namespace rise.Code.Rise
         /// <returns></returns>
         public static async Task<Tx> CreatePaiment(double amount, string secret, string recipiendId)
         {
-            try
+            for (int d = 0; d <= 3; d++)
             {
-                // Create Paiment
-                using (var hc = new HttpClient())
+                try
                 {
+                    // Create Paiment
+                    using (var hc = new HttpClient())
+                    {
 
-                    var values = new Dictionary<string, string>
+                        var values = new Dictionary<string, string>
                     {
                          { "secret", secret },
                          { "amount", amount.ToString() },
                          { "recipientId", recipiendId }
                     };
 
-                    var content = new FormUrlEncodedContent(values);
-                    var response = await hc.PutAsync("http://localhost:7777/api/transactions", content);
-                    var responseString = await response.Content.ReadAsStringAsync();
-                    var transaction = JsonConvert.DeserializeObject<Tx>(responseString);
+                        var content = new FormUrlEncodedContent(values);
+                        var response = await hc.PutAsync("http://localhost:7777/api/transactions", content);
+                        var responseString = await response.Content.ReadAsStringAsync();
+                        var transaction = JsonConvert.DeserializeObject<Tx>(responseString);
 
-                    return transaction.success ? transaction : null;
+                        // Exit if we have a success
+                        if (transaction.success)
+                        {
+                            return transaction;
+                        }
+
+                        Thread.Sleep(1000);
+                    }
+                }
+                catch (Exception e)
+                {
+                    // Pause 1 second between error
+                    Thread.Sleep(100);
                 }
             }
-            catch (Exception e)
+
+            // If we are here it doesnt work after 3 tries
+            var tx = new Tx
             {
-                Console.Write("Error Creating Transaction Amount:" + amount + " recipientId " + recipiendId + " Exception:" + e.Message);
-                var tx = new Tx
-                {
-                    success = false
-                };
-                return tx;
-            }
+                success = false
+            };
+            return tx;
         }
 
         /// <summary>
