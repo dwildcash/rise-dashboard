@@ -676,7 +676,7 @@ namespace rise.Services
 
                     var tx = await rm.CreatePaimentAsync(amountToSend * 100000000, secret, destuser.Address);
 
-                    Thread.Sleep(1000);
+                    Thread.Sleep(200);
 
                     if (tx != null && tx.success)
                     {

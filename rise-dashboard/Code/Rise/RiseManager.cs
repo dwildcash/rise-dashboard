@@ -80,13 +80,13 @@ namespace rise.Code.Rise
                             return transaction;
                         }
 
-                        Thread.Sleep(1250);
+                        Thread.Sleep(250);
                     }
                 }
                 catch (Exception e)
                 {
                     // Pause 1 second between error
-                    Thread.Sleep(1250);
+                    Thread.Sleep(250);
                 }
             }
 
