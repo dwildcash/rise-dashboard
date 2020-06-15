@@ -53,20 +53,34 @@ namespace rise.Code.Rise
         /// Create an Account
         /// </summary>
         /// <returns></returns>
-        public static Tx CreatePaimentAsync(double amount, string secret, string recipiendId)
+        public static async Task<Tx> CreatePaiment(double amount, string secret, string recipiendId)
         {
-
             for (int d = 0; d <= 5; d++)
             {
                 try
                 {
-                    string URI = "http://localhost:7777/api/transactions";
-                    string myParameters = "secret=" + secret + "&amount=" + amount.ToString() + "&recipientId=" + recipiendId;
-
-                    using (WebClient wc = new WebClient())
+                    // Create Paiment
+                    using (var hc = new HttpClient())
                     {
-                        wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                        var transaction = JsonConvert.DeserializeObject<Tx>(wc.UploadString(URI, myParameters));
+                        var values = new Dictionary<string, string>
+                        {
+                            { "secret", secret },
+                            { "amount", amount.ToString() },
+                            { "recipientId", recipiendId }
+                        };
+
+                        var content = new FormUrlEncodedContent(values);
+                        var response = await hc.PutAsync("http://localhost:7777/api/transactions", content);
+                        var responseString = await response.Content.ReadAsStringAsync();
+                        var transaction = JsonConvert.DeserializeObject<Tx>(responseString);
+
+                        // Exit if we have a success
+                        if (transaction.success)
+                        {
+                            return transaction;
+                        }
+
+                        Thread.Sleep(1250);
                     }
                 }
                 catch (Exception e)
