@@ -154,155 +154,162 @@ namespace rise.Services
                         case "!INFO":
                             await cmd_Info(message);
                             break;
+
                         // Show Balance
                         case "!BALANCE":
                             await cmd_ShowUserBalance(appuser);
                             break;
+
                         // Show Help 
                         case "!HELP":
                             await cmd_Help(appuser);
                             break;
 
+                        case "!CLEARLOGS":
+                            await cmd_ClearLogs(appuser);
+                            break;
+
                         // Withdraw RISE to address
                         case "!WITHDRAW":
-
-                            if (await cmd_preSend(lstAmount.FirstOrDefault() - 0.1, command, 1, message.Chat.Id, appuser))
                             {
-                                await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - 0.1, lstDestAddress.FirstOrDefault());
+                                if (await cmd_preSend(lstAmount.FirstOrDefault() - 0.1, command, 1, message.Chat.Id, appuser))
+                                {
+                                    await cmd_Withdraw(appuser, lstAmount.FirstOrDefault() - 0.1, lstDestAddress.FirstOrDefault());
+                                }
+
+                                break;
                             }
 
-                            break;
+                        //// Boom!
+                        //case "!BOOM":
+                        //    {
+                        //        try
+                        //        {
+                        //            if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
+                        //            {
+                        //                maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                        //            }
+                        //            else if (lstAmount.Count == 0)
+                        //            {
+                        //                await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Joy + " You forgot to enter a RISE amount!", ParseMode.Html);
+                        //                return;
+                        //            }
 
-                        // Boom!
-                        case "!BOOM":
-                            {
-                                try
-                                {
-                                    if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
-                                    {
-                                        maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
-                                    }
-                                    else if (lstAmount.Count == 0)
-                                    {
-                                        await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Joy + " You forgot to enter a RISE amount!", ParseMode.Html);
-                                        return;
-                                    }
+                        //            lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
 
-                                    lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
+                        //            if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
+                        //            {
+                        //                var txtmsg = string.Empty;
 
-                                    if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
-                                    {
-                                        var txtmsg = string.Empty;
+                        //                if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
+                        //                {
+                        //                    txtmsg = Emoji.Boom + Emoji.Boom + Emoji.Boom + " KABOOM!!! its a wonderful boom for active users! " + Emoji.Boom + Emoji.Boom + Emoji.Boom;
+                        //                }
+                        //                else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
+                        //                {
+                        //                    txtmsg = Emoji.Boom + Emoji.Boom + " BOOM!!! its a nice boom for active users! " + Emoji.Boom + Emoji.Boom;
+                        //                }
+                        //                else
+                        //                {
+                        //                    txtmsg = Emoji.Boom + " Hola!! its a good day for active users! " + Emoji.Boom;
+                        //                }
 
-                                        if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
-                                        {
-                                            txtmsg = Emoji.Boom + Emoji.Boom + Emoji.Boom + " KABOOM!!! its a wonderful boom for active users! " + Emoji.Boom + Emoji.Boom + Emoji.Boom;
-                                        }
-                                        else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
-                                        {
-                                            txtmsg = Emoji.Boom + Emoji.Boom + " BOOM!!! its a nice boom for active users! " + Emoji.Boom + Emoji.Boom;
-                                        }
-                                        else
-                                        {
-                                            txtmsg = Emoji.Boom + " Hola!! its a good day for active users! " + Emoji.Boom;
-                                        }
-
-                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    var log = new Log();
-                                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                                    _appdb.Logger.Add(log);
-                                    _appdb.SaveChangesAsync().Wait();
-                                }
-                            }
-                            break;
+                        //                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
+                        //            }
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //            var log = new Log();
+                        //            log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                        //            _appdb.Logger.Add(log);
+                        //            _appdb.SaveChangesAsync().Wait();
+                        //        }
+                        //    }
+                        //    break;
                         // Let it Rain Rise
-                        case "!RAIN":
-                            {
-                                if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
-                                {
-                                    maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
-                                }
-                                else if (lstAmount.Count == 0)
-                                {
-                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "You forgot to enter a rise amount!", ParseMode.Html);
-                                    return;
-                                }
+                        //case "!RAIN":
+                        //    {
+                        //        if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
+                        //        {
+                        //            maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
+                        //        }
+                        //        else if (lstAmount.Count == 0)
+                        //        {
+                        //            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "You forgot to enter a rise amount!", ParseMode.Html);
+                        //            return;
+                        //        }
 
-                                lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
+                        //        lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
 
-                                // Check before sending
-                                if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
-                                {
-                                    var txtmsg = string.Empty;
+                        //        // Check before sending
+                        //        if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
+                        //        {
+                        //            var txtmsg = string.Empty;
 
-                                    if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
-                                    {
-                                        txtmsg = Emoji.Star + Emoji.Star + Emoji.Star + " RAIN RAIN!!!! its a wonderful rainy day for last day active users! " + Emoji.Star + Emoji.Star + Emoji.Star;
-                                    }
-                                    else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
-                                    {
-                                        txtmsg = Emoji.Star + Emoji.Star + " Rain!!! its a nice day for last day active users.! " + Emoji.Star + Emoji.Star;
-                                    }
-                                    else
-                                    {
-                                        txtmsg = Emoji.Star + " Hola! its a good day for last day active users! " + Emoji.Star;
-                                    }
+                        //            if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
+                        //            {
+                        //                txtmsg = Emoji.Star + Emoji.Star + Emoji.Star + " RAIN RAIN!!!! its a wonderful rainy day for last day active users! " + Emoji.Star + Emoji.Star + Emoji.Star;
+                        //            }
+                        //            else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
+                        //            {
+                        //                txtmsg = Emoji.Star + Emoji.Star + " Rain!!! its a nice day for last day active users.! " + Emoji.Star + Emoji.Star;
+                        //            }
+                        //            else
+                        //            {
+                        //                txtmsg = Emoji.Star + " Hola! its a good day for last day active users! " + Emoji.Star;
+                        //            }
 
-                                    await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
-                                }
-                            }
-                            break;
+                        //            await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
+                        //        }
+                        //    }
+                        //    break;
 
                         // send coin to address
-                        case "!SEND":
-                            {
-                                foreach (var user in lstDestUsers)
-                                {
-                                    var e = await _appUsersManagerService.GetUserAsync(user);
+                        //case "!SEND":
+                        //    {
+                        //        foreach (var user in lstDestUsers)
+                        //        {
+                        //            var e = await _appUsersManagerService.GetUserAsync(user);
 
-                                    if (e != null)
-                                    {
-                                        lstAppUsers.Add(e);
-                                    }
-                                }
+                        //            if (e != null)
+                        //            {
+                        //                lstAppUsers.Add(e);
+                        //            }
+                        //        }
 
-                                if (lstAppUsers.Count >= 1)
-                                {
-                                    // Check before sending
-                                    if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
-                                    {
-                                        var txtmsg = string.Empty;
+                        //        if (lstAppUsers.Count >= 1)
+                        //        {
+                        //            // Check before sending
+                        //            if (await cmd_preSend(lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), command, lstAppUsers.Count, message.Chat.Id, appuser))
+                        //            {
+                        //                var txtmsg = string.Empty;
 
-                                        if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
-                                        {
-                                            txtmsg = Emoji.Money_With_Wings + "wake up!!! its a wonderful day! " + Emoji.Money_With_Wings;
-                                        }
-                                        else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
-                                        {
-                                            txtmsg = Emoji.Moneybag + "wake up!!! its a nice day! " + Emoji.Moneybag;
-                                        }
-                                        else
-                                        {
-                                            txtmsg = Emoji.Star + " wake up!! its an good day!" + Emoji.Star;
-                                        }
+                        //                if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 90)
+                        //                {
+                        //                    txtmsg = Emoji.Money_With_Wings + "wake up!!! its a wonderful day! " + Emoji.Money_With_Wings;
+                        //                }
+                        //                else if (lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1) >= 10)
+                        //                {
+                        //                    txtmsg = Emoji.Moneybag + "wake up!!! its a nice day! " + Emoji.Moneybag;
+                        //                }
+                        //                else
+                        //                {
+                        //                    txtmsg = Emoji.Star + " wake up!! its an good day!" + Emoji.Star;
+                        //                }
 
-                                        await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
-                                    }
-                                }
-                                else if (lstAppUsers.Count == 0)
-                                {
-                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please tell me a user to send to!.", ParseMode.Html);
-                                }
-                                else
-                                {
-                                    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a valid user.", ParseMode.Html);
-                                }
-                            }
-                            break;
+                        //                await cmd_Send(message, appuser, lstAmount.FirstOrDefault() - (lstAppUsers.Count * 0.1), lstAppUsers, txtmsg);
+                        //            }
+                        //        }
+                        //        else if (lstAppUsers.Count == 0)
+                        //        {
+                        //            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please tell me a user to send to!.", ParseMode.Html);
+                        //        }
+                        //        else
+                        //        {
+                        //            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a valid user.", ParseMode.Html);
+                        //        }
+                        //    }
+                        //    break;
 
                         // Tell when last message from user
                         case "!SEEN":
@@ -350,6 +357,24 @@ namespace rise.Services
                 return;
             }
         }
+
+
+        /// <summary>
+        /// Show Help
+        /// </summary>
+        /// <param name="appuser"></param>
+        /// <returns></returns>
+        private async Task cmd_ClearLogs(ApplicationUser appuser)
+        {
+            if (appuser.UserName == "dwildcash")
+            {
+                _appdb.Logger.RemoveRange(_appdb.Logger);
+                await _appdb.SaveChangesAsync();
+
+                await _botService.Client.SendTextMessageAsync(appuser.TelegramId, "All logs deleted", ParseMode.Html);
+            }
+        }
+
 
         /// <summary>
         /// Show Help
@@ -618,56 +643,47 @@ namespace rise.Services
         /// <returns></returns>
         private async Task cmd_Send(Message message, ApplicationUser sender, double amount, IReadOnlyCollection<ApplicationUser> destusers, string bannerMsg = "")
         {
-            try
+
+
+            await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
+
+            var amountToSend = amount / destusers.Count;
+
+            foreach (var destuser in destusers.Where(x => x.Address != null))
             {
-
-                await _botService.Client.SendChatActionAsync(sender.TelegramId, ChatAction.Typing);
-
-                var amountToSend = amount / destusers.Count;
-
-                foreach (var destuser in destusers.Where(x => x.Address != null))
+                try
                 {
-                    try
+                    var secret = sender.GetSecret();
+
+                    var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
+
+                    if (tx != null && tx.success)
                     {
-                        var secret = sender.GetSecret();
-
-                        var tx = await RiseManager.CreatePaiment(amountToSend * 100000000, secret, destuser.Address);
-
-                        if (tx != null && tx.success)
-                        {
-                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);
-                            var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
-                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Transaction Id:" + tx.transactionId, replyMarkup: keyboard);
-                        }
-                        else
-                        {
-                            await _botService.Client.SendTextMessageAsync(destuser.TelegramId, Emoji.Angry + " Error processing transaction", ParseMode.Html);
-                            var log = new Log();
-                            log.LogMessage("Error processing transaction for " + destuser.UserName + " Id:" + destuser.TelegramId);
-                            _appdb.Logger.Add(log);
-                            _appdb.SaveChangesAsync().Wait();
-                        }
+                        await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);
+                        var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("See Transaction", "https://explorer.rise.vision/tx/" + tx.transactionId));
+                        await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "Transaction Id:" + tx.transactionId, replyMarkup: keyboard);
                     }
-                    catch (Exception ex)
+                    else
                     {
+                        await _botService.Client.SendTextMessageAsync(destuser.TelegramId, Emoji.Angry + " Error processing transaction sent by " + sender.UserName, ParseMode.Html);
                         var log = new Log();
-                        log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                        log.LogMessage("Error processing transaction for " + destuser.UserName + " Id:" + destuser.TelegramId);
                         _appdb.Logger.Add(log);
                         _appdb.SaveChangesAsync().Wait();
-                        continue;
                     }
                 }
+                catch (Exception ex)
+                {
+                    var log = new Log();
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                    _appdb.Logger.Add(log);
+                    _appdb.SaveChangesAsync().Wait();
+                    continue;
+                }
+            }
 
-                var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + "  @" + sender.UserName + " sent you <b>" + Math.Round(amountToSend, 3) + " RISE</b> :)", ParseMode.Html);
-            }
-            catch (Exception ex)
-            {
-                var log = new Log();
-                log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                _appdb.Logger.Add(log);
-                _appdb.SaveChangesAsync().Wait();
-            }
+            var destUsersUsername = string.Join(",", destusers.Select(x => "@" + x.UserName));
+            await _botService.Client.SendTextMessageAsync(message.Chat.Id, destUsersUsername + " " + bannerMsg + "  @" + sender.UserName + " sent you <b>" + Math.Round(amountToSend, 3) + " RISE</b> :)", ParseMode.Html);
         }
 
         /// <summary>

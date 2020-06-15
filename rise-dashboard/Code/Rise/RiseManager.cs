@@ -54,20 +54,19 @@ namespace rise.Code.Rise
         /// <returns></returns>
         public static async Task<Tx> CreatePaiment(double amount, string secret, string recipiendId)
         {
-            for (int d = 0; d <= 3; d++)
+            for (int d = 0; d <= 5; d++)
             {
                 try
                 {
                     // Create Paiment
                     using (var hc = new HttpClient())
                     {
-
                         var values = new Dictionary<string, string>
-                    {
-                         { "secret", secret },
-                         { "amount", amount.ToString() },
-                         { "recipientId", recipiendId }
-                    };
+                        {
+                            { "secret", secret },
+                            { "amount", amount.ToString() },
+                            { "recipientId", recipiendId }
+                        };
 
                         var content = new FormUrlEncodedContent(values);
                         var response = await hc.PutAsync("http://localhost:7777/api/transactions", content);
@@ -80,13 +79,13 @@ namespace rise.Code.Rise
                             return transaction;
                         }
 
-                        Thread.Sleep(1000);
+                        Thread.Sleep(1250);
                     }
                 }
                 catch (Exception e)
                 {
                     // Pause 1 second between error
-                    Thread.Sleep(100);
+                    Thread.Sleep(1250);
                 }
             }
 
