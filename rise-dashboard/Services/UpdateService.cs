@@ -676,8 +676,6 @@ namespace rise.Services
 
                     var tx = await rm.CreatePaimentAsync(amountToSend * 100000000, secret, destuser.Address);
 
-                    Thread.Sleep(200);
-
                     if (tx != null && tx.success)
                     {
                         await _botService.Client.SendTextMessageAsync(destuser.TelegramId, "You received " + amountToSend + " from @" + sender.UserName, ParseMode.Html);

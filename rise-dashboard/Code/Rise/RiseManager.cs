@@ -55,7 +55,7 @@ namespace rise.Code.Rise
         /// <returns></returns>
         public async Task<Tx> CreatePaimentAsync(double amount, string secret, string recipiendId)
         {
-            for (int d = 0; d <= 5; d++)
+            for (int d = 0; d <= 2; d++)
             {
                 try
                 {
@@ -79,8 +79,6 @@ namespace rise.Code.Rise
                         {
                             return transaction;
                         }
-
-                        Thread.Sleep(250);
                     }
                 }
                 catch (Exception e)
