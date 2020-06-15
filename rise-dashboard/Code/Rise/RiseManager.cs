@@ -55,45 +55,34 @@ namespace rise.Code.Rise
         /// <returns></returns>
         public async Task<Tx> CreatePaimentAsync(double amount, string secret, string recipiendId)
         {
-            for (int d = 0; d <= 2; d++)
+            try
             {
-                try
+                // Create Paiment
+                using (var hc = new HttpClient())
                 {
-                    // Create Paiment
-                    using (var hc = new HttpClient())
-                    {
-                        var values = new Dictionary<string, string>
+                    var values = new Dictionary<string, string>
                         {
                             { "secret", secret },
                             { "amount", amount.ToString() },
                             { "recipientId", recipiendId }
                         };
 
-                        var content = new FormUrlEncodedContent(values);
-                        var response = await hc.PutAsync("http://localhost:7777/api/transactions", content);
-                        var responseString = await response.Content.ReadAsStringAsync();
-                        var transaction = JsonConvert.DeserializeObject<Tx>(responseString);
+                    var content = new FormUrlEncodedContent(values);
+                    var response = await hc.PutAsync("http://localhost:7777/api/transactions", content);
+                    var responseString = await response.Content.ReadAsStringAsync();
+                    var transaction = JsonConvert.DeserializeObject<Tx>(responseString);
 
-                        // Exit if we have a success
-                        if (transaction.success)
-                        {
-                            return transaction;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    // Pause 1 second between error
-                    Thread.Sleep(250);
+                    return transaction;
                 }
             }
-
-            // If we are here it doesnt work after 3 tries
-            var tx = new Tx
+            catch (Exception e)
             {
-                success = false
-            };
-            return tx;
+                var tx = new Tx
+                {
+                    success = false
+                };
+                return tx;
+            }
         }
 
 
