@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using rise.Code;
 using rise.Code.Rise;
 using rise.Data;
 using rise.Models;
@@ -16,7 +14,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -135,14 +132,18 @@ namespace rise.Services
                             {
                                 await cmd_Withdraw(appuser, amount, "11843004005205985384R");
                             }
+                            else
+                            {
+                                break;
+                            }
 
                             await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + Math.Round(amount, 2) + " <b>RISE</b> added to the jackpot!", ParseMode.Html);
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed on blockchain: " + balance + " <b>RISE</b>" + " (" + Math.Round(amount, 2) + " unconfirmed.)", ParseMode.Html);
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed on blockchain: <b>" + balance + " </b> RISE" + " ( + " + Math.Round(amount, 2) + " unconfirmed.)", ParseMode.Html);
                         }
 
                         else
                         {
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed Balance: " + balance + " <b>RISE</b>", ParseMode.Html);
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed Balance: <b>" + balance + " </b> RISE", ParseMode.Html);
                         }
                         break;
 
@@ -190,9 +191,9 @@ namespace rise.Services
                             {
                                 double amount = 0;
 
+                                //fetch the second number for the new max number of people.
                                 if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                                 {
-                                    amount = Math.Round(lstAmount.FirstOrDefault() - 0.1, 2);
                                     maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                                 }
                                 else if (lstAmount.Count == 0)
@@ -200,10 +201,8 @@ namespace rise.Services
                                     await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Joy + " You forgot to enter a RISE amount!", ParseMode.Html);
                                     return;
                                 }
-                                else
-                                {
-                                    amount = Math.Round(lstAmount.FirstOrDefault() - 0.1, 2);
-                                }
+
+                                amount = Math.Round(lstAmount.FirstOrDefault() - (0.1 * maxusers), 2);
 
                                 lstAppUsers = _appUsersManagerService.GetBoomUsers(appuser.UserName, maxusers);
 
@@ -213,15 +212,15 @@ namespace rise.Services
 
                                     if (amount >= 90)
                                     {
-                                        txtmsg = Emoji.Boom + Emoji.Boom + Emoji.Boom + " KABOOM!!! its a wonderful boom for active users! " + Emoji.Boom + Emoji.Boom + Emoji.Boom;
+                                        txtmsg = Emoji.Boom + Emoji.Boom + Emoji.Boom + " KABOOM!!! " + Emoji.Boom + Emoji.Boom + Emoji.Boom + " its a wonderful day for active users!";
                                     }
                                     else if (amount >= 10)
                                     {
-                                        txtmsg = Emoji.Boom + Emoji.Boom + " BOOM!!! its a nice boom for active users! " + Emoji.Boom + Emoji.Boom;
+                                        txtmsg = Emoji.Boom + Emoji.Boom + " BOOM!!! " + Emoji.Boom + Emoji.Boom + " its a nice day for active users!";
                                     }
                                     else
                                     {
-                                        txtmsg = Emoji.Boom + " Hola!! its a good day for active users! " + Emoji.Boom;
+                                        txtmsg = Emoji.Boom + " Hola!! " + Emoji.Boom + " its a good day for active users! ";
                                     }
 
                                     await cmd_Send(message, appuser, amount, lstAppUsers, txtmsg);
@@ -241,9 +240,9 @@ namespace rise.Services
                         {
                             double amount = 0;
 
+                            //fetch the second number for the new max number of people.
                             if (lstAmount.Count > 1 && Math.Abs(lstAmount[1]) > 0)
                             {
-                                amount = Math.Round(lstAmount.FirstOrDefault() - 0.1, 2);
                                 maxusers = int.Parse(lstAmount[1].ToString(CultureInfo.InvariantCulture));
                             }
                             else if (lstAmount.Count == 0)
@@ -251,10 +250,8 @@ namespace rise.Services
                                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Joy + " You forgot to enter a RISE amount!", ParseMode.Html);
                                 return;
                             }
-                            else
-                            {
-                                amount = Math.Round(lstAmount.FirstOrDefault() - 0.1, 2);
-                            }
+
+                            amount = Math.Round(lstAmount.FirstOrDefault() - (0.1 * maxusers), 2);
 
                             lstAppUsers = _appUsersManagerService.GetRainUsers(appuser.UserName, maxusers);
 
@@ -265,15 +262,15 @@ namespace rise.Services
 
                                 if (amount >= 90)
                                 {
-                                    txtmsg = Emoji.Star + Emoji.Star + Emoji.Star + " RAIN RAIN!!!! its a wonderful rainy day for last day active users! " + Emoji.Star + Emoji.Star + Emoji.Star;
+                                    txtmsg = Emoji.Star + Emoji.Star + Emoji.Star + " RAIN RAIN!!!! " + Emoji.Star + Emoji.Star + Emoji.Star + " its a wonderful rainy day for last day active users!";
                                 }
                                 else if (amount >= 10)
                                 {
-                                    txtmsg = Emoji.Star + Emoji.Star + " Rain!!! its a nice day for last day active users.! " + Emoji.Star + Emoji.Star;
+                                    txtmsg = Emoji.Star + Emoji.Star + " RAIN!!! " + Emoji.Star + Emoji.Star + " its a nice day for last day active users.!";
                                 }
                                 else
                                 {
-                                    txtmsg = Emoji.Star + " Hola! its a good day for last day active users! " + Emoji.Star;
+                                    txtmsg = Emoji.Star + " RAIN!!! " + Emoji.Star + " its a good day for last day active users!";
                                 }
 
                                 await cmd_Send(message, appuser, amount, lstAppUsers, txtmsg);
@@ -331,7 +328,7 @@ namespace rise.Services
                             }
                             else
                             {
-                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a valid user.", ParseMode.Html);
+                                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Please provide a valid user. Dont forget the @username", ParseMode.Html);
                             }
                         }
                         break;
@@ -611,9 +608,9 @@ namespace rise.Services
         {
             try
             {
-                if (numReceivers > 20)
+                if (numReceivers > 30)
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, Emoji.Point_Up + " Please use a maximum of 20 users!", ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, Emoji.Point_Up + " Please use a maximum of 30 users!", ParseMode.Html);
                     return false;
                 }
 
@@ -635,7 +632,7 @@ namespace rise.Services
 
                 if (balance < ((0.1 * numReceivers) + amount))
                 {
-                    await _botService.Client.SendTextMessageAsync(chatId, "Not enough RISE to " + command + " " + amount + " RISE to " + numReceivers + " users. RISE Balance:" + balance, ParseMode.Html);
+                    await _botService.Client.SendTextMessageAsync(chatId, Emoji.Astonished + " Not enough RISE to " + command + " " + amount + " RISE to " + numReceivers + " users. RISE Balance:" + balance, ParseMode.Html);
                     return false;
                 }
             }
