@@ -886,6 +886,7 @@ namespace rise.Services
                 await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
                                   "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + " sat)" + Environment.NewLine +
+                                  "<b>Altilly</b> - https://www.altilly.com/" + Environment.NewLine +
                                   "<b>Xt.com</b> - https://www.xt.com (24h V:" + volXtcom.ToString("N0") + " - Price:" + priceXtcom + " sat)" + Environment.NewLine +
                                   "Bitcoin Price: <b>" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2) + "$</b> (Coinbase)";
 
