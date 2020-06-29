@@ -9,82 +9,40 @@ namespace rise.Models
 
     using System;
 
-    public partial class RiseForce
+    public class RiseForceWinner
     {
-        /// <summary>
-        /// Gets or sets the Current
-        /// </summary>
-        public static RiseForce Current { get; set; }
+        public int id { get; set; }
+        public DateTime timestamp { get; set; }
+        public int season { get; set; }
+        public string name { get; set; }
+        public string riseAddress { get; set; }
+        public string transId { get; set; }
+        public int score { get; set; }
+        public int potSize { get; set; }
 
-        [JsonProperty("success")]
-        public bool Success { get; set; }
-
-        [JsonProperty("result")]
-        public RiseForceResult Result { get; set; }
     }
-
-
-    public partial class RiseForceResult
+    public class RiseForceTop
     {
+        public DateTime timestamp { get; set; }
+        public string name { get; set; }
+        public int score { get; set; }
 
-        [JsonProperty("season")]
-        public long Season { get; set; }
-
-        [JsonProperty("recordCount")]
-        public long RecordCount { get; set; }
-
-        [JsonProperty("sumScore")]
-        public long SumScore { get; set; }
-
-        [JsonProperty("avgScore")]
-        public long AvgScore { get; set; }
-
-        [JsonProperty("distinctPlayers")]
-        public long DistinctPlayers { get; set; }
-
-        [JsonProperty("winner")]
-        public RiseForceWinner Winner { get; set; }
-
-        [JsonProperty("top10")]
-        public RiseForceTop10[] Top10 { get; set; }
     }
-
-    public partial class RiseForceTop10
+    public class RiseForceResult
     {
-        [JsonProperty("timestamp")]
-        public DateTimeOffset Timestamp { get; set; }
+        public string season { get; set; }
+        public int recordCount { get; set; }
+        public int sumScore { get; set; }
+        public int avgScore { get; set; }
+        public int distinctPlayers { get; set; }
+        public RiseForceWinner winner { get; set; }
+        public IList<RiseForceTop> top10 { get; set; }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("score")]
-        public long Score { get; set; }
     }
-
-    public partial class RiseForceWinner
+    public class Application
     {
-        [JsonProperty("id")]
-        public long Id { get; set; }
+        public bool success { get; set; }
+        public RiseForceResult result { get; set; }
 
-        [JsonProperty("timestamp")]
-        public DateTimeOffset Timestamp { get; set; }
-
-        [JsonProperty("season")]
-        public long Season { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("riseAddress")]
-        public string RiseAddress { get; set; }
-
-        [JsonProperty("transId")]
-        public string TransId { get; set; }
-
-        [JsonProperty("score")]
-        public long Score { get; set; }
-
-        [JsonProperty("potSize")]
-        public long PotSize { get; set; }
     }
 }

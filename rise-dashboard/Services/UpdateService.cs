@@ -151,15 +151,15 @@ namespace rise.Services
                             var stringTopScore = string.Empty;
                             int i = 0;
 
-                            foreach (var user in RiseForceResult.Top10.OrderByDescending(x => x.Score).ToList())
+                            foreach (var user in RiseForceResult.top10.OrderByDescending(x => x.score).ToList())
                             {
                                 if (i != 0)
                                 {
-                                    stringTopScore += user.Name + " <b>" + user.Score + "</b>" + Environment.NewLine;
+                                    stringTopScore += user.name + " <b>" + user.score + "</b>" + Environment.NewLine;
                                 }
                                 else
                                 {
-                                    stringTopScore += Emoji.FlexedArm + " " + user.Name + " " + Emoji.FlexedArm + " <b>" + user.Score + "</b>" + Environment.NewLine;
+                                    stringTopScore += Emoji.FlexedArm + " " + user.name + " " + Emoji.FlexedArm + " <b>" + user.score + "</b>" + Environment.NewLine;
                                 }
 
                                 i++;
