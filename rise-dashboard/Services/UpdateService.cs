@@ -159,13 +159,13 @@ namespace rise.Services
                                 }
                                 else
                                 {
-                                    stringTopScore += Emoji.FlexedArm + " " + user.name + " " + Emoji.FlexedArm + " <b>" + user.score + "</b>" + Environment.NewLine;
+                                    stringTopScore += Emoji.Star + " " + user.name + " " + Emoji.Star + " <b>" + user.score + "</b>" + Environment.NewLine;
                                 }
 
                                 i++;
                             }
 
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "<b>TOP SCORE </b>" + stringTopScore, ParseMode.Html);
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "<b>TOP SCORE </b>" + Environment.NewLine + stringTopScore, ParseMode.Html);
                         }
                         break;
 
