@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using rise.Code.DataFetcher;
 using rise.Code.Rise;
 using rise.Data;
 using rise.Models;
@@ -137,13 +138,34 @@ namespace rise.Services
                                 break;
                             }
 
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + Math.Round(amount, 2) + " <b>RISE</b> added to the jackpot!", ParseMode.Html);
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + Math.Round(amount, 2) + " <b>RISE</b> added to the season Jackpot!", ParseMode.Html);
                             await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed on blockchain: <b>" + balance + " </b> RISE" + " ( + " + Math.Round(amount, 2) + " unconfirmed.)", ParseMode.Html);
                         }
 
                         else
                         {
                             await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed Balance: <b>" + balance + " </b> RISE", ParseMode.Html);
+
+                            var RiseForceResult = await RiseForceScoreFetcher.FetchRiseForceStats();
+
+                            var stringTopScore = string.Empty;
+                            int i = 0;
+
+                            foreach (var user in RiseForceResult.Top10.OrderByDescending(x => x.Score).ToList())
+                            {
+                                if (i != 0)
+                                {
+                                    stringTopScore += user.Name + " <b>" + user.Score + "</b>" + Environment.NewLine;
+                                }
+                                else
+                                {
+                                    stringTopScore += Emoji.FlexedArm + " " + user.Name + " " + Emoji.FlexedArm + " <b>" + user.Score + "</b>" + Environment.NewLine;
+                                }
+
+                                i++;
+                            }
+
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "<b>TOP SCORE </b>" + stringTopScore, ParseMode.Html);
                         }
                         break;
 
