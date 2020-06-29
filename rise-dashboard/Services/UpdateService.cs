@@ -151,7 +151,7 @@ namespace rise.Services
                             var stringTopScore = string.Empty;
                             int i = 0;
 
-                            foreach (var user in RiseForceResult.top10.OrderByDescending(x => x.score).ToList())
+                            foreach (var user in RiseForceResult.result.top10.OrderByDescending(x => x.score).ToList())
                             {
                                 if (i != 0)
                                 {

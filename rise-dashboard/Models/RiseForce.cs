@@ -39,7 +39,7 @@ namespace rise.Models
         public IList<RiseForceTop> top10 { get; set; }
 
     }
-    public class Application
+    public class RiseForceApplication
     {
         public bool success { get; set; }
         public RiseForceResult result { get; set; }
