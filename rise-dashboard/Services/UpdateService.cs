@@ -157,15 +157,16 @@ namespace rise.Services
                                 {
                                     stringTopScore += user.name + " <b>" + user.score + "</b>" + Environment.NewLine;
                                 }
+
                                 else
                                 {
-                                    stringTopScore += Emoji.Star + " " + user.name + " " + Emoji.Star + " <b>" + user.score + "</b>" + Environment.NewLine;
+                                    stringTopScore += Emoji.Star + " " + user.name + " <b>" + user.score + "</b>" + Emoji.Star + Environment.NewLine;
                                 }
 
                                 i++;
                             }
 
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "<b>TOP SCORE </b>" + Environment.NewLine + stringTopScore, ParseMode.Html);
+                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "<b>TOP 10 SCORE </b>" + Environment.NewLine + stringTopScore, ParseMode.Html);
                         }
                         break;
 
