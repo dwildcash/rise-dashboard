@@ -424,7 +424,8 @@ namespace rise.Services
                 await _botService.Client.SendChatActionAsync(appuser.TelegramId, ChatAction.Typing);
 
                 var strResponse = "<b>-= Help =-</b>" + Environment.NewLine +
-                                     "<b>!pool</b> - (List active Pools)" + Environment.NewLine +
+                                     "<b>!balance</b> - Show your current balance and wallet address" + Environment.NewLine +
+                                     "<b>!pool</b> - Show a a list of all active Pools" + Environment.NewLine +
                                      "<b>!rain</b> - !rain 10 (to any random users active in last day with min 5 msg)" + Environment.NewLine +
                                      "<b>!boom</b> - !boom 10 (to any random users active in the last 4 hours with min of 5 msg)" + Environment.NewLine +
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
