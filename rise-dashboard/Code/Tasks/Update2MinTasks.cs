@@ -25,6 +25,7 @@ namespace rise.Code.Tasks
         {
             var liveCoinQuoteResult = await LiveCoinQuoteFetcher.FetchLiveCoinQuote();
 
+
             if (liveCoinQuoteResult != null)
             {
                 LiveCoinQuote.Current = liveCoinQuoteResult;
