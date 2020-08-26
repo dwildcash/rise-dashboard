@@ -31,11 +31,11 @@ namespace rise.Code.Tasks
                 LiveCoinQuote.Current = liveCoinQuoteResult;
             }
 
-            var XtcomQuoteResult = await XtcomQuoteFetcher.FetchXtcomQuote();
+            var XtcomQuote = await XtcomQuoteFetcher.FetchXtcomQuote();
 
-            if (XtcomQuoteResult != null)
+            if (XtcomQuote != null)
             {
-                XtcomQuoteResult.Current = XtcomQuoteResult;
+                XtcomQuote.Current = XtcomQuote;
             }
 
             var coinbaseBtcQuoteResult = await CoinbaseBtcFetcher.FetchCoinbaseBtcQuote();

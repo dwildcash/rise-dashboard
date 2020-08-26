@@ -12,16 +12,16 @@
     /// </summary>
     public static class XtcomQuoteFetcher
     {
-        public static async Task<XtcomQuoteResult> FetchXtcomQuote()
+        public static async Task<XtcomQuote> FetchXtcomQuote()
         {
             try
             {
                 using (var hc = new HttpClient())
                 {
                     var quote = JObject.Parse(await hc.GetStringAsync("https://api.xt.com/data/api/v1/getTicker?market=rise_usdt"));
-                    var xtcomQuoteResult = JsonConvert.DeserializeObject<XtcomQuoteResult>(quote.ToString());
+                    var xtcomQuoteResult = JsonConvert.DeserializeObject<XtcomQuote>(quote.ToString());
 
-                    if (xtcomQuoteResult.resMsg.message.StartsWith("success"))
+                    if (xtcomQuoteResult != null)
                     {
                         return xtcomQuoteResult;
                     }
