@@ -95,15 +95,15 @@
 
                     try
                     {
-                        var totalVolume = liveCoinVolume + XtcomVolume;
+                        var totalVolume = liveCoinVolume;
 
                         var quoteAllWeighted = new CoinQuote
                         {
                             Exchange = "All",
-                            Price = (liveCoinPrice * liveCoinVolume / totalVolume) + (XtcomPrice * XtcomVolume / totalVolume),
+                            Price = (liveCoinPrice * liveCoinVolume / totalVolume),
                             Volume = totalVolume,
                             TimeStamp = time,
-                            USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((liveCoinPrice * liveCoinVolume / totalVolume) + (XtcomPrice * XtcomVolume / totalVolume))
+                            USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((liveCoinPrice * liveCoinVolume / totalVolume))
                         };
 
                         dbContext.CoinQuotes.Add(quoteAllWeighted);
