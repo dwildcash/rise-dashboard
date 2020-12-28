@@ -24,11 +24,11 @@ namespace rise.Code.Tasks
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
 
-            var XtcomQuote = await XtcomQuoteFetcher.FetchXtcomQuote();
+            var XtcomQuoteResult = await XtcomQuoteFetcher.FetchXtcomQuote();
 
-            if (XtcomQuote != null)
+            if (XtcomQuoteResult != null)
             {
-                XtcomQuote.Current = XtcomQuote;
+                XtcomQuoteResult.Current = XtcomQuoteResult;
             }
 
             var coinbaseBtcQuoteResult = await CoinbaseBtcFetcher.FetchCoinbaseBtcQuote();

@@ -46,10 +46,12 @@
                         var quoteXtcom = new CoinQuote
                         {
                             Exchange = "Xt.com",
-                            Price = XtcomQuote.Current.price / 10000,
-                            Volume = XtcomQuote.Current.moneyVol,
+
+                            Price = double.Parse(XtcomQuoteResult.Current.datas[1]) / double.Parse(CoinbaseBtcQuote.Current.amount),
+                            Volume = double.Parse(XtcomQuoteResult.Current.datas[4]),
+
                             TimeStamp = time,
-                            USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * XtcomQuote.Current.price / 10000,
+                            USDPrice = double.Parse(XtcomQuoteResult.Current.datas[1])
                         };
 
                         XtcomPrice = quoteXtcom.Price;
