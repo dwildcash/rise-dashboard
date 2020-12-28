@@ -377,7 +377,7 @@ namespace rise.Services
 
                     // Info Price
                     case "!PRICE":
-                        await cmd_Price(message, appuser);
+                        //await cmd_Price(message, appuser);
                         break;
 
                     // Return a  geek joke

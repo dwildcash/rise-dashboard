@@ -47,11 +47,11 @@
                         {
                             Exchange = "Xt.com",
 
-                            Price = double.Parse(XtcomQuoteResult.Current.datas[1]) / double.Parse(CoinbaseBtcQuote.Current.amount),
-                            Volume = double.Parse(XtcomQuoteResult.Current.datas[4]),
+                            Price = XtcomQuoteResult.Current.quote.price / double.Parse(CoinbaseBtcQuote.Current.amount),
+                            Volume = XtcomQuoteResult.Current.quote.moneyVol,
 
                             TimeStamp = time,
-                            USDPrice = double.Parse(XtcomQuoteResult.Current.datas[1])
+                            USDPrice = XtcomQuoteResult.Current.quote.price
                         };
 
                         XtcomPrice = quoteXtcom.Price;

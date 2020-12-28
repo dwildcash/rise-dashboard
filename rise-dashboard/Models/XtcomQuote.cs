@@ -8,15 +8,21 @@
 
     public class XtcomQuote
     {
-        public string message { get; set; }
-        public object method { get; set; }
-        public string code { get; set; }
+        public double moneyVol { get; set; }
+        public double monthRate { get; set; }
+        public int coinVol { get; set; }
+        public double weekRate { get; set; }
+        public double high { get; set; }
+        public double rate { get; set; }
+        public double low { get; set; }
+        public double price { get; set; }
+        public double ask { get; set; }
+        public double bid { get; set; }
     }
 
     public class XtcomQuoteResult
     {
         public static XtcomQuoteResult Current { get; set; }
-        public IList<string> datas { get; set; }
-        public XtcomQuote resMsg { get; set; }
+        public XtcomQuote quote { get; set; }
     }
 }

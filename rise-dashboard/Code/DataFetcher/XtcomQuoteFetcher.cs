@@ -21,7 +21,7 @@
                     var quote = JObject.Parse(await hc.GetStringAsync("https://api.xt.com/data/api/v1/getTicker?market=rise_usdt"));
                     var xtcomQuoteResult = JsonConvert.DeserializeObject<XtcomQuoteResult>(quote.ToString());
 
-                    if (xtcomQuoteResult.resMsg.message.StartsWith("success"))
+                    if (xtcomQuoteResult.quote.moneyVol.ToString().Length > 0)
                     {
                         return xtcomQuoteResult;
                     }
