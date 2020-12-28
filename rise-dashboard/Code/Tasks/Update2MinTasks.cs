@@ -23,13 +23,6 @@ namespace rise.Code.Tasks
         /// <returns>The <see cref="Task"/></returns>
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            var liveCoinQuoteResult = await LiveCoinQuoteFetcher.FetchLiveCoinQuote();
-
-
-            if (liveCoinQuoteResult != null)
-            {
-                LiveCoinQuote.Current = liveCoinQuoteResult;
-            }
 
             var XtcomQuote = await XtcomQuoteFetcher.FetchXtcomQuote();
 

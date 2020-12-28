@@ -884,22 +884,12 @@ namespace rise.Services
         {
             try
             {
-                double volLivecoin = 0;
-                double priceLivecoin = 0;
-
                 double volXtcom = 0;
                 double priceXtcom = 0;
 
                 coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
 
-                var quoteLivecoin = LastLiveCoinQuote();
                 var quoteXtcom = LastXtcomQuote();
-
-                if (quoteLivecoin != null)
-                {
-                    volLivecoin = Math.Round(quoteLivecoin.Volume);
-                    priceLivecoin = Math.Round(quoteLivecoin.Price * 100000000);
-                }
 
                 if (quoteXtcom != null)
                 {
@@ -909,8 +899,6 @@ namespace rise.Services
 
                 await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
-                                  "<b>Livecoin</b> - https://livecoin.net (24h V:" + volLivecoin.ToString("N0") + " - Price:" + priceLivecoin + " sat)" + Environment.NewLine +
-                                  "<b>Altilly</b> - https://www.altilly.com/" + Environment.NewLine +
                                   "<b>Xt.com</b> - https://www.xt.com (24h V:" + volXtcom.ToString("N0") + " - Price:" + priceXtcom + " sat)" + Environment.NewLine +
                                   "Bitcoin Price: <b>" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2) + "$</b> (Coinbase)";
 

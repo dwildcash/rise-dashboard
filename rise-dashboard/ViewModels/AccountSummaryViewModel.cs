@@ -8,10 +8,6 @@
     /// </summary>
     public class AccountSummaryViewModel : QuoteStats
     {
-        /// <summary>
-        /// Gets or sets the liveCoinQuoteResult
-        /// </summary>
-        public LiveCoinQuote liveCoinQuoteResult { get; set; }
 
         /// <summary>
         /// Gets or sets the coinbaseBtcQuoteResult

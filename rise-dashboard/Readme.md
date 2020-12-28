@@ -50,8 +50,6 @@ Trust me all secrets below wont work... found below please use your own.
     "APIUrl": "http://localhost:5555",
     "CoinRewardDay": 345,
     "CoinMarketCapTickerCode": "1294",
-    "LiveCoinMarket": "RISE/BTC",
-    "LiveCoinWalletAddress": "5920507067941756798R",
     "IPStackApiKey": "putapikey",
     "DonationAddress": "5556972430134253533R",
     "SimulateRoundCount": "100",

@@ -71,15 +71,7 @@
         /// </summary>
         public static string CoinFullName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the LiveCoinMarket
-        /// </summary>
-        public static string LiveCoinMarket { get; set; }
 
-        /// <summary>
-        /// Gets or sets the LiveCoinWalletAddress
-        /// </summary>
-        public static string LiveCoinWalletAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the APIUrl

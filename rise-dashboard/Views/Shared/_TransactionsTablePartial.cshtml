@@ -14,19 +14,12 @@
             return mydelegate.Username;
         }
 
-        // Flag Live Coin Tx
-        if (address == AppSettingsProvider.LiveCoinWalletAddress)
-        {
-            return "Livecoin.net";
-        }
-
         return null;
     }
 }
 
 <!-- Initialize Data Table-->
-<script type="text/javascript">
-    $(document).ready(function () {
+<script type="text/javascript">$(document).ready(function () {
         $('#transac').DataTable({
             "pageLength": 10,
             "order": [[0, "desc"]],
@@ -43,8 +36,7 @@
                 targets: -1
             }]
         });
-    });
-</script>
+    });</script>
 
 <!-- Start Transactions Table-->
 <!-- Main content -->

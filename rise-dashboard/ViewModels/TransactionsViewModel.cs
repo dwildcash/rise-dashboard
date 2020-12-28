@@ -9,11 +9,6 @@
     public class TransactionsViewModel : QuoteStats
     {
         /// <summary>
-        /// Gets or sets the LiveCoinQuoteResult
-        /// </summary>
-        public LiveCoinQuote LiveCoinQuoteResult { get; set; }
-
-        /// <summary>
         /// Gets or sets the CoinbaseBtcQuoteResult
         /// </summary>
         public CoinbaseBtcQuote CoinbaseBtcQuoteResult { get; set; }

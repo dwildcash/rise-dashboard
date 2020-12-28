@@ -37,35 +37,9 @@
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var time = DateTime.Now.ToUniversalTime();
-                    var liveCoinPrice = 0.0;
-                    var liveCoinVolume = 0.0;
+
                     var XtcomPrice = 0.0;
                     var XtcomVolume = 0.0;
-
-                    try
-                    {
-                        var quoteLivecoin = new CoinQuote
-                        {
-                            Exchange = "LiveCoin",
-                            Price = LiveCoinQuote.Current.Last,
-                            Volume = LiveCoinQuote.Current.Volume,
-                            TimeStamp = time,
-                            USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * LiveCoinQuote.Current.Last
-                        };
-
-                        liveCoinVolume = quoteLivecoin.Volume;
-                        liveCoinPrice = quoteLivecoin.Price;
-                        dbContext.CoinQuotes.Add(quoteLivecoin);
-                        dbContext.SaveChangesAsync().Wait();
-                    }
-                    catch (Exception ex)
-                    {
-                        var log = new Log();
-                        log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                        dbContext.Logger.Add(log);
-                        dbContext.SaveChangesAsync().Wait();
-                    }
-
 
                     try
                     {
@@ -83,33 +57,6 @@
                         dbContext.CoinQuotes.Add(quoteXtcom);
                         dbContext.SaveChangesAsync().Wait();
 
-                    }
-                    catch (Exception ex)
-                    {
-                        var log = new Log();
-                        log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
-                        dbContext.Logger.Add(log);
-                        dbContext.SaveChangesAsync().Wait();
-                    }
-
-
-                    try
-                    {
-                        var totalVolume = liveCoinVolume;
-
-                        var quoteAllWeighted = new CoinQuote
-                        {
-                            Exchange = "All",
-                            Price = (liveCoinPrice * liveCoinVolume / totalVolume),
-                            Volume = totalVolume,
-                            TimeStamp = time,
-                            USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((liveCoinPrice * liveCoinVolume / totalVolume))
-                        };
-
-                        dbContext.CoinQuotes.Add(quoteAllWeighted);
-
-                        // Save Context in Database
-                        await dbContext.SaveChangesAsync();
                     }
                     catch (Exception ex)
                     {

@@ -82,7 +82,6 @@
         {
             var accountSummaryViewModel = new AccountSummaryViewModel
             {
-                liveCoinQuoteResult = LiveCoinQuote.Current,
                 coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                 transactionsResult = TransactionsResult.Current,
                 delegateResult = DelegateResult.Current,
@@ -106,7 +105,6 @@
         {
             var accountSummaryViewModel = new AccountSummaryViewModel
             {
-                liveCoinQuoteResult = LiveCoinQuote.Current,
                 coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                 transactionsResult = TransactionsResult.Current,
                 delegateResult = DelegateResult.Current,
@@ -161,7 +159,6 @@
                         address = delegate_account.Address;
                         accountSummaryViewModel = new AccountSummaryViewModel
                         {
-                            liveCoinQuoteResult = LiveCoinQuote.Current,
                             coinQuoteCol = CoinQuoteResult.Current,
                             coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                             transactionsResult = TransactionsResult.Current,
@@ -177,7 +174,6 @@
                     {
                         accountSummaryViewModel = new AccountSummaryViewModel
                         {
-                            liveCoinQuoteResult = LiveCoinQuote.Current,
                             coinQuoteCol = CoinQuoteResult.Current,
                             coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                             transactionsResult = TransactionsResult.Current,
@@ -246,7 +242,6 @@
             {
                 var accountSummaryViewModel = new AccountSummaryViewModel
                 {
-                    liveCoinQuoteResult = LiveCoinQuote.Current,
                     coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     transactionsResult = TransactionsResult.Current,
                     delegateResult = DelegateResult.Current,
@@ -280,7 +275,6 @@
                 TransactionsViewModel transactionsViewModel = new TransactionsViewModel
                 {
                     coinQuoteCol = CoinQuoteResult.Current,
-                    LiveCoinQuoteResult = LiveCoinQuote.Current,
                     CoinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     DelegateResult = DelegateResult.Current
                 };
@@ -329,7 +323,6 @@
 
                 var tipAccountSummaryViewModel = new AccountSummaryViewModel
                 {
-                    liveCoinQuoteResult = LiveCoinQuote.Current,
                     coinQuoteCol = CoinQuoteResult.Current,
                     coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     transactionsResult = TransactionsResult.Current,
@@ -362,9 +355,7 @@
             {
                 var quoteViewModel = new QuoteViewModel
                 {
-                    //liveCoinTx = await TransactionsFetcher.FetchAllUserTransactions(AppSettingsProvider.LiveCoinWalletAddress),
                     transactionsResult = TransactionsResult.Current,
-                    liveCoinQuoteResult = LiveCoinQuote.Current,
                     coinbaseBtcQuoteResult = CoinbaseBtcQuote.Current,
                     coinQuoteCol = CoinQuoteResult.Current
                 };
