@@ -56,7 +56,20 @@
 
                         XtcomPrice = quoteXtcom.Price;
                         XtcomVolume = quoteXtcom.Volume;
+
+                        var totalVolume = XtcomVolume;
+
+                        var quoteAllWeighted = new CoinQuote
+                        {
+                            Exchange = "All",
+                            Price = (XtcomPrice * XtcomVolume / totalVolume),
+                            Volume = totalVolume,
+                            TimeStamp = time,
+                            USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((XtcomPrice * XtcomVolume / totalVolume))
+                        };
+
                         dbContext.CoinQuotes.Add(quoteXtcom);
+                        dbContext.CoinQuotes.Add(quoteAllWeighted);
                         dbContext.SaveChangesAsync().Wait();
 
                     }
@@ -68,16 +81,7 @@
                         dbContext.SaveChangesAsync().Wait();
                     }
 
-                    var totalVolume = XtcomVolume;
-
-                    var quoteAllWeighted = new CoinQuote
-                    {
-                        Exchange = "All",
-                        Price = (XtcomPrice * XtcomVolume / totalVolume),
-                        Volume = totalVolume,
-                        TimeStamp = time,
-                        USDPrice = double.Parse(CoinbaseBtcQuote.Current.amount) * ((XtcomPrice * XtcomVolume / totalVolume))
-                    };
+                    
 
                     // Load latest all Last 15 days
                     CoinQuoteResult.Current = dbContext.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList();
