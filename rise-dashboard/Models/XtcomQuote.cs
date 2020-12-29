@@ -8,6 +8,7 @@
 
     public class XtcomQuote
     {
+        public static XtcomQuote Current { get; set; }
         public double moneyVol { get; set; }
         public double monthRate { get; set; }
         public int coinVol { get; set; }
@@ -18,11 +19,5 @@
         public double price { get; set; }
         public double ask { get; set; }
         public double bid { get; set; }
-    }
-
-    public class XtcomQuoteResult
-    {
-        public static XtcomQuoteResult Current { get; set; }
-        public XtcomQuote quote { get; set; }
     }
 }

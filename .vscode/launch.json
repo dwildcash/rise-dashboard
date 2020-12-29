@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/rise-dashboard/bin/Debug/netcoreapp3.1/rise-dashboard.dll",
+            "program": "${workspaceFolder}/rise-dashboard/bin/Debug/net5.0/rise-dashboard.dll",
             "args": [],
             "cwd": "${workspaceFolder}/rise-dashboard",
             "stopAtEntry": false,
@@ -31,6 +31,28 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:pickProcess}"
+        },
+        {
+            "name": ".NET Core SSH Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickRemoteProcess}",
+            "pipeTransport": {
+                "pipeProgram": "ssh",
+                "pipeArgs": [
+                    "-T",
+                    "-i",
+                    "~/.ssh/id_rsa.pub",
+                    "root@dashboard.rise.vision"
+                ],
+                "debuggerPath": "~/vsdbg/vsdbg",
+                "pipeCwd": "${workspaceRoot}",
+                "quoteArgs": true
+            },
+            "sourceFileMap": {
+                "/var/www/rise-dashboard": "${workspaceRoot}"
+            }
         }
+        
     ]
 }

@@ -28,7 +28,7 @@ namespace rise.Code.Tasks
 
             if (XtcomQuoteResult != null)
             {
-                XtcomQuoteResult.Current = XtcomQuoteResult;
+                XtcomQuote.Current = XtcomQuoteResult;
             }
 
             var coinbaseBtcQuoteResult = await CoinbaseBtcFetcher.FetchCoinbaseBtcQuote();
