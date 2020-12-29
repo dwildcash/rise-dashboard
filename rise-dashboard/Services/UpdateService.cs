@@ -901,7 +901,7 @@ namespace rise.Services
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
                                   "<b>Xt.com</b> - https://www.xt.com" + Environment.NewLine +
                                   "Price (sat): <b>" + priceXtcom + "</b>" + Environment.NewLine +
-                                  "Vol (24H): <b>" +  volXtcom.ToString("N0") + "/<b>" + Environment.NewLine +
+                                  "Vol (24H): <b>" +  volXtcom.ToString("N0") + "</b>" + Environment.NewLine +
                                   "Bitcoin Price: <b>" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2) + "$</b> (Coinbase)";
 
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
