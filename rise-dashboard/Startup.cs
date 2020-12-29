@@ -121,7 +121,7 @@ namespace rise
             services.AddSingleton<IBotService, BotService>();
 
             // Configure 1Min Update Tasks
-            services.AddSingleton<IScheduledTask, Update2MinTasks>();
+            services.AddSingleton<IScheduledTask, Update1MinTasks>();
 
             // Configure 30Min Update Task
             services.AddSingleton<IScheduledTask, Update5MinTasks>();

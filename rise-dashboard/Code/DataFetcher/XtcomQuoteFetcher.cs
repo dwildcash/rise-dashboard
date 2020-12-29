@@ -19,11 +19,11 @@
                 using (var hc = new HttpClient())
                 {
                     var quote = JObject.Parse(await hc.GetStringAsync("https://api.xt.com/data/api/v1/getTicker?market=rise_usdt"));
-                    var xtcomQuoteResult = JsonConvert.DeserializeObject<XtcomQuote>(quote.ToString());
+                    var xtcomQuote = JsonConvert.DeserializeObject<XtcomQuote>(quote.ToString());
 
-                    if (xtcomQuoteResult.moneyVol.ToString().Length > 0)
+                    if (xtcomQuote.moneyVol > 0)
                     {
-                        return xtcomQuoteResult;
+                        return xtcomQuote;
                     }
 
                     return null;
