@@ -14,7 +14,7 @@ namespace rise.Code.Tasks
         /// <summary>
         /// Gets the Schedule
         /// </summary>
-        public string Schedule => "*/1 * * * *";
+        public string Schedule => "*/2 * * * *";
 
         /// <summary>
         /// The ExecuteAsync
