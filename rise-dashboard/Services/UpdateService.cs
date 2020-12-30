@@ -913,9 +913,9 @@ namespace rise.Services
                                   "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
                                   "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
                                   "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
-                                  "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
                                   "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                                   "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
+                                  "<b>Veritise</b> - https://www.veritise.com/" + Environment.NewLine +
                                   "<b>Rise Telegram Tipping Bot</b> - type !help";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
