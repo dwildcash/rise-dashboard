@@ -269,42 +269,46 @@
 </div>
 
 <div class="row">
-    <div class="box card">
-        <div class="card-header no-border">
-            <div class="d-flex justify-content-between">
-                <h3 class="card-title">24H Volume by Exchange</h3>
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="box card">
+            <div class="card-header no-border">
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">24H Volume by Exchange</h3>
+                </div>
             </div>
-        </div>
 
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <canvas id="pieChart" height="125"></canvas>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <canvas id="pieChart" height="125"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="box card">
 
-    <div class="box card">
-        <div class="card-body">
-            <div class="d-flex justify-content-center">
-                <div align="center">
-                    <img src="~/img/xtcom.png" alt="Xt.com" class="img-circle img-size-32 mr-2">
-                    <div><a href="https://xt.com/">Xt.com</a></div>
-                </div>
-                <div class="d-flex flex-column ml-4">
-                    <span class="d-flex flex-column">
-                        <p class="mb-0">Deposit</p>
-                        <p class="font-weight-bold">@toXt.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                    </span>
-                    <small class="text-muted">On @toXt.Count() Tx</small>
-                </div>
-                <div class="d-flex flex-column ml-4">
-                    <span class="d-flex flex-column">
-                        <p class="mb-0">Withdraw</p>
-                        <p class="font-weight-bold">@fromXt.Sum(x => x.amount / 100000000).ToString("N0")</p>
-                    </span>
-                    <small class="text-muted">On <b>@fromXt.Count()</b> Tx</small>
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <div align="center">
+                        <img src="~/img/xtcom.png" alt="Xt.com" class="img-circle img-size-32 mr-2">
+                        <div><a href="https://xt.com/">Xt.com</a></div>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Deposit</p>
+                            <p class="font-weight-bold">@toXt.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+                        <small class="text-muted">On @toXt.Count() Tx</small>
+                    </div>
+                    <div class="d-flex flex-column ml-4">
+                        <span class="d-flex flex-column">
+                            <p class="mb-0">Withdraw</p>
+                            <p class="font-weight-bold">@fromXt.Sum(x => x.amount / 100000000).ToString("N0")</p>
+                        </span>
+                        <small class="text-muted">On <b>@fromXt.Count()</b> Tx</small>
+                    </div>
                 </div>
             </div>
         </div>
