@@ -14,6 +14,12 @@
             return mydelegate.Username;
         }
 
+        // Flag Live Coin Tx
+        if (address == AppSettingsProvider.XtDepositAddress || address == AppSettingsProvider.XtWithdrawalAddress)
+        {
+            return "Xt.com";
+        }
+
         return null;
     }
 }

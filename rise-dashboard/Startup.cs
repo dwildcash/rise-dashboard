@@ -64,6 +64,8 @@ namespace rise
             AppSettingsProvider.EncryptionKey = Configuration["AppSettings:EncryptionKey"];
             AppSettingsProvider.WebHookSecret = Configuration["AppSettings:WebHookSecret"];
             AppSettingsProvider.TelegramChannelId = long.Parse(Configuration["AppSettings:TelegramChannelId"]);
+            AppSettingsProvider.XtDepositAddress = Configuration["AppSettings:XtDepositAddress"];
+            AppSettingsProvider.XtWithdrawalAddress = Configuration["Appsettings:XtWithdrawalAddress"];
         }
 
 

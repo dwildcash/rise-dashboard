@@ -11,6 +11,18 @@
         /// </summary>
         public static int SimulateRoundCount { get; set; }
 
+
+        /// <summary>
+        /// Xt receive Address
+        /// </summary>
+        public static string XtDepositAddress { get; set; }
+
+
+        /// <summary>
+        /// Xt Send Address
+        /// </summary>
+        public static string XtWithdrawalAddress { get; set; }
+
         /// <summary>
         /// Encryption Salt
         /// </summary>
