@@ -120,56 +120,6 @@ namespace rise.Services
             {
                 switch (command.Trim())
                 {
-                    case "!RISEFORCE":
-
-                        RiseManager rm = new RiseManager();
-
-                        var balance = await rm.AccountBalanceAsync("11843004005205985384R");
-
-                        if (lstAmount.Count > 0)
-                        {
-                            double amount = Math.Round(lstAmount.FirstOrDefault() - 0.1, 2);
-                            if (await cmd_preSend(amount, command, 1, message.Chat.Id, appuser))
-                            {
-                                await cmd_Withdraw(appuser, amount, "11843004005205985384R");
-                            }
-                            else
-                            {
-                                break;
-                            }
-
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thank you " + appuser.UserName + " for supporting RiseForce with " + Math.Round(amount, 2) + " <b>RISE</b> added to the season Jackpot!", ParseMode.Html);
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed on blockchain: <b>" + balance + " </b> RISE" + " ( + " + Math.Round(amount, 2) + " unconfirmed.)", ParseMode.Html);
-                        }
-
-                        else
-                        {
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, Emoji.Rocket + " Current RiseForce Jackpot confirmed Balance: <b>" + balance + " </b> RISE", ParseMode.Html);
-
-                            var RiseForceResult = await RiseForceScoreFetcher.FetchRiseForceStats();
-
-                            var stringTopScore = string.Empty;
-                            int i = 0;
-
-                            foreach (var user in RiseForceResult.result.top10.OrderByDescending(x => x.score).ToList())
-                            {
-                                if (i != 0)
-                                {
-                                    stringTopScore += user.name + " <b>" + user.score + "</b>" + Environment.NewLine;
-                                }
-
-                                else
-                                {
-                                    stringTopScore += Emoji.Star + " " + user.name + " <b>" + user.score + "</b>" + Emoji.Star + Environment.NewLine;
-                                }
-
-                                i++;
-                            }
-
-                            await _botService.Client.SendTextMessageAsync(message.Chat.Id, "<b>TOP 10 SCORE </b>" + Environment.NewLine + stringTopScore, ParseMode.Html);
-                        }
-                        break;
-
                     // Show Pool
                     case "!POOL":
                         await cmd_ShowPool(appuser, lstDestAddress);
@@ -902,7 +852,7 @@ namespace rise.Services
                                   "<b>Xt.com</b> - https://www.xt.com" + Environment.NewLine +
                                   "Price (USD): <b>$" + Math.Round(quoteXtcom.USDPrice, 4) + "</b>" + Environment.NewLine +
                                   "Price (sat): <b>" + priceXtcom + "</b>" + Environment.NewLine +
-                                  "Vol (24H): <b>" +  volXtcom.ToString("N0") + "</b>" + Environment.NewLine +
+                                  "Vol (24H): <b>" + volXtcom.ToString("N0") + "</b>" + Environment.NewLine +
                                   "Bitcoin Price: <b>" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2) + "$</b> (Coinbase)";
 
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
@@ -960,18 +910,12 @@ namespace rise.Services
                 var strResponse = "<b>Rise Information/Tools</b>" + Environment.NewLine +
                                   "<b>Rise Website</b> - https://rise.vision" + Environment.NewLine +
                                   "<b>Rise Dashboard</b> - https://dashboard.rise.vision" + Environment.NewLine +
-                                  "<b>Riseforce Game</b> - https://riseforce.rise.vision" + Environment.NewLine +
-                                  "<b>Rise RoadMap</b> - https://rise.vision/roadmap/" + Environment.NewLine +
                                   "<b>Rise Explorer</b> - https://explorer.rise.vision/" + Environment.NewLine +
                                   "<b>Rise GitHub</b> - https://github.com/RiseVision" + Environment.NewLine +
                                   "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
                                   "<b>Rise Medium</b> - https://medium.com/rise-vision" + Environment.NewLine +
                                   "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                                   "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
-                                  "<b>Rise TG Official Updates</b> - https://t.me/riseupdates" + Environment.NewLine +
-                                  "<b>Rise Slack</b> - https://risevision.slack.com/" + Environment.NewLine +
-                                  "<b>Rise BitcoinTalk</b> - https://bitcointalk.org/index.php?topic=3211240.200" + Environment.NewLine +
-                                  "<b>Rise Intro Youtube</b> - https://www.youtube.com/watch?v=wZ2vIGl_gCM&feature=youtu.be" + Environment.NewLine +
                                   "<b>Rise Telegram Tipping Bot</b> - type !help";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
