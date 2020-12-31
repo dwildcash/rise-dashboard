@@ -860,8 +860,8 @@ namespace rise.Services
                                   "Price (USD): <b>$" + Math.Round(quoteXtcom.USDPrice, 2).ToString("N0") + "</b>" + Environment.NewLine +
                                   "Price (sat): <b>" + priceXtcom + "</b>" + Environment.NewLine +
                                   "Vol (24H): <b>" + volXtcom.ToString("N0") + "</b>" + Environment.NewLine +
-                                  "Rise Sent to Xt.com (24H): <b>" + toXt + "</b>" + Environment.NewLine +
-                                  "Rise Withdraw from Xt.com (24H): <b>" + fromXt + "</b>" + Environment.NewLine +
+                                  "Rise Sent to Xt.com (24H): <b>" + toXt.Sum(x => x.amount / 100000000).ToString("N0") + "</b>" + Environment.NewLine +
+                                  "Rise Withdraw from Xt.com (24H): <b>" + fromXt.Sum(x => x.amount / 100000000).ToString("N0") + "</b>" + Environment.NewLine +
                                   "Bitcoin Price: <b>$" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2) + "</b> (Coinbase)";
 
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
