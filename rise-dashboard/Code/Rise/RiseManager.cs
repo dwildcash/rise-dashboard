@@ -75,7 +75,7 @@ namespace rise.Code.Rise
                     return transaction;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 var tx = new Tx
                 {

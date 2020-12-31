@@ -47,7 +47,7 @@
                         {
                             Exchange = "Xt.com",
 
-                            Price = ((XtcomQuote.Current.price * 100000000) / double.Parse(CoinbaseBtcQuote.Current.amount))/100000000,
+                            Price = ((XtcomQuote.Current.price * 100000000) / double.Parse(CoinbaseBtcQuote.Current.amount)) / 100000000,
                             Volume = XtcomQuote.Current.moneyVol,
 
                             TimeStamp = time,
@@ -81,7 +81,6 @@
                         dbContext.SaveChangesAsync().Wait();
                     }
 
-                    
 
                     // Load latest all Last 15 days
                     CoinQuoteResult.Current = dbContext.CoinQuotes.AsEnumerable().Where(x => x.TimeStamp.ToUniversalTime() > DateTime.Now.AddDays(-15)).ToList();

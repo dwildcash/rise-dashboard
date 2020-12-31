@@ -380,7 +380,6 @@ namespace rise.Services
                                      "<b>!boom</b> - !boom 10 (to any random users active in the last 4 hours with min of 5 msg)" + Environment.NewLine +
                                      "<b>!send</b> - !send 5 RISE to @Dwildcash" + Environment.NewLine +
                                      "<b>!withdraw</b> - !withdraw 5 RISE to 5953135380169360325R" + Environment.NewLine +
-                                     "<b>!RiseForce</b> - Send Rise to RiseForce JackPot" + Environment.NewLine +
                                      "<b>!seen</b> - Show last message from user !seen @Dwildcash" + Environment.NewLine +
                                      "<b>!hope</b> - Show hope quote" + Environment.NewLine +
                                      "<b>!exchanges</b> - Display current RISE Exchanges" + Environment.NewLine +
@@ -839,6 +838,14 @@ namespace rise.Services
 
                 coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
 
+
+                QuoteStats qs = new QuoteStats();
+
+                var toXt = TransactionsResult.Current.transactions.AsEnumerable().Where(x => qs.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.XtDepositAddress);
+                var fromXt = TransactionsResult.Current.transactions.AsEnumerable().Where(x => qs.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.XtWithdrawalAddress);
+
+
+
                 var quoteXtcom = LastXtcomQuote();
 
                 if (quoteXtcom != null)
@@ -853,6 +860,8 @@ namespace rise.Services
                                   "Price (USD): <b>$" + Math.Round(quoteXtcom.USDPrice, 2).ToString("N0") + "</b>" + Environment.NewLine +
                                   "Price (sat): <b>" + priceXtcom + "</b>" + Environment.NewLine +
                                   "Vol (24H): <b>" + volXtcom.ToString("N0") + "</b>" + Environment.NewLine +
+                                  "Rise Sent to Xt.com (24H): <b>" + toXt + "</b>" + Environment.NewLine +
+                                  "Rise Withdraw from Xt.com (24H): <b>" + fromXt + "</b>" + Environment.NewLine +
                                   "Bitcoin Price: <b>$" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2) + "</b> (Coinbase)";
 
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
