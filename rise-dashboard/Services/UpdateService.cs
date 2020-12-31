@@ -844,7 +844,8 @@ namespace rise.Services
                 var toXt = TransactionsResult.Current.transactions.AsEnumerable().Where(x => qs.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.XtDepositAddress);
                 var fromXt = TransactionsResult.Current.transactions.AsEnumerable().Where(x => qs.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.XtWithdrawalAddress);
 
-
+                var xtcomBid = Math.Round(((XtcomQuote.Current.bid * 100000000) / double.Parse(CoinbaseBtcQuote.Current.amount)));
+                var xtcomAsk = Math.Round(((XtcomQuote.Current.ask * 100000000) / double.Parse(CoinbaseBtcQuote.Current.amount)));
 
                 var quoteXtcom = LastXtcomQuote();
 
@@ -859,6 +860,7 @@ namespace rise.Services
                                   "<b>Xt.com</b> - https://www.xt.com" + Environment.NewLine +
                                   "Price (USD): <b>$" + Math.Round(quoteXtcom.USDPrice, 2).ToString("N0") + "</b>" + Environment.NewLine +
                                   "Price (sat): <b>" + priceXtcom + "</b>" + Environment.NewLine +
+                                  "Market (sat) Bid:<b>" + xtcomBid + "</b> Ask:<b>" + xtcomAsk + "</b>" + Environment.NewLine +
                                   "Vol (24H): <b>" + volXtcom.ToString("N0") + "</b>" + Environment.NewLine +
                                   "Rise Sent to Xt.com (24H): <b>" + toXt.Sum(x => x.amount / 100000000).ToString("N0") + "</b>" + Environment.NewLine +
                                   "Rise Withdraw from Xt.com (24H): <b>" + fromXt.Sum(x => x.amount / 100000000).ToString("N0") + "</b>" + Environment.NewLine +
@@ -888,11 +890,11 @@ namespace rise.Services
                 this.coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-7)).ToList();
                 var quote = LastAllQuote();
 
-                var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " (24h:" + Math.Round(PercentChange(1), 2) + "%) (1w: " + Math.Round(PercentChange(7), 2) + "%)</b>" + Environment.NewLine +
+                var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " [24h:" + Math.Round(PercentChange(1), 2) + "% 1W: " + Math.Round(PercentChange(7), 2) + "%]</b>" + Environment.NewLine +
                                   "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + " (" + USDPricePercentChange(1) + "%)</b>" + Environment.NewLine +
                                   "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " (" + VolumePercentChange(1) + "%) </b>" + Environment.NewLine +
                                   "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>" + Environment.NewLine +
-                                  "Bitcoin Price: <b>" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2).ToString("N0") + "$</b> (Coinbase)";
+                                  "Bitcoin Price: <b>$" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2).ToString("N0") + " </b> (Coinbase)";
 
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
                 var keyboard = new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("dashboard.rise.vision", "https://dashboard.rise.vision"));
@@ -924,7 +926,7 @@ namespace rise.Services
                                   "<b>Rise Web Wallet</b> - https://wallet.rise.vision" + Environment.NewLine +
                                   "<b>Rise Twitter</b> - https://twitter.com/RiseVisionTeam" + Environment.NewLine +
                                   "<b>Rise Telegram</b> - https://t.me/risevisionofficial" + Environment.NewLine +
-                                  "<b>Veritise</b> - https://www.veritise.com/" + Environment.NewLine +
+                                  "<b>Veritise - VTS</b> - https://www.veritise.com/" + Environment.NewLine +
                                   "<b>Rise Telegram Tipping Bot</b> - type !help";
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }

@@ -43,7 +43,8 @@
     var Xtcom = Model.LastXtcomQuote();
 
     var toXt = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.XtDepositAddress);
-    var fromXt = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.XtWithdrawalAddress); }
+    var fromXt = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.XtWithdrawalAddress); }    s
+
 
 <script type="text/javascript">
 
