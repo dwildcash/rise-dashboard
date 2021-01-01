@@ -43,8 +43,7 @@
     var Xtcom = Model.LastXtcomQuote();
 
     var toXt = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.XtDepositAddress);
-    var fromXt = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.XtWithdrawalAddress); }    s
-
+    var fromXt = Model.transactionsResult.transactions.AsEnumerable().Where(x => Model.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.senderId == AppSettingsProvider.XtWithdrawalAddress); }
 
 <script type="text/javascript">
 
@@ -289,7 +288,6 @@
     </div>
     <div class="col-lg-6 grid-margin stretch-card">
         <div class="box card">
-
             <div class="card-body">
                 <div class="d-flex justify-content-center">
                     <div align="center">

@@ -85,6 +85,39 @@ namespace rise.Code.Rise
             }
         }
 
+        /// <summary>
+        /// Create an Account
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Tx> DelegateVoteAsync(string secret)
+        {
+            try
+            {
+                // Create Paiment
+                using (var hc = new HttpClient())
+                {
+                    var values = new Dictionary<string, string>
+                        {
+                            { "secret", secret },
+                        };
+
+                    var content = new FormUrlEncodedContent(values);
+                    var response = await hc.PutAsync("http://localhost:7777/api/transactions2", content);
+                    var responseString = await response.Content.ReadAsStringAsync();
+                    var transaction = JsonConvert.DeserializeObject<Tx>(responseString);
+
+                    return transaction;
+                }
+            }
+            catch (Exception)
+            {
+                var tx = new Tx
+                {
+                    success = false
+                };
+                return tx;
+            }
+        }
 
         /// <summary>
         /// Get account Balance

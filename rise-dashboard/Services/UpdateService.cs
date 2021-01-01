@@ -135,6 +135,13 @@ namespace rise.Services
                         await cmd_ShowUserBalance(appuser);
                         break;
 
+
+                    // Vote for Dtpool
+                    case "!VOTE":
+                        await cmd_Vote(appuser);
+                        break;
+
+
                     // Show Help 
                     case "!HELP":
                         await cmd_Help(appuser);
@@ -513,6 +520,58 @@ namespace rise.Services
             var index = random.Next(lstHope.Count);
             await _botService.Client.SendTextMessageAsync(message.Chat.Id, lstHope[index], ParseMode.Html);
         }
+
+
+
+
+        /// <summary>
+        /// Withdraw coin
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="amount"></param>
+        /// <param name="recipientId"></param>
+        /// <returns></returns>
+        private async Task cmd_Vote(ApplicationUser sender)
+        {
+            if (sender.UserName == "Dwildcash")
+            {
+                RiseManager rm = new RiseManager();
+
+                try
+                {
+
+                    var balance = await rm.AccountBalanceAsync(sender.Address);
+
+                    if (balance >= (1.1))
+                    {
+                        var tx = await rm.DelegateVoteAsync(sender.GetSecret());
+
+                        if (tx.success)
+                        {
+                            await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Successfully voted for dtpool, thanks you!", ParseMode.Html);
+
+                        }
+                        else
+                        {
+                            await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Error voting...", ParseMode.Html);
+                        }
+                    }
+                    else
+                    {
+                        await _botService.Client.SendTextMessageAsync(sender.TelegramId, "Not enough RISE to vote <b>1 requited</b> RISE balance: <b>" + balance + "</b>", ParseMode.Html);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    var log = new Log();
+                    log.LogMessage(ex.Message + " " + ex.StackTrace + " " + ex.InnerException);
+                    _appdb.Logger.Add(log);
+                    _appdb.SaveChangesAsync().Wait();
+                }
+            }
+        }
+
 
         /// <summary>
         /// Withdraw coin
