@@ -346,6 +346,11 @@ namespace rise.Services
                     case "!EXCHANGES":
                         await cmd_Exchanges(message, appuser);
                         break;
+
+                    // Show Rise Exchanges
+                    case "!EXCHANGE":
+                        await cmd_Exchanges(message, appuser);
+                        break;
                 }
             }
         }
