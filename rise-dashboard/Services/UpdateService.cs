@@ -897,7 +897,6 @@ namespace rise.Services
 
                 coinQuoteCol = _appdb.CoinQuotes.Where(x => x.TimeStamp >= DateTime.Now.AddDays(-1)).ToList();
 
-
                 QuoteStats qs = new QuoteStats();
 
                 var toXt = TransactionsResult.Current.transactions.AsEnumerable().Where(x => qs.FromGenesisTime(x.timestamp) > DateTime.Now.AddDays(-1).ToUniversalTime() && x.recipientId == AppSettingsProvider.XtDepositAddress);
@@ -917,13 +916,13 @@ namespace rise.Services
                 await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
                                   "<b>Xt.com</b> - https://www.xt.com" + Environment.NewLine +
-                                  "Price (USD): <b>$" + Math.Round(quoteXtcom.USDPrice, 4).ToString("N0") + "</b>" + Environment.NewLine +
+                                  "Price (USD): <b>$" + Math.Round(quoteXtcom.USDPrice, 5).ToString("N0") + "</b>" + Environment.NewLine +
                                   "Price (sat): <b>" + priceXtcom + "</b>" + Environment.NewLine +
                                   "Market (sat) Bid:<b>" + xtcomBid + "</b> Ask:<b>" + xtcomAsk + "</b>" + Environment.NewLine +
                                   "Vol (24H): <b>" + volXtcom.ToString("N0") + "</b>" + Environment.NewLine +
                                   "Rise Sent to Xt.com (24H): <b>" + toXt.Sum(x => x.amount / 100000000).ToString("N0") + "</b>" + Environment.NewLine +
                                   "Rise Withdraw from Xt.com (24H): <b>" + fromXt.Sum(x => x.amount / 100000000).ToString("N0") + "</b>" + Environment.NewLine +
-                                  "Bitcoin Price: <b>$" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2) + "</b> (Coinbase)";
+                                  "Bitcoin Price: <b>$" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2).ToString("N0") + "</b> (Coinbase)";
 
                 await _botService.Client.SendTextMessageAsync(message.Chat.Id, strResponse, ParseMode.Html);
             }
@@ -950,7 +949,7 @@ namespace rise.Services
                 var quote = LastAllQuote();
 
                 var strResponse = "Price (sat): <b>" + Math.Round(quote.Price * 100000000) + " [24h:" + Math.Round(PercentChange(1), 2) + "% 1W: " + Math.Round(PercentChange(7), 2) + "%]</b>" + Environment.NewLine +
-                                  "USD Price: <b>$" + Math.Round(quote.USDPrice, 4) + " (" + USDPricePercentChange(1) + "%)</b>" + Environment.NewLine +
+                                  "Price (USD): <b>$" + Math.Round(quote.USDPrice, 5) + " (" + USDPricePercentChange(1) + "%)</b>" + Environment.NewLine +
                                   "Volume: <b>" + Math.Round(quote.Volume).ToString("N0") + " (" + VolumePercentChange(1) + "%) </b>" + Environment.NewLine +
                                   "Day Range: <b>" + Math.Round(DaysLow(1) * 100000000) + " - " + Math.Round(DaysHigh(1) * 100000000) + " sat</b>" + Environment.NewLine +
                                   "Bitcoin Price: <b>$" + Math.Round(double.Parse(CoinbaseBtcQuote.Current.amount), 2).ToString("N0") + " </b> (Coinbase)";
