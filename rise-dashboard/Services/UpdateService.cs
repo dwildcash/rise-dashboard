@@ -916,7 +916,7 @@ namespace rise.Services
                 await _botService.Client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                 var strResponse = "<b>-= Current Rise Exchanges =-</b>" + Environment.NewLine +
                                   "<b>Xt.com</b> - https://www.xt.com" + Environment.NewLine +
-                                  "Price (USD): <b>$" + Math.Round(quoteXtcom.USDPrice, 5).ToString("N0") + "</b>" + Environment.NewLine +
+                                  "Price (USD): <b>$" + Math.Round(quoteXtcom.USDPrice, 5)+ "</b>" + Environment.NewLine +
                                   "Price (sat): <b>" + priceXtcom + "</b>" + Environment.NewLine +
                                   "Market (sat) Bid:<b>" + xtcomBid + "</b> Ask:<b>" + xtcomAsk + "</b>" + Environment.NewLine +
                                   "Vol (24H): <b>" + volXtcom.ToString("N0") + "</b>" + Environment.NewLine +
