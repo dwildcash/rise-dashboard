@@ -4,7 +4,7 @@ write-host -ForegroundColor Magenta "Stopping Dashboard..."
 systemctl stop kestrel-rise-dashboard.service
 
 cd /var/www/rise-dashboard/
-pkill dotnet
+pkill rise-dashboard
 
 write-host -ForegroundColor Green "Fetching Latest version from github..."
 git pull
